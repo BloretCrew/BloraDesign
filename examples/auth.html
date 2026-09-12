@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="zh-CN" data-blora-color-scheme="light" data-blora-theme="coral">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#faf7f8" />
+    <title>Bloret PassPort · 登录</title>
+    <script>
+      (() => {
+        try {
+          const scheme = localStorage.getItem("blora-color-scheme");
+          const theme = localStorage.getItem("blora-theme");
+          if (scheme) document.documentElement.dataset.bloraColorScheme = scheme;
+          if (theme) document.documentElement.dataset.bloraTheme = theme;
+        } catch {}
+      })();
+    </script>
+    <link rel="stylesheet" href="../packages/blora-design/dist/blora.css" />
+    <link rel="stylesheet" href="../packages/blora-design/dist/tokens.dark.css" />
+    <link rel="stylesheet" href="../packages/blora-design/dist/tokens.themes.css" />
+    <link rel="stylesheet" href="../addons/theming/dist/theming.css" />
+    <style>
+      :root {
+        --auth-max-width: 31rem;
+      }
+
+      * { box-sizing: border-box; }
+      html { min-width: 20rem; background: var(--blora-color-surface-canvas); }
+      body { margin: 0; min-height: 100dvh; color: var(--blora-color-text-primary); }
+      button, a { -webkit-tap-highlight-color: transparent; }
+
+      .auth-page {
+        position: relative;
+        display: grid;
+        min-height: 100dvh;
+        place-items: center;
+        overflow: hidden;
+        padding: clamp(1.5rem, 5vw, 4rem) 1rem;
+        background:
+          radial-gradient(circle at 12% 12%, color-mix(in srgb, var(--blora-color-action-primary-default) 14%, transparent), transparent 30%),
+          radial-gradient(circle at 88% 86%, color-mix(in srgb, var(--blora-color-action-secondary-default) 12%, transparent), transparent 32%),
+          var(--blora-color-surface-canvas);
+      }
+
+      .auth-page::before {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        content: "";
+        opacity: .42;
+        background-image: linear-gradient(color-mix(in srgb, var(--blora-color-text-primary) 3%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--blora-color-text-primary) 3%, transparent) 1px, transparent 1px);
+        background-size: 2.5rem 2.5rem;
+        mask-image: linear-gradient(to bottom, black, transparent 75%);
+      }
+
+      .auth-card {
+        position: relative;
+        z-index: 1;
+        width: min(100%, var(--auth-max-width));
+        padding: clamp(1.5rem, 5vw, 2.5rem);
+        animation: auth-enter .55s var(--blora-easing-standard) both;
+      }
+
+      .auth-card__header { text-align: center; }
+      .auth-card__logo {
+        display: grid;
+        width: 3.5rem;
+        height: 3.5rem;
+        margin: 0 auto 1.25rem;
+        place-items: center;
+        overflow: hidden;
+        border: 1px solid var(--blora-color-border-subtle);
+        border-radius: var(--blora-radius-lg);
+        background: var(--blora-color-surface-default);
+        box-shadow: var(--blora-shadow-primary);
+      }
+      .auth-card__logo img { width: 100%; height: 100%; object-fit: cover; }
+      .auth-card__header h1 { margin: 0; font-family: var(--blora-font-heading); font-size: clamp(1.65rem, 4vw, 2rem); letter-spacing: -.03em; }
+      .auth-card__header p { margin: .55rem 0 0; color: var(--blora-color-text-muted); }
+
+      .auth-mode { display: grid; grid-template-columns: repeat(2, 1fr); gap: .25rem; margin: 2rem 0 1.5rem; padding: .25rem; border: 1px solid var(--blora-color-border-subtle); border-radius: var(--blora-radius-md); background: var(--blora-color-surface-inset); }
+      .auth-native-tab { border: 0; border-radius: var(--blora-radius-sm); padding: .7rem 1rem; color: var(--blora-color-text-muted); background: transparent; font: inherit; cursor: pointer; transition: color .2s ease, background .2s ease, box-shadow .2s ease; }
+      .auth-native-tab[aria-selected="true"] { color: var(--blora-color-text-primary); background: var(--blora-color-surface-default); box-shadow: var(--blora-shadow-1); }
+      .auth-native-tab:focus-visible { outline: var(--blora-focus-ring-width-strong) solid var(--blora-color-action-primary-default); outline-offset: 2px; }
+
+      .auth-panel[hidden] { display: none; }
+      .auth-form { display: grid; gap: 1rem; }
+      .auth-form .blora-field__help { color: var(--blora-color-text-muted); }
+      .auth-actions, .auth-oauth { display: grid; gap: .7rem; }
+      .auth-actions { margin-top: .25rem; }
+      .auth-actions .blora-button, .auth-oauth .blora-button { width: 100%; justify-content: center; }
+      .auth-oauth { grid-template-columns: repeat(2, 1fr); }
+      .auth-oauth .blora-button { min-width: 0; }
+      .auth-divider { margin: 1.5rem 0; }
+      .auth-message { min-height: 1.3rem; margin: .8rem 0 0; color: var(--blora-color-status-danger-text); font-size: var(--blora-text-sm); text-align: center; }
+      .auth-card__footer { display: flex; align-items: center; justify-content: center; gap: .65rem; margin-top: 1.5rem; }
+      .auth-lang { min-width: 7rem; }
+
+      @keyframes auth-enter { from { opacity: 0; transform: translateY(.75rem); } to { opacity: 1; transform: translateY(0); } }
+      @media (max-width: 34rem) {
+        .auth-card { padding: 1.25rem; }
+        .auth-oauth { grid-template-columns: 1fr; }
+      }
+      @media (prefers-reduced-motion: reduce) { .auth-card { animation: none; } *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+    </style>
+  </head>
+  <body class="blora-page blora-scope">
+    <main class="auth-page">
+      <section class="blora-card auth-card" aria-labelledby="auth-title">
+        <header class="auth-card__header">
+          <span class="auth-card__logo" aria-hidden="true"><img src="bbbs-replica/assets/bloret.png" alt="" /></span>
+          <h1 id="auth-title">Bloret PassPort</h1>
+          <p>使用你的 Bloret 账户继续</p>
+        </header>
+
+        <div class="auth-mode" role="tablist" aria-label="登录或注册">
+          <button id="loginTab" class="auth-native-tab" type="button" role="tab" aria-controls="loginPanel" aria-selected="true" data-auth-mode="login">登录</button>
+          <button id="registerTab" class="auth-native-tab" type="button" role="tab" aria-controls="registerPanel" aria-selected="false" data-auth-mode="register">注册</button>
+        </div>
+
+        <section id="loginPanel" class="auth-panel" role="tabpanel" aria-labelledby="loginTab">
+          <form id="loginForm" class="auth-form" action="#login" method="post">
+            <blora-field label="用户名" name="username" placeholder="请输入用户名" autocomplete="username" required></blora-field>
+            <blora-field label="密码" name="password" type="password" placeholder="请输入密码" autocomplete="current-password" required></blora-field>
+            <div class="auth-actions">
+              <button class="blora-button" data-variant="primary" type="submit">登录</button>
+              <button class="blora-button" data-variant="outline" type="button" id="passkeyButton"><span data-icon="key-round" aria-hidden="true"></span>使用通行密钥登录</button>
+            </div>
+          </form>
+        </section>
+
+        <section id="registerPanel" class="auth-panel" role="tabpanel" aria-labelledby="registerTab" hidden>
+          <form id="registerForm" class="auth-form" action="#register" method="post">
+            <blora-field label="用户名" name="username" placeholder="请输入用户名" autocomplete="username" hint="仅允许小写字母、数字和下划线" pattern="[a-z0-9_]+" required></blora-field>
+            <blora-field label="昵称" name="nickname" placeholder="留空则同用户名" autocomplete="nickname"></blora-field>
+            <blora-field label="邮箱" name="email" type="email" placeholder="请输入邮箱" autocomplete="email" required></blora-field>
+            <blora-field label="密码" name="password" type="password" placeholder="请输入密码" autocomplete="new-password" minlength="6" required></blora-field>
+            <blora-field label="确认密码" name="confirmPassword" type="password" placeholder="请再次输入密码" autocomplete="new-password" minlength="6" required></blora-field>
+            <div class="auth-actions"><button class="blora-button" data-variant="primary" type="submit">注册</button></div>
+          </form>
+        </section>
+
+        <p id="authMessage" class="auth-message" role="status" aria-live="polite"></p>
+        <div class="blora-divider auth-divider" data-variant="text">或使用其他方式</div>
+        <div class="auth-oauth">
+          <button class="blora-button" data-variant="outline" type="button" data-provider="lark"><span data-icon="building-2" aria-hidden="true"></span>飞书登录</button>
+          <button class="blora-button" data-variant="outline" type="button" data-provider="github"><span data-icon="github" aria-hidden="true"></span>GitHub 登录</button>
+        </div>
+        <footer class="auth-card__footer">
+          <blora-palette-picker button-variant="ghost" size="sm" icon-only></blora-palette-picker>
+          <blora-dropdown class="auth-lang" label="中文" align="center" aria-label="选择语言">
+            <blora-dropdown-item value="zh">中文</blora-dropdown-item>
+            <blora-dropdown-item value="en">English</blora-dropdown-item>
+            <blora-dropdown-item value="ru">Русский</blora-dropdown-item>
+          </blora-dropdown>
+          <blora-color-scheme-toggle button-variant="ghost" size="sm"></blora-color-scheme-toggle>
+        </footer>
+      </section>
+    </main>
+    <script src="../packages/blora-design/dist/blora.global.js"></script>
+    <script src="../packages/blora-design/dist/icons-full.global.js"></script>
+    <script src="../addons/theming/dist/theming.global.js"></script>
+    <script>
+      (() => {
+        const Blora = window.Blora;
+        Blora?.autoDefine();
+        document.querySelectorAll("[data-icon]").forEach((host) => {
+          if (host.dataset.icon && !host.querySelector("svg")) host.replaceChildren(Blora.createBloraIcon(host.dataset.icon, 16));
+        });
+
+        const message = document.getElementById("authMessage");
+        const showMessage = (text) => { message.textContent = text; };
+        const tabs = [...document.querySelectorAll("[data-auth-mode]")];
+        tabs.forEach((tab) => tab.addEventListener("click", () => {
+          const mode = tab.dataset.authMode;
+          tabs.forEach((item) => item.setAttribute("aria-selected", String(item === tab)));
+          document.getElementById("loginPanel").hidden = mode !== "login";
+          document.getElementById("registerPanel").hidden = mode !== "register";
+          showMessage("");
+        }));
+
+        document.getElementById("loginForm").addEventListener("submit", (event) => { event.preventDefault(); showMessage("演示页面：登录请求已准备提交。"); });
+        document.getElementById("passkeyButton").addEventListener("click", () => showMessage("当前示例未连接通行密钥服务。"));
+        document.getElementById("registerForm").addEventListener("submit", (event) => {
+          const password = event.currentTarget.elements.password.value;
+          const confirm = event.currentTarget.elements.confirmPassword.value;
+          if (password !== confirm) { event.preventDefault(); showMessage("密码和确认密码不匹配！"); }
+          else { event.preventDefault(); showMessage("演示页面：注册请求已准备提交。"); }
+        });
+        document.querySelectorAll("[data-provider]").forEach((button) => button.addEventListener("click", () => showMessage(`${button.textContent.trim()}暂未连接。`)));
+      })();
+    </script>
+  </body>
+</html>
