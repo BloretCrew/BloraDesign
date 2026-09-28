@@ -138,6 +138,7 @@ export const zhCN: BloraLocalePack = {
     "mockup.label": "{variant} 样机",
     "navbar.title": "Blora Design",
     "deck.label": "卡片叠层",
+    "imageStack.label": "图片堆叠",
     "dock.label": "底部导航",
     "diff.position": "对比位置",
     "countdown.days": "天",

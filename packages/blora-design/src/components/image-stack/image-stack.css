@@ -1,0 +1,57 @@
+/* Blora Design 2.0 - image stack for compact photo browsing. */
+
+blora-image-stack { display: block; }
+
+.blora-image-stack {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 18rem) 2.5rem;
+  grid-template-rows: auto 1fr;
+  gap: var(--blora-space-2);
+  align-items: center;
+  width: min(100%, 22rem);
+  min-height: 18rem;
+  padding: var(--blora-space-4);
+  touch-action: pan-y;
+  user-select: none;
+  outline: none;
+}
+
+.blora-image-stack:focus-visible { box-shadow: 0 0 0 2px var(--blora-color-action-primary-default); border-radius: var(--blora-radius-lg); }
+.blora-image-stack__index { grid-column: 2; grid-row: 1; justify-self: center; color: var(--blora-color-text-muted); font-size: var(--blora-text-sm); }
+.blora-image-stack__tile {
+  grid-column: 2; grid-row: 2;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: var(--blora-radius-lg);
+  background: var(--blora-color-surface-sunken);
+  box-shadow: var(--blora-shadow-2);
+  transform: translate(calc(var(--blora-image-stack-layer, 0) * 0.45rem), calc(var(--blora-image-stack-layer, 0) * -0.45rem)) scale(calc(1 - var(--blora-image-stack-layer, 0) * 0.035));
+  opacity: calc(1 - var(--blora-image-stack-layer, 0) * 0.13);
+  transition: transform var(--blora-duration-base) var(--blora-easing-standard), opacity var(--blora-duration-base) var(--blora-easing-standard);
+  z-index: var(--blora-image-stack-layer, 0);
+}
+.blora-image-stack__tile:not([data-current]) { pointer-events: none; }
+.blora-image-stack__tile[data-passed] { transform: translateX(-110%) rotate(-5deg); opacity: 0; }
+.blora-image-stack__tile[data-current] { transform: none; opacity: 1; z-index: 4; pointer-events: auto; }
+.blora-image-stack__tile img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.blora-image-stack__nav {
+  grid-row: 2;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: var(--blora-radius-full);
+  color: var(--blora-color-text-on-media);
+  background: var(--blora-color-overlay-media);
+  cursor: pointer;
+}
+.blora-image-stack__nav--prev { grid-column: 1; }
+.blora-image-stack__nav--next { grid-column: 3; }
+.blora-image-stack__nav[hidden] { visibility: hidden; }
+.blora-image-stack__nav:hover { background: var(--blora-color-overlay-media-strong); }
+@media (prefers-reduced-motion: reduce) { .blora-image-stack__tile { transition: none; } }

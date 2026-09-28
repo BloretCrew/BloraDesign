@@ -1158,6 +1158,13 @@
           <blora-deck-card variant="content"><div class="showcase-deck-card"><strong>上线检查</strong><p class="blora-text-muted">发布清单 · 第 4 张</p></div></blora-deck-card>
         </blora-deck>
       </template>
+      <template data-component="image-stack" data-label="Image Stack" data-group="数据展示" data-eyebrow="Data display" data-kind="Composite CE" data-description="以堆叠卡片浏览相邻图片，支持拖动、横向滚轮和键盘翻阅。">
+        <blora-image-stack label="络聊图片堆叠" style="width: 22rem;">
+          <blora-image-stack-item src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640'%3E%3Crect width='640' height='640' fill='%234c566a'/%3E%3C/svg%3E" alt="第一张照片"></blora-image-stack-item>
+          <blora-image-stack-item src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640'%3E%3Crect width='640' height='640' fill='%23bf616a'/%3E%3C/svg%3E" alt="第二张照片"></blora-image-stack-item>
+          <blora-image-stack-item src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640'%3E%3Crect width='640' height='640' fill='%2388c0d0'/%3E%3C/svg%3E" alt="第三张照片"></blora-image-stack-item>
+        </blora-image-stack>
+      </template>
       <template data-component="indicator" data-label="Indicator" data-group="布局" data-eyebrow="Layout" data-kind="CSS-only" data-description="把徽标、状态点或任意元素钉在宿主的角上。">
         <div data-showcase-cases>
           <section data-showcase-case="Default"><h3>默认（右上）</h3><span class="blora-indicator"><button class="blora-button" type="button">收件箱</button><span class="blora-indicator__item"><span class="blora-badge" data-shape="pill">12</span></span></span></section>

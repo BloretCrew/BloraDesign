@@ -151,6 +151,11 @@ export {
 } from "./components/calendar/index.js";
 export { BLORA_DECK_TAG, BloraDeck, defineBloraDeck } from "./components/deck/index.js";
 export {
+  BLORA_IMAGE_STACK_TAG,
+  BloraImageStack,
+  defineBloraImageStack,
+} from "./components/image-stack/index.js";
+export {
   BLORA_TAGS_INPUT_TAG,
   BloraTagsInput,
   defineBloraTagsInput,

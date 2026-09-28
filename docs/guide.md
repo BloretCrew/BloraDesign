@@ -260,7 +260,7 @@ const themeBootScript = getThemeBootScript();
 
 ## 6. 完整跨框架迁移规范
 
-请按 [`migration/from-any-ui-to-blora-design.md`](./migration/from-any-ui-to-blora-design.md) 执行。文档覆盖 Bootstrap、Tailwind、Ant Design、Element Plus、Naive UI、Vuetify、MUI、PrimeVue、shadcn/ui、React、Vue、Svelte、Angular 和手写 UI，并包含 87 个核心组件示例、21 个 add-on 能力示例、npm-only 规则和最终验收清单。
+请按 [`migration/from-any-ui-to-blora-design.md`](./migration/from-any-ui-to-blora-design.md) 执行。文档覆盖 Bootstrap、Tailwind、Ant Design、Element Plus、Naive UI、Vuetify、MUI、PrimeVue、shadcn/ui、React、Vue、Svelte、Angular 和手写 UI，并包含 88 个核心组件示例、21 个 add-on 能力示例、npm-only 规则和最终验收清单。
 
 ---
 

@@ -42,6 +42,7 @@ import { defineBloraTreeSelect } from "../src/components/tree-select/index.js";
 import { defineBloraCalendar } from "../src/components/calendar/index.js";
 import { defineBloraCarousel } from "../src/components/carousel/index.js";
 import { defineBloraDeck } from "../src/components/deck/index.js";
+import { defineBloraImageStack } from "../src/components/image-stack/index.js";
 import { defineBloraImage } from "../src/components/image/index.js";
 import { defineBloraDock } from "../src/components/dock/index.js";
 import { defineBloraMegamenu } from "../src/components/megamenu/index.js";
@@ -103,6 +104,7 @@ for (const define of [
   defineBloraCalendar,
   defineBloraCarousel,
   defineBloraDeck,
+  defineBloraImageStack,
   defineBloraImage,
   defineBloraDock,
   defineBloraMegamenu,
@@ -167,6 +169,7 @@ const DEFAULT_TAGS = [
   "blora-calendar",
   "blora-carousel",
   "blora-deck",
+  "blora-image-stack",
   "blora-image",
   "blora-dock",
   "blora-megamenu",
@@ -261,6 +264,7 @@ describe("Composite Custom Elements", () => {
       "defineBloraCalendar",
       "defineBloraCarousel",
       "defineBloraDeck",
+      "defineBloraImageStack",
       "defineBloraImage",
       "defineBloraDock",
       "defineBloraMegamenu",
