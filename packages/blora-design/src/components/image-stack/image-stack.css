@@ -16,13 +16,11 @@ blora-image-stack { display: block; }
 .blora-image-stack:active { cursor: grabbing; }
 .blora-image-stack:focus-visible { box-shadow: 0 0 0 2px var(--blora-color-action-primary-default); border-radius: var(--blora-radius-lg); }
 .blora-image-stack__count {
-  position: absolute;
-  inset-inline: 0;
-  top: calc(-1 * var(--blora-space-8));
   display: flex;
   align-items: center;
   gap: var(--blora-space-2);
-  width: 100%;
+  width: min(300px, calc(64vw - 48px));
+  margin: 0 var(--blora-space-3) var(--blora-space-3);
   padding: 0 var(--blora-space-3);
   border: 0;
   color: var(--blora-color-action-primary-default);
@@ -79,9 +77,9 @@ blora-image-stack { display: block; }
 .blora-image-stack:focus-within .blora-image-stack__nav { opacity: 1; pointer-events: auto; }
 .blora-image-stack__nav[hidden] { display: none; }
 .blora-image-stack__nav:focus-visible { outline: 2px solid var(--blora-color-action-primary-default); outline-offset: 2px; }
-.blora-image-stack__gallery[hidden] { display: none; }
-.blora-image-stack__gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--blora-space-2); width: calc(100% - var(--blora-space-6)); margin: var(--blora-space-2) var(--blora-space-3); }
-.blora-image-stack__gallery-item { display: block; aspect-ratio: 1; overflow: hidden; border-radius: var(--blora-radius-sm); }
-.blora-image-stack__gallery-item img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.blora-image-gallery[hidden] { display: none; }
+.blora-image-gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--blora-space-2); width: calc(100% - var(--blora-space-6)); margin: 0 var(--blora-space-3) var(--blora-space-2); }
+.blora-image-gallery__item { display: block; aspect-ratio: 1; overflow: hidden; border-radius: var(--blora-radius-sm); }
+.blora-image-gallery__item img { display: block; width: 100%; height: 100%; object-fit: cover; }
 @media (hover: none) { .blora-image-stack__nav:not([hidden]) { opacity: 1; pointer-events: auto; } }
 @media (prefers-reduced-motion: reduce) { .blora-image-stack__tile, .blora-image-stack__nav { transition: none; } .blora-image-stack__tile.is-departing, .blora-image-stack__tile.is-returning { animation: none; } }

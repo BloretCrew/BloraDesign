@@ -1,6 +1,7 @@
 import { BloraElement } from "../../core/blora-element.js";
 import { t } from "../../core/i18n.js";
 import { createBloraIcon } from "../../core/icons.js";
+import { openImagePreview } from "../image/image.js";
 
 export const BLORA_IMAGE_STACK_TAG = "blora-image-stack";
 
@@ -16,6 +17,7 @@ const clamp = (value: number, count: number) => Math.max(0, Math.min(count - 1, 
 
 export function createImageStackController(root: HTMLElement): ImageStackController {
   const tiles = () => Array.from(root.querySelectorAll<HTMLElement>(".blora-image-stack__tile"));
+  const counter = () => root.parentElement?.querySelector<HTMLElement>(".blora-image-stack__index");
   let current = clamp(Number(root.dataset.index ?? 0), tiles().length);
   let wheelDistance = 0;
   let wheelDirection = 0;
@@ -28,8 +30,7 @@ export function createImageStackController(root: HTMLElement): ImageStackControl
   let swiped = false;
 
   const positionPassed = () => {
-    const items = tiles();
-    items.forEach((tile, index) => {
+    tiles().forEach((tile, index) => {
       const distance = index - current;
       tile.style.setProperty("--blora-image-stack-layer", String(distance));
       tile.style.setProperty("--blora-image-stack-shift", `${Math.max(0, current - index) * 22}px`);
@@ -45,12 +46,9 @@ export function createImageStackController(root: HTMLElement): ImageStackControl
     const items = tiles();
     if (!items.length) return;
     root.dataset.index = String(current);
-    const counter = root.querySelector<HTMLElement>(".blora-image-stack__index");
-    if (counter) counter.textContent = `${current + 1} / ${items.length}`;
-    const prev = root.querySelector<HTMLButtonElement>(".blora-image-stack__nav--prev");
-    const next = root.querySelector<HTMLButtonElement>(".blora-image-stack__nav--next");
-    if (prev) prev.hidden = current === 0;
-    if (next) next.hidden = current === items.length - 1;
+    if (counter()) counter()!.textContent = `${current + 1} / ${items.length}`;
+    root.querySelector<HTMLButtonElement>(".blora-image-stack__nav--prev")!.hidden = current === 0;
+    root.querySelector<HTMLButtonElement>(".blora-image-stack__nav--next")!.hidden = current === items.length - 1;
     positionPassed();
   };
 
@@ -58,7 +56,7 @@ export function createImageStackController(root: HTMLElement): ImageStackControl
     const count = tiles().length;
     if (!count) return;
     const target = clamp(index, count);
-    if (target === current) return;
+    if (target === current || root.classList.contains("is-flipping")) return;
     const previous = current;
     const entering = target < previous ? tiles()[target] : null;
     const front = tiles()[previous];
@@ -163,36 +161,45 @@ export class BloraImageStack extends BloraElement {
         const src = item.getAttribute("src") ?? image?.getAttribute("src") ?? "";
         return { src, alt: item.getAttribute("alt") ?? image?.getAttribute("alt") ?? "", href: item.getAttribute("href") ?? src };
       });
-    const root = this.ownerDocument.createElement("div");
-    root.className = "blora-image-stack"; root.dataset.bloraGenerated = "";
-    root.setAttribute("role", "group"); root.setAttribute("aria-label", this.getAttribute("label") ?? t("imageStack.label"));
     const count = this.definitions.length;
+    const galleryId = `blora-image-stack-gallery-${Math.random().toString(36).slice(2)}`;
     const countButton = this.ownerDocument.createElement("button");
-    countButton.type = "button"; countButton.className = "blora-image-stack__count";
-    countButton.setAttribute("aria-label", `展开 ${count} 张照片`); countButton.appendChild(createBloraIcon("square.grid.2x2.fill", 14));
-    countButton.append(` ${count} 张照片 `);
+    countButton.type = "button"; countButton.className = "blora-image-stack__count"; countButton.setAttribute("aria-expanded", "false"); countButton.setAttribute("aria-controls", galleryId);
+    countButton.setAttribute("aria-label", `展开 ${count} 张照片`); countButton.appendChild(createBloraIcon("square.grid.2x2.fill", 14)); countButton.append(` ${count} 张照片 `);
     const index = this.ownerDocument.createElement("span"); index.className = "blora-image-stack__index"; index.setAttribute("aria-live", "polite"); countButton.append(index);
-    const gallery = this.ownerDocument.createElement("div"); gallery.className = "blora-image-stack__gallery"; gallery.hidden = true;
+    const stack = this.ownerDocument.createElement("div");
+    stack.className = "blora-image-stack"; stack.dataset.bloraGenerated = ""; stack.setAttribute("role", "group"); stack.setAttribute("aria-label", `${count} 张图片，横向滑动浏览`); stack.dataset.index = "0";
     this.definitions.forEach((item, itemIndex) => {
-      const link = this.ownerDocument.createElement("a"); link.className = "blora-image-stack__tile"; link.href = item.href; link.target = "_blank"; link.rel = "noopener noreferrer";
-      link.setAttribute("aria-label", `打开第 ${itemIndex + 1} 张图片`); link.dataset.index = String(itemIndex); link.draggable = false;
-      const image = this.ownerDocument.createElement("img"); image.src = item.src; image.alt = item.alt; image.loading = "lazy"; image.draggable = false; link.append(image); root.append(link);
-      const thumb = link.cloneNode(true) as HTMLAnchorElement; thumb.className = "blora-image-stack__gallery-item"; gallery.append(thumb);
+      const link = this.ownerDocument.createElement("a"); link.className = `blora-image-stack__tile${itemIndex > 2 ? " is-hidden" : ""}`; link.href = item.href; link.target = "_blank"; link.rel = "noopener noreferrer"; link.setAttribute("aria-label", `打开第 ${itemIndex + 1} 张图片`); link.dataset.index = String(itemIndex); link.draggable = false;
+      const image = this.ownerDocument.createElement("img"); image.src = item.src; image.alt = item.alt; image.loading = "lazy"; image.draggable = false; link.append(image); stack.append(link);
     });
-    const prev = this.nav("prev"); const next = this.nav("next");
-    root.append(countButton, prev, next, gallery); this.replaceChildren(root);
+    stack.append(this.nav("prev"), this.nav("next"));
+    const gallery = this.ownerDocument.createElement("div"); gallery.className = "blora-image-gallery"; gallery.id = galleryId; gallery.hidden = true;
+    this.definitions.forEach((item, itemIndex) => {
+      const link = this.ownerDocument.createElement("a"); link.className = "blora-image-gallery__item"; link.href = item.href; link.target = "_blank"; link.rel = "noopener noreferrer"; link.setAttribute("aria-label", `打开第 ${itemIndex + 1} 张图片`);
+      const image = this.ownerDocument.createElement("img"); image.src = item.src; image.alt = item.alt; image.loading = "lazy"; link.append(image); gallery.append(link);
+    });
+    this.replaceChildren(countButton, stack, gallery);
   }
 
   private nav(direction: "prev" | "next"): HTMLButtonElement {
-    const button = this.ownerDocument.createElement("button"); button.type = "button"; button.className = `blora-image-stack__nav blora-image-stack__nav--${direction}`;
-    button.setAttribute("aria-label", direction === "prev" ? t("preview.prev") : t("preview.next")); button.appendChild(createBloraIcon(direction === "prev" ? "chevron-left" : "chevron-right", 18, this.ownerDocument)); return button;
+    const button = this.ownerDocument.createElement("button"); button.type = "button"; button.className = `blora-image-stack__nav blora-image-stack__nav--${direction}`; button.setAttribute("aria-label", direction === "prev" ? t("preview.prev") : t("preview.next")); button.appendChild(createBloraIcon(direction === "prev" ? "chevron-left" : "chevron-right", 18, this.ownerDocument)); return button;
   }
   protected bindEvents(): void {
-    const root = this.querySelector<HTMLElement>(".blora-image-stack"); if (!root) return;
-    this.controller = createImageStackController(root); const initial = Number(this.getAttribute("current") ?? 0); if (initial) this.controller.goTo(initial);
-    this.listen(root, "blora-image-stack-change", (event) => { this.reflecting = true; this.setAttribute("current", String((event as CustomEvent<{ index: number }>).detail.index)); this.reflecting = false; });
-    const count = root.querySelector<HTMLButtonElement>(".blora-image-stack__count"); const gallery = root.querySelector<HTMLElement>(".blora-image-stack__gallery");
-    count?.addEventListener("click", () => { const expanded = !gallery?.hidden; if (gallery) gallery.hidden = expanded; count.setAttribute("aria-expanded", String(!expanded)); });
+    const stack = this.querySelector<HTMLElement>(".blora-image-stack"); if (!stack) return;
+    this.controller = createImageStackController(stack); const initial = Number(this.getAttribute("current") ?? 0); if (initial) this.controller.goTo(initial);
+    this.listen(stack, "blora-image-stack-change", (event) => { this.reflecting = true; this.setAttribute("current", String((event as CustomEvent<{ index: number }>).detail.index)); this.reflecting = false; });
+    const count = this.querySelector<HTMLButtonElement>(".blora-image-stack__count"); const gallery = this.querySelector<HTMLElement>(".blora-image-gallery");
+    count?.addEventListener("click", () => { const expanded = count.getAttribute("aria-expanded") === "true"; count.setAttribute("aria-expanded", String(!expanded)); count.setAttribute("aria-label", `${expanded ? "展开" : "收起"} ${this.definitions?.length ?? 0} 张照片`); if (gallery) gallery.hidden = expanded; stack.hidden = !expanded; });
+    this.listen(this, "click", (event) => {
+      const link = (event.target as HTMLElement).closest<HTMLAnchorElement>(".blora-image-stack__tile, .blora-image-gallery__item");
+      if (!link || !this.contains(link)) return;
+      event.preventDefault();
+      const links = Array.from(this.querySelectorAll<HTMLAnchorElement>(".blora-image-stack__tile, .blora-image-gallery__item"));
+      const items = this.definitions?.map((item) => ({ src: item.src, alt: item.alt })) ?? [];
+      const index = Math.max(0, links.indexOf(link) % Math.max(1, items.length));
+      openImagePreview(items, index);
+    });
   }
   protected onDisconnect(): void { this.controller?.destroy(); this.controller = null; }
 }

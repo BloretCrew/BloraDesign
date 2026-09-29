@@ -751,7 +751,7 @@ test("Calendar, carousel, deck and image CEs own structure and interactions", as
   await expect(page.locator("#image-stack .blora-image-stack")).toHaveAttribute("data-index", "1");
   await expect(page.locator("#image-stack .blora-image-stack__count")).toContainText("2 张照片");
   await page.locator("#image-stack .blora-image-stack__count").click();
-  await expect(page.locator("#image-stack .blora-image-stack__gallery")).toBeVisible();
+  await expect(page.locator("#image-stack .blora-image-gallery")).toBeVisible();
   await page.locator("#image .blora-image").click();
   await expect(page.locator("body > .blora-image-preview")).toBeVisible();
   for (const selector of [
