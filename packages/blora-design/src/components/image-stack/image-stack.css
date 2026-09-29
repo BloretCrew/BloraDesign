@@ -1,57 +1,87 @@
-/* Blora Design 2.0 - image stack for compact photo browsing. */
+/* Blora Design 2.0 - chat-compatible stacked photo browsing. */
 
 blora-image-stack { display: block; }
-
 .blora-image-stack {
   position: relative;
-  display: grid;
-  grid-template-columns: 2.5rem minmax(0, 18rem) 2.5rem;
-  grid-template-rows: auto 1fr;
-  gap: var(--blora-space-2);
-  align-items: center;
-  width: min(100%, 22rem);
-  min-height: 18rem;
-  padding: var(--blora-space-4);
+  width: min(300px, calc(64vw - 48px));
+  height: min(320px, 68vw);
+  margin: var(--blora-space-8) var(--blora-space-8) 0;
+  isolation: isolate;
+  overscroll-behavior-x: contain;
   touch-action: pan-y;
+  cursor: grab;
   user-select: none;
   outline: none;
 }
-
+.blora-image-stack:active { cursor: grabbing; }
 .blora-image-stack:focus-visible { box-shadow: 0 0 0 2px var(--blora-color-action-primary-default); border-radius: var(--blora-radius-lg); }
-.blora-image-stack__index { grid-column: 2; grid-row: 1; justify-self: center; color: var(--blora-color-text-muted); font-size: var(--blora-text-sm); }
-.blora-image-stack__tile {
-  grid-column: 2; grid-row: 2;
-  display: block;
+.blora-image-stack__count {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(-1 * var(--blora-space-8));
+  display: flex;
+  align-items: center;
+  gap: var(--blora-space-2);
   width: 100%;
-  aspect-ratio: 1;
-  overflow: hidden;
-  border-radius: var(--blora-radius-lg);
-  background: var(--blora-color-surface-sunken);
-  box-shadow: var(--blora-shadow-2);
-  transform: translate(calc(var(--blora-image-stack-layer, 0) * 0.45rem), calc(var(--blora-image-stack-layer, 0) * -0.45rem)) scale(calc(1 - var(--blora-image-stack-layer, 0) * 0.035));
-  opacity: calc(1 - var(--blora-image-stack-layer, 0) * 0.13);
-  transition: transform var(--blora-duration-base) var(--blora-easing-standard), opacity var(--blora-duration-base) var(--blora-easing-standard);
-  z-index: var(--blora-image-stack-layer, 0);
-}
-.blora-image-stack__tile:not([data-current]) { pointer-events: none; }
-.blora-image-stack__tile[data-passed] { transform: translateX(-110%) rotate(-5deg); opacity: 0; }
-.blora-image-stack__tile[data-current] { transform: none; opacity: 1; z-index: 4; pointer-events: auto; }
-.blora-image-stack__tile img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.blora-image-stack__nav {
-  grid-row: 2;
-  z-index: 5;
-  display: grid;
-  place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  padding: 0 var(--blora-space-3);
   border: 0;
-  border-radius: var(--blora-radius-full);
-  color: var(--blora-color-text-on-media);
-  background: var(--blora-color-overlay-media);
+  color: var(--blora-color-action-primary-default);
+  background: transparent;
+  font: inherit;
+  font-size: var(--blora-text-sm);
+  font-weight: 600;
+  text-align: start;
   cursor: pointer;
 }
-.blora-image-stack__nav--prev { grid-column: 1; }
-.blora-image-stack__nav--next { grid-column: 3; }
-.blora-image-stack__nav[hidden] { visibility: hidden; }
-.blora-image-stack__nav:hover { background: var(--blora-color-overlay-media-strong); }
-@media (prefers-reduced-motion: reduce) { .blora-image-stack__tile { transition: none; } }
+.blora-image-stack__count:focus-visible { outline: 2px solid var(--blora-color-action-primary-default); outline-offset: 3px; border-radius: var(--blora-radius-sm); }
+.blora-image-stack__index { margin-inline-start: auto; color: var(--blora-color-text-muted); font-size: var(--blora-text-sm); font-weight: 400; }
+.blora-image-stack__tile {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 22px;
+  background: var(--blora-color-surface-raised);
+  box-shadow: var(--blora-shadow-2);
+  transform: translate(calc(var(--blora-image-stack-layer, 0) * -10px), calc(var(--blora-image-stack-layer, 0) * -10px));
+  z-index: calc(4 - var(--blora-image-stack-layer, 0));
+  transition: transform var(--blora-duration-base) var(--blora-easing-standard), opacity var(--blora-duration-base) var(--blora-easing-standard);
+}
+.blora-image-stack__tile.is-hidden { opacity: 0; pointer-events: none; }
+.blora-image-stack__tile[data-passed] { transform: translate(calc(-1 * var(--blora-image-stack-shift, 0px)), var(--blora-space-3)) rotate(-5deg); opacity: 1; z-index: 0; pointer-events: auto; }
+.blora-image-stack__tile.is-departing { animation: blora-image-stack-pass var(--blora-duration-base) var(--blora-easing-standard) forwards; }
+.blora-image-stack__tile.is-returning { transform: translate(calc(-1 * var(--blora-image-stack-shift, 0px)), var(--blora-space-3)) rotate(-5deg); animation: blora-image-stack-return var(--blora-duration-base) var(--blora-easing-standard) forwards; z-index: 5; }
+.blora-image-stack__tile img { display: block; width: 100%; height: 100%; object-fit: cover; }
+@keyframes blora-image-stack-pass { to { transform: translate(calc(-1 * var(--blora-image-stack-shift, 0px)), var(--blora-space-3)) rotate(-5deg); opacity: 1; } }
+@keyframes blora-image-stack-return { to { transform: translate(0, 0) rotate(0); opacity: 1; } }
+.blora-image-stack__nav {
+  position: absolute;
+  top: 50%;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--blora-radius-full);
+  color: var(--blora-color-text-default);
+  background: color-mix(in srgb, var(--blora-color-surface-raised) 85%, transparent);
+  box-shadow: var(--blora-shadow-1);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: opacity var(--blora-duration-fast) var(--blora-easing-standard);
+}
+.blora-image-stack__nav--prev { left: var(--blora-space-3); }
+.blora-image-stack__nav--next { right: var(--blora-space-3); }
+.blora-image-stack:hover .blora-image-stack__nav,
+.blora-image-stack:focus-within .blora-image-stack__nav { opacity: 1; pointer-events: auto; }
+.blora-image-stack__nav[hidden] { display: none; }
+.blora-image-stack__nav:focus-visible { outline: 2px solid var(--blora-color-action-primary-default); outline-offset: 2px; }
+.blora-image-stack__gallery[hidden] { display: none; }
+.blora-image-stack__gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--blora-space-2); width: calc(100% - var(--blora-space-6)); margin: var(--blora-space-2) var(--blora-space-3); }
+.blora-image-stack__gallery-item { display: block; aspect-ratio: 1; overflow: hidden; border-radius: var(--blora-radius-sm); }
+.blora-image-stack__gallery-item img { display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (hover: none) { .blora-image-stack__nav:not([hidden]) { opacity: 1; pointer-events: auto; } }
+@media (prefers-reduced-motion: reduce) { .blora-image-stack__tile, .blora-image-stack__nav { transition: none; } .blora-image-stack__tile.is-departing, .blora-image-stack__tile.is-returning { animation: none; } }

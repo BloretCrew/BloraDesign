@@ -18,28 +18,33 @@ describe("createImageStackController", () => {
 
   afterEach(() => root.remove());
 
-  it("keeps the current tile and boundary controls in sync", () => {
+  it("keeps the current tile and boundary controls in sync", async () => {
     const controller = createImageStackController(root);
     expect(root.dataset.index).toBe("0");
     expect(root.querySelectorAll('[data-current]')).toHaveLength(1);
+    expect(root.querySelectorAll('.is-hidden')).toHaveLength(0);
     expect((root.querySelector(".blora-image-stack__nav--prev") as HTMLElement).hidden).toBe(true);
     controller.next();
+    await new Promise((resolve) => setTimeout(resolve, 310));
     expect(controller.getCurrent()).toBe(1);
     expect(root.querySelector(".blora-image-stack__index")!.textContent).toBe("2 / 3");
     expect((root.querySelector(".blora-image-stack__nav--prev") as HTMLElement).hidden).toBe(false);
     controller.goTo(99);
+    await new Promise((resolve) => setTimeout(resolve, 310));
     expect(controller.getCurrent()).toBe(2);
     expect((root.querySelector(".blora-image-stack__nav--next") as HTMLElement).hidden).toBe(true);
     controller.destroy();
   });
 
-  it("navigates with keyboard and horizontal wheel input", () => {
+  it("navigates with keyboard and horizontal wheel input", async () => {
     const controller = createImageStackController(root);
     root.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    await new Promise((resolve) => setTimeout(resolve, 310));
     expect(controller.getCurrent()).toBe(1);
     const event = new WheelEvent("wheel", { deltaX: 140, cancelable: true });
     root.dispatchEvent(event);
     expect(event.defaultPrevented).toBe(true);
+    await new Promise((resolve) => setTimeout(resolve, 310));
     expect(controller.getCurrent()).toBe(2);
     controller.destroy();
   });

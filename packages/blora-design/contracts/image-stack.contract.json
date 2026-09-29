@@ -21,8 +21,10 @@
   "events": {
     "blora-image-stack-change": { "detail": "{ index: number }", "bubbles": true, "composed": false }
   },
-  "slots": { "default": "Declarative <blora-image-stack-item src alt href> definitions; consumed into the official image stack tree." },
+  "slots": {
+    "default": "Declarative <blora-image-stack-item src alt href> definitions; consumed into the official chat-compatible image stack tree."
+  },
+  "cssProperties": ["--blora-image-stack-layer", "--blora-image-stack-shift"],
   "parts": [],
-  "cssProperties": ["--blora-image-stack-layer"],
   "accessibilityPattern": "group"
 }
