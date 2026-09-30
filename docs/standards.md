@@ -80,12 +80,12 @@ Blora Design 将视觉令牌分为三个基础层：**背景与表面、内容�
 | `--blora-color-action-primary-default` | `#9F5964` | **唯一主强调色**（Coral） |
 | `--blora-color-action-primary-hover` | `#80464F` | 主色 hover/press |
 | `--blora-color-action-primary-soft` | `#C07E86` | 主色弱化（装饰、数据系列） |
-| `--blora-color-status-danger` | `#9E5559` | 危险与错误 |
+| `--blora-color-status-danger` | `#AF4A3F` | 危险与错误（砖红，与主色明确区分；深色 `#E0715B`） |
 | `--blora-color-status-neutral` | `#6E6975` | 中性强调 |
 | `--blora-color-status-info` | `#5D6680` | 信息 |
 | `--blora-color-status-success` | `#5B756B` | 成功 |
 | `--blora-color-status-support` | `#687C7B` | 辅助数据系列 |
-| `--blora-color-status-warning` | `#806C4F` | 警告 |
+| `--blora-color-status-warning` | `#8C6429` | 警告（琥珀） |
 | `--blora-color-status-secondary` | `#8B6571` | 次强调/数据系列 |
 
 浅色底（tint）不需要新令牌：用 `color-mix(in srgb, var(--blora-color-status-success) 12%, transparent)` 这类写法从状态色派生，或直接使用 Tag / Alert / Badge 的语义 variant。
