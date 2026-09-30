@@ -149,15 +149,19 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "blora-lint": "./bin/blora-lint.mjs"
+  },
   "files": [
     "dist/",
+    "bin/",
     "contracts/",
     "schemas/",
     "llms.txt",
     "README.md"
   ],
   "scripts": {
-    "lint": "eslint src/ tests/ --no-error-on-unmatched-pattern",
+    "lint": "eslint src/ tests/ bin/ --no-error-on-unmatched-pattern",
     "lint:css": "stylelint \"src/**/*.css\"",
     "typecheck": "tsc --noEmit",
     "test": "pnpm run build && vitest run --config vitest.config.ts",

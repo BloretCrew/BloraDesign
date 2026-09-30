@@ -1,0 +1,4 @@
+/* ce-internals (warn in CSS): styling an internal part of a custom element. */
+.blora-select__trigger {
+  padding: 0;
+}

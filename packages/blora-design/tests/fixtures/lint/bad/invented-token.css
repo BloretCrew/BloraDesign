@@ -1,0 +1,4 @@
+/* invented-token: declaring a --blora-* custom property that is not shipped. */
+:root {
+  --blora-made-up-color: #123456;
+}

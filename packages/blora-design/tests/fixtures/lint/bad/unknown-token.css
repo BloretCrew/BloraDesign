@@ -1,0 +1,5 @@
+/* unknown-token: var() referencing an unregistered/legacy Blora token. */
+.thing {
+  color: var(--blora-text-strong);
+  background: var(--blora-color-surface-nope);
+}

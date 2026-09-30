@@ -1,0 +1,10 @@
+/* dark-override: hand-rolled dark mode; Blora tokens already handle it. */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #000;
+  }
+}
+
+[data-theme="dark"] .panel {
+  color: #fff;
+}

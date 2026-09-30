@@ -1,0 +1,6 @@
+/* override-blora: app CSS restyling a Blora component class with visual props. */
+.blora-card {
+  background: hotpink;
+  box-shadow: none;
+  border-radius: 0;
+}

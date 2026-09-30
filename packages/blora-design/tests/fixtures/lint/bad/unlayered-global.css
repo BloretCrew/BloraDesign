@@ -1,0 +1,12 @@
+/* unlayered-global: top-level element rules outside any @layer. */
+button {
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+}
+
+table {
+  border-collapse: collapse;
+}

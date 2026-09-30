@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard · Good Blora page</title>
+    <link rel="stylesheet" href="../../../../dist/blora.css" />
+    <style>
+      /* App CSS lives in its own layer, declared after Blora so it never
+         shadows a component by accident. Only layout properties touch Blora
+         classes; visuals come from tokens. */
+      @layer legacy, blora, app;
+
+      @layer app {
+        .app-shell {
+          display: grid;
+          grid-template-columns: 16rem 1fr;
+          gap: var(--blora-space-4);
+          min-height: 100dvh;
+          background: var(--blora-color-surface-canvas);
+          color: var(--blora-color-text-primary);
+        }
+
+        .app-main {
+          display: grid;
+          gap: var(--blora-space-4);
+          padding: var(--blora-space-5);
+        }
+
+        /* Layout-only nudge on a Blora class — allowed (no visual props). */
+        .app-main .blora-card {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body class="blora-page blora-scope">
+    <div class="app-shell">
+      <aside>
+        <blora-sidebar-nav label="Primary" value="home">
+          <blora-sidebar-nav-group label="Discover">
+            <blora-sidebar-nav-link label="Home" href="#home" value="home"></blora-sidebar-nav-link>
+            <blora-sidebar-nav-link
+              label="Latest"
+              href="#latest"
+              value="latest"
+            ></blora-sidebar-nav-link>
+          </blora-sidebar-nav-group>
+        </blora-sidebar-nav>
+      </aside>
+
+      <main class="app-main">
+        <section class="blora-card" data-variant="hover">
+          <h2>Team</h2>
+          <div class="blora-table-wrap">
+            <table class="blora-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Role</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Alice</td>
+                  <td>Admin</td>
+                </tr>
+                <tr>
+                  <td>Bob</td>
+                  <td>Editor</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="blora-card">
+          <span class="blora-tag" data-variant="success">Stable</span>
+          <span class="blora-badge" data-variant="pill">3</span>
+
+          <blora-field label="Email">
+            <blora-search placeholder="Filter people"></blora-search>
+          </blora-field>
+
+          <blora-select name="team" placeholder="Pick a team">
+            <blora-option value="a">Alpha</blora-option>
+            <blora-option value="b">Beta</blora-option>
+          </blora-select>
+
+          <button type="button" class="blora-button" data-variant="primary">Save</button>
+          <button type="submit" class="blora-button" data-variant="secondary">Submit</button>
+        </section>
+
+        <blora-dialog>
+          <p>A confirmation dialog rendered by the Blora custom element.</p>
+          <button type="button" class="blora-button" data-variant="ghost">Close</button>
+        </blora-dialog>
+      </main>
+    </div>
+
+    <script type="module">
+      import { message } from "../../../../dist/index.js";
+      const btn = document.querySelector(".blora-button");
+      btn?.addEventListener("click", () => {
+        message("Saved");
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+/* hardcoded-color: literal colors in declarations instead of tokens. */
+.box {
+  color: #ff0000;
+  background: rgb(0, 128, 255);
+  border-color: hsl(210, 50%, 40%);
+}

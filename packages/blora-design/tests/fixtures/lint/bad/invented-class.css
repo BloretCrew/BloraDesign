@@ -1,0 +1,4 @@
+/* invented-class: defining a .blora-* selector that the system does not ship. */
+.blora-my-widget {
+  display: block;
+}
