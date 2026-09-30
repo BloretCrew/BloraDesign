@@ -1,67 +1,40 @@
 # Blora Design 2.0
 
-> Token-driven, accessible, zero-dependency Web UI design system. Stable package: `2.0.0`.
+> Token-driven, accessible, zero-dependency Web UI design system (npm `@bloret-crew/blora-design`).
+> This file is the entry point for AI agents that migrate or build pages with Blora.
 
-## Installation
+## Read in this order
 
-```bash
-npm install @bloret-crew/blora-design
-```
+1. `docs/patterns.md` — page composition rules and ten copy-ready page patterns. Read it before writing any page.
+2. `docs/migration/from-any-ui-to-blora-design.md` — the complete migration standard: replacement matrix and a verified example for every component and add-on.
+3. `docs/standards.md` — the real token names and visual rules.
+4. `packages/blora-design/contracts/*.contract.json` — the only source of truth for attributes, slots, events and classes.
 
-```ts
-import "@bloret-crew/blora-design/blora.css";
-import "@bloret-crew/blora-design/auto";
-import { createTableController, message, notify } from "@bloret-crew/blora-design";
-```
+Inside an installed project the same documents ship with the package: `node_modules/@bloret-crew/blora-design/llms.txt` and `node_modules/@bloret-crew/blora-design/dist/docs/`.
 
-Consumers must use published npm package exports only. Do not import repository source paths, git source paths, generated files from the repository, or copied component implementations.
+## Hard rules
 
-## Package surface
+- Import `@bloret-crew/blora-design/blora.css` and `@bloret-crew/blora-design/auto`; use published npm exports only (never repository `src/` paths or copied component code).
+- Declare `@layer legacy, blora;` before every stylesheet and move all legacy/global CSS into `@layer legacy`. Unlayered `button {}`, `input {}`, `a {}` or `* {}` rules override every Blora component.
+- Page CSS only does layout. Colours come from `--blora-color-*` tokens; names such as `--blora-primary`, `--blora-surface-1` or `--blora-text-muted` do not exist.
+- One surface level: page → `.blora-card`. Never put cards inside cards; use lists, descriptions, dividers or `data-variant="inset"`.
+- Status uses `.blora-badge` / `.blora-tag` variants (`success`, `warning`, `danger`, `info`, `neutral`); never hand-coloured chips.
+- One primary button per region; secondary actions `outline`/`ghost`; destructive actions `danger` plus `<blora-popconfirm>`.
+- Forms use `<blora-field>`; controls use the Blora element (`<blora-select>`, `<blora-switch>`, `<blora-checkbox>`, `<blora-datepicker>` …), not bare native controls.
+- Icons: `data-icon="name"` on `.blora-button`, `.blora-badge` or an empty `<span>` (Lucide names); no emoji or glyph icons.
+- Every data region has loading (`.blora-skeleton`), empty (`<blora-empty>`) and error (`<blora-alert>`) states; feedback uses `message`, never `alert()`/`confirm()`.
+- Use only attributes declared in the contracts. Do not author `blora-<component>__*` internals or invent `blora-*` classes.
 
-- Main package: `@bloret-crew/blora-design`
-- `./auto`: registers the default Composite Custom Element surface
-- `./icons-full`: optional complete Lucide icon registry
-- `./button`, `./select`, `./dialog`, `./table`: JavaScript subpaths
-- `./blora.global.js`: CDN/IIFE global `Blora`
-- `./custom-elements.json`: Custom Elements Manifest
-- `./component-manifest.json`: component manifest
-- `./api-snapshot.json`: public API snapshot
-- `./tokens.css`, `./tokens.dark.css`, `./tokens.themes.css`: token styles
-- `./blora.css`: aggregate core stylesheet
+## Verify
 
-## Add-ons
+- `npx blora-lint src` (2.1.0+) must report zero errors.
+- Check every page in light and dark mode, two themes and a 390px viewport.
 
-```bash
-npm install \
-  @bloret-crew/blora-design-markdown \
-  @bloret-crew/blora-design-thread \
-  @bloret-crew/blora-design-qrcode \
-  @bloret-crew/blora-design-effects \
-  @bloret-crew/blora-design-layout \
-  @bloret-crew/blora-design-theming
-```
+## Repository
 
-Each add-on exposes its public ESM entry, CSS entry, and global entry through npm `exports`.
+- `docs/guide.md` — usage guide
+- `docs/framework.md` — framework integration
+- `examples/showcase-v2/` — interactive catalogue of every component (the rendering reference)
+- `pnpm verify` — full gate for changes to this repository
 
-## Architecture
-
-- Use official CSS-only patterns for presentational content.
-- Use official Composite Custom Elements for structure-sensitive controls.
-- Use official headless controllers only when business code must own open data DOM, such as Table or Form.
-- Controller instances must be destroyed when their host lifecycle ends.
-- Use `data-blora-selectable` for built-in Table row selection.
-- Use `createBloraIcon()` or official component-generated Lucide SVG for UI icons.
-- Use registered `--blora-*` tokens for color, spacing, radius, shadow, motion, and layering.
-- Component-generated chrome follows the page locale through the locale pack.
-
-## Migration
-
-Read `docs/migration/from-any-ui-to-blora-design.md`. It contains the complete migration standard, the 87-component replacement matrix, 87 core component examples, 21 add-on capability examples, framework integration rules, npm-only policy, prohibited patterns, and final acceptance checklist.
-
-## Verification
-
-```bash
-pnpm verify
-```
-
-The published package is the only supported consumer surface. `packages/**/src` and `addons/**/src` are not consumer imports.
+The complete migration standard is `docs/migration/from-any-ui-to-blora-design.md`.

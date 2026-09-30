@@ -2,11 +2,13 @@
 
 > Token-driven, dark-friendly, zero-runtime-dependency Web UI design system.
 
-**Package** `@bloret-crew/blora-design` · **Version** `2.0.0` · **License** Apache-2.0
+**Package** `@bloret-crew/blora-design` · **Version** `2.0.8`（2.x Stable，API 自 `2.0.0` 起稳定）· **License** Apache-2.0
 **Status** Stable · **npm** `latest`
 
 ## 入口
 
+- **AI Agent 入口**：[`llms.txt`](./llms.txt)（安装后在 `node_modules/@bloret-crew/blora-design/llms.txt`）
+- [页面范式与组合规则](./docs/patterns.md) —— 写页面之前先读
 - [使用指南](./docs/guide.md)
 - [完整迁移规范](./docs/migration/from-any-ui-to-blora-design.md)
 - [设计规范](./docs/standards.md)
@@ -24,11 +26,19 @@
 npm install @bloret-crew/blora-design
 ```
 
+```css
+/* styles/layers.css —— 必须最先加载：旧样式进 legacy 层，永远输给 Blora 组件 */
+@layer legacy, blora;
+```
+
 ```ts
+import "./styles/layers.css";
 import "@bloret-crew/blora-design/blora.css";
-import "@bloret-crew/blora-design/auto";
+import "@bloret-crew/blora-design/auto"; // 注册组件，并自动填充 data-icon 图标
 import { createTableController, message } from "@bloret-crew/blora-design";
 ```
+
+迁移完成后运行 `npx blora-lint src`（2.1.0+），零 error 才算完成。
 
 可选 add-on：
 
@@ -71,8 +81,9 @@ window.addEventListener("pagehide", () => controller.destroy(), { once: true });
 | 展示型内容 | 使用官方 class 和语义 HTML，例如 `.blora-card`、`.blora-quote`、`.blora-tag`、`.blora-badge` |
 | 结构敏感交互 | 使用官方 Composite Custom Element，例如 `<blora-select>`、`<blora-dialog>`、`<blora-tabs>` |
 | 开放数据 DOM | 使用官方 headless controller，例如 `createTableController()`、`createFormController()` |
-| 图标 | 使用 `createBloraIcon()` 或官方组件生成的 Lucide SVG |
-| 样式 | 使用注册的 `--blora-*` token 和官方 CSS |
+| 图标 | `data-icon="plus"`（按钮、徽标、空 `<span>`）或 `createBloraIcon()` |
+| 样式 | 注册的 `--blora-color-*` 等 token 和官方 CSS；页面 CSS 只写布局 |
+| 页面组合 | 卡片不嵌套、状态用 Badge/Tag、每区一个主按钮，见 [页面范式](./docs/patterns.md) |
 
 业务项目不得复制组件源码、内部 CSS、内部 DOM 或第二套组件视觉。完整规则和每个组件示例见[完整迁移规范](./docs/migration/from-any-ui-to-blora-design.md)。
 

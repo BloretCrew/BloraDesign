@@ -2,7 +2,13 @@
 
 Blora Design 2.0 是基于 Design Token、Composite Custom Element 和公开 headless controller 的 ESM 设计系统。它不要求 React、Vue 或其他特定框架运行时。
 
-日常用法看 [`guide.md`](./guide.md)，完整迁移规范看 [`migration/from-any-ui-to-blora-design.md`](./migration/from-any-ui-to-blora-design.md)。交互真值在 `examples/showcase-v2/`，组件契约在 `packages/blora-design/contracts/`，发布状态在 [`refactor/status.md`](./refactor/status.md)。
+日常用法看 [`guide.md`](./guide.md)，页面组合规则看 [`patterns.md`](./patterns.md)，完整迁移规范看 [`migration/from-any-ui-to-blora-design.md`](./migration/from-any-ui-to-blora-design.md)。交互真值在 `examples/showcase-v2/`，组件契约在 `packages/blora-design/contracts/`，发布状态在 [`refactor/status.md`](./refactor/status.md)。
+
+框架项目的三个要点：
+
+- 入口最先加载只含 `@layer legacy, blora;` 的样式文件，旧框架样式放进 `legacy` 层（Tailwind 的写法见 `patterns.md` 第 1 节）。
+- 图标在模板里写 `<span data-icon="plus" aria-hidden="true"></span>`：`auto` 会持续填充后渲染的节点，框架不会删除它不认识的子节点。
+- 模板里只使用 contract 声明过的属性；需要调用方法（`show()`、`close()`）时在挂载后通过 ref 调用。
 
 ## 安装和入口
 

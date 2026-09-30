@@ -1,0 +1,36 @@
+# @bloret-crew/blora-design
+
+> AI agents: this file ships inside the npm package so you can follow Blora's rules offline.
+> Paths below are relative to `node_modules/@bloret-crew/blora-design/`.
+
+## Read before writing any page
+
+1. `dist/docs/patterns.md` — composition rules (surface levels, spacing, status colours, button hierarchy, CSS layers) and ten copy-ready page patterns.
+2. `dist/docs/migration/from-any-ui-to-blora-design.md` — replacement matrix plus a verified example for every component and add-on.
+3. `dist/docs/standards.md` — real token names (`--blora-color-*`) and visual rules.
+4. `contracts/<component>.contract.json` — attributes, slots, events and classes. Use nothing that is not declared here.
+5. `dist/token-manifest.json` / `dist/component-manifest.json` — every token and component.
+
+## Setup
+
+```ts
+import "./styles/layers.css"; // contains only: @layer legacy, blora;
+import "@bloret-crew/blora-design/blora.css";
+import "@bloret-crew/blora-design/auto"; // registers elements and fills data-icon icons
+```
+
+Put all legacy/global CSS inside `@layer legacy { … }`. Page CSS stays unlayered, uses class selectors and only does layout.
+
+## Hard rules
+
+- Colours only from `--blora-color-*` tokens. `--blora-primary`, `--blora-surface-1`, `--blora-text-muted` do not exist.
+- Never nest `.blora-card` in `.blora-card` (except one `data-variant="inset"` level).
+- Status: `.blora-badge[data-variant]`; categories: `.blora-tag[data-variant]`; never hand-coloured chips.
+- One primary button per region; `danger` for destructive actions with `<blora-popconfirm>` or `<blora-dialog>`.
+- Forms: `<blora-field>`. Controls: `<blora-select>`, `<blora-switch>`, `<blora-checkbox>`, `<blora-radio>`, `<blora-datepicker>`, `<blora-upload>` … not bare native controls.
+- Icons: `data-icon="plus"` on `.blora-button` / `.blora-badge` / an empty `<span>`; never emoji or `× → ★`.
+- Loading / empty / error: `.blora-skeleton`, `<blora-empty>`, `<blora-alert>`; feedback: `message.success()`, never `alert()`.
+
+## Verify
+
+Run `npx blora-lint src` (2.1.0+) and fix every error, then check light/dark mode and a 390px viewport.

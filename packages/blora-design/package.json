@@ -153,6 +153,7 @@
     "dist/",
     "contracts/",
     "schemas/",
+    "llms.txt",
     "README.md"
   ],
   "scripts": {
@@ -161,7 +162,7 @@
     "typecheck": "tsc --noEmit",
     "test": "pnpm run build && vitest run --config vitest.config.ts",
     "test:browser": "pnpm run build && playwright test --config ../../playwright.config.ts --project=chromium --project=mobile-chromium --project=a11y",
-    "build": "node ../tokens/scripts/build-tokens.mjs && vite build && vite build -c vite.global.config.ts && vite build -c vite.icons-global.config.ts && tsc --emitDeclarationOnly && node scripts/copy-tokens.mjs && node scripts/generate-manifests.mjs",
+    "build": "node ../tokens/scripts/build-tokens.mjs && vite build && vite build -c vite.global.config.ts && vite build -c vite.icons-global.config.ts && tsc --emitDeclarationOnly && node scripts/copy-tokens.mjs && node scripts/generate-manifests.mjs && node scripts/copy-docs.mjs",
     "build:tokens": "node ../tokens/scripts/build-tokens.mjs",
     "size": "node scripts/check-size.mjs",
     "pack:test": "node scripts/pack-test.mjs",
