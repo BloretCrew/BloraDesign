@@ -1244,6 +1244,10 @@ test("showcase catalog mounts all component previews without runtime errors", as
     "qrcode",
     "theming",
     "thread",
+    "pattern-resources",
+    "pattern-settings",
+    "pattern-states",
+    "pattern-table",
   ].sort();
   expect([...names].sort()).toEqual(expectedCatalogNames);
 

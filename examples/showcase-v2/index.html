@@ -209,7 +209,7 @@
         border-top: 1px solid var(--blora-color-border-subtle);
       }
 
-      .showcase-section h2 {
+      .showcase-section > h2 {
         margin: 0 0 var(--blora-space-4);
         color: var(--blora-color-text-primary);
         font-family: var(--blora-font-heading);
@@ -236,7 +236,7 @@
 
       .showcase-preview {
         display: grid;
-        min-height: 18rem;
+        min-height: 12rem;
         place-items: start center;
       }
 
@@ -245,8 +245,46 @@
         min-width: 0;
       }
 
-      .showcase-preview > .blora-indicator {
+      /* Intrinsically sized demos keep their own width; forcing the 40rem
+         column onto them stretched lone buttons and detached avatar badges. */
+      .showcase-preview
+        > :is(
+          button,
+          a,
+          .blora-avatar-wrap,
+          .blora-indicator,
+          .blora-badge,
+          .blora-tag,
+          blora-popconfirm,
+          blora-popover,
+          blora-tooltip,
+          blora-dropdown,
+          blora-switch,
+          blora-checkbox,
+          blora-radio,
+          blora-swap,
+          blora-rate
+        ) {
         width: max-content;
+        max-width: 100%;
+      }
+
+      /* Demo rows sit in the middle of the preview instead of hugging the
+         start edge of a centred column. */
+      .showcase-preview [data-showcase-row] {
+        justify-content: center;
+      }
+
+      .showcase-preview [data-showcase-row]:has(> blora-switch) {
+        gap: var(--blora-space-6);
+      }
+
+      .showcase-preview:has(> [data-showcase-pattern]) {
+        place-items: start stretch;
+      }
+
+      .showcase-preview > [data-showcase-pattern] {
+        width: 100%;
       }
 
       .showcase-preview:has([data-showcase-addon-layout]) {
@@ -291,6 +329,10 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
         gap: var(--blora-space-4);
+      }
+
+      [data-showcase-grid][data-showcase-grid-wide] {
+        grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
       }
 
       [data-showcase-mockup-stage] {
@@ -488,6 +530,177 @@
     </blora-sidebar-layout>
 
     <div id="showcase-component-sources" hidden>
+      <template data-pattern="pattern-resources" data-label="资源管理页" data-group="页面范式" data-eyebrow="Patterns" data-kind="Page pattern" data-description="页头、统计区和资源卡片网格：一层卡片、状态用 Badge、每区一个主按钮。">
+        <div data-showcase-pattern class="blora-stack--xl">
+          <header class="blora-row blora-row--between">
+            <div class="blora-stack--sm">
+              <h1 class="blora-h2">API Key 与用量</h1>
+              <p class="blora-text-muted">管理密钥、路由和调用额度。</p>
+            </div>
+            <div class="blora-actions">
+              <button type="button" class="blora-button" data-variant="outline" data-icon="download">导出</button>
+              <button type="button" class="blora-button" data-variant="primary" data-icon="plus">创建密钥</button>
+            </div>
+          </header>
+          <section class="blora-grid blora-grid--3" aria-label="用量概览">
+            <article class="blora-card" data-size="sm"><blora-statistic label="调用次数" value="12,926" trend="+8.2%" direction="up"></blora-statistic></article>
+            <article class="blora-card" data-size="sm"><blora-statistic label="Token 消耗" value="3.22" suffix="B"></blora-statistic></article>
+            <article class="blora-card" data-size="sm"><blora-statistic label="积分消耗" value="1,087.11" trend="-2.4%" direction="down"></blora-statistic></article>
+          </section>
+          <section class="blora-stack" aria-labelledby="pattern-keys-title">
+            <div class="blora-row blora-row--between">
+              <div class="blora-stack--sm">
+                <h2 class="blora-h4" id="pattern-keys-title">普通 API Key</h2>
+                <p class="blora-text-muted">仅自己管理的密钥</p>
+              </div>
+              <span class="blora-badge" data-variant="neutral">2</span>
+            </div>
+            <div class="blora-grid blora-grid--2">
+              <article class="blora-card blora-stack" data-size="sm">
+                <header class="blora-card__header">
+                  <div class="blora-row blora-row--tight">
+                    <h3 class="blora-card__title">Tools</h3>
+                    <span class="blora-badge" data-variant="success">有效</span>
+                    <span class="blora-tag">签名关闭</span>
+                  </div>
+                  <blora-switch name="pattern-tools" checked>启用</blora-switch>
+                </header>
+                <p class="blora-text-muted">最近使用 2026-08-25 · 创建于 2026-08-23 · 26 次 · 61.3K Token</p>
+                <blora-copy text="sk-01a7e55f9c3d2b045" masked label="复制 Tools 的 API Key"></blora-copy>
+                <footer class="blora-card__foot blora-row blora-row--between">
+                  <span class="blora-tag" data-variant="primary">路由 cursor-grok-4.5</span>
+                  <div class="blora-actions blora-actions--tight">
+                    <button type="button" class="blora-button" data-variant="outline" data-size="sm">模型队列</button>
+                    <blora-dropdown label="更多" align="end">
+                      <blora-dropdown-item value="rename">重命名</blora-dropdown-item>
+                      <blora-dropdown-item value="rotate">重新生成</blora-dropdown-item>
+                      <blora-dropdown-item value="delete" separator>删除</blora-dropdown-item>
+                    </blora-dropdown>
+                  </div>
+                </footer>
+              </article>
+              <article class="blora-card blora-stack" data-size="sm">
+                <header class="blora-card__header">
+                  <div class="blora-row blora-row--tight">
+                    <h3 class="blora-card__title">Translator</h3>
+                    <span class="blora-badge" data-variant="warning">额度将尽</span>
+                  </div>
+                  <blora-switch name="pattern-translator" checked>启用</blora-switch>
+                </header>
+                <p class="blora-text-muted">最近使用 1 天前 · 创建于 2026-08-17 · 26 次 · 29.7K Token</p>
+                <blora-copy text="sk-3b9d10a7c2e8f4412" masked label="复制 Translator 的 API Key"></blora-copy>
+                <footer class="blora-card__foot blora-row blora-row--between">
+                  <span class="blora-tag" data-variant="primary">路由 gpt-5.6-luna</span>
+                  <div class="blora-actions blora-actions--tight">
+                    <button type="button" class="blora-button" data-variant="outline" data-size="sm">模型队列</button>
+                    <blora-dropdown label="更多" align="end">
+                      <blora-dropdown-item value="rename">重命名</blora-dropdown-item>
+                      <blora-dropdown-item value="delete" separator>删除</blora-dropdown-item>
+                    </blora-dropdown>
+                  </div>
+                </footer>
+              </article>
+            </div>
+          </section>
+        </div>
+      </template>
+      <template data-pattern="pattern-table" data-label="列表与表格" data-group="页面范式" data-eyebrow="Patterns" data-kind="Page pattern" data-description="工具栏、表格、分页，以及卡片内列表：表格本身就是一层表面，不再装进卡片。">
+        <div data-showcase-pattern class="blora-stack--xl">
+          <section class="blora-stack" aria-labelledby="pattern-members-title">
+            <div class="blora-row blora-row--between">
+              <h2 class="blora-h4" id="pattern-members-title">成员</h2>
+              <div class="blora-actions">
+                <blora-search label="搜索成员" placeholder="姓名或邮箱"></blora-search>
+                <blora-segmented value="all">
+                  <blora-segment value="all">全部</blora-segment>
+                  <blora-segment value="active">活跃</blora-segment>
+                  <blora-segment value="disabled">已停用</blora-segment>
+                </blora-segmented>
+                <button type="button" class="blora-button" data-variant="primary" data-icon="plus">邀请成员</button>
+              </div>
+            </div>
+            <div class="blora-table-wrap">
+              <table class="blora-table">
+                <thead>
+                  <tr><th>成员</th><th>角色</th><th>状态</th><th>操作</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>张三</td><td>管理员</td><td><span class="blora-badge" data-variant="success">活跃</span></td><td><button type="button" class="blora-button" data-variant="ghost" data-size="sm">编辑</button></td></tr>
+                  <tr><td>李四</td><td>成员</td><td><span class="blora-badge" data-variant="neutral">已停用</span></td><td><button type="button" class="blora-button" data-variant="ghost" data-size="sm">编辑</button></td></tr>
+                  <tr><td>王五</td><td>成员</td><td><span class="blora-badge" data-variant="danger">登录异常</span></td><td><button type="button" class="blora-button" data-variant="ghost" data-size="sm">编辑</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="blora-row blora-row--between">
+              <span class="blora-text-muted">共 48 人</span>
+              <blora-pagination label="成员分页" page="1" total="5"></blora-pagination>
+            </div>
+          </section>
+          <article class="blora-card">
+            <header class="blora-card__header">
+              <div>
+                <h2 class="blora-card__title">关联账户</h2>
+                <p class="blora-card__desc">登录方式与第三方账户</p>
+              </div>
+              <button type="button" class="blora-button" data-variant="outline" data-size="sm" data-icon="link">关联新账户</button>
+            </header>
+            <ul class="blora-list">
+              <li class="blora-list__item">
+                <span class="blora-avatar" data-size="sm" data-variant="info">GH</span>
+                <div class="blora-list__meta"><div class="blora-list__title">GitHub</div><div class="blora-list__desc">rhedar · 2026-07-17 关联</div></div>
+                <span class="blora-badge" data-variant="success">已连接</span>
+                <button type="button" class="blora-button" data-variant="ghost" data-size="sm">解除</button>
+              </li>
+              <li class="blora-list__item">
+                <span class="blora-avatar" data-size="sm">MC</span>
+                <div class="blora-list__meta"><div class="blora-list__title">Minecraft</div><div class="blora-list__desc">尚未关联</div></div>
+                <button type="button" class="blora-button" data-variant="outline" data-size="sm">关联</button>
+              </li>
+            </ul>
+          </article>
+        </div>
+      </template>
+      <template data-pattern="pattern-settings" data-label="设置表单" data-group="页面范式" data-eyebrow="Patterns" data-kind="Page pattern" data-description="Field 生成标签、提示和错误；开关放进 fieldset；底部一个主按钮。">
+        <div data-showcase-pattern>
+          <form class="blora-card blora-stack--lg" aria-labelledby="pattern-profile-title">
+            <header class="blora-card__header">
+              <div>
+                <h2 class="blora-card__title" id="pattern-profile-title">个人资料</h2>
+                <p class="blora-card__desc">这些信息会显示在你的主页上。</p>
+              </div>
+            </header>
+            <div class="blora-grid blora-grid--2">
+              <blora-field label="昵称" name="nickname" required maxlength="20" value="Rhedar"></blora-field>
+              <blora-field label="邮箱" name="email" type="email" hint="用于接收通知" autocomplete="email"></blora-field>
+            </div>
+            <blora-field label="个人简介" name="bio" textarea limit="120"></blora-field>
+            <fieldset class="blora-fieldset" data-variant="flat">
+              <legend>通知</legend>
+              <div class="blora-grid blora-gap-3">
+                <blora-switch name="notify-email" checked>邮件通知</blora-switch>
+                <blora-switch name="notify-sms">短信通知</blora-switch>
+              </div>
+            </fieldset>
+            <footer class="blora-card__foot blora-actions blora-actions--end">
+              <button type="reset" class="blora-button" data-variant="ghost">重置</button>
+              <button type="button" class="blora-button" data-variant="primary">保存</button>
+            </footer>
+          </form>
+        </div>
+      </template>
+      <template data-pattern="pattern-states" data-label="加载、空与错误" data-group="页面范式" data-eyebrow="Patterns" data-kind="Page pattern" data-description="每个数据区都要有三态：骨架屏保持布局形状，空状态给出下一步，错误说明原因。">
+        <div data-showcase-pattern class="blora-grid blora-grid--3">
+          <article class="blora-card" data-size="sm" aria-busy="true" aria-label="加载中">
+            <div class="blora-skeleton" data-variant="title"></div>
+            <div class="blora-skeleton" data-variant="text"></div>
+            <div class="blora-skeleton" data-variant="text"></div>
+          </article>
+          <article class="blora-card" data-size="sm">
+            <blora-empty title="还没有密钥" description="创建第一个密钥后即可调用 API。" action-label="创建密钥"></blora-empty>
+          </article>
+          <blora-alert variant="danger" title="加载失败" description="网络异常，请检查连接后重试。"></blora-alert>
+        </div>
+      </template>
       <template data-component="button" data-label="Button" data-group="操作" data-eyebrow="Actions" data-kind="Native + CSS" data-description="原生按钮语义配合统一变体、尺寸、禁用与加载状态。">
         <div data-showcase-cases>
           <section data-showcase-case="Default"><h3>默认</h3><div data-showcase-row><button class="blora-button" type="button">保存</button></div></section>
@@ -797,7 +1010,8 @@
       <template data-component="card" data-label="Card" data-group="数据展示" data-eyebrow="Data display" data-kind="CSS-only" data-description="承载标题、内容和操作的通用内容容器。">
         <div data-showcase-cases>
           <section data-showcase-case="Default"><h3>默认</h3><div class="blora-card"><div class="blora-card__title">项目概览</div><div class="blora-card__body">卡片内容可以组合文本和其他正式组件。</div><div class="blora-card__foot"><button class="blora-button" type="button" data-variant="primary" data-size="sm">查看详情</button></div></div></section>
-          <section data-showcase-case="Variants"><h3>变体</h3><div data-showcase-grid><div class="blora-card"><div class="blora-card__title">Default</div><div class="blora-card__body">默认卡片样式</div></div><div class="blora-card" data-variant="hover"><div class="blora-card__title">Hover</div><div class="blora-card__body">悬浮效果卡片</div></div><div class="blora-card" data-variant="flat"><div class="blora-card__title">Flat</div><div class="blora-card__body">无阴影卡片</div></div><div class="blora-card" data-variant="inset"><div class="blora-card__title">Inset</div><div class="blora-card__body">内嵌卡片</div></div></div></section>
+          <section data-showcase-case="Header"><h3>标题行</h3><article class="blora-card"><header class="blora-card__header"><div><h4 class="blora-card__title">API 密钥</h4><p class="blora-card__desc">仅自己管理的密钥</p></div><button class="blora-button" type="button" data-variant="primary" data-size="sm" data-icon="plus">创建密钥</button></header><div class="blora-card__body">标题、说明和操作排成一行，标题不再带额外下边距。</div></article></section>
+          <section data-showcase-case="Variants"><h3>变体</h3><div data-showcase-grid data-showcase-grid-wide><div class="blora-card" data-size="sm"><div class="blora-card__title">Default</div><div class="blora-card__body">默认卡片样式</div></div><div class="blora-card" data-size="sm" data-variant="hover"><div class="blora-card__title">Hover</div><div class="blora-card__body">悬浮效果卡片</div></div><div class="blora-card" data-size="sm" data-variant="flat"><div class="blora-card__title">Flat</div><div class="blora-card__body">无阴影卡片</div></div><div class="blora-card" data-size="sm" data-variant="inset"><div class="blora-card__title">Inset</div><div class="blora-card__body">内嵌卡片</div></div></div></section>
           <section data-showcase-case="Panel"><h3>面板</h3><div class="blora-panel"><div class="blora-panel__header"><span>面板标题</span><button class="blora-button" type="button" data-variant="text" data-size="sm">更多</button></div><p>面板内容区域，比卡片更宽松的容器。</p></div></section>
           <section data-showcase-case="PositionedBadge"><h3>定位角标</h3><div class="blora-card" data-positioned data-with-badge><span class="blora-badge blora-card__badge" data-variant="circle">3</span><div class="blora-card__title">待处理项目</div><div class="blora-card__body">卡片角标由正式定位契约管理。</div></div></section>
         </div>
@@ -818,7 +1032,7 @@
       <template data-component="chat" data-label="Chat" data-group="数据展示" data-eyebrow="Data display" data-kind="Composite CE" data-description="展示左右两侧对话气泡、作者、头像和时间。">
         <div data-showcase-stack>
           <blora-chat author="Alice" time="10:24" avatar="A" message="设计稿已经更新。"></blora-chat>
-          <blora-chat author="Blora" time="10:26" avatar="B" message="收到，我来检查组件状态。" side="end" variant="primary"></blora-chat>
+          <blora-chat author="Blora" time="10:26" avatar="B" message="收到，我来检查组件状态。" side="end" avatar-variant="primary"></blora-chat>
         </div>
       </template>
       <template data-component="collapse" data-label="Collapse" data-group="数据展示" data-eyebrow="Data display" data-kind="Composite CE" data-description="允许多个条目独立展开的信息折叠组。">
@@ -899,7 +1113,7 @@
       <template data-component="tag" data-label="Tag" data-group="数据展示" data-eyebrow="Data display" data-kind="CSS-only" data-description="分类、关键词或可移除标签。浅底描边。数量、红点和状态提示请用 Badge。">
         <div data-showcase-cases>
           <section data-showcase-case="Default"><h3>默认</h3><div data-showcase-row><span class="blora-tag">Default</span></div></section>
-          <section data-showcase-case="Variants"><h3>语义变体</h3><div data-showcase-row><span class="blora-tag">Default</span><span class="blora-tag" data-variant="primary">Primary</span><span class="blora-tag" data-variant="neutral">Neutral</span><span class="blora-tag" data-variant="info">Info</span><span class="blora-tag" data-variant="success">Success</span><span class="blora-tag" data-variant="warning">Warning</span></div></section>
+          <section data-showcase-case="Variants"><h3>语义变体</h3><div data-showcase-row><span class="blora-tag">Default</span><span class="blora-tag" data-variant="primary">Primary</span><span class="blora-tag" data-variant="neutral">Neutral</span><span class="blora-tag" data-variant="info">Info</span><span class="blora-tag" data-variant="success">Success</span><span class="blora-tag" data-variant="warning">Warning</span><span class="blora-tag" data-variant="danger">Danger</span></div></section>
           <section data-showcase-case="Removable"><h3>可移除</h3><div data-showcase-row><span class="blora-tag blora-tag--removable" data-variant="primary">React<button class="blora-tag__close" type="button" aria-label="移除"></button></span><span class="blora-tag blora-tag--removable">设计系统<button class="blora-tag__close" type="button" aria-label="移除"></button></span></div></section>
           <section data-showcase-case="VersusBadge">
             <h3>和 Badge 怎么选</h3>
@@ -982,7 +1196,7 @@
             <blora-progress label="上传中" value="30"></blora-progress>
             <blora-progress label="处理中" value="60" variant="success"></blora-progress>
             <blora-progress label="下载中" value="90" variant="info"></blora-progress>
-            <blora-progress label="不确定" value="100" variant="striped"></blora-progress>
+            <blora-progress label="同步中" value="75" variant="striped"></blora-progress>
           </div></section>
           <section data-showcase-case="Circular"><h3>环形进度</h3><div data-showcase-row><blora-progress shape="circular" label="完成度" value="70"></blora-progress><blora-progress shape="circular" label="同步中" value="40" variant="success"></blora-progress></div></section>
         </div>
@@ -1144,10 +1358,10 @@
       </template>
       <template data-component="tooltip" data-label="Tooltip" data-group="反馈" data-eyebrow="Feedback" data-kind="Composite CE" data-description="悬停或聚焦时提供简短辅助说明。">
         <div data-showcase-cases>
-          <section data-showcase-case="Default"><h3>默认（上）</h3><div data-showcase-overlay-space><blora-tooltip trigger="悬停或聚焦查看" text="这是一个提示信息"></blora-tooltip></div></section>
-          <section data-showcase-case="Bottom"><h3>下方</h3><div data-showcase-overlay-space><blora-tooltip trigger="下方提示" text="出现在触发器下方" placement="bottom"></blora-tooltip></div></section>
-          <section data-showcase-case="Start"><h3>起始侧</h3><div data-showcase-overlay-space><blora-tooltip trigger="起始侧" text="逻辑起始侧，LTR 在左" placement="start"></blora-tooltip></div></section>
-          <section data-showcase-case="End"><h3>结束侧</h3><div data-showcase-overlay-space><blora-tooltip trigger="结束侧" text="逻辑结束侧，LTR 在右" placement="end"></blora-tooltip></div></section>
+          <section data-showcase-case="Default"><h3>默认（上）</h3><div data-showcase-overlay-space><blora-tooltip text="这是一个提示信息"><button class="blora-button" type="button" data-variant="outline">悬停或聚焦查看</button></blora-tooltip></div></section>
+          <section data-showcase-case="Bottom"><h3>下方</h3><div data-showcase-overlay-space><blora-tooltip text="出现在触发器下方" placement="bottom"><button class="blora-button" type="button" data-variant="outline">下方提示</button></blora-tooltip></div></section>
+          <section data-showcase-case="Start"><h3>起始侧</h3><div data-showcase-overlay-space><blora-tooltip text="逻辑起始侧，LTR 在左" placement="start"><button class="blora-button" type="button" data-variant="outline">起始侧</button></blora-tooltip></div></section>
+          <section data-showcase-case="End"><h3>结束侧</h3><div data-showcase-overlay-space><blora-tooltip text="逻辑结束侧，LTR 在右" placement="end"><button class="blora-button" type="button" data-variant="outline" data-size="icon" data-icon="info" aria-label="更多说明"></button></blora-tooltip></div></section>
         </div>
       </template>
       <template data-component="deck" data-label="Deck" data-group="布局" data-eyebrow="Layout" data-kind="Composite CE" data-description="以叠层卡片浏览队列或相册内容。">
@@ -1459,10 +1673,14 @@
         const componentNavigationMount = document.getElementById("component-navigation-mount");
         const componentPanelRoot = document.getElementById("component-panel-root");
         const sourceTemplates = [
-          ...document.querySelectorAll("#showcase-component-sources template:is([data-component], [data-addon])"),
+          ...document.querySelectorAll(
+            "#showcase-component-sources template:is([data-component], [data-addon], [data-pattern])",
+          ),
         ];
         sourceTemplates.forEach((template) => {
-          if (!template.dataset.component) template.dataset.component = template.dataset.addon;
+          if (!template.dataset.component) {
+            template.dataset.component = template.dataset.addon || template.dataset.pattern;
+          }
         });
         const voidElements = new Set(["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"]);
         const sourceScripts = {
@@ -1739,7 +1957,11 @@
           value: "button",
         });
 
+        /* Page patterns are compositions, not a taxonomy category; list them first. */
+        const leadingGroups = ["页面范式"];
         const groupOrder = ["操作", "数据展示", "导航", "反馈", "数据输入", "布局", "样机"];
+        const groupRank = (label) =>
+          leadingGroups.includes(label) ? 0 : groupOrder.indexOf(label) + 1 || 99;
         const groups = new Map();
         for (const template of sourceTemplates) {
           const group = template.dataset.group;
@@ -1748,8 +1970,7 @@
         }
 
         for (const label of [...groups.keys()].sort(
-          (left, right) =>
-            (groupOrder.indexOf(left) + 1 || 99) - (groupOrder.indexOf(right) + 1 || 99),
+          (left, right) => groupRank(left) - groupRank(right),
         )) {
           const templates = groups.get(label);
           const group = createElement("blora-sidebar-nav-group", { label });
@@ -1858,7 +2079,7 @@
               requiredBottom = Math.max(requiredBottom, visibleBottom(element, mount));
             }
             const blockPadding = parseFloat(getComputedStyle(mount).paddingBottom) || 0;
-            mount.style.minHeight = `${Math.max(288, Math.ceil(requiredBottom - previewRect.top + blockPadding))}px`;
+            mount.style.minHeight = `${Math.max(192, Math.ceil(requiredBottom - previewRect.top + blockPadding))}px`;
           };
           const schedulePreviewResize = () => requestAnimationFrame(() => requestAnimationFrame(resizePreview));
           new ResizeObserver(schedulePreviewResize).observe(mount);
