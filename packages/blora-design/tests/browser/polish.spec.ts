@@ -116,3 +116,135 @@ test("avatar badge and presence dot stay anchored to a stretched wrap", async ({
     expect(geometry.badgeCenterX).toBeLessThan(geometry.avatarRight + 8);
   }
 });
+
+test("tag semantic variants are visually distinct and include danger", async ({ page: p }) => {
+  await p.setContent(
+    page(
+      componentCss("tag"),
+      ["default", "primary", "info", "success", "warning", "danger"]
+        .map(
+          (variant) =>
+            `<span class="blora-tag"${variant === "default" ? "" : ` data-variant="${variant}"`} data-key="${variant}">${variant}</span>`,
+        )
+        .join(""),
+    ),
+  );
+  const styles = await p.locator("[data-key]").evaluateAll((tags) =>
+    tags.map((tag) => ({
+      key: (tag as HTMLElement).dataset.key,
+      background: getComputedStyle(tag).backgroundColor,
+      color: getComputedStyle(tag).color,
+      border: getComputedStyle(tag).borderTopColor,
+    })),
+  );
+  const backgrounds = new Set(styles.map((style) => style.background));
+  const colors = new Set(styles.map((style) => style.color));
+  expect(backgrounds.size).toBe(styles.length);
+  expect(colors.size).toBeGreaterThanOrEqual(5);
+  const danger = styles.find((style) => style.key === "danger")!;
+  const fallback = styles.find((style) => style.key === "default")!;
+  expect(danger.background).not.toBe(fallback.background);
+  expect(danger.border).not.toBe(fallback.border);
+});
+
+test("disabled form controls share one sunken treatment", async ({ page: p }) => {
+  await p.setContent(
+    page(
+      componentCss("input", "textarea", "select"),
+      `<input class="blora-input" disabled value="x" id="input" />
+       <textarea class="blora-textarea" disabled id="textarea">x</textarea>
+       <blora-select id="select" label="状态" disabled>
+         <blora-option value="a">A</blora-option>
+       </blora-select>`,
+      true,
+    ),
+  );
+  const input = await p
+    .locator("#input")
+    .evaluate((element) => getComputedStyle(element).backgroundColor);
+  const textarea = await p.locator("#textarea").evaluate((element) => ({
+    background: getComputedStyle(element).backgroundColor,
+    resize: getComputedStyle(element).resize,
+  }));
+  await expect(p.locator("#select")).toHaveAttribute("disabled", "");
+  const select = await p.locator("#select").evaluate((host) => {
+    const trigger = host.shadowRoot?.querySelector(".blora-select__trigger");
+    return {
+      background: trigger ? getComputedStyle(trigger).backgroundColor : "",
+      opacity: getComputedStyle(host).opacity,
+    };
+  });
+  expect(textarea.background).toBe(input);
+  expect(textarea.resize).toBe("none");
+  expect(select.background).toBe(input);
+  expect(select.opacity).toBe("1");
+});
+
+test("navbar links never break inside a word in a narrow container", async ({ page: p }) => {
+  await p.setContent(
+    page(
+      componentCss("navbar", "button"),
+      `<div style="width:30rem">
+        <blora-navbar title="Blora Design" brand-href="#">
+          <blora-navbar-link label="设计规范" href="#a"></blora-navbar-link>
+          <blora-navbar-link label="设计令牌" href="#b"></blora-navbar-link>
+          <blora-navbar-link label="组件" href="#c"></blora-navbar-link>
+          <blora-navbar-action label="开始使用" href="#d" variant="primary"></blora-navbar-action>
+        </blora-navbar>
+      </div>`,
+      true,
+    ),
+  );
+  const links = p.locator(".blora-navbar__link");
+  await expect(links).toHaveCount(3);
+  const measured = await links.evaluateAll((items) =>
+    items.map((item) => {
+      const range = document.createRange();
+      range.selectNodeContents(item);
+      const tops = new Set([...range.getClientRects()].map((rect) => Math.round(rect.top)));
+      return { whiteSpace: getComputedStyle(item).whiteSpace, lines: tops.size };
+    }),
+  );
+  for (const link of measured) {
+    expect(link.whiteSpace).toBe("nowrap");
+    expect(link.lines).toBe(1);
+  }
+});
+
+test("square and circle icon buttons have different corner radii", async ({ page: p }) => {
+  await p.setContent(
+    page(
+      componentCss("button"),
+      `<button type="button" class="blora-button" data-size="icon" data-shape="square" aria-label="A" id="square">A</button>
+       <button type="button" class="blora-button" data-size="icon" data-shape="circle" aria-label="B" id="circle">B</button>`,
+    ),
+  );
+  const radius = async (selector: string) =>
+    p.locator(selector).evaluate((element) => {
+      const width = element.getBoundingClientRect().width;
+      return parseFloat(getComputedStyle(element).borderTopLeftRadius) / width;
+    });
+  expect(await radius("#square")).toBeLessThan(0.4);
+  expect(await radius("#circle")).toBeGreaterThanOrEqual(0.5);
+});
+
+test("status icons share the circled Lucide family", async ({ page: p }) => {
+  await p.setContent(
+    page(
+      componentCss("alert"),
+      ["info", "success", "warning", "danger"]
+        .map(
+          (variant) =>
+            `<blora-alert variant="${variant}" title="${variant}" description="d" data-key="${variant}"></blora-alert>`,
+        )
+        .join(""),
+      true,
+    ),
+  );
+  const icons = await p
+    .locator("blora-alert")
+    .evaluateAll((alerts) =>
+      alerts.map((alert) => alert.querySelector("svg")?.getAttribute("data-blora-icon") ?? ""),
+    );
+  expect(icons).toEqual(["info", "circle-check", "circle-alert", "circle-x"]);
+});

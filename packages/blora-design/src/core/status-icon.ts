@@ -2,10 +2,13 @@ import { createBloraIcon, type BloraIconName } from "./icons.js";
 
 export type StatusIconVariant = "danger" | "error" | "info" | "success" | "warning";
 
+/* One circled family for every status so Alert, Result, Message and
+   Notification variants read as siblings (bare check/x next to circled
+   alert/info looked like two icon sets). */
 const STATUS_ICON: Record<StatusIconVariant, BloraIconName> = {
-  success: "check",
-  danger: "close",
-  error: "close",
+  success: "circle-check",
+  danger: "circle-x",
+  error: "circle-x",
   warning: "circle-alert",
   info: "info",
 };

@@ -30,6 +30,7 @@ export type BloraIconName =
   | "chevron-right"
   | "circle-alert"
   | "circle-check"
+  | "circle-x"
   | "clock"
   | "close"
   | "copy"

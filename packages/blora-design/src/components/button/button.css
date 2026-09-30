@@ -260,7 +260,8 @@
 }
 
 .blora-button[data-size="icon"][data-shape="square"] {
-  --blora-button-radius: var(--blora-radius-lg);
+  /* radius-lg on a ~40px box is nearly a circle; md keeps it a rounded square. */
+  --blora-button-radius: var(--blora-radius-md);
   --blora-button-corner: superellipse(1.2);
 }
 

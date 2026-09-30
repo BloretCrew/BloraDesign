@@ -8,7 +8,7 @@
   "formAssociated": false,
   "attributes": {
     "data-variant": {
-      "type": "\"primary\" | \"neutral\" | \"info\" | \"success\" | \"warning\"",
+      "type": "\"primary\" | \"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\"",
       "reflects": true
     }
   },

@@ -59,6 +59,11 @@ export const BLORA_ICON_DATA: Record<string, BloraIconNode[]> = {
     { tag: "circle", attrs: { cx: "12", cy: "12", r: "10" } },
     { tag: "path", attrs: { d: "m9 12 2 2 4-4" } },
   ],
+  "circle-x": [
+    { tag: "circle", attrs: { cx: "12", cy: "12", r: "10" } },
+    { tag: "path", attrs: { d: "m15 9-6 6" } },
+    { tag: "path", attrs: { d: "m9 9 6 6" } },
+  ],
   clock: [
     { tag: "circle", attrs: { cx: "12", cy: "12", r: "10" } },
     { tag: "path", attrs: { d: "M12 6v6l4 2" } },

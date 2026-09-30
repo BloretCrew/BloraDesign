@@ -111,6 +111,7 @@ test("component text variants keep WCAG AA contrast across every theme", async (
       <head><style>${css}</style></head>
       <body class="blora-page blora-scope">
         <main style="background:var(--blora-color-surface-default);padding:2rem;display:flex;gap:1rem;flex-wrap:wrap">
+          <span class="blora-avatar" data-contrast-key="avatar-default">Aa</span>
           <span class="blora-avatar" data-variant="primary" data-contrast-key="avatar-primary">Aa</span>
           <span class="blora-avatar" data-variant="neutral" data-contrast-key="avatar-neutral">Aa</span>
           <span class="blora-avatar" data-variant="info" data-contrast-key="avatar-info">Aa</span>
@@ -129,6 +130,7 @@ test("component text variants keep WCAG AA contrast across every theme", async (
           <span class="blora-tag" data-variant="info" data-contrast-key="tag-info">Tag</span>
           <span class="blora-tag" data-variant="success" data-contrast-key="tag-success">Tag</span>
           <span class="blora-tag" data-variant="warning" data-contrast-key="tag-warning">Tag</span>
+          <span class="blora-tag" data-variant="danger" data-contrast-key="tag-danger">Tag</span>
 
           <button class="blora-button" data-variant="primary" data-contrast-key="button-primary">Primary</button>
           <button class="blora-button" data-variant="secondary" data-contrast-key="button-secondary">Secondary</button>

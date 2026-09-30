@@ -32,6 +32,7 @@ const ICON_MAP = {
   "chevron-right": "chevron-right",
   "circle-alert": "circle-alert",
   "circle-check": "circle-check",
+  "circle-x": "circle-x",
   clock: "clock",
   close: "x",
   copy: "copy",
