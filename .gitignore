@@ -37,6 +37,8 @@ _verify_tmp/
 
 # Local agent tooling and private working documents
 .agents/
+.kiro/settings/
+deepseek-discussion.html
 docs/IMPROVEMENTS.md
 docs/migrate-bbs-prompt.md
 gpt-reply.md
