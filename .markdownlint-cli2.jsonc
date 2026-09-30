@@ -20,6 +20,7 @@
     "docs/guide.md",
     "docs/standards.md",
     "docs/framework.md",
+    "docs/patterns.md",
     "docs/ai/**/*.md",
     "examples/**/*.md",
     "packages/*/README.md",

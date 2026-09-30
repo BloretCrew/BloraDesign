@@ -70,8 +70,8 @@
   },
   "slots": {
     "default": "Dialog body content",
-    "header": "Dialog header (title, close button)",
-    "footer": "Dialog footer (action buttons)"
+    "title": "Dialog title, rendered inside the h2 that labels the dialog (aria-labelledby)",
+    "footer": "Dialog footer (action buttons); hidden while empty"
   },
   "parts": ["backdrop", "panel", "header", "title", "close-button", "body", "footer"],
   "cssProperties": [

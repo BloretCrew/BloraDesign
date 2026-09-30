@@ -1,6 +1,7 @@
 # Blora Design 2.0 · 使用与迁移指南
 
 > **面向 Blora Design 2.0 Stable（当前 `2.0.8`）**。展示型内容使用官方 class 和语义 HTML，结构敏感交互使用 Composite Custom Element，开放数据 DOM 使用公开 headless controller。
+> **写页面之前先读 [`patterns.md`](./patterns.md)**：卡片层级、间距节奏、状态色、CSS 层级和整页范式都在那里。
 > 设计令牌见 [`standards.md`](./standards.md)。完整迁移规范见 [`migration/from-any-ui-to-blora-design.md`](./migration/from-any-ui-to-blora-design.md)。组件契约见 `packages/blora-design/contracts/*.contract.json`。交互示例见 `examples/showcase-v2/`。
 
 ---
@@ -14,6 +15,7 @@
 5. [主题首屏与表单可访问性](#5-主题首屏与表单可访问性)
 6. [完整跨框架迁移规范](./migration/from-any-ui-to-blora-design.md)
 7. [验收清单](#7-验收清单)
+8. [页面范式与组合规则](./patterns.md)
 
 ---
 
@@ -118,20 +120,18 @@ import "@bloret-crew/blora-design/components/button.css";
 ### 3.2 Field、Input、Textarea
 
 ```html
-<blora-field label="项目名称" name="project" required hint="最多 40 个字符">
-  <input class="blora-input" maxlength="40" />
-</blora-field>
+<blora-field label="项目名称" name="project" required hint="最多 40 个字符" maxlength="40"></blora-field>
 
-<label class="blora-field">
-  <span class="blora-field__label">备注</span>
-  <textarea class="blora-textarea" name="note"></textarea>
-</label>
+<!-- 2.1.0+：写在里面的原生控件会被保留（type、name、autocomplete 不丢） -->
+<blora-field label="备注" hint="选填">
+  <textarea class="blora-textarea" name="note" rows="4"></textarea>
+</blora-field>
 ```
 
 ### 3.3 Select、Tabs、Segmented、Accordion
 
 ```html
-<blora-select label="状态" name="status">
+<blora-select name="status" placeholder="选择状态">
   <blora-option value="active">进行中</blora-option>
   <blora-option value="done">已完成</blora-option>
 </blora-select>
@@ -158,14 +158,20 @@ import "@bloret-crew/blora-design/components/button.css";
 <button type="button" class="blora-button" data-variant="primary" id="open-dialog">
   打开对话框
 </button>
-<blora-dialog id="dialog" aria-label="删除成员">
+<blora-dialog id="dialog">
+  <span slot="title">删除成员</span>
   <p>确定要删除这个成员吗？</p>
 </blora-dialog>
 
-<blora-popover label="查看说明">
-  <button slot="trigger" type="button" class="blora-button" data-variant="ghost">说明</button>
+<!-- trigger 属性生成触发按钮，子元素是浮层内容 -->
+<blora-popover trigger="说明">
   <p>这里是补充信息。</p>
 </blora-popover>
+
+<!-- Tooltip 的子元素就是触发器 -->
+<blora-tooltip text="保存当前项目">
+  <button type="button" class="blora-button" data-variant="ghost">保存</button>
+</blora-tooltip>
 ```
 
 ```ts
@@ -267,6 +273,8 @@ const themeBootScript = getThemeBootScript();
 ## 7. 验收清单
 
 - [ ] 所有依赖来自已发布 npm 包，不引用仓库 `src/`，不复制组件源码。
+- [ ] `npx blora-lint src` 没有 error（2.1.0+）。
+- [ ] 页面组合符合 [`patterns.md`](./patterns.md)：卡片不嵌套、状态用 Badge/Tag、旧 CSS 在 `@layer legacy`。
 - [ ] 组件清单中已有能力全部改用对应 Blora 组件或官方基础模式。
 - [ ] Composite CE 由 `@bloret-crew/blora-design/auto` 或官方 add-on 注册。
 - [ ] 业务代码没有复制内部 BEM 树，也没有访问 `shadowRoot`。

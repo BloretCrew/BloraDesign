@@ -58,24 +58,53 @@ function contractAttributes(): Record<string, string[]> {
   return map;
 }
 
-/** HTML blocks of sections 14 (core) and 15 (add-ons), scripts removed. */
+/** Every `.blora-*` class shipped by the core and add-on CSS bundles. */
+function shippedClasses(): Set<string> {
+  const classes = new Set<string>();
+  const walk = (dir: string) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const path = resolve(dir, entry.name);
+      if (entry.isDirectory()) walk(path);
+      else if (entry.name.endsWith(".css")) {
+        for (const match of readFileSync(path, "utf8").matchAll(/\.(blora-[a-z0-9_-]+)/gi)) {
+          classes.add(match[1]!);
+        }
+      }
+    }
+  };
+  walk(resolve(packageRoot, "dist"));
+  for (const addon of addons) walk(resolve(repoRoot, "addons", addon, "dist"));
+  return classes;
+}
+
+/** HTML blocks of the executable documents, scripts removed. */
 function examples(): Example[] {
-  const doc = readFileSync(
-    resolve(repoRoot, "docs", "migration", "from-any-ui-to-blora-design.md"),
-    "utf8",
-  ).replaceAll("\r\n", "\n");
-  const body = doc.slice(doc.indexOf("## 14. "), doc.indexOf("## 16. "));
+  const sources: Array<{ file: string; from?: string; to?: string; label: string }> = [
+    {
+      file: resolve(repoRoot, "docs", "migration", "from-any-ui-to-blora-design.md"),
+      from: "## 14. ",
+      to: "## 16. ",
+      label: "migration",
+    },
+    { file: resolve(repoRoot, "docs", "patterns.md"), label: "patterns" },
+  ];
   const found: Example[] = [];
-  let heading = "";
-  for (const match of body.matchAll(/^(#{3,4} .+)$|```html\n([\s\S]*?)```/gm)) {
-    if (match[1]) {
-      heading = match[1].replace(/^#+ /, "");
-    } else if (match[2]) {
-      const html = match[2].replace(
-        /<script\b(?![^>]*type="text\/markdown")[\s\S]*?<\/script>/g,
-        "",
-      );
-      if (html.trim()) found.push({ heading, html });
+  for (const source of sources) {
+    const doc = readFileSync(source.file, "utf8").replaceAll("\r\n", "\n");
+    const start = source.from ? doc.indexOf(source.from) : 0;
+    const end = source.to ? doc.indexOf(source.to) : doc.length;
+    const body = doc.slice(start, end);
+    let heading = "";
+    for (const match of body.matchAll(/^(#{3,4} .+)$|```html\n([\s\S]*?)```/gm)) {
+      if (match[1]) {
+        heading = `${source.label} · ${match[1].replace(/^#+ /, "")}`;
+      } else if (match[2]) {
+        const html = match[2].replace(
+          /<script\b(?![^>]*type="text\/markdown")[\s\S]*?<\/script>/g,
+          "",
+        );
+        if (html.trim()) found.push({ heading, html });
+      }
     }
   }
   return found;
@@ -95,6 +124,7 @@ test("every per-component migration example mounts defined, rendering elements",
 
   const list = examples();
   const allowed = contractAttributes();
+  const classes = shippedClasses();
   expect(list.length).toBeGreaterThan(90);
   const failures: string[] = [];
   for (const example of list) {
@@ -151,6 +181,13 @@ test("every per-component migration example mounts defined, rendering elements",
       { html: example.html, allowed },
     );
     for (const problem of report) failures.push(`${example.heading}: ${problem}`);
+    for (const match of example.html.matchAll(/\bclass="([^"]*)"/g)) {
+      for (const name of match[1]!.split(/\s+/)) {
+        if (name.startsWith("blora-") && !classes.has(name)) {
+          failures.push(`${example.heading}: class "${name}" is not shipped by any Blora CSS`);
+        }
+      }
+    }
   }
   expect(failures).toEqual([]);
   expect(errors).toEqual([]);

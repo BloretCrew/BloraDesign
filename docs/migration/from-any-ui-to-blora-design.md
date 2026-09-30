@@ -4,7 +4,8 @@
 >
 > 本规范的目标是：迁移后，所有 Blora Design 已经覆盖的界面能力都使用 Blora 官方组件、基础模式或公开服务；业务代码不重复实现同一组件，不引入第二套组件视觉，不使用未经过 Blora 统一的裸原生交互控件。
 >
-> **当前稳定版本**：`2.0.7`
+> **当前稳定版本**：`2.0.8`（标注 `2.1.0+` 的能力随下一个版本发布）
+> **页面组合规则**：[`docs/patterns.md`](../patterns.md) —— 卡片层级、间距节奏、状态色、整页范式；**动手前先读**
 > **推荐入口**：[`docs/guide.md`](../guide.md)
 > **交互真值**：[`examples/showcase-v2/`](../../examples/showcase-v2/)
 > **组件清单**：[`component-manifest.json`](../../packages/blora-design/component-manifest.json)
@@ -86,12 +87,14 @@ Blora 的 `Button` 是 `button.blora-button`，它仍然是原生 `button`；`Se
 ### 2.3 迁移前命令
 
 ```bash
-# 扫描项目中的旧组件 class、内部结构和不符合迁移规范的实现
-pnpm --filter @bloret-crew/blora-design run migrate:check -- ./src
+# 扫描业务代码：不存在的令牌、手写颜色、复刻组件内部结构、未声明属性、卡片嵌套、原生弹窗……（2.1.0+）
+npx blora-lint src
 
-# 查看完整组件清单和契约
-node -e "const p=require('./packages/blora-design/component-manifest.json'); for(const c of p.components) console.log(c.name, c.kind, c.tagName || c.cssExport || '')"
+# 查看已安装版本的组件清单（随包发布，离线可读）
+node -e "const p=require('@bloret-crew/blora-design/component-manifest.json'); for(const c of p.components) console.log(c.name, c.kind, c.tagName || c.cssExport || '')"
 ```
+
+安装后，`node_modules/@bloret-crew/blora-design/llms.txt` 是给 AI Agent 的入口，`dist/docs/` 下有本规范、页面范式和设计规范的离线副本。
 
 ## 3. 完整组件替换矩阵
 
@@ -232,24 +235,24 @@ node -e "const p=require('./packages/blora-design/component-manifest.json'); for
 
 ### 4.1 Bootstrap
 
-| Bootstrap            | Blora 2.0                                                  |
-| -------------------- | ---------------------------------------------------------- |
-| `.btn btn-primary`   | `.blora-button[data-variant="primary"]`                    |
-| `.btn btn-secondary` | `.blora-button[data-variant="secondary"]`                  |
-| `.btn btn-sm`        | `.blora-button[data-size="sm"]`                            |
-| `.form-control`      | `<blora-input>`、`<blora-textarea>` 或 `<blora-field>`     |
-| `.form-select`       | `<blora-select>`                                           |
-| `.form-check`        | `<blora-checkbox>` 或 `<blora-radio>`                      |
-| `.modal`             | `<blora-dialog>`                                           |
-| `.offcanvas`         | `<blora-drawer>`                                           |
-| `.dropdown`          | `<blora-dropdown>`                                         |
-| `.collapse`          | `<blora-collapse>`                                         |
-| `.accordion`         | `<blora-accordion>`                                        |
-| `.nav-tabs`          | `<blora-tabs>`                                             |
-| `.pagination`        | `<blora-pagination>`                                       |
-| `.badge`             | `.blora-badge`                                             |
-| `.alert`             | `<blora-alert>`                                            |
-| `.table`             | `.blora-table` + `createTableController`（需要高级行为时） |
+| Bootstrap            | Blora 2.0                                                           |
+| -------------------- | ------------------------------------------------------------------- |
+| `.btn btn-primary`   | `.blora-button[data-variant="primary"]`                             |
+| `.btn btn-secondary` | `.blora-button[data-variant="secondary"]`                           |
+| `.btn btn-sm`        | `.blora-button[data-size="sm"]`                                     |
+| `.form-control`      | `<blora-field>`，或 `input.blora-input` / `textarea.blora-textarea` |
+| `.form-select`       | `<blora-select>`                                                    |
+| `.form-check`        | `<blora-checkbox>` 或 `<blora-radio>`                               |
+| `.modal`             | `<blora-dialog>`                                                    |
+| `.offcanvas`         | `<blora-drawer>`                                                    |
+| `.dropdown`          | `<blora-dropdown>`                                                  |
+| `.collapse`          | `<blora-collapse>`                                                  |
+| `.accordion`         | `<blora-accordion>`                                                 |
+| `.nav-tabs`          | `<blora-tabs>`                                                      |
+| `.pagination`        | `<blora-pagination>`                                                |
+| `.badge`             | `.blora-badge`                                                      |
+| `.alert`             | `<blora-alert>`                                                     |
+| `.table`             | `.blora-table` + `createTableController`（需要高级行为时）          |
 
 迁移后删除 Bootstrap 的组件 CSS 和 reset。不要在 `.blora-*` 节点上继续叠加 `btn`、`form-control`、`rounded-*`、`shadow-*` 等 Bootstrap class。
 
@@ -284,21 +287,21 @@ Tailwind 可继续作为业务布局工具，迁移后的限制如下：
 
 ### 4.3 Ant Design / Ant Design Vue
 
-| Ant                                | Blora 2.0                                |
-| ---------------------------------- | ---------------------------------------- |
-| `Button`                           | `.blora-button`                          |
-| `Input` / `Input.TextArea`         | `<blora-input>` / `<blora-textarea>`     |
-| `Select`                           | `<blora-select>`                         |
-| `DatePicker`                       | `<blora-datepicker>`                     |
-| `ColorPicker`                      | `<blora-color-picker>`                   |
-| `Checkbox` / `Radio` / `Switch`    | 对应 Blora CE                            |
-| `Modal`                            | `<blora-dialog>`                         |
-| `Drawer`                           | `<blora-drawer>`                         |
-| `Popover` / `Tooltip` / `Dropdown` | 对应 Blora CE                            |
-| `Tabs` / `Segmented`               | 对应 Blora CE                            |
-| `Table`                            | `.blora-table` + `createTableController` |
-| `Tag` / `Badge` / `Alert`          | 对应 Blora class/CE                      |
-| `message` / `notification`         | Blora `message` / `notify`               |
+| Ant                                | Blora 2.0                                                          |
+| ---------------------------------- | ------------------------------------------------------------------ |
+| `Button`                           | `.blora-button`                                                    |
+| `Input` / `Input.TextArea`         | `<blora-field>` 或 `input.blora-input` / `textarea.blora-textarea` |
+| `Select`                           | `<blora-select>`                                                   |
+| `DatePicker`                       | `<blora-datepicker>`                                               |
+| `ColorPicker`                      | `<blora-color-picker>`                                             |
+| `Checkbox` / `Radio` / `Switch`    | 对应 Blora CE                                                      |
+| `Modal`                            | `<blora-dialog>`                                                   |
+| `Drawer`                           | `<blora-drawer>`                                                   |
+| `Popover` / `Tooltip` / `Dropdown` | 对应 Blora CE                                                      |
+| `Tabs` / `Segmented`               | 对应 Blora CE                                                      |
+| `Table`                            | `.blora-table` + `createTableController`                           |
+| `Tag` / `Badge` / `Alert`          | 对应 Blora class/CE                                                |
+| `message` / `notification`         | Blora `message` / `notify`                                         |
 
 卸载 Ant 的 `ConfigProvider` 主题 token 和组件样式。React/Vue 仍可保留作为应用框架，但不要同时渲染 Ant 和 Blora 两套同类控件。
 
@@ -455,6 +458,8 @@ import "@bloret-crew/blora-design-theming/theming.css";
 
 不要同时加载旧 UI 框架的 reset、组件主题和 Blora 的同名组件样式。
 
+**CSS 层级（必读）**：Blora 的全部样式在 `@layer blora.*` 中，而未分层的样式永远赢过分层样式。旧项目里任何全局的 `button {}`、`input {}`、`a {}`、`* {}` 或 Tailwind preflight 都会覆盖 Blora 组件。在所有样式之前声明 `@layer legacy, blora;`，把保留的旧样式整体放进 `@layer legacy`；新写的页面样式只用 class 选择器、只写布局。完整写法见 [`docs/patterns.md`](../patterns.md) 第 1 节。
+
 ### 5.2 Token 规则
 
 业务 CSS 使用语义 token：
@@ -494,12 +499,22 @@ z-index: 9999;
 
 ### 5.4 图标
 
-所有操作、状态和导航图标使用 `createBloraIcon()` 或官方组件生成的 Lucide SVG：
+所有操作、状态和导航图标使用 `createBloraIcon()` 或官方组件生成的 Lucide SVG。模板里优先用声明式写法——`@bloret-crew/blora-design/auto`（2.1.0+）会自动填充，框架后渲染的内容也会被补上：
+
+```html
+<button type="button" class="blora-button" data-variant="primary" data-icon="plus">新建</button>
+<span class="blora-badge" data-variant="info" data-icon="info">提示</span>
+<span data-icon="key" aria-hidden="true"></span>
+```
+
+需要在脚本里生成时：
 
 ```ts
 import { createBloraIcon } from "@bloret-crew/blora-design";
 const icon = createBloraIcon("settings", 18);
 ```
+
+默认包内置常用图标（如 `plus`、`close`、`search`、`settings`、`trash`、`pencil`、`download`、`bell`、`link`、`lock`、`log-out`、`refresh-cw`、`filter`）；其他 Lucide 图标先加载一次 `@bloret-crew/blora-design/icons-full`。
 
 禁止：
 
@@ -755,8 +770,18 @@ coral / indigo / graphite / mono / circuit / dusk
 
 ### 11.4 发布门禁
 
+**业务项目**（迁移到 Blora 的项目）至少执行：
+
 ```bash
-pnpm --filter @bloret-crew/blora-design run migrate:check -- ./src
+npx blora-lint src          # 2.1.0+：零 error
+npm run lint && npm run typecheck && npm test   # 项目自己的门禁
+```
+
+并在浅色、深色、至少两套主题、390px 宽度下逐页截图检查，逐项对照 [`docs/patterns.md`](../patterns.md) 第 10 节自检清单。
+
+**Blora Design 仓库自身**发布组件改动时执行（这些脚本只存在于本仓库）：
+
+```bash
 pnpm lint
 pnpm lint:css
 pnpm lint:contracts
@@ -903,8 +928,12 @@ import "@bloret-crew/blora-design/auto";
 
 ```html
 <blora-carousel label="项目图片">
-  <blora-carousel-slide label="第一张"><img src="/images/one.jpg" alt="第一张图片" /></blora-carousel-slide>
-  <blora-carousel-slide label="第二张"><img src="/images/two.jpg" alt="第二张图片" /></blora-carousel-slide>
+  <blora-carousel-slide label="第一张"
+    ><img src="/images/one.jpg" alt="第一张图片"
+  /></blora-carousel-slide>
+  <blora-carousel-slide label="第二张"
+    ><img src="/images/two.jpg" alt="第二张图片"
+  /></blora-carousel-slide>
 </blora-carousel>
 ```
 
@@ -931,7 +960,12 @@ import "@bloret-crew/blora-design/auto";
 ```html
 <blora-chart-container title="销售趋势" subtitle="最近 7 天" trend="+12%" trend-variant="success">
   <svg viewBox="0 0 400 160" width="100%" height="160" role="img" aria-label="销售趋势折线图">
-    <polyline points="0,120 114,90 228,60 342,40 400,20" fill="none" stroke="currentColor" stroke-width="2.5"></polyline>
+    <polyline
+      points="0,120 114,90 228,60 342,40 400,20"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.5"
+    ></polyline>
   </svg>
 </blora-chart-container>
 ```
@@ -940,7 +974,14 @@ import "@bloret-crew/blora-design/auto";
 
 ```html
 <blora-chat author="Alice" time="10:24" avatar="A" message="设计稿已经更新。"></blora-chat>
-<blora-chat author="Blora" time="10:26" avatar="B" message="收到，我来检查组件状态。" side="end" avatar-variant="primary"></blora-chat>
+<blora-chat
+  author="Blora"
+  time="10:26"
+  avatar="B"
+  message="收到，我来检查组件状态。"
+  side="end"
+  avatar-variant="primary"
+></blora-chat>
 ```
 
 ### Checkbox（checkbox）
@@ -1022,8 +1063,14 @@ import "@bloret-crew/blora-design/auto";
 ```html
 <table class="blora-descriptions">
   <tbody>
-    <tr><th>状态</th><td>在线</td></tr>
-    <tr><th>版本</th><td>2.0.8</td></tr>
+    <tr>
+      <th>状态</th>
+      <td>在线</td>
+    </tr>
+    <tr>
+      <th>版本</th>
+      <td>2.0.8</td>
+    </tr>
   </tbody>
 </table>
 ```
@@ -1055,7 +1102,9 @@ import "@bloret-crew/blora-design/auto";
 ```html
 <blora-dock label="主导航" static>
   <blora-dock-item value="home" href="/" icon="home" active><span>首页</span></blora-dock-item>
-  <blora-dock-item value="projects" href="/projects" icon="folder"><span>项目</span></blora-dock-item>
+  <blora-dock-item value="projects" href="/projects" icon="folder"
+    ><span>项目</span></blora-dock-item
+  >
 </blora-dock>
 ```
 
@@ -1093,7 +1142,12 @@ import "@bloret-crew/blora-design/auto";
 ### Empty（empty）
 
 ```html
-<blora-empty id="projects-empty" title="暂无项目" description="创建项目后，它们会显示在这里。" action-label="创建项目"></blora-empty>
+<blora-empty
+  id="projects-empty"
+  title="暂无项目"
+  description="创建项目后，它们会显示在这里。"
+  action-label="创建项目"
+></blora-empty>
 <script type="module">
   document
     .querySelector("#projects-empty")
@@ -1113,9 +1167,15 @@ import "@bloret-crew/blora-design/auto";
 
 ```html
 <!-- 属性写法：Field 生成 label、原生 input、提示和错误。 -->
-<blora-field label="项目名称" name="project" required hint="最多 40 个字符" maxlength="40"></blora-field>
+<blora-field
+  label="项目名称"
+  name="project"
+  required
+  hint="最多 40 个字符"
+  maxlength="40"
+></blora-field>
 
-<!-- 子控件写法（2.0.9+）：写在里面的原生 input/textarea 会被保留，type、name、autocomplete 不会丢。 -->
+<!-- 子控件写法（2.1.0+）：写在里面的原生 input/textarea 会被保留，type、name、autocomplete 不会丢。 -->
 <blora-field label="密码" hint="至少 8 位" required>
   <input class="blora-input" type="password" name="password" autocomplete="current-password" />
 </blora-field>
@@ -1171,7 +1231,6 @@ import "@bloret-crew/blora-design/auto";
   window.addEventListener("pagehide", () => controller.destroy(), { once: true });
 </script>
 ```
-
 
 ### Hero（hero）
 
@@ -1234,10 +1293,12 @@ import "@bloret-crew/blora-design/auto";
 ### Media（media）
 
 ```html
-<figure class="blora-media" data-ratio="16:9">
+<figure class="blora-media" data-ratio="video">
   <img src="/images/cover.jpg" alt="封面" />
 </figure>
 ```
+
+`data-ratio` 可选 `square`（1:1）、`video`（16:9，默认）、`wide`、`portrait`。
 
 ### Megamenu（megamenu）
 
@@ -1318,7 +1379,13 @@ import "@bloret-crew/blora-design/auto";
 
 ```html
 <!-- total 是总页数（不是条目数）；默认就是带数字页码的完整分页。 -->
-<blora-pagination id="project-pages" label="项目分页" page="2" total="12" max-visible="7"></blora-pagination>
+<blora-pagination
+  id="project-pages"
+  label="项目分页"
+  page="2"
+  total="12"
+  max-visible="7"
+></blora-pagination>
 <script type="module">
   document
     .querySelector("#project-pages")
@@ -1329,7 +1396,12 @@ import "@bloret-crew/blora-design/auto";
 ### Popconfirm（popconfirm）
 
 ```html
-<blora-popconfirm trigger="删除" message="确认删除此项？" cancel-label="取消" confirm-label="确定"></blora-popconfirm>
+<blora-popconfirm
+  trigger="删除"
+  message="确认删除此项？"
+  cancel-label="取消"
+  confirm-label="确定"
+></blora-popconfirm>
 ```
 
 ### Popover（popover）
@@ -1555,8 +1627,14 @@ import "@bloret-crew/blora-design/auto";
 
 ```html
 <blora-tour label="新手引导">
-  <blora-tour-step title="标签" description="高亮贴合的胶囊标签。"><span class="blora-tag" data-variant="primary">步骤 A</span></blora-tour-step>
-  <blora-tour-step title="按钮" description="跟随按钮圆角的高亮。"><button type="button" class="blora-button" data-variant="outline">步骤 B</button></blora-tour-step>
+  <blora-tour-step title="标签" description="高亮贴合的胶囊标签。"
+    ><span class="blora-tag" data-variant="primary">步骤 A</span></blora-tour-step
+  >
+  <blora-tour-step title="按钮" description="跟随按钮圆角的高亮。"
+    ><button type="button" class="blora-button" data-variant="outline">
+      步骤 B
+    </button></blora-tour-step
+  >
 </blora-tour>
 ```
 
@@ -1598,9 +1676,13 @@ import "@bloret-crew/blora-design/auto";
 ### Upload（upload）
 
 ```html
-<blora-upload prompt="拖拽文件至此" hint="支持 SVG / PNG / JPG · 单文件 ≤ 8MB" accept=".svg,.png,.jpg" multiple></blora-upload>
+<blora-upload
+  prompt="拖拽文件至此"
+  hint="支持 SVG / PNG / JPG · 单文件 ≤ 8MB"
+  accept=".svg,.png,.jpg"
+  multiple
+></blora-upload>
 ```
-
 
 ## 15. Add-on 的最小示例
 
@@ -1740,9 +1822,11 @@ import "@bloret-crew/blora-design-markdown";
 
 ```html
 <blora-markdown>
-  <script type="text/markdown"># 标题
+  <script type="text/markdown">
+    # 标题
 
-正文内容</script>
+    正文内容
+  </script>
 </blora-markdown>
 ```
 

@@ -22,14 +22,14 @@
     "data-size": {
       "type": "\"sm\"",
       "default": null,
-      "description": "Compact padding for dense grids such as resource cards and statistics (since 2.0.9)."
+      "description": "Compact padding for dense grids such as resource cards and statistics (since 2.1.0)."
     }
   },
   "classes": {
     "blora-card": "Surface container. Nest at most one level (use data-variant=\"inset\" for the inner surface); organise content inside with lists, descriptions and dividers instead of more cards.",
-    "blora-card__header": "Header row (since 2.0.9): title block on the start side, status or actions on the end side.",
+    "blora-card__header": "Header row (since 2.1.0): title block on the start side, status or actions on the end side.",
     "blora-card__title": "Card title.",
-    "blora-card__desc": "Muted one-line description under the title (since 2.0.9).",
+    "blora-card__desc": "Muted one-line description under the title (since 2.1.0).",
     "blora-card__body": "Body text.",
     "blora-card__foot": "Footer separated by a top border, usually a .blora-actions row.",
     "blora-card__badge": "Absolutely positioned corner badge; requires data-positioned on the card.",
