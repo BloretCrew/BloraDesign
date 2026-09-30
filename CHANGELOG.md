@@ -1,5 +1,34 @@
 # Changelog
 
+## 2.1.0 (unreleased)
+
+Focus: make Blora itself more consistent and make migrations by other projects (and their AI agents) come out right the first time.
+
+### Added
+
+- `npx blora-lint [paths]`: consumer lint CLI shipped with the package. Reports unknown/invented tokens and classes, authored Composite CE internals, undeclared attributes and invalid variant values, hard-coded colours, dark-mode overrides, unlayered global CSS that overrides components, app CSS restyling Blora classes, bare native controls, glyph/emoji icons, nested cards, native `alert`/`confirm`, inline handlers, 1.x APIs and `shadowRoot` access.
+- The package now ships `llms.txt` and an offline copy of the rules in `dist/docs/` (page patterns, migration standard, design standard, guide, framework notes).
+- `docs/patterns.md`: composition rules (CSS layers, token cheat sheet, layout primitives, surface levels, spacing rhythm, status and button hierarchy) and ten copy-ready page patterns; the showcase renders them in a new 页面范式 group.
+- `hydrateIcons()` / `observeIcons()`: `data-icon` on `.blora-button`, `.blora-badge` and empty placeholders is filled automatically by `auto` and `Blora.autoDefine()`, including content rendered later by frameworks.
+- Curated icons: `bell`, `circle-x`, `download`, `external-link`, `filter`, `link`, `lock`, `log-out`, `refresh-cw`.
+- Tag `data-variant="danger"`; Card `.blora-card__header`, `.blora-card__desc` and `data-size="sm"`.
+- `<blora-field>` adopts an authored `<input>`/`<textarea>` child instead of replacing it, keeping its `type`, `name`, `autocomplete` and other attributes.
+
+### Changed
+
+- Coral `danger` is now brick red (`#AF4A3F`, dark `#E0715B`) so destructive actions no longer look like the primary colour; the shared light `warning` is amber `#8C6429` across coral, dusk, graphite, circuit and indigo.
+- Tag and Alert semantic variants use visible tints; status icons share one circled Lucide family.
+- Stack spacing lives in the utilities layer and wins over component margin resets; fields no longer double the spacing of stacks and grids.
+- Buttons follow their container's cross-axis alignment (fixed size already prevents stretching).
+
+### Fixed
+
+- Pills Tabs: the sliding indicator no longer covers the selected label.
+- Avatar badges and presence dots stay anchored to the avatar in stretched rows.
+- Navbar links never wrap mid-word; disabled Select matches disabled Input; disabled Textarea is not resizable; square icon buttons look square.
+- Contrast: Copy action icons, default avatar initials and statistic labels meet WCAG AA/non-text thresholds.
+- Documentation: real token names in the design standard; every migration example uses the real component API and is now executed by a browser gate and the linter.
+
 ## 2.0.8
 
 ### Added

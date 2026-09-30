@@ -54,3 +54,15 @@
 
 这些工作必须遵守当前 contract、npm-only 和完整门禁规则。
 
+
+## 2.1.0 迭代（未发布）
+
+目标：组件本身更一致，其他项目（及其 AI Agent）迁移时一次写对。已完成：
+
+- 页面组合规范 `docs/patterns.md` 与 Showcase「页面范式」分组；
+- 随包发布 `llms.txt`、`dist/docs/` 离线规范和 `npx blora-lint`；
+- 迁移规范逐例改为真实 API，并由浏览器门禁和 lint 执行校验；
+- `data-icon` 自动填充、Field 采纳子控件、Card 标题行、Tag danger；
+- Coral danger/warning 调色与语义变体、禁用态、Tabs/Avatar/Navbar 缺陷修复（见 `known-differences.md`）。
+
+待办：版本号升到 `2.1.0` 并发布 npm，消费项目才能使用上述能力。
