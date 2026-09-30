@@ -248,3 +248,42 @@ test("status icons share the circled Lucide family", async ({ page: p }) => {
     );
   expect(icons).toEqual(["info", "circle-check", "circle-alert", "circle-x"]);
 });
+
+test("card header aligns title block and actions without title margin drift", async ({
+  page: p,
+}) => {
+  await p.setContent(
+    page(
+      componentCss("card", "button"),
+      `<article class="blora-card" data-size="sm" style="width:36rem">
+        <header class="blora-card__header">
+          <div>
+            <h2 class="blora-card__title">API 密钥</h2>
+            <p class="blora-card__desc">仅自己管理的密钥</p>
+          </div>
+          <button type="button" class="blora-button" data-variant="primary" data-size="sm">创建</button>
+        </header>
+        <p class="blora-card__body">内容</p>
+      </article>`,
+    ),
+  );
+  const geometry = await p.locator(".blora-card").evaluate((card) => {
+    const header = card.querySelector(".blora-card__header")!.getBoundingClientRect();
+    const block = card.querySelector(".blora-card__header > div")!.getBoundingClientRect();
+    const button = card.querySelector(".blora-button")!.getBoundingClientRect();
+    const title = card.querySelector(".blora-card__title")!;
+    return {
+      padding: getComputedStyle(card).paddingTop,
+      titleMargin: getComputedStyle(title).marginBottom,
+      titleWeight: getComputedStyle(title).fontWeight,
+      buttonRightGap: header.right - button.right,
+      blockCenter: block.top + block.height / 2,
+      buttonCenter: button.top + button.height / 2,
+    };
+  });
+  expect(geometry.padding).toBe("24px");
+  expect(geometry.titleMargin).toBe("0px");
+  expect(Number(geometry.titleWeight)).toBeGreaterThanOrEqual(600);
+  expect(Math.abs(geometry.buttonRightGap)).toBeLessThan(1);
+  expect(Math.abs(geometry.blockCenter - geometry.buttonCenter)).toBeLessThan(2);
+});

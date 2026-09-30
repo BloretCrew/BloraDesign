@@ -15,6 +15,7 @@ const css =
     resolve(packageRoot, "src", "components", "badge", "badge.css"),
     resolve(packageRoot, "src", "components", "button", "button.css"),
     resolve(packageRoot, "src", "components", "tag", "tag.css"),
+    resolve(packageRoot, "src", "components", "statistic", "statistic.css"),
   ]
     .map((file) => readFileSync(file, "utf8"))
     .join("\n") + "\n* { transition: none !important; animation: none !important; }";
@@ -131,6 +132,7 @@ test("component text variants keep WCAG AA contrast across every theme", async (
           <span class="blora-tag" data-variant="success" data-contrast-key="tag-success">Tag</span>
           <span class="blora-tag" data-variant="warning" data-contrast-key="tag-warning">Tag</span>
           <span class="blora-tag" data-variant="danger" data-contrast-key="tag-danger">Tag</span>
+          <div class="blora-stat"><div class="blora-stat__label" data-contrast-key="stat-label">本月访问</div></div>
 
           <button class="blora-button" data-variant="primary" data-contrast-key="button-primary">Primary</button>
           <button class="blora-button" data-variant="secondary" data-contrast-key="button-secondary">Secondary</button>
