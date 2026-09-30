@@ -173,6 +173,24 @@ describe("Markdown add-on", () => {
     el.remove();
   });
 
+  it("blora-markdown keeps its content when it is moved", () => {
+    const el = document.createElement(BLORA_MARKDOWN_TAG);
+    const script = document.createElement("script");
+    script.type = "text/markdown";
+    script.textContent = "# Moved";
+    el.append(script);
+    const first = document.createElement("div");
+    const second = document.createElement("div");
+    document.body.append(first, second);
+    first.append(el);
+    const rendered = el.firstElementChild;
+    second.append(el);
+    expect(el.innerHTML).toContain("Moved");
+    expect(el.firstElementChild).toBe(rendered);
+    first.remove();
+    second.remove();
+  });
+
   it("initMarkdown binds nodes", () => {
     document.body.innerHTML = `<div data-blora-markdown data-source="# T"></div>`;
     const off = initMarkdown(document);

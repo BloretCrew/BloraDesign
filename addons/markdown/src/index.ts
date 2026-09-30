@@ -307,10 +307,16 @@ export class BloraMarkdown extends MarkdownBase {
   }
 
   private source = "";
+  private drawnSource: string | null = null;
 
   connectedCallback(): void {
+    /* The first render consumes the <script type="text/markdown"> child, so a
+       later reconnect (tabs, sidebar layouts and frameworks re-parent light
+       DOM) must keep the captured source instead of rendering nothing. */
     const script = this.querySelector("script[type='text/markdown']");
-    this.source = this.getAttribute("source") ?? script?.textContent ?? "";
+    if (this.hasAttribute("source")) this.source = this.getAttribute("source") ?? "";
+    else if (script) this.source = script.textContent ?? "";
+    if (this.drawnSource === this.source && this.childNodes.length > 0) return;
     this.draw();
   }
 
@@ -326,6 +332,7 @@ export class BloraMarkdown extends MarkdownBase {
       allowHtml: this.hasAttribute("allow-html"),
       inline: this.hasAttribute("inline"),
     });
+    this.drawnSource = this.source;
   }
 }
 
