@@ -25,6 +25,15 @@ export const BLORA_ICON_DATA: Record<string, BloraIconNode[]> = {
     { tag: "circle", attrs: { cx: "12", cy: "12", r: "10" } },
     { tag: "path", attrs: { d: "M4.929 4.929 19.07 19.071" } },
   ],
+  bell: [
+    { tag: "path", attrs: { d: "M10.268 21a2 2 0 0 0 3.464 0" } },
+    {
+      tag: "path",
+      attrs: {
+        d: "M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326",
+      },
+    },
+  ],
   calendar: [
     { tag: "path", attrs: { d: "M8 2v3" } },
     { tag: "path", attrs: { d: "M16 2v3" } },
@@ -96,10 +105,20 @@ export const BLORA_ICON_DATA: Record<string, BloraIconNode[]> = {
     { tag: "path", attrs: { d: "M9 15h6" } },
     { tag: "path", attrs: { d: "M12 18v-6" } },
   ],
+  download: [
+    { tag: "path", attrs: { d: "M12 15V3" } },
+    { tag: "path", attrs: { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" } },
+    { tag: "path", attrs: { d: "m7 10 5 5 5-5" } },
+  ],
   ellipsis: [
     { tag: "circle", attrs: { cx: "12", cy: "12", r: "1" } },
     { tag: "circle", attrs: { cx: "19", cy: "12", r: "1" } },
     { tag: "circle", attrs: { cx: "5", cy: "12", r: "1" } },
+  ],
+  "external-link": [
+    { tag: "path", attrs: { d: "M15 3h6v6" } },
+    { tag: "path", attrs: { d: "M10 14 21 3" } },
+    { tag: "path", attrs: { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" } },
   ],
   eye: [
     {
@@ -125,6 +144,14 @@ export const BLORA_ICON_DATA: Record<string, BloraIconNode[]> = {
       },
     },
     { tag: "path", attrs: { d: "m2 2 20 20" } },
+  ],
+  filter: [
+    {
+      tag: "path",
+      attrs: {
+        d: "M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z",
+      },
+    },
   ],
   flame: [
     {
@@ -194,6 +221,19 @@ export const BLORA_ICON_DATA: Record<string, BloraIconNode[]> = {
     { tag: "path", attrs: { d: "m21 2-9.6 9.6" } },
     { tag: "circle", attrs: { cx: "7.5", cy: "15.5", r: "5.5" } },
   ],
+  link: [
+    { tag: "path", attrs: { d: "M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" } },
+    { tag: "path", attrs: { d: "M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" } },
+  ],
+  lock: [
+    { tag: "rect", attrs: { rx: "2", ry: "2", x: "3", y: "11", width: "18", height: "11" } },
+    { tag: "path", attrs: { d: "M7 11V7a5 5 0 0 1 10 0v4" } },
+  ],
+  "log-out": [
+    { tag: "path", attrs: { d: "m16 17 5-5-5-5" } },
+    { tag: "path", attrs: { d: "M21 12H9" } },
+    { tag: "path", attrs: { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" } },
+  ],
   mail: [
     { tag: "path", attrs: { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" } },
     { tag: "rect", attrs: { rx: "2", x: "2", y: "4", width: "20", height: "16" } },
@@ -257,6 +297,12 @@ export const BLORA_ICON_DATA: Record<string, BloraIconNode[]> = {
   plus: [
     { tag: "path", attrs: { d: "M5 12h14" } },
     { tag: "path", attrs: { d: "M12 5v14" } },
+  ],
+  "refresh-cw": [
+    { tag: "path", attrs: { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" } },
+    { tag: "path", attrs: { d: "M21 3v5h-5" } },
+    { tag: "path", attrs: { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" } },
+    { tag: "path", attrs: { d: "M8 16H3v5" } },
   ],
   search: [
     { tag: "path", attrs: { d: "m21 21-4.34-4.34" } },
