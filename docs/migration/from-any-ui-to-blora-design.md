@@ -835,7 +835,11 @@ import "@bloret-crew/blora-design/auto";
 ### Autocomplete（autocomplete）
 
 ```html
-<blora-autocomplete label="搜索成员" placeholder="输入成员名称"></blora-autocomplete>
+<blora-autocomplete label="组件" placeholder="搜索组件…">
+  <blora-autocomplete-option value="Button"></blora-autocomplete-option>
+  <blora-autocomplete-option value="Dialog"></blora-autocomplete-option>
+  <blora-autocomplete-option value="Table"></blora-autocomplete-option>
+</blora-autocomplete>
 ```
 
 ### Avatar（avatar）
@@ -847,7 +851,7 @@ import "@bloret-crew/blora-design/auto";
 ### Backtop（backtop）
 
 ```html
-<blora-backtop target="body" label="返回顶部"></blora-backtop>
+<blora-backtop target="body" show-after="120" label="返回顶部"></blora-backtop>
 ```
 
 ### Badge（badge）
@@ -867,10 +871,10 @@ import "@bloret-crew/blora-design/auto";
 ### Breadcrumb（breadcrumb）
 
 ```html
-<blora-breadcrumb label="当前位置">
-  <a href="/">首页</a>
-  <a href="/settings">设置</a>
-  <span aria-current="page">主题</span>
+<blora-breadcrumb>
+  <blora-breadcrumb-item label="首页" href="/"></blora-breadcrumb-item>
+  <blora-breadcrumb-item label="设置" href="/settings"></blora-breadcrumb-item>
+  <blora-breadcrumb-item label="主题" current></blora-breadcrumb-item>
 </blora-breadcrumb>
 ```
 
@@ -883,7 +887,7 @@ import "@bloret-crew/blora-design/auto";
 ### Calendar（calendar）
 
 ```html
-<blora-calendar label="选择日期" value="2026-08-28"></blora-calendar>
+<blora-calendar value="2026-08-28"></blora-calendar>
 ```
 
 ### Card（card）
@@ -899,29 +903,44 @@ import "@bloret-crew/blora-design/auto";
 
 ```html
 <blora-carousel label="项目图片">
-  <img src="/images/one.jpg" alt="第一张图片" />
-  <img src="/images/two.jpg" alt="第二张图片" />
+  <blora-carousel-slide label="第一张"><img src="/images/one.jpg" alt="第一张图片" /></blora-carousel-slide>
+  <blora-carousel-slide label="第二张"><img src="/images/two.jpg" alt="第二张图片" /></blora-carousel-slide>
 </blora-carousel>
 ```
 
 ### Cascader（cascader）
 
 ```html
-<blora-cascader label="选择地区" placeholder="请选择"></blora-cascader>
+<blora-cascader placeholder="选择成员" show-result>
+  <blora-cascader-option label="技术部">
+    <blora-cascader-option label="前端组">
+      <blora-cascader-option label="张三"></blora-cascader-option>
+      <blora-cascader-option label="李四"></blora-cascader-option>
+    </blora-cascader-option>
+  </blora-cascader-option>
+  <blora-cascader-option label="产品部">
+    <blora-cascader-option label="桌面组">
+      <blora-cascader-option label="周十"></blora-cascader-option>
+    </blora-cascader-option>
+  </blora-cascader-option>
+</blora-cascader>
 ```
 
 ### ChartContainer（chart-container）
 
 ```html
-<blora-chart-container label="销售趋势">
-  <canvas aria-label="销售趋势图"></canvas>
+<blora-chart-container title="销售趋势" subtitle="最近 7 天" trend="+12%" trend-variant="success">
+  <svg viewBox="0 0 400 160" width="100%" height="160" role="img" aria-label="销售趋势折线图">
+    <polyline points="0,120 114,90 228,60 342,40 400,20" fill="none" stroke="currentColor" stroke-width="2.5"></polyline>
+  </svg>
 </blora-chart-container>
 ```
 
 ### Chat（chat）
 
 ```html
-<blora-chat label="团队消息"></blora-chat>
+<blora-chat author="Alice" time="10:24" avatar="A" message="设计稿已经更新。"></blora-chat>
+<blora-chat author="Blora" time="10:26" avatar="B" message="收到，我来检查组件状态。" side="end" avatar-variant="primary"></blora-chat>
 ```
 
 ### Checkbox（checkbox）
@@ -934,7 +953,7 @@ import "@bloret-crew/blora-design/auto";
 <script type="module">
   document.querySelector("#terms-form")?.addEventListener("submit", (event) => {
     event.preventDefault();
-    const values = new FormData(event.currentTarget as HTMLFormElement);
+    const values = new FormData(event.currentTarget);
     console.log(values.get("terms"));
   });
 </script>
@@ -957,7 +976,11 @@ import "@bloret-crew/blora-design/auto";
 ### CommandPalette（command-palette）
 
 ```html
-<blora-command label="打开命令面板"></blora-command>
+<blora-command placeholder="输入命令或搜索…">
+  <blora-command-item value="new" icon="document" shortcut="⌘N">新建文档</blora-command-item>
+  <blora-command-item value="open" icon="folder" shortcut="⌘O">打开文件</blora-command-item>
+  <blora-command-item value="settings" icon="settings" shortcut="⌘,">设置</blora-command-item>
+</blora-command>
 ```
 
 ### Comment（comment）
@@ -982,7 +1005,7 @@ import "@bloret-crew/blora-design/auto";
 ### Datepicker（datepicker）
 
 ```html
-<blora-datepicker label="开始日期" value="2026-08-28"></blora-datepicker>
+<blora-datepicker name="date" value="2026-08-28" placeholder="选择日期"></blora-datepicker>
 ```
 
 ### Deck（deck）
@@ -997,54 +1020,54 @@ import "@bloret-crew/blora-design/auto";
 ### Descriptions（descriptions）
 
 ```html
-<dl class="blora-descriptions">
-  <div>
-    <dt>状态</dt>
-    <dd>在线</dd>
-  </div>
-  <div>
-    <dt>版本</dt>
-    <dd>2.0.8</dd>
-  </div>
-</dl>
+<table class="blora-descriptions">
+  <tbody>
+    <tr><th>状态</th><td>在线</td></tr>
+    <tr><th>版本</th><td>2.0.8</td></tr>
+  </tbody>
+</table>
 ```
 
 ### Dialog（dialog）
 
 ```html
-<button
-  type="button"
-  class="blora-button"
-  data-variant="primary"
-  onclick="this.nextElementSibling.show()"
->
+<button type="button" class="blora-button" data-variant="primary" id="open-dialog">
   打开对话框
 </button>
-<blora-dialog aria-label="删除成员">
+<blora-dialog id="confirm-dialog">
+  <span slot="title">删除成员</span>
   <p>确定要删除这个成员吗？</p>
 </blora-dialog>
+<script type="module">
+  const dialog = document.querySelector("#confirm-dialog");
+  document.querySelector("#open-dialog")?.addEventListener("click", () => dialog.show());
+</script>
 ```
 
 ### Divider（divider）
 
 ```html
-<div class="blora-divider" data-orientation="horizontal" role="separator"></div>
+<hr class="blora-divider" data-orientation="horizontal" />
 ```
 
 ### Dock（dock）
 
 ```html
-<blora-dock label="主导航">
-  <a href="/">首页</a>
-  <a href="/projects">项目</a>
+<blora-dock label="主导航" static>
+  <blora-dock-item value="home" href="/" icon="home" active><span>首页</span></blora-dock-item>
+  <blora-dock-item value="projects" href="/projects" icon="folder"><span>项目</span></blora-dock-item>
 </blora-dock>
 ```
 
 ### Drawer（drawer）
 
 ```html
-<button type="button" class="blora-button" onclick="drawer.open()">打开菜单</button>
-<blora-drawer id="drawer" aria-label="导航菜单">菜单内容</blora-drawer>
+<button type="button" class="blora-button" id="open-drawer">打开菜单</button>
+<blora-drawer id="nav-drawer" title="导航菜单">菜单内容</blora-drawer>
+<script type="module">
+  const drawer = document.querySelector("#nav-drawer");
+  document.querySelector("#open-drawer")?.addEventListener("click", () => drawer.open());
+</script>
 ```
 
 ### Dropdown（dropdown）
@@ -1070,9 +1093,12 @@ import "@bloret-crew/blora-design/auto";
 ### Empty（empty）
 
 ```html
-<blora-empty title="暂无项目" description="创建项目后，它们会显示在这里。">
-  <button slot="action" type="button" class="blora-button" data-variant="primary">创建项目</button>
-</blora-empty>
+<blora-empty id="projects-empty" title="暂无项目" description="创建项目后，它们会显示在这里。" action-label="创建项目"></blora-empty>
+<script type="module">
+  document
+    .querySelector("#projects-empty")
+    ?.addEventListener("blora-empty-action", () => openCreateDialog());
+</script>
 ```
 
 ### Fab（fab）
@@ -1086,10 +1112,16 @@ import "@bloret-crew/blora-design/auto";
 ### Field（field）
 
 ```html
-<blora-field label="项目名称" name="project" required hint="最多 40 个字符" autocomplete="off">
-  <input class="blora-input" maxlength="40" />
+<!-- 属性写法：Field 生成 label、原生 input、提示和错误。 -->
+<blora-field label="项目名称" name="project" required hint="最多 40 个字符" maxlength="40"></blora-field>
+
+<!-- 子控件写法（2.0.9+）：写在里面的原生 input/textarea 会被保留，type、name、autocomplete 不会丢。 -->
+<blora-field label="密码" hint="至少 8 位" required>
+  <input class="blora-input" type="password" name="password" autocomplete="current-password" />
 </blora-field>
 ```
+
+不要在 Field 外面再手写 `<label>`、大号标题或 `.blora-field__*` 结构；错误信息写在 `error` 属性上，Field 会同步 `aria-invalid` 和 `aria-describedby`。
 
 ### Fieldset（fieldset）
 
@@ -1130,7 +1162,7 @@ import "@bloret-crew/blora-design/auto";
 
 ```html
 <form class="blora-form" id="profile-form">
-  <blora-field label="昵称" name="nickname"><input class="blora-input" /></blora-field>
+  <blora-field label="昵称" name="nickname"></blora-field>
   <button type="submit" class="blora-button" data-variant="primary">保存</button>
 </form>
 <script type="module">
@@ -1139,6 +1171,7 @@ import "@bloret-crew/blora-design/auto";
   window.addEventListener("pagehide", () => controller.destroy(), { once: true });
 </script>
 ```
+
 
 ### Hero（hero）
 
@@ -1164,13 +1197,11 @@ import "@bloret-crew/blora-design/auto";
 ### Input（input）
 
 ```html
-<label class="blora-field">
-  <span class="blora-field__label">项目名称</span>
-  <input class="blora-input" type="text" name="project" />
-</label>
+<!-- 需要标签/提示/错误时放进 blora-field（见 Field）；单独使用时给 aria-label。 -->
+<input class="blora-input" type="text" name="project" aria-label="项目名称" />
 
 <!-- Use the compact size for dense inline editing, such as a key name. -->
-<input class="blora-input" data-size="sm" type="text" name="keyName" />
+<input class="blora-input" data-size="sm" type="text" name="keyName" aria-label="Key 名称" />
 ```
 
 ### Join（join）
@@ -1212,15 +1243,19 @@ import "@bloret-crew/blora-design/auto";
 
 ```html
 <blora-megamenu label="产品">
-  <a href="/design">设计系统</a>
-  <a href="/components">组件</a>
+  <blora-megamenu-section title="设计"><a href="/design">设计系统</a></blora-megamenu-section>
+  <blora-megamenu-section title="组件"><a href="/components">组件</a></blora-megamenu-section>
 </blora-megamenu>
 ```
 
 ### Mentions（mentions）
 
 ```html
-<blora-mentions label="评论" placeholder="输入 @ 提及用户"></blora-mentions>
+<blora-mentions label="评论" placeholder="输入 @ 提及用户">
+  <blora-mention value="alice"></blora-mention>
+  <blora-mention value="bob"></blora-mention>
+  <blora-mention value="carol"></blora-mention>
+</blora-mentions>
 ```
 
 ### Menu（menu）
@@ -1282,22 +1317,26 @@ import "@bloret-crew/blora-design/auto";
 ### Pagination（pagination）
 
 ```html
-<blora-pagination label="项目分页" page="2" total="50" page-size="10"></blora-pagination>
+<!-- total 是总页数（不是条目数）；默认就是带数字页码的完整分页。 -->
+<blora-pagination id="project-pages" label="项目分页" page="2" total="12" max-visible="7"></blora-pagination>
+<script type="module">
+  document
+    .querySelector("#project-pages")
+    ?.addEventListener("blora-change", (event) => loadPage(event.detail.page));
+</script>
 ```
 
 ### Popconfirm（popconfirm）
 
 ```html
-<blora-popconfirm title="确认删除？">
-  <button slot="trigger" type="button" class="blora-button" data-variant="danger">删除</button>
-</blora-popconfirm>
+<blora-popconfirm trigger="删除" message="确认删除此项？" cancel-label="取消" confirm-label="确定"></blora-popconfirm>
 ```
 
 ### Popover（popover）
 
 ```html
-<blora-popover label="查看说明">
-  <button slot="trigger" type="button" class="blora-button" data-variant="ghost">说明</button>
+<!-- trigger 属性生成触发按钮；子元素是浮层内容（纯文本可改用 content 属性）。 -->
+<blora-popover trigger="说明">
   <p>这里是补充信息。</p>
 </blora-popover>
 ```
@@ -1305,7 +1344,7 @@ import "@bloret-crew/blora-design/auto";
 ### Progress（progress）
 
 ```html
-<blora-progress value="72" max="100" label="上传进度"></blora-progress>
+<blora-progress value="72" label="上传进度"></blora-progress>
 ```
 
 ### Radio（radio）
@@ -1320,7 +1359,7 @@ import "@bloret-crew/blora-design/auto";
 ### Range（range）
 
 ```html
-<blora-range label="价格范围" min="0" max="100" values="20,80"></blora-range>
+<blora-range min="0" max="100" values="20,80"></blora-range>
 ```
 
 ### Rate（rate）
@@ -1332,9 +1371,7 @@ import "@bloret-crew/blora-design/auto";
 ### Result（result）
 
 ```html
-<blora-result variant="success" title="操作完成" description="项目已经创建。">
-  <a slot="action" class="blora-button" data-variant="primary" href="/projects">查看项目</a>
-</blora-result>
+<blora-result variant="success" title="操作完成" description="项目已经创建。"></blora-result>
 ```
 
 ### Search（search）
@@ -1356,7 +1393,7 @@ import "@bloret-crew/blora-design/auto";
 ### Select（select）
 
 ```html
-<blora-select label="状态" name="status" value="active">
+<blora-select name="status" value="active" placeholder="选择状态">
   <blora-option value="active">进行中</blora-option>
   <blora-option value="done">已完成</blora-option>
 </blora-select>
@@ -1382,7 +1419,7 @@ import "@bloret-crew/blora-design/auto";
 ### Slider（slider）
 
 ```html
-<blora-slider label="音量" min="0" max="100" value="60"></blora-slider>
+<blora-slider min="0" max="100" value="60"></blora-slider>
 ```
 
 ### SpeedDial（speed-dial）
@@ -1404,21 +1441,21 @@ import "@bloret-crew/blora-design/auto";
 
 ```html
 <blora-splitter>
-  <section slot="start">导航</section>
-  <section slot="end">内容</section>
+  <blora-splitter-pane>导航</blora-splitter-pane>
+  <blora-splitter-pane>内容</blora-splitter-pane>
 </blora-splitter>
 ```
 
 ### Statistic（statistic）
 
 ```html
-<blora-statistic label="本月访问" value="12,480" trend="up"></blora-statistic>
+<blora-statistic label="本月访问" value="12,480" trend="↑ 12.5%" direction="up"></blora-statistic>
 ```
 
 ### Steps（steps）
 
 ```html
-<blora-steps current="1" label="创建流程">
+<blora-steps current="1">
   <blora-step title="准备"></blora-step>
   <blora-step title="配置"></blora-step>
   <blora-step title="完成"></blora-step>
@@ -1428,9 +1465,7 @@ import "@bloret-crew/blora-design/auto";
 ### Swap（swap）
 
 ```html
-<button type="button" class="blora-swap" aria-label="切换视图">
-  <span data-icon="sun"></span><span data-icon="moon"></span>
-</button>
+<blora-swap off-label="深色模式" on-label="浅色模式"></blora-swap>
 ```
 
 ### Switch（switch）
@@ -1481,16 +1516,15 @@ import "@bloret-crew/blora-design/auto";
 ### TagsInput（tags-input）
 
 ```html
-<blora-tags-input label="技术栈" value="TypeScript,Web Components"></blora-tags-input>
+<blora-tags-input label="技术栈" values="TypeScript,Web Components"></blora-tags-input>
 ```
 
 ### Textarea（textarea）
 
 ```html
-<label class="blora-field">
-  <span class="blora-field__label">备注</span>
+<blora-field label="备注" hint="选填">
   <textarea class="blora-textarea" name="note" rows="4" placeholder="补充说明"></textarea>
-</label>
+</blora-field>
 ```
 
 ### Timeline（timeline）
@@ -1505,46 +1539,68 @@ import "@bloret-crew/blora-design/auto";
 ### Timepicker（timepicker）
 
 ```html
-<blora-timepicker label="开始时间" value="09:30"></blora-timepicker>
+<blora-timepicker name="time" value="09:30" placeholder="HH:MM"></blora-timepicker>
 ```
 
 ### Tooltip（tooltip）
 
 ```html
-<blora-tooltip content="保存当前项目"
-  ><button type="button" class="blora-button" data-variant="ghost">保存</button></blora-tooltip
->
+<!-- 子元素就是触发器；提示文字写在 text 属性上。 -->
+<blora-tooltip text="保存当前项目">
+  <button type="button" class="blora-button" data-variant="ghost">保存</button>
+</blora-tooltip>
 ```
 
 ### Tour（tour）
 
 ```html
-<blora-tour label="新手引导"></blora-tour>
+<blora-tour label="新手引导">
+  <blora-tour-step title="标签" description="高亮贴合的胶囊标签。"><span class="blora-tag" data-variant="primary">步骤 A</span></blora-tour-step>
+  <blora-tour-step title="按钮" description="跟随按钮圆角的高亮。"><button type="button" class="blora-button" data-variant="outline">步骤 B</button></blora-tour-step>
+</blora-tour>
 ```
 
 ### Transfer（transfer）
 
 ```html
-<blora-transfer label="选择成员"></blora-transfer>
+<blora-transfer source-label="候选" target-label="已选">
+  <blora-transfer-item value="zhang">张三</blora-transfer-item>
+  <blora-transfer-item value="li">李四</blora-transfer-item>
+  <blora-transfer-item value="wang" target checked>王五</blora-transfer-item>
+</blora-transfer>
 ```
 
 ### Tree（tree）
 
 ```html
-<blora-tree label="文件树"></blora-tree>
+<blora-tree value="tech">
+  <blora-tree-node value="tech" label="技术部" open selected>
+    <blora-tree-node value="zhang" label="张三"></blora-tree-node>
+    <blora-tree-node value="li" label="李四"></blora-tree-node>
+  </blora-tree-node>
+</blora-tree>
 ```
 
 ### TreeSelect（tree-select）
 
 ```html
-<blora-tree-select label="选择部门"></blora-tree-select>
+<blora-tree-select label="选择部门" placeholder="选择部门">
+  <blora-tree-select-option label="华东" value="east">
+    <blora-tree-select-option label="上海" value="sh"></blora-tree-select-option>
+    <blora-tree-select-option label="杭州" value="hz"></blora-tree-select-option>
+  </blora-tree-select-option>
+  <blora-tree-select-option label="华北" value="north">
+    <blora-tree-select-option label="北京" value="bj"></blora-tree-select-option>
+  </blora-tree-select-option>
+</blora-tree-select>
 ```
 
 ### Upload（upload）
 
 ```html
-<blora-upload label="上传附件"></blora-upload>
+<blora-upload prompt="拖拽文件至此" hint="支持 SVG / PNG / JPG · 单文件 ≤ 8MB" accept=".svg,.png,.jpg" multiple></blora-upload>
 ```
+
 
 ## 15. Add-on 的最小示例
 
@@ -1566,37 +1622,43 @@ import "@bloret-crew/blora-design-effects";
 #### Text FX
 
 ```html
-<blora-text-fx effect="fade">欢迎使用 Blora</blora-text-fx>
+<blora-text-fx effect="bloom" loop>欢迎使用 Blora</blora-text-fx>
 ```
 
 #### Rotate
 
 ```html
-<blora-rotate>旋转内容</blora-rotate>
+<blora-text-rotate interval="3200">
+  <span>结构统一</span>
+  <span>令牌驱动</span>
+</blora-text-rotate>
 ```
 
 #### Countdown
 
 ```html
-<blora-countdown until="2026-12-31T00:00:00Z"></blora-countdown>
+<blora-countdown seconds="86405"></blora-countdown>
 ```
 
 #### Count Up
 
 ```html
-<blora-count-up value="1280"></blora-count-up>
+<blora-count-up value="1280">0</blora-count-up>
 ```
 
 #### Diff
 
 ```html
-<blora-diff from="12" to="18"></blora-diff>
+<blora-diff>
+  <blora-diff-before><img src="/images/before.jpg" alt="改造前" /></blora-diff-before>
+  <blora-diff-after><img src="/images/after.jpg" alt="改造后" /></blora-diff-after>
+</blora-diff>
 ```
 
 #### Hover Gallery
 
 ```html
-<blora-hover-gallery><img src="/images/a.jpg" alt="图一" /></blora-hover-gallery>
+<blora-hover-gallery aria-label="图库"><img src="/images/a.jpg" alt="图一" /></blora-hover-gallery>
 ```
 
 #### Watermark
@@ -1630,7 +1692,7 @@ import "@bloret-crew/blora-design-layout";
 #### Sidebar Layout
 
 ```html
-<blora-sidebar-layout variant="seamless" sticky label="页面导航" toggle-label="打开导航">
+<blora-sidebar-layout sticky label="页面导航" toggle-label="打开导航">
   <blora-sidebar-layout-sidebar>导航</blora-sidebar-layout-sidebar>
   <blora-sidebar-layout-content>内容</blora-sidebar-layout-content>
 </blora-sidebar-layout>
@@ -1639,13 +1701,16 @@ import "@bloret-crew/blora-design-layout";
 #### Affix
 
 ```html
-<blora-affix top="16">固定工具栏</blora-affix>
+<blora-affix offset="16">固定工具栏</blora-affix>
 ```
 
 #### Anchor
 
 ```html
-<blora-anchor sync-hash>章节导航</blora-anchor>
+<blora-anchor offset="80" sync-hash>
+  <a class="blora-anchor__link" href="#section-a">章节 A</a>
+  <a class="blora-anchor__link" href="#section-b">章节 B</a>
+</blora-anchor>
 ```
 
 #### Smooth Scroll
@@ -1674,7 +1739,11 @@ import "@bloret-crew/blora-design-markdown";
 #### Markdown CE
 
 ```html
-<blora-markdown source="# 标题\n\n正文内容"></blora-markdown>
+<blora-markdown>
+  <script type="text/markdown"># 标题
+
+正文内容</script>
+</blora-markdown>
 ```
 
 #### SSR Renderer
