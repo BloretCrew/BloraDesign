@@ -33,7 +33,7 @@
       }
     },
     "status": {
-      "danger": { "$type": "color", "$value": "#D27779" },
+      "danger": { "$type": "color", "$value": "#E0715B" },
       "neutral": { "$type": "color", "$value": "#99939E" },
       "neutralSoft": { "$type": "color", "$value": "#B5B0B9" },
       "info": { "$type": "color", "$value": "#919AB4" },

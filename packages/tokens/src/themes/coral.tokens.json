@@ -61,7 +61,7 @@
         },
         "danger": {
           "$type": "color",
-          "$value": "#9E5559"
+          "$value": "#AF4A3F"
         },
         "accentNeutral": {
           "$type": "color",
@@ -93,7 +93,7 @@
         },
         "warning": {
           "$type": "color",
-          "$value": "#806C4F"
+          "$value": "#8C6429"
         },
         "accentSecondary": {
           "$type": "color",
@@ -191,7 +191,7 @@
         },
         "danger": {
           "$type": "color",
-          "$value": "#D27779"
+          "$value": "#E0715B"
         },
         "accentNeutral": {
           "$type": "color",

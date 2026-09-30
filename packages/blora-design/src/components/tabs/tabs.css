@@ -47,9 +47,10 @@ blora-tabs {
     transform var(--blora-duration-base) var(--blora-easing-standard);
 
   /* The controller appends the indicator after every tab, so an equal
-     z-index would paint it over the labels. The full-height pills indicator
-     then hid the selected tab's text. Keep it one tier below the tabs. */
-  z-index: calc(var(--blora-z-base) - 1);
+     stacking level would paint it over the labels (the full-height pills
+     indicator hid the selected text). Auto stacking keeps it in the
+     positioned layer, below the tabs' positive level. */
+  z-index: auto;
 }
 
 .blora-tabs__tab {

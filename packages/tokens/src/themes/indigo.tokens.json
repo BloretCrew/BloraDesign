@@ -93,7 +93,7 @@
         },
         "warning": {
           "$type": "color",
-          "$value": "#AF8A55"
+          "$value": "#8C6429"
         },
         "accentSecondary": {
           "$type": "color",

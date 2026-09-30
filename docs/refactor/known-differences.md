@@ -416,3 +416,35 @@
 - **2.0 表现**：窄屏（≤720px 标题隐藏）时品牌链接圆角改为 `50%`，焦点环与圆形 logo 一致。
 - **改变原因**：bug 修复（焦点环与资产形状不一致）
 - **审核状态**：approved（用户反馈，2026-08-27）
+
+### Coral Danger / 各主题浅色 Warning - 语义色可区分
+
+- **组件**：tokens（coral / dusk / graphite / circuit / indigo）→ button、badge、tag、alert、result、message、notification
+- **1.x 表现**：Coral 的 danger（浅 `#9E5559`、深 `#D27779`）与主色（`#9F5964` / `#D18A94`）色相只差 6–7°，危险按钮与主按钮几乎同色；浅色 warning（`#806C4F` 等）是偏橄榄的灰褐色，读起来不像警告。
+- **2.0 表现**：Coral danger 改为砖红 `#AF4A3F`（深色 `#E0715B`），与主色拉开色相和饱和度；coral、dusk、graphite、circuit、indigo 的浅色 warning 统一为琥珀 `#8C6429`（深色值不变）。Warning Badge 直接使用 warning 令牌，不再与主文字色混合。
+- **改变原因**：可用性（危险操作必须一眼区分）+ WCAG（白字 ≥ 5:1，画布上 ≥ 4.5:1，六套主题明暗均过对比度门禁）
+- **审核状态**：approved（用户批准 2026-09-30）
+
+### Tag / Alert - 语义变体提高区分度，Tag 新增 danger
+
+- **组件**：tag、alert
+- **1.x 表现**：Tag 语义变体底色 8%、边框 25%、文字统一为强调文字色；Alert 底色 6%。在低饱和配色下 info / success / neutral 几乎一样，暗色下 Alert 四态难以区分。
+- **2.0 表现**：Tag 底色 15%（warning 16%）、边框 45%，文字向状态色靠拢（与主文字色混合保证 AA），新增 `data-variant="danger"`；Alert 底色 11–13%、边框 32–38%。
+- **改变原因**：语义表达（状态不能只剩边框差异）；对比度门禁覆盖全部主题
+- **审核状态**：approved（用户批准 2026-09-30）
+
+### Alert / Result / Message / Notification - 状态图标统一为圆形线框
+
+- **组件**：status-icon（alert、result、message、notification）
+- **1.x 表现**：success 用裸 `check`、danger 用裸 `x`，warning / info 却是带圆圈的图标，同一组状态像两套图标。
+- **2.0 表现**：success `circle-check`、danger/error `circle-x`、warning `circle-alert`、info `info`，均为圆形线框 Lucide 图标（默认图标集新增 `circle-x`）。
+- **改变原因**：视觉一致性
+- **审核状态**：approved（用户批准 2026-09-30）
+
+### Tabs(pills) / Avatar / Navbar / 表单禁用态 - 缺陷修复
+
+- **组件**：tabs、avatar、navbar、select、textarea、button、copy
+- **1.x 表现**：胶囊 Tabs 的滑动指示块画在选中文字上方，选中项只剩空色块；头像角标和在线点在拉伸的行里会飘到最右；窄容器里导航链接逐字换行；禁用 Select 只是半透明；禁用 Textarea 仍可拖拽；方形图标按钮因 18px 圆角看起来是圆的；Copy 图标对比度约 2.7:1；默认头像字母约 3.7:1。
+- **2.0 表现**：指示块位于标签下层；`.blora-avatar-wrap` 收缩包裹头像、在线点贴在头像右下角；导航链接不换行，受限时菜单横向滚动；禁用 Select 与禁用 Input 同为内凹底；禁用 Textarea 不可拖拽；方形图标按钮用 `radius-md`；Copy 图标 ≥ 3:1；默认头像字母 ≥ 4.5:1。
+- **改变原因**：bug 修复 / WCAG
+- **审核状态**：approved（用户批准 2026-09-30）

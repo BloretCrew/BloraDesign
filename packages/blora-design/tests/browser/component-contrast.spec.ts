@@ -136,6 +136,7 @@ test("component text variants keep WCAG AA contrast across every theme", async (
           <button class="blora-button" data-variant="secondary" data-contrast-key="button-secondary">Secondary</button>
           <button class="blora-button" data-variant="ghost" data-contrast-key="button-ghost">Ghost</button>
           <button class="blora-button" data-variant="outline" data-contrast-key="button-outline">Outline</button>
+          <button class="blora-button" data-variant="danger" data-contrast-key="button-danger">Danger</button>
 
           ${["info", "success", "warning", "danger"]
             .map(
