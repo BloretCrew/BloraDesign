@@ -101,13 +101,14 @@ test("every per-component migration example mounts defined, rendering elements",
     const report = await page.evaluate(
       async ({ html, allowed }) => {
         const mount = document.getElementById("mount")!;
-        const probe = document.createElement("template");
-        probe.innerHTML = html;
+        /* Trusted fixture text from our own docs; parsed inertly, then adopted
+           so the custom elements upgrade on connection. */
+        const parsed = new DOMParser().parseFromString(`<body>${html}</body>`, "text/html");
         const problems: string[] = [];
         /* Authored attributes must be declared by the contract (global HTML,
            ARIA and data-* attributes are always fine). */
         const global = new Set(["id", "class", "style", "slot", "hidden", "lang", "dir", "role"]);
-        for (const element of probe.content.querySelectorAll("*")) {
+        for (const element of parsed.body.querySelectorAll("*")) {
           const declared = allowed[element.localName];
           if (!declared) continue;
           for (const { name } of element.attributes) {
@@ -117,7 +118,9 @@ test("every per-component migration example mounts defined, rendering elements",
             }
           }
         }
-        mount.innerHTML = html;
+        mount.replaceChildren(
+          ...[...parsed.body.childNodes].map((node) => document.importNode(node, true)),
+        );
         await new Promise((done) => setTimeout(done, 30));
         const hosts = [...mount.querySelectorAll("*")].filter((element) =>
           element.localName.startsWith("blora-"),
