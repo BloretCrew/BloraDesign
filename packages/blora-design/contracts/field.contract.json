@@ -116,7 +116,7 @@
     }
   },
   "slots": {
-    "default": "No authored structure; label, native control and feedback are generated from attributes."
+    "default": "Optional: one native <input> or <textarea> to adopt (since 2.0.9). Its own attributes (type, name, autocomplete, maxlength …) are kept; host attributes win when set. Label, hint and error are always generated from host attributes. Without a child, the control is generated from host attributes."
   },
   "parts": [],
   "cssProperties": [],

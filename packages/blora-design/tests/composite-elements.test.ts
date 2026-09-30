@@ -456,6 +456,42 @@ describe("Composite Custom Elements", () => {
     expect(field.querySelector(".blora-limit[data-over-limit]")).not.toBeNull();
     expect(input.getAttribute("aria-invalid")).toBe("true");
 
+    /* An authored native control is adopted, not replaced: its own type,
+       name and autocomplete survive, host attributes still win when set. */
+    const adopting = document.createElement("blora-field");
+    adopting.setAttribute("label", "密码");
+    adopting.setAttribute("hint", "至少 8 位");
+    adopting.setAttribute("required", "");
+    const authored = document.createElement("input");
+    authored.type = "password";
+    authored.name = "password";
+    authored.autocomplete = "current-password";
+    authored.maxLength = 64;
+    adopting.appendChild(authored);
+    document.body.appendChild(adopting);
+    const adopted = adopting.querySelector<HTMLInputElement>("input")!;
+    expect(adopted).toBe(authored);
+    expect(adopting.querySelectorAll("input")).toHaveLength(1);
+    expect(adopted.type).toBe("password");
+    expect(adopted.name).toBe("password");
+    expect(adopted.getAttribute("autocomplete")).toBe("current-password");
+    expect(adopted.maxLength).toBe(64);
+    expect(adopted.required).toBe(true);
+    expect(adopted.classList.contains("blora-input")).toBe(true);
+    const adoptedLabel = adopting.querySelector<HTMLLabelElement>(".blora-field__label")!;
+    expect(adoptedLabel.htmlFor).toBe(adopted.id);
+    expect(adoptedLabel.hasAttribute("data-required")).toBe(true);
+    expect(adopted.getAttribute("aria-describedby")).toBe(`${adopted.id}-hint`);
+    adopting.setAttribute("disabled", "");
+    expect(adopted.disabled).toBe(true);
+    adopting.removeAttribute("disabled");
+    expect(adopted.disabled).toBe(false);
+    adopting.setAttribute("name", "secret");
+    expect(adopted.name).toBe("secret");
+    adopting.setAttribute("error", "密码错误");
+    expect(adopted.getAttribute("aria-invalid")).toBe("true");
+    expect(adopted.type).toBe("password");
+
     const upload = appendHost<HTMLElement>("blora-upload", { multiple: "" });
     expect(upload.querySelector(".blora-dropzone svg")).not.toBeNull();
     expect(upload.querySelector<HTMLInputElement>('input[type="file"]')?.multiple).toBe(true);

@@ -15,16 +15,6 @@ const FORWARDED_NATIVE_ATTRIBUTES = [
   "enterkeyhint",
 ] as const;
 
-function forwardNativeAttributes(
-  source: HTMLElement,
-  control: HTMLInputElement | HTMLTextAreaElement,
-) {
-  FORWARDED_NATIVE_ATTRIBUTES.forEach((name) => {
-    const value = source.getAttribute(name);
-    if (value === null) control.removeAttribute(name);
-    else control.setAttribute(name, value);
-  });
-}
 let fieldId = 0;
 export interface FieldController {
   destroy(): void;
@@ -127,6 +117,100 @@ export class BloraField extends BloraElement {
   private controller: FieldController | null = null;
   private reflecting = false;
   private readonly controlId = `blora-field-${++fieldId}`;
+  /** True when the author supplied the native input/textarea as a child. */
+  private adopted = false;
+  /** Control attributes currently written from host attributes. */
+  private readonly managed = new Set<string>();
+
+  /**
+   * An authored `<input>` / `<textarea>` child is adopted instead of being
+   * replaced, so attributes written on it (type="password", name,
+   * autocomplete, maxlength …) survive. Host attributes still win when set.
+   */
+  private authoredControl(): HTMLInputElement | HTMLTextAreaElement | null {
+    for (const child of Array.from(this.children)) {
+      if (child instanceof HTMLTextAreaElement) return child;
+      if (child instanceof HTMLInputElement && child.type !== "hidden") return child;
+    }
+    return null;
+  }
+
+  /**
+   * Write host-driven attributes onto the control. Generated controls mirror
+   * the host exactly (previous behaviour); adopted controls only lose an
+   * attribute when the host itself had set it earlier.
+   */
+  private applyControlAttributes(control: HTMLInputElement | HTMLTextAreaElement): void {
+    const clearable = (name: string) => !this.adopted || this.managed.has(name);
+    const text = (name: string, apply: (value: string) => void, clear: () => void) => {
+      const value = this.getAttribute(name);
+      if (value !== null) {
+        apply(value);
+        this.managed.add(name);
+      } else if (clearable(name)) {
+        clear();
+        this.managed.delete(name);
+      }
+    };
+    const flag = (name: string, prop: "required" | "disabled" | "readOnly") => {
+      if (this.hasAttribute(name)) {
+        control[prop] = true;
+        this.managed.add(name);
+      } else if (clearable(name)) {
+        control[prop] = false;
+        this.managed.delete(name);
+      }
+    };
+    if (control instanceof HTMLInputElement) {
+      text(
+        "type",
+        (value) => (control.type = value),
+        () => (control.type = "text"),
+      );
+    }
+    text(
+      "name",
+      (value) => (control.name = value),
+      () => (control.name = ""),
+    );
+    text(
+      "placeholder",
+      (value) => (control.placeholder = value),
+      () => (control.placeholder = ""),
+    );
+    flag("required", "required");
+    flag("disabled", "disabled");
+    flag("readonly", "readOnly");
+    for (const name of FORWARDED_NATIVE_ATTRIBUTES) {
+      text(
+        name,
+        (value) => control.setAttribute(name, value),
+        () => control.removeAttribute(name),
+      );
+    }
+    text(
+      "limit",
+      (value) => (control.dataset.limit = value),
+      () => delete control.dataset.limit,
+    );
+    text(
+      "minlength",
+      (value) => (control.minLength = Number(value)),
+      () => control.removeAttribute("minlength"),
+    );
+    text(
+      "maxlength",
+      (value) => (control.maxLength = Number(value)),
+      () => control.removeAttribute("maxlength"),
+    );
+    if (control instanceof HTMLInputElement) {
+      text(
+        "pattern",
+        (value) => (control.pattern = value),
+        () => control.removeAttribute("pattern"),
+      );
+    }
+  }
 
   static get observedAttributes(): string[] {
     return [
@@ -157,7 +241,8 @@ export class BloraField extends BloraElement {
     const control = this.querySelector<HTMLInputElement | HTMLTextAreaElement>("input, textarea");
     const wantsTextarea = this.hasAttribute("textarea");
     const isTextarea = control instanceof HTMLTextAreaElement;
-    if (control && wantsTextarea !== isTextarea) {
+    /* An adopted control keeps the element type the author chose. */
+    if (control && !this.adopted && wantsTextarea !== isTextarea) {
       const current = control.value;
       this.controller?.destroy();
       this.render();
@@ -188,16 +273,32 @@ export class BloraField extends BloraElement {
     root.className = "blora-field";
     root.dataset.bloraGenerated = "";
     const state = this.getAttribute("state") ?? (this.hasAttribute("error") ? "invalid" : null);
-    if (state === "invalid" || state === "valid") root.dataset.state = state;
     const hintText = this.getAttribute("hint") ?? "";
     const errorText = this.getAttribute("error") ?? "";
-    const id = this.id ? `${this.id}-control` : this.controlId;
+    const authored = this.authoredControl();
+    this.adopted = authored !== null;
+    this.managed.clear();
+    const id = authored?.id || (this.id ? `${this.id}-control` : this.controlId);
     const hintId = `${id}-hint`;
     const errorId = `${id}-error`;
+    if (state === "invalid" || state === "valid") root.dataset.state = state;
     const layout = this.getAttribute("layout");
     if (layout === "horizontal") root.dataset.layout = layout;
     const validate = this.getAttribute("validate");
     if (validate) root.dataset.bloraValidate = validate;
+
+    const control =
+      authored ??
+      (this.hasAttribute("textarea")
+        ? this.ownerDocument.createElement("textarea")
+        : this.ownerDocument.createElement("input"));
+    control.id = id;
+    control.classList.add(
+      control instanceof HTMLTextAreaElement ? "blora-textarea" : "blora-input",
+    );
+    const initialValue = this.getAttribute("value");
+    if (initialValue !== null || !authored) control.value = initialValue ?? "";
+    this.applyControlAttributes(control);
 
     const labelText = this.getAttribute("label");
     if (labelText) {
@@ -205,36 +306,15 @@ export class BloraField extends BloraElement {
       label.className = "blora-field__label";
       label.htmlFor = id;
       label.textContent = labelText;
-      if (this.hasAttribute("required")) label.dataset.required = "";
+      if (control.required) label.dataset.required = "";
       root.appendChild(label);
     }
 
-    const control = this.hasAttribute("textarea")
-      ? this.ownerDocument.createElement("textarea")
-      : this.ownerDocument.createElement("input");
-    control.id = id;
-    control.className = this.hasAttribute("textarea") ? "blora-textarea" : "blora-input";
-    if (control instanceof HTMLInputElement) control.type = this.getAttribute("type") ?? "text";
-    control.name = this.getAttribute("name") ?? "";
-    control.value = this.getAttribute("value") ?? "";
-    control.placeholder = this.getAttribute("placeholder") ?? "";
-    control.required = this.hasAttribute("required");
-    control.disabled = this.hasAttribute("disabled");
-    control.readOnly = this.hasAttribute("readonly");
-    forwardNativeAttributes(this, control);
     if (state === "invalid" || errorText) control.setAttribute("aria-invalid", "true");
     const describedBy: string[] = [];
     if (hintText) describedBy.push(hintId);
     if (errorText) describedBy.push(errorId);
     if (describedBy.length) control.setAttribute("aria-describedby", describedBy.join(" "));
-    const limit = this.getAttribute("limit");
-    if (limit) control.dataset.limit = limit;
-    const minlength = this.getAttribute("minlength");
-    if (minlength) control.minLength = Number(minlength);
-    const maxlength = this.getAttribute("maxlength");
-    if (maxlength) control.maxLength = Number(maxlength);
-    const pattern = this.getAttribute("pattern");
-    if (pattern && control instanceof HTMLInputElement) control.pattern = pattern;
     root.appendChild(control);
 
     if (hintText) {
@@ -263,7 +343,7 @@ export class BloraField extends BloraElement {
     const state = this.getAttribute("state") ?? (this.hasAttribute("error") ? "invalid" : null);
     const hintText = this.getAttribute("hint") ?? "";
     const errorText = this.getAttribute("error") ?? "";
-    const id = this.id ? `${this.id}-control` : this.controlId;
+    const id = control.id || (this.id ? `${this.id}-control` : this.controlId);
     const hintId = `${id}-hint`;
     const errorId = `${id}-error`;
     if (state === "invalid" || state === "valid") root.dataset.state = state;
@@ -274,20 +354,14 @@ export class BloraField extends BloraElement {
     const validate = this.getAttribute("validate");
     if (validate) root.dataset.bloraValidate = validate;
     else delete root.dataset.bloraValidate;
+    if (document.activeElement !== control)
+      control.value = this.getAttribute("value") ?? control.value;
+    this.applyControlAttributes(control);
     const label = root.querySelector<HTMLLabelElement>(".blora-field__label");
     if (label) {
       label.textContent = this.getAttribute("label") ?? "";
-      label.toggleAttribute("data-required", this.hasAttribute("required"));
+      label.toggleAttribute("data-required", control.required);
     }
-    if (control instanceof HTMLInputElement) control.type = this.getAttribute("type") ?? "text";
-    control.name = this.getAttribute("name") ?? "";
-    if (document.activeElement !== control)
-      control.value = this.getAttribute("value") ?? control.value;
-    control.placeholder = this.getAttribute("placeholder") ?? "";
-    control.required = this.hasAttribute("required");
-    control.disabled = this.hasAttribute("disabled");
-    control.readOnly = this.hasAttribute("readonly");
-    forwardNativeAttributes(this, control);
     if (state === "invalid" || errorText) control.setAttribute("aria-invalid", "true");
     else control.removeAttribute("aria-invalid");
     const describedBy: string[] = [];
@@ -295,18 +369,6 @@ export class BloraField extends BloraElement {
     if (errorText) describedBy.push(errorId);
     if (describedBy.length) control.setAttribute("aria-describedby", describedBy.join(" "));
     else control.removeAttribute("aria-describedby");
-    const limit = this.getAttribute("limit");
-    if (limit) control.dataset.limit = limit;
-    else delete control.dataset.limit;
-    const minlength = this.getAttribute("minlength");
-    if (minlength) control.minLength = Number(minlength);
-    else control.removeAttribute("minlength");
-    const maxlength = this.getAttribute("maxlength");
-    if (maxlength) control.maxLength = Number(maxlength);
-    else control.removeAttribute("maxlength");
-    const pattern = this.getAttribute("pattern");
-    if (pattern && control instanceof HTMLInputElement) control.pattern = pattern;
-    else if (control instanceof HTMLInputElement) control.removeAttribute("pattern");
     let hint = root.querySelector<HTMLElement>(".blora-field__help");
     if (hintText) {
       if (!hint) {
