@@ -2,11 +2,15 @@
 
 > Blora Design 是一套令牌驱动的 Web UI 设计规范。  
 > 本文是 **视觉与令牌** 的信源（色彩 / 字体 / 间距 / 动效 / 无障碍）。  
+> **页面组合、表面层级、页面范式** → [`patterns.md`](./patterns.md)  
 > **工程接入、组件用法、迁移** → [`guide.md`](./guide.md)  
 > **完整迁移规范** → [`migration/from-any-ui-to-blora-design.md`](./migration/from-any-ui-to-blora-design.md)
 > **框架接入说明** → [`framework.md`](./framework.md)
 > **发布状态** → [`refactor/status.md`](./refactor/status.md)
 > 默认配色 `coral` 的色值与当前 token CSS 对齐；换肤后以运行时令牌为准。
+>
+> **令牌名称以本文表格中的 CSS 变量为准**（与 `@bloret-crew/blora-design/token-manifest.json` 一致）。
+> 颜色一律使用 `--blora-color-*` 语义令牌；不存在 `--blora-primary`、`--blora-surface-1`、`--blora-text-muted` 这类简写，写了也不会生效。
 
 ---
 
@@ -18,9 +22,9 @@ Blora Design 将视觉令牌分为三个基础层：**背景与表面、内容�
 
 | 层 | 职责 | 在界面中的体现 |
 |----|------|----------------|
-| **背景与表面** | 建立页面层级 | 页面背景使用 `--blora-background`，容器按 `--blora-surface-1..3` 递进 |
-| **内容** | 承载文本与结构 | 文本和边框按强度使用 `--blora-text-*` 与 `--blora-border-subtle` |
-| **交互与状态** | 表达操作和反馈 | 主操作使用 `--blora-primary`，成功、警告、危险和信息使用对应功能色 |
+| **背景与表面** | 建立页面层级 | 页面背景使用 `--blora-color-surface-canvas`，容器使用 `--blora-color-surface-default`，hover/分组与内凹面使用 `--blora-color-surface-raised` / `--blora-color-surface-sunken` |
+| **内容** | 承载文本与结构 | 文本按强度使用 `--blora-color-text-*`，边框使用 `--blora-color-border-subtle` |
+| **交互与状态** | 表达操作和反馈 | 主操作使用 `--blora-color-action-primary-default`，成功、警告、危险和信息使用 `--blora-color-status-*` |
 
 具体色值由配色系统映射；组件结构、交互和可访问性不随配色变化。
 
@@ -41,51 +45,59 @@ Blora Design 将视觉令牌分为三个基础层：**背景与表面、内容�
 
 ### 2.1 背景与表面 · Background & Surfaces
 
-| Token | Hex | 用途 |
+| Token | Coral 浅色 | 用途 |
 |------|-----|------|
-| `--blora-background` | `#FAF7F8` | 页面底色 |
-| `--blora-surface-1` | `#FFFCFD` | 卡面/输入框 |
-| `--blora-surface-2` | `#F4ECEE` | 次级面 — hover/分组 |
-| `--blora-surface-3` | `#E9DEE1` | 三级面 — 禁用/轨道 |
+| `--blora-color-surface-canvas` | `#FAF7F8` | 页面底色（`body.blora-page` 已自动使用） |
+| `--blora-color-surface-default` | `#FFFCFD` | 卡面、输入框、浮层 |
+| `--blora-color-surface-raised` | `#F4ECEE` | 次级面 — hover、分组、引用块 |
+| `--blora-color-surface-sunken` | `#E9DEE1` | 三级面 — 禁用、轨道、内凹区域 |
+
+> 深色模式下这四个令牌会整体重映射（canvas 最深，sunken 最浅），组件与业务 CSS 不需要也不应该为暗色另写颜色。
 
 ### 2.2 文本与边框 · Text & Border
 
 文字色自深至浅逐级递进，覆盖从主标题到禁用文本的全部层级：
 
-| 层级 | Token | Hex | 用途 |
+| 层级 | Token | Coral 浅色 | 用途 |
 |------|-------|-----|------|
-| Strong | `--blora-text-strong` | `#303143` | 品牌、大标题和高强调数字 |
-| Foreground | `--blora-foreground` | `#3D3E50` | 标题和默认高强调文本 |
-| Emphasis | `--blora-text-emphasis` | `#555565` | 强调正文 |
-| Muted | `--blora-text-muted` | `#74717C` | 正文和辅助说明 |
-| Subtle | `--blora-text-subtle` | `#9B959D` | 非关键说明（不用于小号正文） |
-| Disabled | `--blora-text-disabled` | `#B9B2B8` | 禁用和占位文本 |
-| Border | `--blora-border-subtle` | `#D9D2D6` | 边框和分隔线 |
+| Primary | `--blora-color-text-primary` | `#303143` | 品牌、页面标题和高强调数字 |
+| Secondary | `--blora-color-text-secondary` | `#3D3E50` | 默认正文（`.blora-scope` 的默认文字色） |
+| Emphasis | `--blora-color-text-emphasis` | `#555565` | 强调正文、卡片正文 |
+| Muted | `--blora-color-text-muted` | `#74717C` | 辅助说明、元信息 |
+| Subtle | `--blora-color-text-subtle` | `#9B959D` | 非关键说明（不用于小号正文，对比度不足 4.5:1） |
+| Disabled | `--blora-color-text-disabled` | `#B9B2B8` | 禁用和占位文本 |
+| On accent | `--blora-color-text-on-accent` | `#FFFFFF` | 主色/状态色实心底上的文字 |
+| Border | `--blora-color-border-subtle` | `#D9D2D6` | 边框和分隔线的**颜色** |
+
+`--blora-border-subtle`、`--blora-border-strong`、`--blora-border-primary` 是完整的 `border` 简写（含 `1px solid`），只能用于 `border` / `border-top` 等简写属性，不能当颜色使用。
 
 高强调文本用于建立层级，不应用作大面积填充。
 
 ### 2.3 功能色 · Functional Accents
 
-| Token | Hex | 语义 |
+| Token | Coral 浅色 | 语义 |
 |------|-----|------|
-| `--blora-primary` | `#9F5964` | **唯一主强调色**（Coral） |
-| `--blora-primary-hover` | `#80464F` | 主色 hover/press |
-| `--blora-danger` | `#9E5559` | 危险与错误 |
-| `--blora-accent-neutral` | `#6E6975` | 中性强调 |
-| `--blora-info` | `#5D6680` | 信息 |
-| `--blora-success` | `#5B756B` | 成功 |
-| `--blora-support` | `#687C7B` | 辅助数据系列 |
-| `--blora-warning` | `#806C4F` | 警告 |
-| `--blora-accent-secondary` | `#8B6571` | 次强调/数据系列 |
+| `--blora-color-action-primary-default` | `#9F5964` | **唯一主强调色**（Coral） |
+| `--blora-color-action-primary-hover` | `#80464F` | 主色 hover/press |
+| `--blora-color-action-primary-soft` | `#C07E86` | 主色弱化（装饰、数据系列） |
+| `--blora-color-status-danger` | `#9E5559` | 危险与错误 |
+| `--blora-color-status-neutral` | `#6E6975` | 中性强调 |
+| `--blora-color-status-info` | `#5D6680` | 信息 |
+| `--blora-color-status-success` | `#5B756B` | 成功 |
+| `--blora-color-status-support` | `#687C7B` | 辅助数据系列 |
+| `--blora-color-status-warning` | `#806C4F` | 警告 |
+| `--blora-color-status-secondary` | `#8B6571` | 次强调/数据系列 |
+
+浅色底（tint）不需要新令牌：用 `color-mix(in srgb, var(--blora-color-status-success) 12%, transparent)` 这类写法从状态色派生，或直接使用 Tag / Alert / Badge 的语义 variant。
 
 ### 2.4 状态映射
 
-| 状态 | 色 |
-|------|----|
-| 成功 success | `--blora-success` / `#5B756B` |
-| 警告 warning | `--blora-warning` / `#806C4F` |
-| 危险 danger  | `--blora-danger` / `#9E5559` |
-| 信息 info    | `--blora-info` / `#5D6680` |
+| 状态 | 令牌 | 组件写法 |
+|------|----|------|
+| 成功 success | `--blora-color-status-success` | `data-variant="success"` |
+| 警告 warning | `--blora-color-status-warning` | `data-variant="warning"` |
+| 危险 danger  | `--blora-color-status-danger` | `data-variant="danger"`（Result 使用 `variant="error"`） |
+| 信息 info    | `--blora-color-status-info` | `data-variant="info"` |
 
 ### 2.5 用色比例
 
@@ -176,10 +188,10 @@ Blora Design 采用 12 级非线性间距，组件与布局必须优先使用对
 
 ### 5.2 边框 · Border
 
-- 默认边框：`1px solid var(--blora-border-subtle)`
-- 强调边框：`1px solid var(--blora-text-subtle)`
-- 主色边框：`1px solid var(--blora-primary)`
-- 虚线分隔：`border-top: 1px dashed var(--blora-text-subtle)`
+- 默认边框：`border: var(--blora-border-subtle)`（等价于 `1px solid var(--blora-color-border-subtle)`）
+- 强调边框：`border: var(--blora-border-strong)`（`1px solid var(--blora-color-text-subtle)`）
+- 主色边框：`border: var(--blora-border-primary)`（`1px solid var(--blora-color-action-primary-default)`）
+- 虚线分隔：`border-top: 1px dashed var(--blora-color-text-subtle)`，或直接使用 `.blora-divider[data-variant="dashed"]`
 
 ### 5.3 阴影 · Shadow
 
@@ -200,7 +212,7 @@ Blora Design 采用 12 级非线性间距，组件与布局必须优先使用对
 
 ### 6.1 表面纹理 · Surface Texture
 
-`--blora-background-texture` 与 `--blora-background-overlay` 默认均为 `none`，Blora Design 的基础表面保持纯净。产品可以覆盖这两个令牌增加低对比纹理，但禁止在单个组件内部硬编码装饰背景。
+`--blora-texture-background` 与 `--blora-texture-overlay` 在浅色下默认均为 `none`（深色下只有极弱的径向纹理），Blora Design 的基础表面保持纯净。产品可以覆盖这两个令牌增加低对比纹理，但禁止在单个组件内部硬编码装饰背景。
 
 ### 6.2 分隔线 · Divider
 
@@ -239,7 +251,7 @@ Blora Design 采用 12 级非线性间距，组件与布局必须优先使用对
 ### 7.3 组件动效
 
 - **FAB 浮起** FAB hover 时 `scale(1.12)`，主色按钮的悬停浮起。
-- **状态点呼吸** `.blora-dot--pulse` — 在线状态的 2s 呼吸。
+- **状态点呼吸** `.blora-dot[data-pulse]` — 在线状态的 2s 呼吸；放在 `.blora-avatar-wrap` 里时自动贴在头像右下角。
 
 ### 7.4 reduced-motion
 
@@ -249,10 +261,14 @@ Blora Design 采用 12 级非线性间距，组件与布局必须优先使用对
 
 ## 八 · 图标规范
 
-- **风格**：线性、`stroke-width: 2`、圆端圆角（`stroke-linecap: round`）。
+- **风格**：Lucide 线性图标，`stroke-width: 2`、圆端圆角（`stroke-linecap: round`）。
 - **尺寸**：默认 22px，按钮内 16–18px，导航 20px。
 - **颜色**：继承 `currentColor`，hover/active 状态按组件规则使用主色。
-- **引入方式**：推荐内联 SVG，或自建图标字体。不绑定第三方库。
+- **引入方式**：
+  - 组件内的图标由组件自己生成（例如 `.blora-button[data-icon="plus"]`、`<blora-speed-dial-action icon="upload">`）；
+  - 业务代码需要图标时调用 `createBloraIcon(name, size)`；
+  - 默认包只含常用图标，需要其他 Lucide 图标时加载一次 `@bloret-crew/blora-design/icons-full`（CDN 用 `icons-full.global.js`）。
+- **禁止**：Emoji、图标字体、`‹ › × ★ → +` 等文本字符、从其他组件库复制的 SVG。
 
 ---
 
@@ -276,9 +292,9 @@ Blora Design 采用 12 级非线性间距，组件与布局必须优先使用对
 
 - 模态 / 抽屉 / 命令面板：`Esc` 关闭；打开时焦点移入浮层、关闭后归还；`Tab` 圈禁于浮层内
 - 命令面板 `Ctrl/⌘ + K` 唤起
-- 标签页：方向键 / Home / End 切换；树：`Enter` / `Space` 展开与选中（`role` 与 `aria-*` 由 blora.js 自动注入）
+- 标签页：方向键 / Home / End 切换；树：`Enter` / `Space` 展开与选中（`role` 与 `aria-*` 由组件自动管理）
 - 复选 / 单选 / 开关 / 滑块以原生 input 为底，天然键盘可达
-- 自定义下拉已支持方向键、Home/End、Enter/Space 与 Esc；分页、分段、评分、范围滑块的完整键盘化仍在路线图中，正式项目请暂以原生控件兜底
+- 下拉、分段、评分、分页、范围滑块由对应组件提供键盘操作（方向键、Home/End、Enter/Space、Esc）；业务不要为了"键盘可用"改回裸原生控件
 
 ### 9.5 动效降级
 
@@ -288,13 +304,19 @@ Blora Design 采用 12 级非线性间距，组件与布局必须优先使用对
 
 ## 十 · 暗色模式
 
-Blora Design 支持浅色、深色和跟随系统三种模式。业务层优先使用 `Blora.applyColorMode('light' | 'dark' | 'system')`；`system` 根据 `prefers-color-scheme` 实时更新，框架内部通过 `<html class="blora-dark">` 表示当前有效暗色状态。Token 自动重映射：
+Blora Design 支持浅色、深色和跟随系统三种状态，全部由根元素属性驱动：
 
-- 背景 → 深紫灰 `#151317`
-- 文字色 → 冷白 `#F5F2F6`
-- 主色 → 提亮低饱和紫 `#A9A1BA`
+| 状态 | 根元素 | 写法 |
+|------|--------|------|
+| 浅色 | `<html data-blora-color-scheme="light">` | `applyColorScheme("light")` |
+| 深色 | `<html data-blora-color-scheme="dark">` | `applyColorScheme("dark")` |
+| 跟随系统 | 不设置 `data-blora-color-scheme` | 移除该属性，`tokens.dark.css` 按 `prefers-color-scheme` 生效 |
 
-**不另写组件样式**，所有组件通过 token 自动适配。
+`applyColorScheme()` / `applyTheme()` 来自 `@bloret-crew/blora-design-theming`；只用核心包时，同时引入 `tokens.dark.css` 并直接设置属性即可。首屏恢复用户选择时使用 `getThemeBootScript()`（见 [`guide.md`](./guide.md) 第 5 节）。
+
+深色下 Coral 的关键色值：页面底 `#17161C`、主文字 `#F8F2F4`、主色 `#D18A94`。
+
+**不另写组件样式**，所有组件通过 token 自动适配；业务 CSS 里出现 `.dark`、`@media (prefers-color-scheme: dark)` 或第二套颜色即视为违规。
 
 ---
 
@@ -333,15 +355,16 @@ Blora Design 支持浅色、深色和跟随系统三种模式。业务层优先�
 
 - 输入、选择、文件、开关、Swap、Filter 与 Diff 应保留原生 `input`，自定义视觉不能替换键盘和表单语义。
 - Fieldset 必须使用 `<fieldset>` / `<legend>`，Kbd 使用 `<kbd>`，Footer、Hero、Sidebar 优先采用对应语义元素。
-- 无原生语义的展开组件由 `blora.js` 同步 `aria-expanded`、焦点与 Esc 行为；业务不重复绑定同一状态。
+- 无原生语义的展开组件由对应 Composite CE 同步 `aria-expanded`、焦点与 Esc 行为；业务不重复绑定同一状态。
 
 ### 13.2 组件组合边界
 
 - Sidebar Layout 负责应用级页面结构；Drawer 负责临时任务面板，两者不可因外观相似而互换。
 - Megamenu 用于多分组全局导航；普通操作集合继续使用 Dropdown。
 - Dock 适合 3–5 个高频一级入口；桌面信息密集型应用优先 Navbar 或 Sidebar。
-- 搜索提交动作使用 `button.blora-search__icon` 与原生 `form[role="search"]`；输入框聚焦时图标通过 `:focus-within` 跟随主题色。
+- 搜索框使用 `<blora-search>`；需要提交时把它放进原生 `<form role="search">`，不要自己拼放大镜按钮或复用组件内部 class。
 - Deck 只表现有明确前后顺序的同类对象，不用于隐藏大量可操作内容。
+- 页面级组合（卡片嵌套层数、区块间距、统计区、资源列表、设置表单）遵守 [`patterns.md`](./patterns.md)。
 
 ### 13.3 可选视觉效果
 
