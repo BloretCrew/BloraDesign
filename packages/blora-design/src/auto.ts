@@ -12,6 +12,7 @@
  */
 
 import { applyDocumentLocale } from "./core/i18n.js";
+import { observeIcons } from "./core/icon-hydration.js";
 import { defineBloraDialog } from "./components/dialog/index.js";
 import { defineBloraAccordion } from "./components/accordion/index.js";
 import { defineBloraCollapse } from "./components/collapse/index.js";
@@ -142,6 +143,10 @@ export function defineAllBloraElements(registry: CustomElementRegistry = customE
 if (typeof customElements !== "undefined") {
   defineAllBloraElements(customElements);
 }
+
+/* data-icon on buttons, badges and placeholders "just works", including
+   content that frameworks render after this module loads. */
+if (typeof document !== "undefined") observeIcons(document);
 
 export {
   defineBloraAccordion,

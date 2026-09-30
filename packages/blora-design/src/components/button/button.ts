@@ -70,7 +70,10 @@ export function setButtonLoading(
  */
 export function enhanceButtons(root: ParentNode = document): void {
   if (typeof document === "undefined") return;
-  root.querySelectorAll<HTMLElement>(".blora-button[data-icon]").forEach((button) => {
+  const buttons = [...root.querySelectorAll<HTMLElement>(".blora-button[data-icon]")];
+  if (root instanceof HTMLElement && root.matches(".blora-button[data-icon]"))
+    buttons.unshift(root);
+  buttons.forEach((button) => {
     const name = button.getAttribute("data-icon");
     if (!name || !isBloraIconName(name)) return;
     if (button.querySelector(":scope > svg[data-blora-icon]")) return;

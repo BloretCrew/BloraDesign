@@ -13,6 +13,7 @@ const Blora: BloraGlobal = {
   ...api,
   autoDefine() {
     defineAllBloraElements();
+    if (typeof document !== "undefined") api.observeIcons(document);
   },
 };
 

@@ -38,7 +38,9 @@ function syncBadgeShape(badge: HTMLElement): void {
  */
 export function enhanceBadges(root: ParentNode = document): void {
   if (typeof document === "undefined") return;
-  root.querySelectorAll<HTMLElement>(".blora-badge").forEach((badge) => {
+  const badges = [...root.querySelectorAll<HTMLElement>(".blora-badge")];
+  if (root instanceof HTMLElement && root.matches(".blora-badge")) badges.unshift(root);
+  badges.forEach((badge) => {
     const name = badge.getAttribute("data-icon");
     if (name && isBloraIconName(name) && !badge.querySelector(":scope > svg[data-blora-icon]")) {
       const icon = createBloraIcon(name, 12, badge.ownerDocument);

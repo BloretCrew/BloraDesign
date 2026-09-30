@@ -36,6 +36,7 @@ export {
   registerBloraIcons,
   type BloraIconName,
 } from "./core/icons.js";
+export { hydrateIcons, observeIcons } from "./core/icon-hydration.js";
 
 // Controllers
 export { OverlayController, type OverlayOptions } from "./controllers/overlay-controller.js";
