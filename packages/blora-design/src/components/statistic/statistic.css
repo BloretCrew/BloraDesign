@@ -27,6 +27,7 @@ blora-statistic {
 .blora-stat__label:lang(zh),
 .blora-stat__label:lang(ja),
 .blora-stat__label:lang(ko) {
+  text-transform: none;
   letter-spacing: var(--blora-tracking-wide);
 }
 

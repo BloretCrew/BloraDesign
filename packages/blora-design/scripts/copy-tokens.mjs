@@ -66,6 +66,7 @@ const bloraCss = [
   `@import "./foundations/base.css" layer(blora.base);`,
   `@import "./foundations/layout.css" layer(blora.base);`,
   ...componentImports,
+  `@import "./foundations/stack.css" layer(blora.utilities);`,
   `@import "./foundations/utilities.css" layer(blora.utilities);`,
   `@import "./tokens.themes.css" layer(blora.tokens);`,
   "",
@@ -81,6 +82,7 @@ const foundationsEntry = [
   `@import "./foundations/reset.css";`,
   `@import "./foundations/base.css";`,
   `@import "./foundations/layout.css";`,
+  `@import "./foundations/stack.css";`,
   "",
 ].join("\n");
 writeFileSync(resolve(distDir, "foundations.css"), foundationsEntry);

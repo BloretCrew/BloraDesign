@@ -287,3 +287,42 @@ test("card header aligns title block and actions without title margin drift", as
   expect(Math.abs(geometry.buttonRightGap)).toBeLessThan(1);
   expect(Math.abs(geometry.blockCenter - geometry.buttonCenter)).toBeLessThan(2);
 });
+
+test("stacks own vertical rhythm over component margins", async ({ page: p }) => {
+  /* Load the real layered blora.css (its @imports need a file:// origin). */
+  await p.goto(
+    `file:///${resolve(distDir, "..", "..", "..", "examples", "basic", "index.html").replaceAll("\\", "/")}`,
+  );
+  await p.setContent(
+    `<!doctype html><html lang="zh-CN"><head>
+      <link rel="stylesheet" href="file:///${resolve(distDir, "blora.css").replaceAll("\\", "/")}" />
+    </head><body class="blora-page blora-scope">
+      <form class="blora-stack--lg" id="form">
+        <blora-field label="昵称" name="nickname"></blora-field>
+        <fieldset class="blora-fieldset" id="fieldset"><legend>通知</legend></fieldset>
+      </form>
+      <div class="blora-grid blora-grid--2" id="grid">
+        <blora-field label="甲" name="a"></blora-field>
+        <blora-field label="乙" name="b"></blora-field>
+      </div>
+      <div id="plain"><blora-field label="丙" name="c"></blora-field><blora-field label="丁" name="d"></blora-field></div>
+    </body></html>`,
+  );
+  await p.addScriptTag({ content: globalJs });
+  await p.evaluate(() =>
+    (globalThis as unknown as { Blora: { autoDefine(): void } }).Blora.autoDefine(),
+  );
+  await expect(p.locator("#grid .blora-field")).toHaveCount(2);
+  const spacing = await p.evaluate(() => ({
+    fieldsetTop: getComputedStyle(document.getElementById("fieldset")!).marginTop,
+    gridFieldBottom: getComputedStyle(document.querySelector("#grid .blora-field")!).marginBottom,
+    plainFirstBottom: getComputedStyle(document.querySelector("#plain .blora-field")!).marginBottom,
+    plainLastBottom: getComputedStyle(
+      document.querySelector("#plain blora-field:last-child .blora-field")!,
+    ).marginBottom,
+  }));
+  expect(spacing.fieldsetTop).toBe("32px");
+  expect(spacing.gridFieldBottom).toBe("0px");
+  expect(spacing.plainFirstBottom).toBe("24px");
+  expect(spacing.plainLastBottom).toBe("0px");
+});

@@ -34,13 +34,16 @@ describe("foundations CSS files", () => {
     expect(css).not.toMatch(/\bpadding-left\b/);
   });
 
-  it("layout.css has container, stack, grid", () => {
+  it("layout.css has container and grid; stack spacing ships in the utilities layer", () => {
     const css = readFileSync(resolve(foundationsDir, "layout.css"), "utf8");
     expect(css).toContain(".blora-container");
-    expect(css).toContain(".blora-stack");
     expect(css).toContain(".blora-grid");
     expect(css).toContain("container-type: inline-size");
     expect(css).toContain("@container");
+    const stack = readFileSync(resolve(foundationsDir, "stack.css"), "utf8");
+    expect(stack).toContain(".blora-stack > * + *");
+    const entry = readFileSync(resolve(import.meta.dirname, "..", "src", "blora.css"), "utf8");
+    expect(entry).toContain('@import "./foundations/stack.css" layer(blora.utilities);');
     // Divider shipped as its own component entry after the layout split
     const dividerCss = readFileSync(
       resolve(import.meta.dirname, "..", "src", "components", "divider", "divider.css"),

@@ -12,4 +12,5 @@
 @import "./foundations/reset.css" layer(blora.reset);
 @import "./foundations/base.css" layer(blora.base);
 @import "./foundations/layout.css" layer(blora.base);
+@import "./foundations/stack.css" layer(blora.utilities);
 @import "./foundations/utilities.css" layer(blora.utilities);
