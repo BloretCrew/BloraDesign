@@ -45,7 +45,11 @@ blora-tabs {
   transition:
     width var(--blora-duration-base) var(--blora-easing-standard),
     transform var(--blora-duration-base) var(--blora-easing-standard);
-  z-index: var(--blora-z-base);
+
+  /* The controller appends the indicator after every tab, so an equal
+     z-index would paint it over the labels. The full-height pills indicator
+     then hid the selected tab's text. Keep it one tier below the tabs. */
+  z-index: calc(var(--blora-z-base) - 1);
 }
 
 .blora-tabs__tab {
@@ -64,8 +68,8 @@ blora-tabs {
     background var(--blora-duration-fast) var(--blora-easing-standard);
   position: relative;
 
-  /* Above the sliding indicator (same tier, later in DOM) but below page
-     chrome like the sticky navbar, which must keep covering content. */
+  /* Above the sliding indicator (one tier lower) but below page chrome
+     like the sticky navbar, which must keep covering content. */
   z-index: var(--blora-z-base);
   background: none;
   border-inline-start: none;
