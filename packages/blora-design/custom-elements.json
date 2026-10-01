@@ -1048,6 +1048,46 @@
       "declarations": [
         {
           "kind": "class",
+          "name": "BloraImageStack",
+          "tagName": "blora-image-stack",
+          "customElement": true,
+          "description": "image-stack custom element",
+          "superclass": {
+            "name": "BloraElement",
+            "module": "dist/index.js"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BloraImageStack",
+          "declaration": {
+            "name": "BloraImageStack"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "defineBloraImageStack",
+          "declaration": {
+            "name": "defineBloraImageStack"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "blora-image-stack",
+          "declaration": {
+            "name": "BloraImageStack"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/index.js",
+      "declarations": [
+        {
+          "kind": "class",
           "name": "BloraMegamenu",
           "tagName": "blora-megamenu",
           "customElement": true,

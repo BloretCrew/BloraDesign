@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schemas/component-contract.schema.json",
+  "name": "image-stack",
+  "category": "data-display",
+  "status": "beta",
+  "kind": "custom-element",
+  "tagName": "blora-image-stack",
+  "since": "2.0.9",
+  "requiresJavaScript": true,
+  "formAssociated": false,
+  "attributes": {
+    "current": { "type": "number", "default": 0 },
+    "label": { "type": "string", "default": "图片堆叠" }
+  },
+  "properties": { "current": { "type": "number" } },
+  "methods": {
+    "next": { "signature": "() => void" },
+    "prev": { "signature": "() => void" },
+    "goTo": { "signature": "(index: number) => void" }
+  },
+  "events": {
+    "blora-image-stack-change": { "detail": "{ index: number }", "bubbles": true, "composed": false }
+  },
+  "slots": {
+    "default": "Declarative <blora-image-stack-item src alt href> definitions; consumed into the official chat-compatible image stack tree."
+  },
+  "cssProperties": ["--blora-image-stack-layer", "--blora-image-stack-shift"],
+  "parts": [],
+  "accessibilityPattern": "group"
+}

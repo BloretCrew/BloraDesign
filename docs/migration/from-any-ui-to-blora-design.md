@@ -1155,6 +1155,15 @@ import "@bloret-crew/blora-design/auto";
 <blora-image src="/images/project.png" alt="项目预览" preview></blora-image>
 ```
 
+### Image Stack（image-stack）
+
+```html
+<blora-image-stack label="络聊图片堆叠">
+  <blora-image-stack-item src="/images/photo-1.jpg" alt="第一张照片"></blora-image-stack-item>
+  <blora-image-stack-item src="/images/photo-2.jpg" alt="第二张照片"></blora-image-stack-item>
+</blora-image-stack>
+```
+
 ### Indicator（indicator）
 
 ```html

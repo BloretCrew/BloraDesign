@@ -151,6 +151,7 @@ export const en: BloraLocalePack = {
     "mockup.label": "{variant} mockup",
     "navbar.title": "Blora Design",
     "deck.label": "Card stack",
+    "imageStack.label": "Image stack",
     "dock.label": "Dock",
     "diff.position": "Compare position",
     "countdown.days": "Days",

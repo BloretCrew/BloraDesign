@@ -724,6 +724,10 @@ test("Calendar, carousel, deck and image CEs own structure and interactions", as
         <blora-deck-card>One</blora-deck-card>
         <blora-deck-card>Two</blora-deck-card>
       </blora-deck>
+      <blora-image-stack id="image-stack">
+        <blora-image-stack-item src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="One"></blora-image-stack-item>
+        <blora-image-stack-item src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="Two"></blora-image-stack-item>
+      </blora-image-stack>
       <blora-image
         id="image"
         src="data:image/gif;base64,R0lGODlhAQABAAAAACw="
@@ -742,6 +746,12 @@ test("Calendar, carousel, deck and image CEs own structure and interactions", as
   await page.locator("#deck .blora-deck").focus();
   await page.keyboard.press("ArrowDown");
   await expect(page.locator("#deck")).toHaveAttribute("current", "1");
+  await page.locator("#image-stack .blora-image-stack").focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.locator("#image-stack .blora-image-stack")).toHaveAttribute("data-index", "1");
+  await expect(page.locator("#image-stack .blora-image-stack__count")).toContainText("2 张照片");
+  await page.locator("#image-stack .blora-image-stack__count").click();
+  await expect(page.locator("#image-stack .blora-image-gallery")).toBeVisible();
   await page.locator("#image .blora-image").click();
   await expect(page.locator("body > .blora-image-preview")).toBeVisible();
   for (const selector of [

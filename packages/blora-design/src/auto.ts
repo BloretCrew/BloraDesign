@@ -55,6 +55,7 @@ import { defineBloraTreeSelect } from "./components/tree-select/index.js";
 import { defineBloraCalendar } from "./components/calendar/index.js";
 import { defineBloraCarousel } from "./components/carousel/index.js";
 import { defineBloraDeck } from "./components/deck/index.js";
+import { defineBloraImageStack } from "./components/image-stack/index.js";
 import { defineBloraImage } from "./components/image/index.js";
 import { defineBloraDock } from "./components/dock/index.js";
 import { defineBloraMegamenu } from "./components/megamenu/index.js";
@@ -119,6 +120,7 @@ export function defineAllBloraElements(registry: CustomElementRegistry = customE
   defineBloraCalendar(registry);
   defineBloraCarousel(registry);
   defineBloraDeck(registry);
+  defineBloraImageStack(registry);
   defineBloraImage(registry);
   defineBloraDock(registry);
   defineBloraMegamenu(registry);
@@ -187,6 +189,7 @@ export {
   defineBloraCalendar,
   defineBloraCarousel,
   defineBloraDeck,
+  defineBloraImageStack,
   defineBloraImage,
   defineBloraDock,
   defineBloraMegamenu,

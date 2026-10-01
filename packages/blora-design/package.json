@@ -114,6 +114,7 @@
     "./components/copy.css": "./dist/components/copy/copy.css",
     "./components/datepicker.css": "./dist/components/datepicker/datepicker.css",
     "./components/deck.css": "./dist/components/deck/deck.css",
+    "./components/image-stack.css": "./dist/components/image-stack/image-stack.css",
     "./components/dock.css": "./dist/components/dock/dock.css",
     "./components/fab.css": "./dist/components/fab/fab.css",
     "./components/masonry.css": "./dist/components/masonry/masonry.css",
