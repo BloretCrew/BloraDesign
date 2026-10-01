@@ -43,3 +43,20 @@ pnpm test:visual
 
 `pnpm test:visual` runs project `visual` only (not the full interaction suite).
 Optional: wire into CI as non-blocking or required after baselines stabilize.
+
+## 2026-10-01 Migration quality closeout
+
+- Reviewed the actual Chromium renders of the 2.1 component-state sheet in light and dark mode:
+  distinct primary/danger buttons, semantic Tags and Alerts, pills Tabs, avatar markers, Copy,
+  compact Card headers and disabled form controls.
+- Added 16 page-pattern snapshots: resources, table/list, settings and loading/empty/error states,
+  each in light/dark mode at desktop and 390px mobile widths. Every capture was inspected before
+  accepting its baseline. The mobile table/list review caught and fixed squeezed metadata.
+- Pattern tests check horizontal containment at the real viewport size before using a taller
+  capture viewport of the same width to paint the entire long pattern. The floating sidebar
+  launcher is excluded only from these component crops; the existing shell snapshots cover it.
+- The existing palette-menu baseline was checked against its actual image and diff. Its accepted
+  update is limited to Chinese font rendering; palette geometry, swatches and semantic colours
+  remain covered by the existing tests.
+- No screenshot-difference tolerances were widened. Intentional layout changes are recorded in
+  `known-differences.md`.

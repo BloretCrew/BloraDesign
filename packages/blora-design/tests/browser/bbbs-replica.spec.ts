@@ -325,23 +325,28 @@ test("BBBS replica palette menu opens adjacent to its trigger on mobile", async 
   await page.locator(".blora-sidebar-layout__toggle").first().click();
   await page.waitForTimeout(300);
   await page.locator("blora-palette-picker [data-blora-palette-trigger]").click();
-  await page.waitForTimeout(300);
 
-  const geo = await page.evaluate(() => {
-    const trigger = document.querySelector("blora-palette-picker [data-blora-palette-trigger]")!;
-    const menu = document.querySelector("blora-palette-picker .blora-palette-picker__menu")!;
-    const t = trigger.getBoundingClientRect();
-    const m = menu.getBoundingClientRect();
-    return {
-      gap: Math.round(t.top - m.bottom),
-      insideX: m.left >= 0 && m.right <= window.innerWidth,
-      insideY: m.top >= 0 && m.bottom <= window.innerHeight,
-    };
-  });
+  const measure = () =>
+    page.evaluate(() => {
+      const trigger = document.querySelector("blora-palette-picker [data-blora-palette-trigger]")!;
+      const menu = document.querySelector("blora-palette-picker .blora-palette-picker__menu")!;
+      const t = trigger.getBoundingClientRect();
+      const m = menu.getBoundingClientRect();
+      return {
+        gap: Math.round(t.top - m.bottom),
+        insideX: m.left >= 0 && m.right <= window.innerWidth,
+        insideY: m.top >= 0 && m.bottom <= window.innerHeight,
+      };
+    });
 
-  expect(geo.gap).toBeLessThanOrEqual(12);
-  expect(geo.insideX).toBe(true);
-  expect(geo.insideY).toBe(true);
+  // The drawer and the menu both animate in; a fixed wait read mid-transition geometry
+  // under parallel load, so poll until the menu has settled next to its trigger.
+  await expect
+    .poll(async () => {
+      const geo = await measure();
+      return geo.gap >= 0 && geo.gap <= 12 && geo.insideX && geo.insideY;
+    })
+    .toBe(true);
 });
 
 test("BBBS replica feed filter is a segmented control that filters the feed", async ({ page }) => {

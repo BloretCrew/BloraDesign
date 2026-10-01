@@ -2285,9 +2285,16 @@
         });
         new MutationObserver(() => {
           if (showcaseShell.hasAttribute("data-open")) {
-            requestAnimationFrame(() => revealCurrentNavigation());
+            /* WebKit can scroll the drawer's first focused link after its
+               opening frame. Reveal the current route after that scroll. */
+            requestAnimationFrame(() => requestAnimationFrame(() => revealCurrentNavigation()));
           }
         }).observe(showcaseShell, { attributeFilter: ["data-open"] });
+        document.getElementById("component-sidebar").addEventListener("transitionend", (event) => {
+          if (event.target === event.currentTarget && event.propertyName === "transform" && showcaseShell.hasAttribute("data-open")) {
+            revealCurrentNavigation();
+          }
+        });
         addEventListener("hashchange", () => selectComponent(location.hash.slice(1)));
 
         syncTheme();

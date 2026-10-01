@@ -1217,6 +1217,9 @@ test("showcase catalog resets window scroll when the next page is shorter", asyn
 });
 
 test("showcase catalog mounts all component previews without runtime errors", async ({ page }) => {
+  // Walks every catalog route in one test; the default 30s budget is too tight for
+  // Firefox under a fully parallel run.
+  test.setTimeout(120_000);
   const showcase = resolve(import.meta.dirname, "../../../..", "examples/showcase-v2/index.html");
   const pageErrors: string[] = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
@@ -1473,6 +1476,8 @@ test("showcase Pagination matches the v1 window and keeps active hover colour st
 });
 
 test("every showcase route remains horizontally contained", async ({ page }) => {
+  // Walks every catalog route in one test (see the mount test above).
+  test.setTimeout(120_000);
   const showcase = resolve(import.meta.dirname, "../../../..", "examples/showcase-v2/index.html");
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(`${pathToFileURL(showcase).href}#accordion`);

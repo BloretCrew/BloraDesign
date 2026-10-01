@@ -1,5 +1,5 @@
 /**
- * Regression gates for the 2.0.9 polish pass: states that rendered but were
+ * Regression gates for the 2.1.0 polish pass: states that rendered but were
  * unreadable, detached or indistinguishable in the showcase audit.
  */
 import { readFileSync } from "node:fs";
@@ -26,7 +26,7 @@ function page(styles: string, content: string, withRuntime = false): string {
   const runtime = withRuntime
     ? `<script>${globalJs}</script><script>globalThis.Blora.autoDefine()</script>`
     : "";
-  return `<!doctype html><html lang="zh-CN"><head><style>${styles}</style></head><body class="blora-page blora-scope">${content}${runtime}</body></html>`;
+  return `<!doctype html><html lang="zh-CN"><head><meta name="viewport" content="width=device-width, initial-scale=1"><style>${styles}</style></head><body class="blora-page blora-scope">${content}${runtime}</body></html>`;
 }
 
 test("pills Tabs paint the selected label above the sliding indicator", async ({ page: p }) => {
@@ -181,6 +181,9 @@ test("disabled form controls share one sunken treatment", async ({ page: p }) =>
 });
 
 test("navbar links never break inside a word in a narrow container", async ({ page: p }) => {
+  // Exercise a narrow container while the desktop links are visible; below
+  // the navbar's viewport breakpoint they are intentionally hidden.
+  await p.setViewportSize({ width: 800, height: 600 });
   await p.setContent(
     page(
       componentCss("navbar", "button"),
@@ -197,6 +200,7 @@ test("navbar links never break inside a word in a narrow container", async ({ pa
   );
   const links = p.locator(".blora-navbar__link");
   await expect(links).toHaveCount(3);
+  await expect(links.first()).toBeVisible();
   const measured = await links.evaluateAll((items) =>
     items.map((item) => {
       const range = document.createRange();
@@ -286,6 +290,49 @@ test("card header aligns title block and actions without title margin drift", as
   expect(Number(geometry.titleWeight)).toBeGreaterThanOrEqual(600);
   expect(Math.abs(geometry.buttonRightGap)).toBeLessThan(1);
   expect(Math.abs(geometry.blockCenter - geometry.buttonCenter)).toBeLessThan(2);
+});
+
+test("mobile list rows keep titles readable beside status and actions", async ({ page: p }) => {
+  await p.setViewportSize({ width: 390, height: 844 });
+  await p.setContent(
+    page(
+      componentCss("list", "avatar", "badge", "button", "card"),
+      `<article class="blora-card" style="width:19rem">
+        <ul class="blora-list">
+          <li class="blora-list__item">
+            <span class="blora-avatar" data-size="sm">GH</span>
+            <div class="blora-list__meta">
+              <div class="blora-list__title">GitHub</div>
+              <div class="blora-list__desc">rhedar · 2026-07-17 关联</div>
+            </div>
+            <span class="blora-badge" data-variant="success">已连接</span>
+            <button type="button" class="blora-button" data-variant="ghost" data-size="sm">解除</button>
+          </li>
+        </ul>
+      </article>`,
+    ),
+  );
+  const geometry = await p.locator(".blora-list__item").evaluate((item) => {
+    const title = item.querySelector(".blora-list__title")!;
+    const range = document.createRange();
+    range.selectNodeContents(title);
+    const description = item.querySelector(".blora-list__desc")!;
+    const row = item.getBoundingClientRect();
+    return {
+      metaWidth: item.querySelector(".blora-list__meta")!.getBoundingClientRect().width,
+      titleWidth: range.getBoundingClientRect().width,
+      descriptionLines:
+        description.getBoundingClientRect().height /
+        parseFloat(getComputedStyle(description).lineHeight),
+      controlsContained: [...item.children].every((child) => {
+        const rect = child.getBoundingClientRect();
+        return rect.left >= row.left && rect.right <= row.right;
+      }),
+    };
+  });
+  expect(geometry.metaWidth).toBeGreaterThanOrEqual(geometry.titleWidth);
+  expect(geometry.descriptionLines).toBeLessThanOrEqual(3);
+  expect(geometry.controlsContained).toBe(true);
 });
 
 test("stacks own vertical rhythm over component margins", async ({ page: p }) => {
