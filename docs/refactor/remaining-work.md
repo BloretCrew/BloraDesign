@@ -65,4 +65,13 @@
 - `data-icon` 自动填充、Field 采纳子控件、Card 标题行、Tag danger；
 - Coral danger/warning 调色与语义变体、禁用态、Tabs/Avatar/Navbar 缺陷修复（见 `known-differences.md`）。
 
-待办：版本号升到 `2.1.0` 并发布 npm，消费项目才能使用上述能力。
+2026-10-01 收尾：核心包和六个官方 add-on 的源码版本已统一准备为 `2.1.0`；增加浅深色组件状态和桌面/390px 页面范式的视觉门禁，修复窄屏 List 正文挤压，并检查实际 tarball 中的离线规范和 lint CLI。
+
+本轮验收（Windows，2026-10-01）：
+
+- `pnpm verify` 完整通过：351 个单元测试，210 项 Chromium / mobile Chromium / axe 检查，契约、对比度、类型、文档、包导出、体积和安装包门禁；
+- Firefox 104/104、WebKit 104/104；构建完成后顺序运行，避免产物重建干扰浏览器检查；
+- 视觉回归 48/48；新增的 18 张浅深色组件与页面范式基线均已逐张审核；
+- 核心包与六个 add-on 的实际 tarball 均可安装；安装后的 `blora-lint` 接受有效写法，并对不存在的 token 返回错误与退出码 1；五份离线规范和入口文件齐全。
+
+发布待办：推送并发布 `2.1.0`。在发布完成前，不将本次能力描述为 npm `latest` 已可用；不要覆盖 Stable `2.0.8` 的发布记录。

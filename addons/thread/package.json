@@ -1,6 +1,6 @@
 {
   "name": "@bloret-crew/blora-design-thread",
-  "version": "2.0.8",
+  "version": "2.1.0",
   "description": "Forum comment and composer composite custom elements for Blora Design 2.0.",
   "license": "Apache-2.0",
   "type": "module",

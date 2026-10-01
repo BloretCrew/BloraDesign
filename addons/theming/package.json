@@ -1,6 +1,6 @@
 {
   "name": "@bloret-crew/blora-design-theming",
-  "version": "2.0.8",
+  "version": "2.1.0",
   "description": "Theming add-on for Blora Design 2.0 (palette picker).",
   "license": "Apache-2.0",
   "type": "module",

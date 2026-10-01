@@ -24,10 +24,13 @@ Focus: make Blora itself more consistent and make migrations by other projects (
 ### Fixed
 
 - Pills Tabs: the sliding indicator no longer covers the selected label.
+- Markdown keeps its rendered content when a framework or the showcase moves the element.
 - Avatar badges and presence dots stay anchored to the avatar in stretched rows.
 - Navbar links never wrap mid-word; disabled Select matches disabled Input; disabled Textarea is not resizable; square icon buttons look square.
 - Contrast: Copy action icons, default avatar initials and statistic labels meet WCAG AA/non-text thresholds.
 - Documentation: real token names in the design standard; every migration example uses the real component API and is now executed by a browser gate and the linter.
+- Showcase: opening the mobile sidebar reveals the current route after WebKit's focus scroll settles.
+- Mobile List rows keep titles and descriptions readable when avatars, status badges and actions share a row; controls wrap instead of squeezing the text.
 
 ## 2.0.8
 

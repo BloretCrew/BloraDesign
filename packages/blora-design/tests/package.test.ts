@@ -4,7 +4,7 @@ import { VERSION, isBrowser } from "../src/index.js";
 
 describe("package entry", () => {
   it("exports the correct version", () => {
-    expect(VERSION).toBe("2.0.8");
+    expect(VERSION).toBe("2.1.0");
   });
 
   it("isBrowser returns true in jsdom", () => {

@@ -14,7 +14,7 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { execFileSync, execSync } from "node:child_process";
+import { execFileSync, execSync, spawnSync } from "node:child_process";
 
 const packageDir = resolve(import.meta.dirname, "..");
 const typescriptCli = resolve(
@@ -79,6 +79,16 @@ try {
     "dist/tokens.dark.css",
     "dist/tokens.themes.css",
     "dist/token-manifest.json",
+    "llms.txt",
+    "bin/blora-lint.mjs",
+    "bin/lint-core.mjs",
+    "contracts/button.contract.json",
+    "schemas/component-contract.schema.json",
+    "dist/docs/patterns.md",
+    "dist/docs/standards.md",
+    "dist/docs/guide.md",
+    "dist/docs/framework.md",
+    "dist/docs/migration/from-any-ui-to-blora-design.md",
   ]) {
     if (!existsSync(join(packageInstallDir, file))) {
       throw new Error(`[pack:test] Installed package is missing ${file}`);
@@ -87,6 +97,44 @@ try {
 
   // Walk package.json exports and ensure each mapped file exists in the installed tree.
   const installedPkg = JSON.parse(readFileSync(join(packageInstallDir, "package.json"), "utf8"));
+  const cliPath = join(packageInstallDir, installedPkg.bin["blora-lint"]);
+  const cliShim = join(
+    fixtureDir,
+    "node_modules",
+    ".bin",
+    process.platform === "win32" ? "blora-lint.cmd" : "blora-lint",
+  );
+  if (!existsSync(cliShim)) throw new Error("[pack:test] blora-lint bin was not installed");
+  writeFileSync(
+    join(fixtureDir, "valid.html"),
+    '<button type="button" class="blora-button" data-variant="primary" data-icon="plus">Create</button>',
+  );
+  const validFindings = JSON.parse(
+    execFileSync(process.execPath, [cliPath, "valid.html", "--json"], {
+      cwd: fixtureDir,
+      encoding: "utf8",
+    }),
+  );
+  if (validFindings.length !== 0) {
+    throw new Error(
+      `[pack:test] blora-lint rejected valid consumer markup: ${JSON.stringify(validFindings)}`,
+    );
+  }
+  writeFileSync(join(fixtureDir, "invalid.css"), ".app { color: var(--blora-not-a-token); }");
+  const invalidCheck = spawnSync(process.execPath, [cliPath, "invalid.css", "--json"], {
+    cwd: fixtureDir,
+    encoding: "utf8",
+  });
+  if (invalidCheck.error) throw invalidCheck.error;
+  const invalidFindings = JSON.parse(invalidCheck.stdout);
+  if (
+    invalidCheck.status !== 1 ||
+    !invalidFindings.some((finding) => finding.rule === "unknown-token")
+  ) {
+    throw new Error("[pack:test] blora-lint did not report an unknown token with exit code 1");
+  }
+  console.log("[pack:test] Installed blora-lint and offline migration docs OK");
+
   const exportKeys = Object.keys(installedPkg.exports || {});
   let exportChecked = 0;
   for (const key of exportKeys) {

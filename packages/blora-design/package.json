@@ -1,6 +1,6 @@
 {
   "name": "@bloret-crew/blora-design",
-  "version": "2.0.8",
+  "version": "2.1.0",
   "description": "Token-driven, accessible, zero-dependency Web UI design system.",
   "license": "Apache-2.0",
   "type": "module",
