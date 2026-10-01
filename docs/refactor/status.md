@@ -4,12 +4,14 @@
 
 ## 当前阶段
 
-**Phase 10：Stable 发布** - ✅ **`2.0.8` 已发布，完成最终验收**（stable-core API 已冻结）
+**Phase 10：Stable 发布** - ✅ **`2.1.0` 已发布，完成最终验收**（stable-core API 已冻结）
 
 > **主跟踪文档**：[`remaining-work.md`](./remaining-work.md)  
 > 顺序：**Preflight → Alpha → Beta → RC → Stable**。当前已完成 Stable 发布。
 
 Showcase v2 已完成 87/87 核心组件目录：正式 API/CE 示例、单视图懒挂载、同源 Preview/HTML，以及 manifest、桌面/移动浏览器和代表性视觉门禁。2.0.0 Stable 已完成最终验收。
+
+2026-10-01：组件一致性和迁移工具迭代已发布为 `2.1.0`，核心包与六个 add-on 的 npm `latest` 已同步。`pnpm verify`、Firefox / WebKit 104/104、视觉回归 48/48 和公开核心包安装复验通过；详见主跟踪文档的 2.1.0 记录。
 
 ## 阶段进度
 
