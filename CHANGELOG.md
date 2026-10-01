@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.1.0 (unreleased)
+## 2.1.0
 
 Focus: make Blora itself more consistent and make migrations by other projects (and their AI agents) come out right the first time.
 
