@@ -1,0 +1,4088 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Blora Design — 柔格星轨 · 行内微缝拼接</title>
+<link rel="stylesheet" href="../node_modules/@bloret-crew/cortado/dist/cortado.css">
+<style>
+  :root {
+    --bg-canvas: var(--cortado-slate-55);
+    --bg-seam: var(--cortado-slate-65);
+    --bg-tile: var(--cortado-slate-0);
+    --bg-tile-tint: var(--cortado-slate-40);
+    --bg-well: var(--cortado-slate-40);
+    --bg-ctrl: var(--cortado-slate-0);
+    --bg-slot: var(--cortado-slate-65);
+    --bg-slot-hover: var(--cortado-slate-95);
+    --bg-float: var(--cortado-slate-0);
+    --dash-line: var(--cortado-slate-125);
+
+    --ink-1: var(--cortado-slate-710);
+    --ink-2: var(--cortado-slate-510);
+    --ink-3: var(--cortado-slate-365);
+    --ink-4: var(--cortado-slate-240);
+
+    --blush-solid: var(--cortado-rosewater-285);
+    --blush-solid-hover: var(--cortado-rosewater-320);
+    --blush-track: var(--cortado-rosewater-230);
+    --blush-fill: var(--cortado-rosewater-105);
+    --blush-fill-hover: var(--cortado-rosewater-140);
+    --blush-soft: var(--cortado-rosewater-55);
+    --blush-soft-hover: var(--cortado-rosewater-90);
+    --blush-ink: var(--cortado-rosewater-525);
+
+    --sand-solid: var(--cortado-apricot-255);
+    --sand-fill: var(--cortado-apricot-90);
+    --sand-fill-hover: var(--cortado-apricot-125);
+    --sand-soft: var(--cortado-apricot-50);
+    --sand-ink: var(--cortado-apricot-505);
+
+    --rose-solid: var(--cortado-flamingo-350);
+    --rose-fill: var(--cortado-flamingo-120);
+    --rose-fill-hover: var(--cortado-flamingo-160);
+    --rose-soft: var(--cortado-flamingo-60);
+    --rose-ink: var(--cortado-flamingo-510);
+
+    /* v2 拼接几何：与分裂钮 / 域名拼接框同一套规则 —— 外侧大圆角，相邻处收成小圆角 + 窄缝 */
+    --r-tile: 20px;      /* 行组外角 */
+    --r-seam: 6px;       /* 行内缝角 */
+    --gap-seam: 6px;     /* 行内缝 */
+    --gap-row: 6px;      /* 行间缝，与行内缝一致 */
+    --r-card: 16px;
+    --r-ctrl: 12px;
+    --r-pill: 999px;
+
+    --ctrl-lift: 0 1px 2.5px rgba(34, 36, 48, 0.045);
+    --well-lift: 0 1px 2px rgba(34, 36, 48, 0.035);
+    --float-shadow: 0 14px 34px rgba(32, 34, 48, 0.09), 0 2px 8px rgba(32, 34, 48, 0.04);
+    --focus-halo: 0 0 0 3px color-mix(in srgb, var(--blush-solid) 22%, transparent);
+
+    --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --font-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  html[data-theme="dark"] {
+    --bg-canvas: var(--cortado-slate-800);
+    --bg-seam: var(--cortado-slate-775);
+    --bg-tile: var(--cortado-slate-745);
+    --bg-tile-tint: var(--cortado-slate-730);
+    --bg-well: var(--cortado-slate-765);
+    --bg-ctrl: var(--cortado-slate-705);
+    --bg-slot: var(--cortado-slate-670);
+    --bg-slot-hover: var(--cortado-slate-625);
+    --bg-float: var(--cortado-slate-705);
+    --dash-line: var(--cortado-slate-605);
+
+    --ink-1: var(--cortado-slate-50);
+    --ink-2: var(--cortado-slate-220);
+    --ink-3: var(--cortado-slate-380);
+    --ink-4: var(--cortado-slate-505);
+
+    --blush-solid: var(--cortado-rosewater-285);
+    --blush-solid-hover: var(--cortado-rosewater-250);
+    --blush-track: var(--cortado-rosewater-370);
+    --blush-fill: var(--cortado-rosewater-675);
+    --blush-fill-hover: var(--cortado-rosewater-635);
+    --blush-soft: var(--cortado-rosewater-720);
+    --blush-soft-hover: var(--cortado-rosewater-690);
+    --blush-ink: var(--cortado-rosewater-135);
+
+    --sand-solid: var(--cortado-apricot-255);
+    --sand-fill: var(--cortado-apricot-660);
+    --sand-fill-hover: var(--cortado-apricot-620);
+    --sand-soft: var(--cortado-apricot-715);
+    --sand-ink: var(--cortado-apricot-105);
+
+    --rose-solid: var(--cortado-flamingo-350);
+    --rose-fill: var(--cortado-flamingo-675);
+    --rose-fill-hover: var(--cortado-flamingo-640);
+    --rose-soft: var(--cortado-flamingo-725);
+    --rose-ink: var(--cortado-flamingo-135);
+
+    --ctrl-lift: 0 1px 3px rgba(0, 0, 0, 0.22);
+    --well-lift: 0 1px 2px rgba(0, 0, 0, 0.18);
+    --float-shadow: 0 16px 38px rgba(0, 0, 0, 0.42), 0 2px 8px rgba(0, 0, 0, 0.24);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg-canvas);
+    color: var(--ink-1);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  button, input, textarea { font-family: inherit; font-size: inherit; color: inherit; border: none; outline: none; background: none; }
+  button { cursor: pointer; user-select: none; }
+  svg { display: block; flex-shrink: 0; }
+
+  .page-wrap {
+    max-width: 1320px;
+    margin: 22px auto 48px;
+    padding: 0 20px;
+  }
+
+  /* v2 Stack — 每个 section 是一条独立圆角行组，行间 12px，无外层容器、无 overflow 裁切 */
+  .blora-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-row);
+  }
+
+  /* 行组：行内 3px 微缝；格子默认 6px 缝角，行首行尾外侧换成 20px 外角。
+     行与行之间是 12px 间距而非缝，所以整页不存在十字交叉缝。 */
+  .blora-row { gap: var(--gap-seam); }
+  .blora-row > * { border-radius: var(--r-seam); }
+  .blora-row > :first-child {
+    border-top-left-radius: var(--r-tile);
+    border-bottom-left-radius: var(--r-tile);
+  }
+  .blora-row > :last-child {
+    border-top-right-radius: var(--r-tile);
+    border-bottom-right-radius: var(--r-tile);
+  }
+  section[id^="sec-"] { scroll-margin-top: 76px; }
+
+  /* Top Header Tile */
+  .top-header {
+    background: var(--bg-tile);
+    border-radius: var(--r-tile);
+    padding: 15px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .brand-cluster {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .orbit-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--blush-soft);
+    color: var(--blush-solid);
+    display: grid;
+    place-items: center;
+  }
+  .brand-title {
+    font-size: 15.5px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+  .brand-badge {
+    background: var(--blush-soft);
+    color: var(--blush-ink);
+    padding: 3px 10px;
+    border-radius: var(--r-pill);
+    font-size: 11.5px;
+    font-weight: 550;
+  }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  /* Sticky Jump Strip */
+  .jump-strip {
+    position: sticky;
+    top: 10px;
+    z-index: 60;
+    background: color-mix(in srgb, var(--bg-tile) 78%, transparent);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    backdrop-filter: blur(16px) saturate(1.4);
+    border-radius: var(--r-tile);
+    padding: 7px 10px 7px 8px;
+    transition: box-shadow 0.2s ease, background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .jump-pills {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .jump-pill {
+    padding: 5px 12px;
+    border-radius: var(--r-pill);
+    font-size: 12.5px;
+    color: var(--ink-2);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.16s ease, color 0.16s ease;
+  }
+  .jump-strip.stuck {
+    box-shadow: 0 10px 28px rgba(32, 34, 48, 0.08), 0 1px 3px rgba(32, 34, 48, 0.04);
+  }
+  html[data-theme="dark"] .jump-strip.stuck {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.38), 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  .jump-pill:hover {
+    background: var(--bg-well);
+    color: var(--ink-1);
+  }
+  .jump-pill.active {
+    background: var(--blush-fill);
+    color: var(--blush-ink);
+    font-weight: 600;
+  }
+  .jump-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.65;
+  }
+  .constellation-hint {
+    padding-right: 10px;
+    font-size: 12px;
+    color: var(--ink-3);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Orbital Telemetry Mosaic Strip (4 flush porcelain tiles separated by --gap-seam) */
+  .orbit-strip {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--gap-seam);
+  }
+  .orbit-tile {
+    background: var(--bg-tile);
+    padding: 15px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .orbit-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .orbit-label {
+    font-size: 12px;
+    color: var(--ink-3);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .orbit-val {
+    font-size: 19px;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .orbit-sub {
+    font-size: 11.5px;
+    color: var(--ink-3);
+  }
+  .orbit-ring-wrap {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+  .orbit-ring-pct {
+    position: absolute;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    color: var(--ink-2);
+  }
+
+  /* Mosaic Row Grids */
+  .mosaic-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gap-seam);
+  }
+  .mosaic-3 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--gap-seam);
+  }
+  .mosaic-asym {
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
+    gap: var(--gap-seam);
+  }
+  .tile {
+    background: var(--bg-tile);
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    min-width: 0;
+  }
+  .tile-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .tile-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .orbit-index {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--blush-soft);
+    color: var(--blush-ink);
+    font-size: 11px;
+    font-weight: 650;
+    font-family: var(--font-mono);
+    display: grid;
+    place-items: center;
+  }
+  .tile-title {
+    font-size: 13px;
+    font-weight: 620;
+    color: var(--ink-1);
+  }
+  .tile-caption {
+    font-size: 11.5px;
+    color: var(--ink-3);
+  }
+
+  /* Well Surface inside White Tile */
+  .well-surface {
+    background: var(--bg-well);
+    border-radius: var(--r-card);
+    padding: 14px;
+  }
+
+  /* Buttons */
+  .btn-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    height: 33px;
+    padding: 0 14px;
+    border-radius: var(--r-pill);
+    font-size: 12.5px;
+    font-weight: 560;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+    white-space: nowrap;
+  }
+  .btn:active:not(:disabled) { transform: scale(0.98); }
+  .btn-primary {
+    background: var(--blush-solid);
+    color: var(--cortado-slate-0);
+  }
+  .btn-primary:hover { background: var(--blush-solid-hover); }
+  .btn-blush {
+    background: var(--blush-fill);
+    color: var(--blush-ink);
+  }
+  .btn-blush:hover { background: var(--blush-fill-hover); }
+  .btn-sand {
+    background: var(--sand-fill);
+    color: var(--sand-ink);
+  }
+  .btn-sand:hover { background: var(--sand-fill-hover); }
+  .btn-surface {
+    background: var(--bg-well);
+    color: var(--ink-1);
+  }
+  .btn-surface:hover { background: var(--bg-slot); }
+  .btn-elev {
+    background: var(--bg-ctrl);
+    color: var(--ink-1);
+    box-shadow: var(--ctrl-lift);
+  }
+  .btn-elev:hover { background: var(--blush-soft); color: var(--blush-ink); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink-2);
+  }
+  .btn-ghost:hover { background: var(--bg-well); color: var(--ink-1); }
+  .btn-rose {
+    background: var(--rose-soft);
+    color: var(--rose-ink);
+  }
+  .btn-rose:hover { background: var(--rose-fill); }
+  .btn:disabled {
+    background: var(--bg-well);
+    color: var(--ink-4);
+    cursor: not-allowed;
+  }
+  .btn-icon {
+    width: 33px;
+    padding: 0;
+  }
+
+  /* Coupled Split Button (Connected Radii) */
+  .split-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    position: relative;
+  }
+  .split-main {
+    border-radius: var(--r-pill) 4px 4px var(--r-pill);
+    padding: 0 14px;
+  }
+  .split-caret {
+    border-radius: 4px var(--r-pill) var(--r-pill) 4px;
+    width: 31px;
+    padding: 0;
+  }
+  .coupled-pair {
+    display: inline-flex;
+    background: var(--bg-well);
+    padding: 3px;
+    border-radius: var(--r-pill);
+    gap: 2px;
+  }
+  .coupled-pair .btn {
+    height: 27px;
+    padding: 0 11px;
+    font-size: 12px;
+  }
+
+  /* Spin animation for async button */
+  @keyframes orbitSpin { to { transform: rotate(360deg); } }
+  .spin { animation: orbitSpin 0.9s linear infinite; }
+
+  /* Floating Popovers & Dropdowns (Zero 1px borders, pure light elevation) */
+  .pop-anchor { position: relative; display: inline-flex; }
+  .float-panel {
+    position: absolute;
+    top: calc(100% + 7px);
+    left: 0;
+    min-width: 210px;
+    background: var(--bg-float);
+    border-radius: 15px;
+    padding: 6px;
+    box-shadow: var(--float-shadow);
+    z-index: 90;
+    display: none;
+  }
+  .float-panel.open { display: block; }
+  .float-panel.right { left: auto; right: 0; }
+
+  .menu-opt {
+    width: 100%;
+    padding: 7px 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 12.5px;
+    color: var(--ink-1);
+    text-align: left;
+    transition: background-color 0.12s ease;
+  }
+  .menu-opt:hover { background: var(--bg-well); }
+  .menu-opt.active {
+    background: var(--blush-soft);
+    color: var(--blush-ink);
+    font-weight: 560;
+  }
+  .menu-opt.danger { color: var(--rose-ink); }
+  .menu-opt.danger:hover { background: var(--rose-soft); }
+
+  /* Connected Adjacent Radii for Multi-select Options */
+  .menu-opt.sel {
+    background: var(--blush-soft);
+    color: var(--blush-ink);
+    font-weight: 560;
+    border-radius: 10px;
+  }
+  .menu-opt.sel:hover { background: var(--blush-soft-hover); }
+  .menu-opt.sel.join-top { border-top-left-radius: 0; border-top-right-radius: 0; }
+  .menu-opt.sel.join-bot { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+
+  /* Custom Light Tooltip (Never jarring black) */
+  .tip-wrap { position: relative; display: inline-flex; }
+  .tip-card {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(3px);
+    background: var(--bg-float);
+    color: var(--ink-1);
+    padding: 7px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    white-space: nowrap;
+    box-shadow: var(--float-shadow);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 95;
+  }
+  .tip-wrap:hover .tip-card {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Popconfirm */
+  .popconfirm-box {
+    width: 248px;
+    padding: 13px 14px;
+  }
+  .popconfirm-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-1);
+    margin-bottom: 4px;
+  }
+  .popconfirm-desc {
+    font-size: 12px;
+    color: var(--ink-2);
+    margin-bottom: 11px;
+  }
+  .popconfirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+
+  /* Custom Pickers (Trigger inside soft well) */
+  .picker-shell { position: relative; width: 100%; }
+  .picker-trigger {
+    width: 100%;
+    min-height: 38px;
+    padding: 5px 12px;
+    border-radius: var(--r-ctrl);
+    background: var(--bg-well);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    text-align: left;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .picker-trigger:hover { background: var(--bg-slot); }
+  .picker-shell.open .picker-trigger {
+    background: var(--bg-ctrl);
+    box-shadow: var(--focus-halo);
+  }
+  .picker-val {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.8px;
+    font-weight: 530;
+    min-width: 0;
+  }
+  .orbit-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--blush-solid);
+    box-shadow: 0 0 0 3px var(--blush-fill);
+    flex-shrink: 0;
+  }
+  .tag-flow {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .tag-chip {
+    background: var(--blush-soft);
+    color: var(--blush-ink);
+    padding: 2px 8px;
+    border-radius: var(--r-pill);
+    font-size: 11.5px;
+    font-weight: 560;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* 同心圆角：内嵌元素圆角 = 外框圆角 − 四周间距。
+     触发器 38px 高、12px 圆角；内嵌标签 / 徽标四周留 5px → 高 28px、圆角 7px */
+  .picker-trigger { --nest-inset: 5px; }
+  .picker-trigger .tag-chip,
+  .picker-trigger > .status-pill {
+    height: calc(38px - var(--nest-inset) * 2);
+    border-radius: calc(var(--r-ctrl) - var(--nest-inset));
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .picker-trigger .tag-chip { padding: 0 7px 0 10px; }
+  .picker-trigger > .status-pill { padding: 0 10px; }
+  .picker-trigger:has(.tag-chip) { padding-top: var(--nest-inset); padding-bottom: var(--nest-inset); padding-left: var(--nest-inset); }
+  .picker-trigger:has(> .status-pill) { padding-top: var(--nest-inset); padding-bottom: var(--nest-inset); padding-right: var(--nest-inset); }
+  .tag-chip button {
+    color: var(--blush-ink);
+    opacity: 0.7;
+    display: grid;
+    place-items: center;
+  }
+  .tag-chip button:hover { opacity: 1; }
+
+  .picker-drop {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: var(--bg-float);
+    border-radius: 15px;
+    padding: 7px;
+    box-shadow: var(--float-shadow);
+    z-index: 85;
+    display: none;
+  }
+  .picker-shell.open .picker-drop { display: block; }
+  .drop-search {
+    width: 100%;
+    height: 32px;
+    padding: 0 11px;
+    border-radius: 9px;
+    background: var(--bg-well);
+    font-size: 12.5px;
+    margin-bottom: 6px;
+  }
+
+  /* Custom Range Calendar with Seamless Connected Pill Band */
+  .cal-drop { width: 286px; right: 0; left: auto; padding: 12px; }
+  .cal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .cal-nav-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: var(--bg-well);
+    display: grid;
+    place-items: center;
+    color: var(--ink-2);
+  }
+  .cal-nav-btn:hover { background: var(--blush-soft); color: var(--blush-ink); }
+  .cal-weekdays, .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+  }
+  .cal-weekdays span {
+    font-size: 11px;
+    color: var(--ink-3);
+    padding: 4px 0;
+  }
+  .cal-grid { row-gap: 3px; }
+  .cal-day {
+    height: 30px;
+    font-size: 12.5px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    color: var(--ink-1);
+    font-variant-numeric: tabular-nums;
+  }
+  .cal-day:hover { background: var(--bg-well); }
+  .cal-day.muted { color: var(--ink-4); pointer-events: none; }
+  .cal-day.in-range {
+    background: var(--blush-soft);
+    color: var(--blush-ink);
+    border-radius: 0;
+  }
+  .cal-day.range-start {
+    background: var(--blush-solid);
+    color: var(--cortado-slate-0);
+    border-radius: 9px 0 0 9px;
+    font-weight: 600;
+  }
+  .cal-day.range-end {
+    background: var(--blush-solid);
+    color: var(--cortado-slate-0);
+    border-radius: 0 9px 9px 0;
+    font-weight: 600;
+  }
+  .cal-day.range-single {
+    background: var(--blush-solid);
+    color: var(--cortado-slate-0);
+    border-radius: 9px;
+    font-weight: 600;
+  }
+
+  /* Inputs & Coupled Addon Input */
+  .field-box {
+    height: 36px;
+    background: var(--bg-well);
+    border-radius: var(--r-ctrl);
+    padding: 0 11px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .field-box:focus-within {
+    background: var(--bg-ctrl);
+    box-shadow: var(--focus-halo);
+  }
+  .field-box input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+  }
+  .clear-btn {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--bg-slot);
+    color: var(--ink-2);
+    display: grid;
+    place-items: center;
+  }
+  .clear-btn:hover { background: var(--blush-fill); color: var(--blush-ink); }
+
+  .addon-row {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .addon-cap {
+    height: 36px;
+    padding: 0 11px;
+    background: var(--bg-slot);
+    color: var(--ink-2);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .addon-cap.left { border-radius: var(--r-ctrl) 4px 4px var(--r-ctrl); }
+  .addon-cap.right { border-radius: 4px var(--r-ctrl) var(--r-ctrl) 4px; }
+  .addon-mid {
+    flex: 1;
+    height: 36px;
+    background: var(--bg-well);
+    border-radius: 4px;
+    padding: 0 11px;
+    font-weight: 550;
+    min-width: 0;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .addon-mid:focus {
+    background: var(--bg-ctrl);
+    box-shadow: var(--focus-halo);
+  }
+
+  /* Stepper & Orbital Checks */
+  .num-stepper {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .step-btn {
+    width: 31px;
+    height: 31px;
+    background: var(--bg-slot);
+    color: var(--ink-1);
+    display: grid;
+    place-items: center;
+  }
+  .step-btn:hover { background: var(--blush-fill); color: var(--blush-ink); }
+  .step-btn.dec { border-radius: 10px 4px 4px 10px; }
+  .step-btn.inc { border-radius: 4px 10px 10px 4px; }
+  .step-num {
+    width: 40px;
+    height: 31px;
+    background: var(--bg-well);
+    border-radius: 4px;
+    display: grid;
+    place-items: center;
+    font-weight: 600;
+    font-family: var(--font-mono);
+  }
+
+  /* Inline Multi-select List with Seamless Connected Adjacent Radii */
+  /* 直接铺在白瓷上、无灰托盘；选中项右侧对勾，相邻选中项融成一整块 */
+  .seamless-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .s-item {
+    width: 100%;
+    min-height: 35px;
+    padding: 7px 12px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 12.8px;
+    color: var(--ink-1);
+    text-align: left;
+    transition: background-color 0.12s ease, border-radius 0.16s ease;
+  }
+  .s-item:hover { background: var(--bg-well); }
+  .s-item.sel {
+    background: var(--blush-soft);
+    color: var(--blush-ink);
+    font-weight: 600;
+  }
+  .s-item.sel:hover { background: var(--blush-soft-hover); }
+  /* 缝隙始终保留 2px（总高度不随选中变化），相邻选中时用同色伪元素把缝填平 */
+  .s-item { position: relative; }
+  .s-item.sel.join-top { border-top-left-radius: 0; border-top-right-radius: 0; }
+  .s-item.sel.join-top::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -3px;      /* 上下各多盖 1px，避免缩放 / 高 DPI 下出现亚像素细线 */
+    height: 4px;
+    background: inherit;
+    transition: background-color 0.12s ease;
+  }
+  .s-item.sel.join-bot { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+  .s-left {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    min-width: 0;
+  }
+  .s-ver {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-4);
+  }
+  .s-item.sel .s-ver { color: currentColor; opacity: 0.55; }
+  .s-check { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* Orbital Checkboxes, Radios & Switch */
+  .ctrl-checks {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .chk-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    color: var(--ink-1);
+    cursor: pointer;
+  }
+  .orb-box {
+    width: 17px;
+    height: 17px;
+    border-radius: 6px;
+    background: var(--bg-slot);
+    display: grid;
+    place-items: center;
+    color: transparent;
+    transition: background-color 0.14s ease, color 0.14s ease;
+  }
+  .chk-item.checked .orb-box,
+  .chk-item.indet .orb-box {
+    background: var(--blush-solid);
+    color: var(--cortado-slate-0);
+  }
+  .orb-radio {
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: var(--bg-slot);
+    display: grid;
+    place-items: center;
+    transition: background-color 0.14s ease;
+  }
+  .orb-radio::after {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--cortado-slate-0);
+    transform: scale(0);
+    transition: transform 0.15s ease;
+  }
+  .chk-item.checked .orb-radio {
+    background: var(--blush-solid);
+  }
+  .chk-item.checked .orb-radio::after { transform: scale(1); }
+
+  .sw-pill {
+    width: 36px;
+    height: 20px;
+    border-radius: var(--r-pill);
+    background: var(--bg-slot);
+    padding: 3px;
+    display: inline-flex;
+    align-items: center;
+    transition: background-color 0.18s ease;
+  }
+  .sw-knob {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--cortado-slate-0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+    transition: transform 0.18s ease;
+  }
+  .sw-pill.on { background: var(--blush-solid); }
+  .sw-pill.on .sw-knob { transform: translateX(16px); }
+
+  /* Custom Pointer-Capture Orbital Slider (Zero Dark Ring!) */
+  .slider-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .slider-track-wrap {
+    position: relative;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    touch-action: none;
+  }
+  .slider-rail {
+    width: 100%;
+    height: 7px;
+    border-radius: var(--r-pill);
+    background: var(--bg-slot);
+    overflow: hidden;
+  }
+  .slider-fill {
+    height: 100%;
+    background: var(--blush-track);
+    border-radius: var(--r-pill);
+    width: 68%;
+  }
+  /* 滑块：外径 22（白圈 3.5 + 实心 15）。悬停 / 拖动时尺寸不变，
+     雾粉光晕从中心扩散，盖满白圈（同 seam 的外圈色） */
+  .slider-thumb {
+    --thumb: 22px;
+    --core: 15px;
+    position: absolute;
+    left: 68%;
+    width: var(--thumb);
+    height: var(--thumb);
+    border-radius: 50%;
+    background: var(--bg-tile);
+    box-shadow: 0 1px 5px color-mix(in srgb, var(--blush-solid) 32%, transparent);  /* 跟随 Latte Rosewater */
+    transform: translateX(-50%);
+  }
+  .slider-thumb::before,
+  .slider-thumb::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+  }
+  .slider-thumb::before {
+    background: var(--blush-fill);
+    transform: scale(calc(15 / 22));
+    transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .slider-thumb::after {
+    inset: calc((var(--thumb) - var(--core)) / 2);
+    background: var(--blush-solid);
+  }
+  .slider-track-wrap:hover .slider-thumb::before,
+  .slider-track-wrap.dragging .slider-thumb::before {
+    transform: scale(1);
+  }
+  .slider-live-tip {
+    position: absolute;
+    bottom: 29px;
+    left: 68%;
+    transform: translateX(-50%);
+    background: var(--blush-soft);
+    color: var(--blush-ink);
+    padding: 2px 8px;
+    border-radius: var(--r-pill);
+    font-size: 11px;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.14s ease;
+  }
+  .slider-track-wrap:hover .slider-live-tip,
+  .slider-track-wrap.dragging .slider-live-tip { opacity: 1; }
+
+  /* Gliding Segmented Switcher */
+  .seg-bar {
+    position: relative;
+    background: var(--bg-well);
+    border-radius: 11px;
+    padding: 3px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .seg-glider {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    width: calc((100% - 6px) / 3);
+    background: var(--sand-fill);
+    border-radius: 8px;
+    transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .seg-btn {
+    position: relative;
+    z-index: 1;
+    height: 28px;
+    font-size: 12px;
+    font-weight: 560;
+    color: var(--ink-2);
+  }
+  .seg-btn.active { color: var(--sand-ink); font-weight: 620; }
+
+  /* 1.5px Dashed Upload Dropzone (Explicitly Preferred by User!) */
+  .dropzone {
+    border: 1.5px dashed var(--dash-line);
+    background: var(--bg-well);
+    border-radius: 14px;
+    padding: 11px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+  .dropzone:hover, .dropzone.dragover {
+    background: var(--blush-soft);
+    border-color: var(--blush-track);
+  }
+  .dz-left {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+  }
+  .dz-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--blush-soft);
+    color: var(--blush-ink);
+    display: grid;
+    place-items: center;
+  }
+
+  /* Line-Free Data Table + Warm Blush Bulk Bar + Connected Selected Rows */
+  .bulk-bar {
+    background: var(--blush-soft);
+    color: var(--blush-ink);
+    border-radius: 12px;
+    padding: 8px 13px;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 12.5px;
+    font-weight: 560;
+  }
+  .bulk-bar.show { display: flex; }
+
+  .table-head, .t-row {
+    display: grid;
+    grid-template-columns: 34px 1.6fr 0.9fr 0.9fr 0.8fr;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  .table-head {
+    font-size: 12px;
+    color: var(--ink-3);
+    padding-bottom: 6px;
+  }
+  .t-body {
+    display: flex;
+    flex-direction: column;
+  }
+  .t-row {
+    border-radius: 11px;
+    cursor: pointer;
+    transition: background-color 0.12s ease;
+  }
+  .t-row:hover { background: var(--bg-well); }
+  .t-row.sel {
+    background: var(--blush-soft);
+    border-radius: 11px;
+  }
+  .t-row.sel:hover { background: var(--blush-soft-hover); }
+  .t-row.sel.join-top { border-top-left-radius: 0; border-top-right-radius: 0; }
+  .t-row.sel.join-bot { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 9px;
+    border-radius: var(--r-pill);
+    font-size: 11.5px;
+    font-weight: 580;
+  }
+  .status-pill.ok { background: var(--sand-soft); color: var(--sand-ink); }
+  .status-pill.sync { background: var(--blush-soft); color: var(--blush-ink); }
+  .status-pill.warn { background: var(--rose-soft); color: var(--rose-ink); }
+
+  /* Pagination */
+  .pager {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .page-btn {
+    min-width: 29px;
+    height: 27px;
+    padding: 0 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--ink-2);
+    background: var(--bg-well);
+    display: grid;
+    place-items: center;
+  }
+  .page-btn:hover { background: var(--bg-slot); color: var(--ink-1); }
+  .page-btn.active {
+    background: var(--blush-fill);
+    color: var(--blush-ink);
+    font-weight: 620;
+  }
+
+  /* File Tree & Code Snippet */
+  .tree-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .tree-node {
+    padding: 6px 10px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.8px;
+    color: var(--ink-1);
+    cursor: pointer;
+  }
+  .tree-node:hover { background: var(--bg-well); }
+  .tree-node.active { background: var(--blush-soft); color: var(--blush-ink); font-weight: 560; }
+  .tree-children {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .tree-children.collapsed { display: none; }
+
+  .code-box {
+    background: var(--bg-well);
+    border-radius: 12px;
+    padding: 11px 13px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+
+  /* Dynamic Closable Tabs */
+  .tabs-bar {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+  .tab-pill {
+    height: 30px;
+    padding: 0 12px;
+    border-radius: var(--r-pill);
+    background: var(--bg-well);
+    color: var(--ink-2);
+    font-size: 12.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .tab-pill.active {
+    background: var(--blush-fill);
+    color: var(--blush-ink);
+    font-weight: 600;
+  }
+  .tab-close {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    opacity: 0.65;
+  }
+  .tab-close:hover { background: rgba(0,0,0,0.07); opacity: 1; }
+  .tab-pane {
+    background: var(--bg-well);
+    border-radius: 13px;
+    padding: 13px 15px;
+    font-size: 12.8px;
+    color: var(--ink-2);
+  }
+
+  /* Constellation Orbital Stepper */
+  .constellation-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    position: relative;
+  }
+  .c-step {
+    background: var(--bg-well);
+    border-radius: 12px;
+    padding: 9px 11px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.15s ease;
+  }
+  .c-step.done { background: var(--sand-soft); color: var(--sand-ink); }
+  .c-step.current { background: var(--blush-soft); color: var(--blush-ink); font-weight: 600; }
+  .c-orb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--bg-ctrl);
+    display: grid;
+    place-items: center;
+    font-size: 11.5px;
+    font-family: var(--font-mono);
+    font-weight: 650;
+    flex-shrink: 0;
+  }
+  .c-step.current .c-orb { background: var(--blush-solid); color: var(--cortado-slate-0); }
+  .c-step.done .c-orb { background: var(--sand-solid); color: var(--cortado-slate-0); }
+
+  /* Right-Click Context Zone */
+  .ctx-zone {
+    background: var(--bg-well);
+    border-radius: 13px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: context-menu;
+    color: var(--ink-2);
+    font-size: 12.8px;
+  }
+  .ctx-zone:hover { background: var(--blush-soft); color: var(--blush-ink); }
+
+  /* Smooth Accordion */
+  .acc-stack { display: flex; flex-direction: column; gap: 6px; }
+  .acc-card {
+    background: var(--bg-well);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .acc-trigger {
+    width: 100%;
+    padding: 9px 13px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 560;
+    text-align: left;
+  }
+  .acc-body {
+    padding: 0 14px 11px;
+    font-size: 12.5px;
+    color: var(--ink-2);
+    display: none;
+  }
+  .acc-card.open .acc-body { display: block; }
+  .acc-card.open { background: var(--blush-soft); }
+  .acc-card.open .acc-trigger { color: var(--blush-ink); }
+
+  /* Semantic Alerts, Avatars, Skeleton & Empty State */
+  .alert-stack { display: flex; flex-direction: column; gap: 7px; }
+  .alert-strip {
+    padding: 10px 13px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12.5px;
+  }
+  .alert-strip.blush { background: var(--blush-soft); color: var(--blush-ink); }
+  .alert-strip.sand { background: var(--sand-soft); color: var(--sand-ink); }
+  .alert-strip.rose { background: var(--rose-soft); color: var(--rose-ink); }
+
+  .avatar-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .avatar-stack { display: flex; align-items: center; }
+  .av-orb {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-left: -7px;
+    box-shadow: 0 0 0 2.5px var(--bg-tile);
+    display: grid;
+    place-items: center;
+    font-size: 11.5px;
+    font-weight: 650;
+  }
+  .av-orb:first-child { margin-left: 0; }
+
+  @keyframes pulseSoft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
+  }
+  .skel-bar {
+    height: 12px;
+    border-radius: var(--r-pill);
+    background: var(--bg-slot);
+    animation: pulseSoft 1.4s ease-in-out infinite;
+  }
+
+  .empty-card {
+    background: var(--bg-well);
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  /* Custom Context Menu, Modal, Slide Drawer, Command Palette, Toast */
+  .ctx-menu {
+    position: fixed;
+    min-width: 196px;
+    background: var(--bg-float);
+    border-radius: 14px;
+    padding: 6px;
+    box-shadow: var(--float-shadow);
+    z-index: 200;
+    display: none;
+  }
+  .ctx-menu.open { display: block; }
+
+  .scrim {
+    position: fixed;
+    inset: 0;
+    background: rgba(28, 30, 42, 0.24);
+    backdrop-filter: blur(3px);
+    z-index: 180;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .scrim.open { display: flex; }
+
+  .modal-card {
+    width: 100%;
+    max-width: 440px;
+    background: var(--bg-tile);
+    border-radius: 20px;
+    padding: 22px;
+    box-shadow: var(--float-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .drawer-panel {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    bottom: 14px;
+    width: 360px;
+    max-width: calc(100vw - 28px);
+    background: var(--bg-tile);
+    border-radius: 20px;
+    padding: 22px;
+    box-shadow: var(--float-shadow);
+    z-index: 190;
+    transform: translateX(calc(100% + 24px));
+    transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .drawer-panel.open { transform: translateX(0); }
+
+  .cmd-card {
+    width: 100%;
+    max-width: 480px;
+    background: var(--bg-tile);
+    border-radius: 20px;
+    padding: 12px;
+    box-shadow: var(--float-shadow);
+  }
+
+  .toast-stack {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 250;
+  }
+  .toast-pill {
+    background: var(--bg-float);
+    color: var(--ink-1);
+    padding: 10px 15px;
+    border-radius: var(--r-pill);
+    box-shadow: var(--float-shadow);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 12.8px;
+    font-weight: 550;
+  }
+
+  /* ---------- v2 additions ---------- */
+
+  /* 键帽：符号用 SVG 绘制，线宽与字母笔画对齐，不用字体里的 ⌘ / ↵ */
+  .btn-search { padding-right: 7px; }
+  .kbd {
+    height: 18px;
+    min-width: 18px;
+    padding: 0 5px;
+    margin-left: 3px;
+    border-radius: 7px;
+    background: var(--bg-ctrl);
+    box-shadow: var(--ctrl-lift);
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 620;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5px;
+  }
+  .kbd svg { width: 10px; height: 10px; }
+  .kbd span { transform: translateY(0.5px); }
+  /* 命令面板里只在悬停项显示回车键帽，避免一列重复图标 */
+  .menu-opt .kbd { opacity: 0; transition: opacity 0.12s ease; }
+  .menu-opt:hover .kbd, .menu-opt:focus-visible .kbd { opacity: 1; }
+
+  /* 格子内容高度不齐时，把最后一块推到底部，避免底部留白集中 */
+  .push-end { margin-top: auto; }
+
+  /* 带标签的规格行（按钮谱系等） */
+  .spec-stack { display: flex; flex-direction: column; gap: 12px; }
+  .spec-row {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+  }
+  .row-label {
+    font-size: 11.5px;
+    color: var(--ink-3);
+    white-space: nowrap;
+  }
+
+  .btn-sm { height: 27px; padding: 0 11px; font-size: 11.5px; }
+  .btn-lg { height: 38px; padding: 0 17px; font-size: 13px; }
+  .btn-sm.btn-icon { width: 27px; padding: 0; }
+  .btn-lg.btn-icon { width: 38px; padding: 0; }
+
+  .count-chip {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: var(--r-pill);
+    background: var(--blush-solid);
+    color: var(--cortado-slate-0);
+    font-size: 10.5px;
+    font-weight: 650;
+    font-family: var(--font-mono);
+    display: inline-grid;
+    place-items: center;
+  }
+
+  .coupled-pair .btn-icon { width: 29px; padding: 0; }
+
+  /* 密码框显隐按钮 */
+  .eye-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    color: var(--ink-3);
+    display: grid;
+    place-items: center;
+  }
+  .eye-btn:hover { background: var(--bg-slot); color: var(--ink-1); }
+
+  /* 滑块刻度 */
+  .slider-block { display: flex; flex-direction: column; gap: 1px; }
+  .slider-ticks {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--ink-4);
+    padding: 0 1px;
+  }
+
+  /* 目录树折叠箭头 + 文件信息 */
+  .tree-node .chev {
+    color: var(--ink-3);
+    transition: transform 0.16s ease;
+    margin-right: -2px;
+  }
+  .tree-node.closed .chev { transform: rotate(-90deg); }
+  .file-meta {
+    background: var(--bg-well);
+    border-radius: 12px;
+    padding: 10px 13px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .file-meta dt { font-size: 11px; color: var(--ink-3); }
+  .file-meta dd {
+    font-size: 12.5px;
+    font-weight: 580;
+    color: var(--ink-1);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ================= 侧栏导航（与顶栏 jumpStrip 二选一） =================
+     连贯动画的思路：>900px 时页面始终是「侧栏列 + 内容列」两列网格，
+       顶栏模式  → 侧栏列 0px（侧栏淡出左滑）
+       侧栏展开  → 212px
+       侧栏收起  → 64px
+     切换只改列宽，所以宽度、内容区、文字淡入淡出都能连续过渡。
+     图标在任何宽度下横坐标都不变：按钮左内边距 = (64 − 2×10 − 15) / 2。
+     侧栏只装导航项，按同心规则：高亮圆角 = 外角 20 − 侧栏内边距 10 = 10 */
+  :root {
+    --rail-w: 208px;
+    --rail-w-collapsed: 64px;
+    --rail-pad: 10px;
+    --r-rail-item: calc(var(--r-tile) - var(--rail-pad));
+    --rail-icon: 19px;   /* 收起时按钮 44×44 正方形，图标居中：(64 − 20 − 19) / 2 = 12.5 */
+    --rail-icon-x: calc((var(--rail-w-collapsed) - var(--rail-pad) * 2 - var(--rail-icon)) / 2);
+    --rail-dur: 0.34s;
+  }
+  .side-rail { display: none; }
+  .tip-card.below { bottom: auto; top: calc(100% + 8px); }
+  .strip-mode-btn { flex-shrink: 0; }
+  .strip-mode-btn .btn { color: var(--ink-3); gap: 6px; }
+  .strip-mode-btn .btn:hover { color: var(--ink-1); }
+
+  @media (min-width: 901px) {
+    .page-wrap {
+      display: grid;
+      grid-template-columns: 0px minmax(0, 1fr);
+      column-gap: 0px;
+      align-items: start;
+      transition:
+        grid-template-columns var(--rail-dur) var(--ease-out),
+        column-gap var(--rail-dur) var(--ease-out),
+        max-width var(--rail-dur) var(--ease-out),
+        margin var(--rail-dur) var(--ease-out);
+    }
+    .page-wrap > .blora-stack { min-width: 0; }
+    .page-wrap.nav-rail {
+      max-width: calc(1320px + var(--rail-w) + var(--gap-seam));
+      /* 上下都留 10px：侧栏高 100vh − 20px，滚到底时也不会被顶出视口 */
+      margin-top: 10px;
+      margin-bottom: 10px;
+      grid-template-columns: var(--rail-w) minmax(0, 1fr);
+      column-gap: var(--gap-seam);
+    }
+    /* 收起时页面外宽不变（否则整页重新居中、侧栏会跟着平移），内容区吃掉腾出的宽度 */
+    .page-wrap.nav-rail.rail-collapsed {
+      grid-template-columns: var(--rail-w-collapsed) minmax(0, 1fr);
+    }
+
+    /* 侧栏本体：宽度跟随所在列；顶栏模式时淡出并左移 */
+    .side-rail {
+      position: sticky;
+      top: 10px;
+      z-index: 50;
+      min-width: 0;
+      height: calc(100vh - 20px);
+      background: var(--bg-tile);
+      border-radius: var(--r-tile);
+      padding: 14px var(--rail-pad) var(--rail-pad);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      visibility: hidden;
+      opacity: 0;
+      transform: translateX(-16px);
+      transition:
+        opacity 0.22s ease,
+        transform var(--rail-dur) var(--ease-out),
+        visibility 0s linear var(--rail-dur);
+    }
+    .page-wrap.nav-rail .side-rail {
+      visibility: visible;
+      opacity: 1;
+      transform: none;
+      transition-delay: 0s;
+    }
+
+    /* 顶栏：侧栏模式下高度收起，而不是直接消失 */
+    .jump-strip {
+      max-height: 80px;
+      transition:
+        box-shadow 0.2s ease,
+        background-color 0.2s ease,
+        max-height var(--rail-dur) var(--ease-out),
+        padding var(--rail-dur) var(--ease-out),
+        margin var(--rail-dur) var(--ease-out),
+        opacity 0.2s ease,
+        visibility 0s linear 0s;
+    }
+    .page-wrap.nav-rail #jumpStrip {
+      max-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-top: calc(var(--gap-row) * -1);
+      opacity: 0;
+      overflow: hidden;
+      visibility: hidden;
+      pointer-events: none;
+      transition-delay: 0s, 0s, 0s, 0s, 0s, 0s, var(--rail-dur);
+    }
+    .page-wrap.nav-rail #navSentinel { display: none; }
+
+    /* 页头品牌：侧栏模式下收拢（品牌移到侧栏顶部） */
+    .top-header .orbit-mark,
+    .top-header .brand-title {
+      max-width: 160px;
+      overflow: hidden;
+      white-space: nowrap;
+      transition: max-width var(--rail-dur) var(--ease-out), opacity 0.2s ease;
+    }
+    .brand-cluster, .brand-line { transition: gap var(--rail-dur) var(--ease-out); }
+    .page-wrap.nav-rail .top-header .orbit-mark,
+    .page-wrap.nav-rail .top-header .brand-title { max-width: 0; opacity: 0; }
+    .page-wrap.nav-rail .brand-cluster,
+    .page-wrap.nav-rail .brand-line { gap: 0; }
+
+    .page-wrap.nav-rail section[id^="sec-"] { scroll-margin-top: 16px; }
+  }
+
+  .brand-line { display: flex; align-items: center; gap: 8px; }
+  .nav-instant, .nav-instant * { transition: none !important; }
+
+  .rail-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 6px 18px;   /* 32px 标志在 44px 宽里居中：(44 − 32) / 2 = 6 */
+    white-space: nowrap;
+  }
+  .rail-brand .orbit-mark { flex-shrink: 0; }
+  .rail-caption {
+    max-height: 24px;
+    padding: 0 12px 6px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 11px;
+    color: var(--ink-4);
+    letter-spacing: 0.04em;
+    transition: max-height var(--rail-dur) var(--ease-out), padding var(--rail-dur) var(--ease-out), opacity 0.2s ease;
+  }
+  .rail-track {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .rail-glider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    border-radius: var(--r-rail-item);
+    background: var(--blush-soft);
+    transition: transform 0.3s var(--ease-out), height 0.2s ease;
+    pointer-events: none;
+  }
+  .rail-btn {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 40px;
+    padding: 0 10px 0 var(--rail-icon-x);
+    border-radius: var(--r-rail-item);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow: hidden;
+    font-size: 12.8px;
+    font-weight: 500;
+    color: var(--ink-2);
+    text-align: left;
+    white-space: nowrap;
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+  .rail-btn svg { width: var(--rail-icon); height: var(--rail-icon); flex-shrink: 0; }
+  .rail-btn > .rail-text:not(.rail-idx) { flex: 1; min-width: 0; overflow: hidden; }
+  .rail-btn:not(.active):hover { background: var(--bg-well); color: var(--ink-1); }
+  .rail-btn.active { color: var(--blush-ink); font-weight: 600; }
+  .rail-idx {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    color: var(--ink-4);
+  }
+  .rail-btn.active .rail-idx { color: currentColor; opacity: 0.55; }
+
+  /* 文字：展开时稍晚淡入（等宽度先出来），收起时立刻淡出 */
+  .side-rail .rail-text { transition: opacity 0.2s ease 0.08s; }
+
+  .rail-foot {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .rail-note {
+    max-height: 70px;
+    margin-bottom: 6px;
+    padding: 9px 12px;
+    overflow: hidden;
+    white-space: nowrap;
+    border-radius: var(--r-rail-item);
+    background: var(--bg-well);
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--ink-3);
+    transition:
+      max-height var(--rail-dur) var(--ease-out),
+      padding var(--rail-dur) var(--ease-out),
+      margin var(--rail-dur) var(--ease-out),
+      opacity 0.2s ease;
+  }
+  .rail-foot-btn { color: var(--ink-3); }
+  .rail-collapse-ico { transition: transform var(--rail-dur) var(--ease-out); }
+
+  /* 收起后的气泡：fixed 定位（不被侧栏裁切），位置由 JS 在悬停时写入 */
+  .rail-tip {
+    position: fixed;
+    left: 0;
+    top: 0;
+    transform: translate(-4px, -50%);
+    background: var(--bg-float);
+    color: var(--ink-1);
+    box-shadow: var(--float-shadow);
+    padding: 6px 11px;
+    border-radius: 9px;
+    font-size: 11.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 120;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  /* 收起：64px 图标栏 —— 不改任何尺寸和位置，只淡出文字、收起说明 */
+  .page-wrap.rail-collapsed .side-rail .rail-text { opacity: 0; transition-delay: 0s; }
+  .page-wrap.rail-collapsed .rail-caption { max-height: 0; padding-top: 0; padding-bottom: 0; }
+  .page-wrap.rail-collapsed .rail-note { max-height: 0; padding-top: 0; padding-bottom: 0; margin-bottom: 0; }
+  .page-wrap.rail-collapsed .rail-btn:hover .rail-tip { opacity: 1; transform: translate(0, -50%); }
+  .page-wrap.rail-collapsed .rail-collapse-ico { transform: rotate(180deg); }
+  /* 1280px 以下自动收起，此时不提供展开按钮 */
+  .page-wrap.rail-auto .rail-collapse-btn { display: none; }
+
+  @media (max-width: 900px) {
+    .strip-mode-btn { display: none; }
+  }
+
+  /* ================= 对齐 demo-console.html =================
+     与场景演示页使用同一套尺寸：
+     · 整体限宽 1240px 居中（侧栏模式下包含侧栏），外边距 16
+     · 格子内边距 18/20、间距 12（容器不放大）
+     · 文字与控件放大一号：正文 14、按钮 35、输入 / 下拉 38、分段 30、页签 33、格子标题 14.5 */
+  html, body { font-size: 14px; }
+
+  .page-wrap { max-width: 1760px; margin: 12px auto; padding: 0 12px; }   /* 铺满窗口，只留 12px；超宽屏最多 1760 */
+  .page-wrap.nav-rail { max-width: 1760px; margin-top: 12px; margin-bottom: 12px; }
+  .page-wrap.nav-rail .side-rail,
+  .side-rail { top: 12px; height: calc(100vh - 24px); }
+  .jump-strip { top: 12px; }
+
+  .tile { padding: 18px 20px; gap: 12px; }
+  .top-header { padding: 10px 10px 10px 20px; }
+  .brand-title { font-size: 15.5px; }
+  .brand-badge { font-size: 12px; }
+  .jump-pill { font-size: 13px; padding: 6px 13px; }
+
+  /* 侧栏文字 */
+  .rail-btn { font-size: 13.5px; }
+  .rail-caption { font-size: 11.5px; }
+  .rail-idx { font-size: 11px; }
+  .rail-note { font-size: 11.5px; }
+
+  /* 格子标题 */
+  .tile-title { font-size: 14.5px; }
+  .tile-caption { font-size: 12.5px; }
+  .orbit-index { width: 24px; height: 24px; font-size: 11.5px; }
+  /* 同 scenes：说明小字放在标题下方（与标题文字左对齐），标题独占一行不被挤断；
+     读数、按钮这类功能元素仍留在右侧 */
+  .tile-head:has(> .tile-caption:not(#sliderReadout)) { flex-wrap: wrap; row-gap: 2px; }
+  .tile-head > .tile-caption:not(#sliderReadout) { flex-basis: 100%; padding-left: 32px; white-space: normal; }
+  .row-label { font-size: 12.5px; }
+  .spec-row { grid-template-columns: 76px minmax(0, 1fr); }
+  /* 01 / 1B 高度不一时，较矮一侧的规格行在格子内均匀分布，底部不留一截空白 */
+  #sec-1 > .tile > .spec-stack { flex: 1; justify-content: space-evenly; }
+
+  /* 指标 */
+  .orbit-tile { padding: 16px 20px; }
+  .orbit-label { font-size: 13px; }
+  .orbit-val { font-size: 24px; }
+  .orbit-sub { font-size: 12.5px; }
+
+  /* 按钮 */
+  .btn { height: 35px; padding: 0 13px; font-size: 13.5px; }
+  .btn-row { gap: 6px; }
+  /* 1 号区块按内容分宽：01 按钮多，1B 少；1B 两行内容仍各占一行 */
+  @media (min-width: 761px) { #sec-1 { grid-template-columns: minmax(0, 1.32fr) minmax(0, 1fr); } }
+  .btn-icon { width: 35px; }
+  .btn-sm { height: 29px; padding: 0 12px; font-size: 12.5px; }
+  .btn-sm.btn-icon { width: 29px; }
+  .btn-lg { height: 40px; padding: 0 18px; font-size: 14px; }
+  .btn-lg.btn-icon { width: 40px; }
+  .split-caret { width: 33px; }
+  .coupled-pair .btn { height: 29px; padding: 0 12px; font-size: 12.5px; }
+  .coupled-pair .btn-icon { width: 31px; padding: 0; }
+  .kbd { height: 19px; font-size: 11.5px; }
+  .count-chip { font-size: 11px; height: 19px; min-width: 19px; }
+
+  /* 输入 / 下拉 / 拼接 / 步进 */
+  .field-box, .addon-cap, .addon-mid { height: 38px; }
+  .addon-cap { font-size: 12.5px; }
+  .picker-val { font-size: 13.5px; }
+  .drop-search { height: 34px; font-size: 13px; }
+  .menu-opt { font-size: 13.5px; padding: 8px 11px; }
+  .step-btn { width: 33px; height: 33px; }
+  .step-num { width: 42px; height: 33px; }
+  .tag-chip { font-size: 12px; }
+  .picker-trigger > .status-pill { font-size: 12.5px; }
+  /* 下拉框里的标签收紧一点，三列布局下三个标签仍能放在一行 */
+  .picker-trigger .tag-chip { font-size: 12px; padding: 0 6px 0 9px; gap: 4px; }
+
+  /* 选择类 */
+  .seg-btn { height: 30px; font-size: 13px; }
+  .s-item { min-height: 38px; font-size: 13.5px; }
+  .s-ver { font-size: 11.5px; }
+  .chk-item { font-size: 13px; }
+  .orb-box, .orb-radio { width: 18px; height: 18px; }
+  .status-pill { font-size: 12px; }
+
+  /* 表格 / 分页 / 树 / 代码 */
+  .table-head { font-size: 12.5px; }
+  .t-row { font-size: 13.5px; padding-top: 11px; padding-bottom: 11px; }
+  .bulk-bar { font-size: 13px; }
+  .page-btn { min-width: 30px; height: 30px; font-size: 12.5px; }
+  .tree-node { font-size: 13.5px; padding: 7px 10px; }
+  .code-box { font-size: 12.5px; }
+  .file-meta dt { font-size: 11.5px; }
+  .file-meta dd { font-size: 13px; }
+
+  /* 页签 / 步骤 / 右键 / 手风琴 / 提示 */
+  .tab-pill { height: 33px; font-size: 13.5px; }
+  .tab-pane { font-size: 13.5px; }
+  .c-step { padding: 11px 13px; }
+  .c-orb { width: 26px; height: 26px; font-size: 12px; }
+  .ctx-zone { font-size: 13.5px; }
+  .acc-trigger { font-size: 13.5px; }
+  .acc-body { font-size: 13px; }
+  .alert-strip { font-size: 13px; }
+  .av-orb { width: 34px; height: 34px; font-size: 12px; }
+
+  /* 浮层 */
+  .popconfirm-title { font-size: 13.5px; }
+  .popconfirm-desc { font-size: 12.5px; }
+  .tip-card { font-size: 12.5px; }
+  .rail-tip { font-size: 12px; }
+  .toast-pill { font-size: 13.5px; }
+
+  /* ================= 密度与层级（与 scenes 第二轮一致） =================
+     描述文字加深一档，标题与数值加粗，主次更分明 */
+  :root { --ink-desc: var(--cortado-slate-455); }
+  html[data-theme="dark"] { --ink-desc: var(--cortado-slate-270); }
+  .tile-title { font-size: 15px; font-weight: 650; }
+  .tile-caption:not(#sliderReadout), .orbit-sub, .row-label, .s-ver, .file-meta dt,
+  .acc-body, .tab-pane, .popconfirm-desc { color: var(--ink-desc); }
+  .orbit-label { font-size: 13px; font-weight: 560; color: var(--ink-2); }
+  .orbit-val { font-size: 26px; font-weight: 700; letter-spacing: -0.025em; }
+  .brand-title { font-weight: 700; }
+  .rail-btn.active { font-weight: 650; }
+  .s-item.sel, .tree-node.active { font-weight: 620; }
+
+
+  /* Lucide 图标：线性、圆头；小尺寸时加粗笔画保持清晰 */
+  svg.i { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+  svg.i[width="9"], svg.i[width="10"] { stroke-width: 3; }
+  svg.i[width="11"], svg.i[width="12"] { stroke-width: 2.6; }
+  svg.i[width="13"], svg.i[width="14"] { stroke-width: 2.2; }
+  /* ============ 侧栏微调 ============
+     · Logo 浅粉底 + 雾粉标志；圆环缺口对准右上角同色实心小点
+     · Logo 与导航按钮统一 44×44，左右、顶部都离侧栏边 10px；圆角同心 32 − 10 = 22（见文末「侧栏：胶囊形」）
+     · 顶栏 64px 高，中心 = 12 + 32 = 44 = 侧栏 Logo 中心（12 + 10 + 22），左上角对齐成一条线 */
+  .side-rail { padding-top: var(--rail-pad); }
+  .rail-brand { padding: 0 0 18px; gap: 12px; }
+  .rail-brand .orbit-mark {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-rail-item);
+    background: var(--blush-soft);   /* 浅粉底 + 雾粉标志 */
+    color: var(--blush-solid);
+  }
+  .rail-brand .orbit-mark svg { width: 22px; height: 22px; }
+  .rail-glider { height: 44px; }
+  .rail-btn { height: 44px; }
+  .side-rail svg.i { stroke-width: 1.9; }
+  .page-wrap.nav-rail .top-header { min-height: 64px; }
+
+  /* ================= 精致化（第三轮，与 scenes 一致的搭配） ================= */
+  .tile, .orbit-tile, .top-header, .jump-strip, .side-rail { box-shadow: 0 1px 2px rgba(30, 32, 46, 0.04); }
+  html[data-theme="dark"] .tile, html[data-theme="dark"] .orbit-tile,
+  html[data-theme="dark"] .top-header, html[data-theme="dark"] .side-rail { box-shadow: none; }
+  .tile-title { font-size: 14.5px; font-weight: 600; }
+  .orbit-label { font-size: 12.5px; font-weight: 500; color: var(--ink-3); }
+  .orbit-val { font-size: 25px; font-weight: 620; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .btn { font-weight: 540; }
+  .status-pill { font-size: 11.5px; font-weight: 560; }
+  .brand-title { font-weight: 650; }
+  .rail-btn.active, .s-item.sel, .tree-node.active { font-weight: 600; }
+  .orbit-index { font-weight: 600; }
+
+  /* ============ 节奏修正：间距不随字号放大（字号、控件尺寸不变） ============
+     内边距 16/18、格内间距 10；正文行高 1.55；段落 pretty 换行不留单字孤行 */
+  .tile { padding: 16px 18px; gap: 10px; }
+  p { text-wrap: pretty; }
+  h1, h2, h3, .tile-title, .page-title { text-wrap: balance; line-height: 1.35; }
+  .orbit-tile { padding: 14px 18px; }
+  .tile-caption, .orbit-sub, .alert-desc { text-wrap: pretty; }
+  .tile-head:has(> .tile-caption:not(#sliderReadout)) { row-gap: 1px; }
+
+  /* ================= 响应式 =================
+     ≥1101  桌面：原布局
+     ≤1100  窄桌面 / 平板横屏：三列行改成「2 + 1」，导航变单行横滑
+     ≤900   平板竖屏：指标 2×2，规格行标签移到上方
+     ≤760   手机横屏 / 小平板：全部单列
+     ≤560   手机：紧凑间距、隐藏说明文字、表格收列
+  ============================================== */
+
+  /* 任何宽度都成立的防挤压规则 */
+  .brand-badge { white-space: nowrap; }
+  .orbit-index { flex-shrink: 0; }
+  .tile-title-group { min-width: 0; }
+  .tile-head > :last-child { flex-shrink: 0; }
+  .tile-caption { white-space: nowrap; }
+  .jump-pill { white-space: nowrap; flex-shrink: 0; }
+  .dz-left { min-width: 0; }
+  .status-pill { flex-shrink: 0; white-space: nowrap; }
+  .push-end[style*="justify-content:space-between"] { gap: 12px; }
+  .ctx-zone { gap: 12px; }
+  .ctx-zone > div { min-width: 0; }
+
+  @media (max-width: 1100px) {
+    .constellation-hint { display: none; }
+
+    /* 导航：单行横向滑动，两端渐隐 */
+    .jump-pills {
+      flex: 1;
+      min-width: 0;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
+      mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
+    }
+    .jump-pills::-webkit-scrollbar { display: none; }
+    .jump-pills::after { content: ""; flex: 0 0 20px; }
+
+    /* 三列行 → 上两格 + 下一整格；圆角按新位置重新分配 */
+    .mosaic-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .mosaic-3 > :nth-child(3) { grid-column: 1 / -1; }
+    .blora-row.mosaic-3 > * { border-radius: var(--r-seam); }
+    .blora-row.mosaic-3 > :nth-child(1) { border-top-left-radius: var(--r-tile); }
+    .blora-row.mosaic-3 > :nth-child(2) { border-top-right-radius: var(--r-tile); }
+    .blora-row.mosaic-3 > :nth-child(3) {
+      border-bottom-left-radius: var(--r-tile);
+      border-bottom-right-radius: var(--r-tile);
+    }
+    /* 整宽的 3C：滑块+分段在左，上传区在右，避免拉成长条 */
+    #sec-3 > :nth-child(3) {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: 22px;
+      align-content: start;
+    }
+    #sec-3 > :nth-child(3) > .tile-head { grid-column: 1 / -1; }
+    #sec-3 > :nth-child(3) > .dropzone { grid-column: 2; grid-row: 2 / span 2; margin-top: 0; }
+  }
+
+  @media (max-width: 900px) {
+    .orbit-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .blora-row.orbit-strip > * { border-radius: var(--r-seam); }
+    .blora-row.orbit-strip > :nth-child(1) { border-top-left-radius: var(--r-tile); }
+    .blora-row.orbit-strip > :nth-child(2) { border-top-right-radius: var(--r-tile); }
+    .blora-row.orbit-strip > :nth-child(3) { border-bottom-left-radius: var(--r-tile); }
+    .blora-row.orbit-strip > :nth-child(4) { border-bottom-right-radius: var(--r-tile); }
+
+    .spec-row { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+    .spec-stack { gap: 14px; }
+
+    .mosaic-asym { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .table-head, .t-row { grid-template-columns: 30px 1.5fr 0.9fr 0.8fr; }
+    .table-head > :nth-child(4), .t-row > :nth-child(4) { display: none; }
+  }
+
+  @media (max-width: 760px) {
+    .mosaic-2, .mosaic-3, .mosaic-asym { grid-template-columns: minmax(0, 1fr); }
+    .mosaic-3 > :nth-child(3) { grid-column: auto; }
+
+    /* 单列：外角只留在首格顶部与末格底部 */
+    .blora-row.mosaic-2 > *, .blora-row.mosaic-3 > *, .blora-row.mosaic-asym > * { border-radius: var(--r-seam); }
+    .blora-row.mosaic-2 > :first-child, .blora-row.mosaic-3 > :first-child, .blora-row.mosaic-asym > :first-child {
+      border-top-left-radius: var(--r-tile);
+      border-top-right-radius: var(--r-tile);
+    }
+    .blora-row.mosaic-2 > :last-child, .blora-row.mosaic-3 > :last-child, .blora-row.mosaic-asym > :last-child {
+      border-bottom-left-radius: var(--r-tile);
+      border-bottom-right-radius: var(--r-tile);
+    }
+
+    #sec-3 > :nth-child(3) { display: flex; }
+    #sec-3 > :nth-child(3) > .dropzone { margin-top: auto; }
+
+    .table-head, .t-row { grid-template-columns: 30px 1.5fr 0.9fr 0.9fr 0.8fr; }
+    .table-head > :nth-child(4), .t-row > :nth-child(4) { display: block; }
+  }
+
+  @media (max-width: 560px) {
+    :root { --r-tile: 18px; }
+    .page-wrap { margin: 10px auto 28px; padding: 0 10px; }
+
+    /* 顶栏：徽标让位，操作按钮 2×2 等宽 */
+    .top-header { padding: 14px; gap: 12px; }
+    .brand-badge { display: none; }
+    .header-actions {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+    }
+    .header-actions .btn { width: 100%; padding: 0 10px; }
+    .btn-search .kbd { display: none; }
+
+    .jump-strip { top: 8px; padding: 6px; }
+
+    /* 指标 2×2：去掉副说明，环缩小 */
+    .orbit-tile { padding: 13px 14px; gap: 8px; }
+    .orbit-sub { display: none; }
+    .orbit-val { font-size: 18px; }
+    .orbit-ring-wrap, .orbit-ring-wrap svg { width: 40px; height: 40px; }
+    .orbit-ring-pct { font-size: 10px; }
+
+    .tile { padding: 16px; gap: 13px; }
+    /* 描述性小字在手机上隐藏，功能性的（读数、按钮）保留 */
+    .tile-caption:not(#sliderReadout) { display: none; }
+    .tile-title { font-size: 13.5px; line-height: 1.4; }
+
+    .ctrl-checks { gap: 10px 14px; }
+    .addon-cap { padding: 0 8px; font-size: 11.5px; }
+    .addon-mid { padding: 0 9px; }
+    .push-end[style*="justify-content:space-between"],
+    .avatar-row, .empty-card, .ctx-zone { flex-wrap: wrap; row-gap: 10px; }
+
+    .bulk-bar.show { flex-wrap: wrap; row-gap: 6px; }
+    .table-head, .t-row { grid-template-columns: 26px minmax(0, 1.6fr) auto 52px; padding-left: 8px; padding-right: 8px; }
+    .table-head > :nth-child(4), .t-row > :nth-child(4) { display: none; }
+    .t-row > :nth-child(2) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .constellation-steps { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+
+    .popconfirm-box { width: min(248px, calc(100vw - 40px)); }
+    .toast-stack { left: 12px; right: 12px; bottom: 12px; align-items: center; }
+    .drawer-panel { top: 8px; right: 8px; bottom: 8px; width: calc(100vw - 16px); max-width: none; }
+    .modal-card { padding: 18px; }
+  }
+  /* ======================= 动效 =======================
+     统一节奏：浮层 160–220ms、展开收起 280ms、微反馈 200–260ms
+     --ease-out 用于出现/展开，--ease-pop 用于勾选、数字等带一点回弹的小反馈 */
+  :root {
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* ---- 1. 浮层：下拉 / 菜单 / 确认气泡 / 右键菜单 —— 淡入 + 从触发点轻微展开 ---- */
+  .float-panel,
+  .picker-drop,
+  .ctx-menu {
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+    transform-origin: top left;
+    transition: opacity 0.16s ease, transform 0.22s var(--ease-out), visibility 0s linear 0.22s;
+  }
+  .float-panel.right,
+  .cal-drop { transform-origin: top right; }
+  .float-panel.open,
+  .picker-shell.open .picker-drop,
+  .ctx-menu.open {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition-delay: 0s;
+  }
+
+  /* 触发器箭头随展开翻转 */
+  .picker-trigger > svg:last-child,
+  .split-caret svg,
+  .acc-trigger svg { transition: transform 0.24s var(--ease-out); }
+  .picker-shell.open .picker-trigger > svg:last-child,
+  .split-group:has(.float-panel.open) .split-caret svg,
+  .acc-card.open .acc-trigger svg { transform: rotate(180deg); }
+
+  /* ---- 2. 遮罩 / 弹窗 / 命令面板 / 抽屉 ---- */
+  .scrim {
+    display: flex;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease, visibility 0s linear 0.24s;
+  }
+  .scrim.open { display: flex; visibility: visible; opacity: 1; transition-delay: 0s; }
+  .scrim .modal-card { transform: translateY(10px) scale(0.97); transition: transform 0.28s var(--ease-out); }
+  .scrim .cmd-card { transform: translateY(-10px) scale(0.98); transition: transform 0.26s var(--ease-out); }
+  .scrim.open .modal-card,
+  .scrim.open .cmd-card { transform: none; }
+  .drawer-panel { transition: transform 0.32s var(--ease-out); }
+
+  /* ---- 3. Toast：从下方浮入，离开时下沉淡出 ---- */
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(12px) scale(0.96); }
+    to   { opacity: 1; transform: none; }
+  }
+  .toast-pill {
+    animation: toastIn 0.32s var(--ease-out) backwards;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .toast-pill.leaving { opacity: 0; transform: translateY(8px) scale(0.96); }
+
+  /* ---- 4. 展开 / 收起：grid 0fr → 1fr，高度平滑过渡 ---- */
+  .acc-card { transition: background-color 0.22s ease; }
+  .acc-trigger { transition: color 0.2s ease; }
+  .acc-body,
+  .acc-card.open .acc-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    padding: 0 14px;
+    transition: grid-template-rows 0.28s var(--ease-out), opacity 0.2s ease;
+  }
+  .acc-card.open .acc-body { grid-template-rows: 1fr; opacity: 1; }
+  .acc-body > div { overflow: hidden; min-height: 0; }
+  .acc-body > div > p { padding-bottom: 11px; }
+
+  .tree-children,
+  .tree-children.collapsed {
+    display: grid;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition: grid-template-rows 0.28s var(--ease-out), opacity 0.2s ease;
+  }
+  .tree-children.collapsed { grid-template-rows: 0fr; opacity: 0; }
+  .tree-inner {
+    overflow: hidden;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  /* 批量栏出现时从上方落下 */
+  @keyframes dropIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .bulk-bar.show { animation: none; }  /* 由 JS revealBlock 负责高度展开 */
+
+  /* 通用：内容切换时淡入（页签内容、骨架屏、日历换月） */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes slideFromRight { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+  @keyframes slideFromLeft  { from { opacity: 0; transform: translateX(-14px); } to { opacity: 1; transform: none; } }
+  .anim-fade { animation: fadeUp 0.26s var(--ease-out) backwards; }
+  .anim-next { animation: slideFromRight 0.26s var(--ease-out) backwards; }
+  .anim-prev { animation: slideFromLeft 0.26s var(--ease-out) backwards; }
+
+  /* ---- 5. 微反馈 ---- */
+  @keyframes popIn {
+    0%   { opacity: 0; transform: scale(0.4); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  /* 复选框对勾：切换时弹出；重新渲染的行只给刚点的那一行加 .just */
+  .orb-box svg { transition: transform 0.22s var(--ease-pop), opacity 0.15s ease; }
+  .chk-item:not(.checked):not(.indet) .orb-box svg { transform: scale(0.4); opacity: 0; }
+  .just .orb-box svg,
+  .just .s-check { animation: popIn 0.26s var(--ease-pop) backwards; }
+
+  /* 标签：新增的那一个弹入 */
+  .tag-chip.chip-in { animation: popIn 0.24s var(--ease-pop) backwards; }
+
+  /* 新增页签弹入 + 页签底色过渡 */
+  .tab-pill { transition: background-color 0.18s ease, color 0.18s ease; }
+  .tab-pill.tab-new { animation: popIn 0.26s var(--ease-pop) backwards; }
+
+  /* 步进器数字：加从下往上滚入，减从上往下 */
+  @keyframes numUp   { from { opacity: 0; transform: translateY(8px); }  to { opacity: 1; transform: none; } }
+  @keyframes numDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+  .step-num { overflow: hidden; }
+  .step-num.up   > span { animation: numUp 0.22s var(--ease-out) backwards; }
+  .step-num.down > span { animation: numDown 0.22s var(--ease-out) backwards; }
+  .step-num > span { display: block; }
+
+  /* 其余状态切换补上过渡 */
+  .page-btn,
+  .c-orb,
+  .ctx-zone,
+  .menu-opt,
+  .tree-node,
+  .tag-chip button,
+  .clear-btn,
+  .cal-day,
+  .cal-nav-btn { transition: background-color 0.16s ease, color 0.16s ease, opacity 0.16s ease; }
+  .c-step { transition: background-color 0.2s ease, color 0.2s ease; }
+  .c-orb { transition: background-color 0.2s ease, color 0.2s ease; }
+
+  /* 复制按钮：变成「已复制」 */
+  .copied { animation: popIn 0.24s var(--ease-pop) backwards; }
+
+  /* 上传：雾粉进度从左铺满，图标上下浮动 */
+  .dropzone { position: relative; overflow: hidden; }
+  .dropzone > * { position: relative; z-index: 1; }
+  .dropzone::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--blush-soft);
+    transform: scaleX(0);
+    transform-origin: left center;
+    pointer-events: none;
+  }
+  @keyframes uploadFill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes iconBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+  .dropzone.uploading::before { animation: uploadFill 0.95s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+  .dropzone.uploading .dz-icon svg { animation: iconBob 0.6s ease-in-out infinite; }
+  .dropzone.done .status-pill { animation: popIn 0.26s var(--ease-pop) backwards; }
+
+  /* 指标圆环：载入时从 0 绘制（JS 用 Web Animations，CSS 过渡在部分浏览器不插值 stroke-dasharray） */
+
+  /* ---- 6. 载入入场：各行依次浮起（只用 backwards，结束后不残留 transform） ---- */
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .page-loading .blora-stack > *,
+  .page-loading .side-rail { animation: rise 0.5s var(--ease-out) backwards; }
+  .page-loading .side-rail { animation-delay: 0s; }
+  .page-loading .blora-stack > :nth-child(1)  { animation-delay: 0.02s; }
+  .page-loading .blora-stack > :nth-child(3)  { animation-delay: 0.06s; }
+  .page-loading .blora-stack > :nth-child(4)  { animation-delay: 0.10s; }
+  .page-loading .blora-stack > :nth-child(5)  { animation-delay: 0.14s; }
+  .page-loading .blora-stack > :nth-child(6)  { animation-delay: 0.18s; }
+  .page-loading .blora-stack > :nth-child(7)  { animation-delay: 0.22s; }
+  .page-loading .blora-stack > :nth-child(8)  { animation-delay: 0.26s; }
+  .page-loading .blora-stack > :nth-child(n+9) { animation-delay: 0.30s; }
+
+  /* 主题 / 导航模式切换：View Transition 交叉淡化 */
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation-duration: 0.32s; animation-timing-function: ease; }
+
+  /* 系统开启「减少动态效果」时，全部动效降为瞬时 */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0s !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      transition-delay: 0s !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* ============ 侧栏：胶囊形 ============
+     收起时侧栏 64 宽 → 外圆角 32（宽度的一半），按钮 44 → 同心 32 − 10 = 22：收起是正圆，展开是胶囊。
+     侧栏只装按钮，属于「只装小块」的容器，同心规则成立。
+     只在 .side-rail 作用域里重定义 --r-rail-item：设置页分区导航、文章目录这类格子里的导航仍是 20 − 10 */
+  .side-rail {
+    --r-rail: 32px;
+    --r-rail-item: calc(var(--r-rail) - var(--rail-pad));
+    border-radius: var(--r-rail);
+  }
+
+
+  /* ============ 选中滑块（单选组共用） ============
+     单选组的选中底是一块独立的「滑块」，选中项变化时连续滑过去，而不是在两个按钮之间跳。
+     组内其余项是透明底时滑块直接垫在下面；组内项各自有底色的（分页、页签）改成托盘：整组一块凹槽底，项透明 */
+  .glide-host { position: relative; isolation: isolate; }
+  .glide-pill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: var(--glide-bg, var(--blush-soft));
+    box-shadow: var(--glide-shadow, none);
+    transition: transform 0.34s var(--ease-out), width 0.34s var(--ease-out), height 0.34s var(--ease-out), border-radius 0.34s var(--ease-out), opacity 0.18s ease;
+    will-change: transform;
+  }
+  .glide-host .glide-item { position: relative; z-index: 1; }
+  .glide-host [data-glide-on] { background: transparent !important; box-shadow: none !important; }
+  .glide-tray { background: var(--bg-well); padding: 3px; gap: 2px; }
+  .glide-tray .glide-item { background: transparent; }
+  .glide-tray .glide-item:not([data-glide-on]):hover { background: var(--bg-slot); }
+  @media (prefers-reduced-motion: reduce) { .glide-pill { transition: none; } }
+</style>
+</head>
+<body>
+<!-- Lucide 图标（ISC License · lucide.dev），内联为 sprite，离线可用 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-app-window" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2" /> <path d="M10 4v4" /> <path d="M2 8h20" /> <path d="M6 4v4" /></symbol>
+  <symbol id="i-arrow-up-down" viewBox="0 0 24 24"><path d="m21 16-4 4-4-4" /> <path d="M17 20V4" /> <path d="m3 8 4-4 4 4" /> <path d="M7 4v16" /></symbol>
+  <symbol id="i-badge-alert" viewBox="0 0 24 24"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" /> <line x1="12" x2="12" y1="8" y2="12" /> <line x1="12" x2="12.01" y1="16" y2="16" /></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /> <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4" /> <path d="M16 2v4" /> <rect width="18" height="18" x="3" y="4" rx="2" /> <path d="M3 10h18" /></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol>
+  <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
+  <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" /></symbol>
+  <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" /></symbol>
+  <symbol id="i-circle-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /> <path d="m15 9-6 6" /> <path d="m9 9 6 6" /></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /> <polyline points="12 6 12 12 16 14" /></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2" /> <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></symbol>
+  <symbol id="i-corner-down-left" viewBox="0 0 24 24"><polyline points="9 10 4 15 9 20" /> <path d="M20 4v7a4 4 0 0 1-4 4H4" /></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7 10 12 15 17 10" /> <line x1="12" x2="12" y1="15" y2="3" /></symbol>
+  <symbol id="i-ellipsis" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1" /> <circle cx="19" cy="12" r="1" /> <circle cx="5" cy="12" r="1" /></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /> <circle cx="12" cy="12" r="3" /></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" /> <path d="M14 2v4a2 2 0 0 0 2 2h4" /></symbol>
+  <symbol id="i-file-text" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" /> <path d="M14 2v4a2 2 0 0 0 2 2h4" /> <path d="M10 9H8" /> <path d="M16 13H8" /> <path d="M16 17H8" /></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" /></symbol>
+  <symbol id="i-inbox" viewBox="0 0 24 24"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12" /> <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /> <path d="M12 16v-4" /> <path d="M12 8h.01" /></symbol>
+  <symbol id="i-layout-dashboard" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1" /> <rect width="7" height="5" x="14" y="3" rx="1" /> <rect width="7" height="9" x="14" y="12" rx="1" /> <rect width="7" height="5" x="3" y="16" rx="1" /></symbol>
+  <symbol id="i-layout-grid" viewBox="0 0 24 24"><rect width="7" height="7" x="3" y="3" rx="1" /> <rect width="7" height="7" x="14" y="3" rx="1" /> <rect width="7" height="7" x="14" y="14" rx="1" /> <rect width="7" height="7" x="3" y="14" rx="1" /></symbol>
+  <symbol id="i-layout-template" viewBox="0 0 24 24"><rect width="18" height="7" x="3" y="3" rx="1" /> <rect width="9" height="7" x="3" y="14" rx="1" /> <rect width="5" height="7" x="16" y="14" rx="1" /></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M3 12h.01" /> <path d="M3 18h.01" /> <path d="M3 6h.01" /> <path d="M8 12h13" /> <path d="M8 18h13" /> <path d="M8 6h13" /></symbol>
+  <symbol id="i-loader-circle" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /> <path d="M7 11V7a5 5 0 0 1 10 0v4" /></symbol>
+  <symbol id="i-message-square" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14" /></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></symbol>
+  <symbol id="i-mouse-pointer-click" viewBox="0 0 24 24"><path d="M14 4.1 12 6" /> <path d="m5.1 8-2.9-.8" /> <path d="m6 12-1.9 2" /> <path d="M7.2 2.2 8 5.1" /> <path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z" /></symbol>
+  <symbol id="i-orbit" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /> <circle cx="19" cy="5" r="2" /> <circle cx="5" cy="19" r="2" /> <path d="M10.4 21.9a10 10 0 0 0 9.941-15.416" /> <path d="M13.5 2.1a10 10 0 0 0-9.841 15.416" /></symbol>
+  <symbol id="i-panel-left" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" /> <path d="M9 3v18" /></symbol>
+  <symbol id="i-panel-left-close" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" /> <path d="M9 3v18" /> <path d="m16 15-3-3 3-3" /></symbol>
+  <symbol id="i-panel-top" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" /> <path d="M3 9h18" /></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14" /> <path d="M12 5v14" /></symbol>
+  <symbol id="i-rectangle-horizontal" viewBox="0 0 24 24"><rect width="20" height="12" x="2" y="6" rx="2" /></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" /> <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" /> <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" /> <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /></symbol>
+  <symbol id="i-rotate-cw" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" /> <path d="M21 3v5h-5" /></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /> <path d="m21 21-4.3-4.3" /></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24"><rect width="20" height="8" x="2" y="2" rx="2" ry="2" /> <rect width="20" height="8" x="2" y="14" rx="2" ry="2" /> <line x1="6" x2="6.01" y1="6" y2="6" /> <line x1="6" x2="6.01" y1="18" y2="18" /></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /> <circle cx="12" cy="12" r="3" /></symbol>
+  <symbol id="i-sliders-horizontal" viewBox="0 0 24 24"><line x1="21" x2="14" y1="4" y2="4" /> <line x1="10" x2="3" y1="4" y2="4" /> <line x1="21" x2="12" y1="12" y2="12" /> <line x1="8" x2="3" y1="12" y2="12" /> <line x1="21" x2="16" y1="20" y2="20" /> <line x1="12" x2="3" y1="20" y2="20" /> <line x1="14" x2="14" y1="2" y2="6" /> <line x1="8" x2="8" y1="10" y2="14" /> <line x1="16" x2="16" y1="18" y2="22" /></symbol>
+  <symbol id="i-square-chevron-down" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" /> <path d="m16 10-4 4-4-4" /></symbol>
+  <symbol id="i-table" viewBox="0 0 24 24"><path d="M12 3v18" /> <rect width="18" height="18" x="3" y="3" rx="2" /> <path d="M3 9h18" /> <path d="M3 15h18" /></symbol>
+  <symbol id="i-triangle-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /> <path d="M12 9v4" /> <path d="M12 17h.01" /></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="17 8 12 3 7 8" /> <line x1="12" x2="12" y1="3" y2="15" /></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" /></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" /></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18" /> <path d="m6 6 12 12" /></symbol>
+</svg>
+
+
+<div class="page-wrap page-loading" id="pageWrap">
+
+  <!-- Side Rail（侧栏导航，与顶栏 jumpStrip 二选一） -->
+  <aside class="side-rail" id="sideRail" aria-label="组件目录">
+    <div class="rail-brand">
+      <div class="orbit-mark">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.8" stroke-dasharray="34.98 9" stroke-linecap="round" transform="rotate(-4 10 10)"/>
+          <circle cx="10" cy="10" r="2.6" fill="currentColor"/>
+          <circle cx="15.5" cy="5.2" r="1.8" fill="currentColor"/>
+        </svg>
+      </div>
+      <span class="brand-title rail-text">Blora Design</span>
+    </div>
+
+    <div class="rail-caption rail-text">组件目录</div>
+    <div class="rail-track" id="railTrack">
+      <div class="rail-glider" id="railGlider"></div>
+      <button class="rail-btn active" onclick="jumpToIdx(0)">
+        <svg class="i" width="1.6" aria-hidden="true"><use href="#i-rectangle-horizontal"/></svg>
+        <span class="rail-text">按钮与浮层</span><span class="rail-idx rail-text">01</span>
+        <span class="rail-tip">01 · 按钮与浮层</span>
+      </button>
+      <button class="rail-btn" onclick="jumpToIdx(1)">
+        <svg class="i" width="1.6" aria-hidden="true"><use href="#i-square-chevron-down"/></svg>
+        <span class="rail-text">选择器与日历</span><span class="rail-idx rail-text">02</span>
+        <span class="rail-tip">02 · 选择器与日历</span>
+      </button>
+      <button class="rail-btn" onclick="jumpToIdx(2)">
+        <svg class="i" width="1.6" aria-hidden="true"><use href="#i-sliders-horizontal"/></svg>
+        <span class="rail-text">输入、滑块与列表</span><span class="rail-idx rail-text">03</span>
+        <span class="rail-tip">03 · 输入、滑块与列表</span>
+      </button>
+      <button class="rail-btn" onclick="jumpToIdx(3)">
+        <svg class="i" width="1.6" aria-hidden="true"><use href="#i-table"/></svg>
+        <span class="rail-text">数据表与目录树</span><span class="rail-idx rail-text">04</span>
+        <span class="rail-tip">04 · 数据表与目录树</span>
+      </button>
+      <button class="rail-btn" onclick="jumpToIdx(4)">
+        <svg class="i" width="1.6" aria-hidden="true"><use href="#i-app-window"/></svg>
+        <span class="rail-text">页签、步骤与右键</span><span class="rail-idx rail-text">05</span>
+        <span class="rail-tip">05 · 页签、步骤与右键</span>
+      </button>
+      <button class="rail-btn" onclick="jumpToIdx(5)">
+        <svg class="i" width="1.6" aria-hidden="true"><use href="#i-badge-alert"/></svg>
+        <span class="rail-text">状态与空态</span><span class="rail-idx rail-text">06</span>
+        <span class="rail-tip">06 · 状态与空态</span>
+      </button>
+    </div>
+
+    <div class="rail-foot">
+      <div class="rail-note rail-text">缝 6 · 外角 20 / 缝角 6<br>侧栏胶囊 32 · 高亮 32 − 10</div>
+      <button class="rail-btn rail-foot-btn" onclick="setNavMode('top')">
+        <svg class="i" width="1.6" aria-hidden="true"><use href="#i-panel-top"/></svg>
+        <span class="rail-text">切换为顶栏</span>
+        <span class="rail-tip">切换为顶栏导航</span>
+      </button>
+      <button class="rail-btn rail-foot-btn rail-collapse-btn" onclick="toggleRailCollapse()">
+        <svg class="i rail-collapse-ico" width="1.6" aria-hidden="true"><use href="#i-panel-left-close"/></svg>
+        <span class="rail-text">收起侧栏</span>
+        <span class="rail-tip">展开侧栏</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="blora-stack">
+
+    <!-- Top Header Tile -->
+    <header class="top-header">
+      <div class="brand-cluster">
+        <div class="orbit-mark">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.8" stroke-dasharray="34.98 9" stroke-linecap="round" transform="rotate(-4 10 10)"/>
+            <circle cx="10" cy="10" r="2.6" fill="currentColor"/>
+            <circle cx="15.5" cy="5.2" r="1.8" fill="currentColor"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-line">
+            <span class="brand-title">Blora Design</span>
+            <span class="brand-badge">v2 · 行内微缝拼接 · 外圆内收</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn btn-surface btn-search" onclick="openCmd()">
+          <svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-search"/></svg>
+          <span>星轨检索</span>
+          <kbd class="kbd" aria-label="Command K">
+            <svg class="kbd-cmd" viewBox="0 0 24 24" fill="none"><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>K</span>
+          </kbd>
+        </button>
+        <button class="btn btn-surface" onclick="toggleDrawer(true)">侧滑星轨舱</button>
+        <button class="btn btn-blush" onclick="toggleModal(true)">新建集群节点</button>
+        <button class="btn btn-surface" id="themeBtn" onclick="toggleTheme()">深色模式</button>
+      </div>
+    </header>
+
+    <!-- Sticky Jump Strip（吸顶后浮起阴影） -->
+    <div id="navSentinel" style="height:0;margin-bottom:calc(var(--gap-row) * -1);"></div>
+    <nav class="jump-strip" id="jumpStrip">
+      <div class="jump-pills" id="jumpNav">
+        <button class="jump-pill active" onclick="jumpTo('sec-1', this)"><span class="jump-dot"></span>01 按钮与浮层</button>
+        <button class="jump-pill" onclick="jumpTo('sec-2', this)"><span class="jump-dot"></span>02 选择器与日历</button>
+        <button class="jump-pill" onclick="jumpTo('sec-3', this)"><span class="jump-dot"></span>03 输入、滑块与列表</button>
+        <button class="jump-pill" onclick="jumpTo('sec-4', this)"><span class="jump-dot"></span>04 数据表与目录树</button>
+        <button class="jump-pill" onclick="jumpTo('sec-5', this)"><span class="jump-dot"></span>05 页签、步骤与右键</button>
+        <button class="jump-pill" onclick="jumpTo('sec-6', this)"><span class="jump-dot"></span>06 状态与空态</button>
+      </div>
+      <div class="tip-wrap strip-mode-btn">
+        <button class="btn btn-ghost btn-sm" onclick="setNavMode('rail')" aria-label="切换为侧栏导航">
+          <svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-panel-left"/></svg>
+          <span>侧栏</span>
+        </button>
+        <div class="tip-card below">切换为侧栏导航</div>
+      </div>
+    </nav>
+
+    <!-- Top 4 Orbital Ring Telemetry Tiles -->
+    <section class="orbit-strip blora-row">
+      <div class="orbit-tile">
+        <div class="orbit-meta">
+          <span class="orbit-label">边缘算力负载</span>
+          <span class="orbit-val" id="metricLoadVal">68%</span>
+          <span class="orbit-sub">随下方星轨滑块实时联动</span>
+        </div>
+        <div class="orbit-ring-wrap">
+          <svg width="52" height="52" viewBox="0 0 52 52">
+            <circle cx="26" cy="26" r="21" fill="none" stroke="var(--bg-slot)" stroke-width="4.5"/>
+            <circle id="metricLoadArc" cx="26" cy="26" r="21" fill="none" stroke="var(--blush-solid)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="89.7 132" transform="rotate(-90 26 26)"/>
+          </svg>
+          <span class="orbit-ring-pct" id="metricLoadMini">68</span>
+        </div>
+      </div>
+
+      <div class="orbit-tile">
+        <div class="orbit-meta">
+          <span class="orbit-label">网关轨道延迟</span>
+          <span class="orbit-val">11.8 ms</span>
+          <span class="orbit-sub">亚太 4 节点同频畅通</span>
+        </div>
+        <div class="orbit-ring-wrap">
+          <svg width="52" height="52" viewBox="0 0 52 52">
+            <circle cx="26" cy="26" r="21" fill="none" stroke="var(--bg-slot)" stroke-width="4.5"/>
+            <circle cx="26" cy="26" r="21" fill="none" stroke="var(--sand-solid)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="108 132" transform="rotate(-90 26 26)"/>
+          </svg>
+          <span class="orbit-ring-pct">A+</span>
+        </div>
+      </div>
+
+      <div class="orbit-tile">
+        <div class="orbit-meta">
+          <span class="orbit-label">快照冷备环</span>
+          <span class="orbit-val">820 GB</span>
+          <span class="orbit-sub">总配额 1,000 GB</span>
+        </div>
+        <div class="orbit-ring-wrap">
+          <svg width="52" height="52" viewBox="0 0 52 52">
+            <circle cx="26" cy="26" r="21" fill="none" stroke="var(--bg-slot)" stroke-width="4.5"/>
+            <circle cx="26" cy="26" r="21" fill="none" stroke="var(--blush-track)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="108.2 132" transform="rotate(-90 26 26)"/>
+          </svg>
+          <span class="orbit-ring-pct">82</span>
+        </div>
+      </div>
+
+      <div class="orbit-tile">
+        <div class="orbit-meta">
+          <span class="orbit-label">活跃鉴权会话</span>
+          <span class="orbit-val">1,428</span>
+          <span class="orbit-sub">零异常令牌漂移</span>
+        </div>
+        <div class="orbit-ring-wrap">
+          <svg width="52" height="52" viewBox="0 0 52 52">
+            <circle cx="26" cy="26" r="21" fill="none" stroke="var(--bg-slot)" stroke-width="4.5"/>
+            <circle cx="26" cy="26" r="21" fill="none" stroke="var(--rose-solid)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="118 132" transform="rotate(-90 26 26)"/>
+          </svg>
+          <span class="orbit-ring-pct">99</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 01 Buttons, Split Buttons, Tooltip & Popconfirm -->
+    <section id="sec-1" class="mosaic-2 blora-row">
+      <div class="tile">
+        <div class="tile-head">
+          <div class="tile-title-group">
+            <span class="orbit-index">01</span>
+            <span class="tile-title">柔和暖调按钮层级与星轨异步态</span>
+          </div>
+          <span class="tile-caption">零描边 · 零突兀黑块</span>
+        </div>
+        <div class="spec-stack">
+          <div class="spec-row">
+            <span class="row-label">层级</span>
+            <div class="btn-row">
+              <button class="btn btn-primary" onclick="pushToast('已下发主轨道部署指令')">主操作</button>
+              <button class="btn btn-blush" onclick="pushToast('已触发雾粉次主操作')">雾粉次主</button>
+              <button class="btn btn-sand" onclick="pushToast('暖杏辅助校准已启动')">暖杏辅助</button>
+              <button class="btn btn-surface" onclick="pushToast('常规柔槽操作已响应')">柔槽中性</button>
+              <button class="btn btn-ghost" onclick="pushToast('轻量透明操作已触发')">轻量透明</button>
+              <button class="btn" disabled>禁用态</button>
+            </div>
+          </div>
+          <div class="spec-row">
+            <span class="row-label">尺寸·异步</span>
+            <div class="btn-row">
+              <button class="btn btn-blush btn-sm" onclick="pushToast('小号按钮 29px')">小号</button>
+              <button class="btn btn-blush" onclick="pushToast('默认按钮 35px')">默认</button>
+              <button class="btn btn-blush btn-lg" onclick="pushToast('大号按钮 41px')">大号</button>
+              <button class="btn btn-surface btn-icon" aria-label="新增" onclick="pushToast('图标按钮')">
+                <svg class="i" width="13" height="13" aria-hidden="true"><use href="#i-plus"/></svg>
+              </button>
+              <button class="btn btn-surface" id="asyncBtn" onclick="triggerAsync(this)">
+                <svg class="i" width="14" height="14" style="color:var(--blush-solid)" aria-hidden="true"><use href="#i-check"/></svg>
+                <span>轨道已同步</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head">
+          <div class="tile-title-group">
+            <span class="orbit-index">1B</span>
+            <span class="tile-title">邻接分裂钮、耦合工具组、浅色气泡与原位确认</span>
+          </div>
+          <span class="tile-caption">点击直接交互</span>
+        </div>
+        <div class="spec-stack">
+        <div class="spec-row">
+          <span class="row-label">分裂·确认</span>
+        <div class="btn-row">
+          <div class="split-group pop-anchor" id="splitAnchor">
+            <button class="btn btn-primary split-main" onclick="pushToast('正在按默认编排发布实例')">立即发布</button>
+            <button class="btn btn-primary split-caret" onclick="togglePop('splitMenu', event)">
+              <svg class="i" width="13" height="13" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+            </button>
+            <div class="float-panel" id="splitMenu">
+              <button class="menu-opt active" onclick="pickSplit('滚动无感热更新')">滚动无感热更新<svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-check"/></svg></button>
+              <button class="menu-opt" onclick="pickSplit('蓝绿双轨切流')">蓝绿双轨切流</button>
+              <button class="menu-opt" onclick="pickSplit('仅生成校验快照')">仅生成校验快照</button>
+            </div>
+          </div>
+
+          <div class="tip-wrap">
+            <button class="btn btn-surface btn-icon" aria-label="轨道说明">
+              <svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-info"/></svg>
+            </button>
+            <div class="tip-card">浅色柔和悬浮气泡 · 无突兀黑底</div>
+          </div>
+
+          <div class="pop-anchor">
+            <button class="btn btn-rose" onclick="togglePop('popConfirm', event)">销毁节点</button>
+            <div class="float-panel right popconfirm-box" id="popConfirm" onclick="event.stopPropagation()">
+              <div class="popconfirm-title">确认销毁边缘节点？</div>
+              <div class="popconfirm-desc">关联快照将保留 72 小时，期间可随时回滚恢复。</div>
+              <div class="popconfirm-actions">
+                <button class="btn btn-surface" style="height:29px;padding:0 11px;font-size:12px;" onclick="closeAllPops()">取消</button>
+                <button class="btn btn-rose" style="height:29px;padding:0 11px;font-size:12px;" onclick="closeAllPops();pushToast('已移入安全回收环')">确认销毁</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="spec-row">
+          <span class="row-label">耦合工具组</span>
+          <div class="btn-row">
+            <div class="coupled-pair">
+              <button class="btn btn-elev" onclick="pushToast('边缘探针已重连')">重连</button>
+              <button class="btn btn-ghost" onclick="pushToast('路由表已刷新')">刷新</button>
+            </div>
+            <div class="coupled-pair" id="viewPair">
+              <button class="btn btn-elev btn-icon" aria-label="列表视图" onclick="pickView(this)">
+                <svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-list"/></svg>
+              </button>
+              <button class="btn btn-ghost btn-icon" aria-label="网格视图" onclick="pickView(this)">
+                <svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-layout-grid"/></svg>
+              </button>
+              <button class="btn btn-ghost btn-icon" aria-label="拓扑视图" onclick="pickView(this)">
+                <svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-orbit"/></svg>
+              </button>
+            </div>
+            <button class="btn btn-surface" onclick="pushToast('3 条轨道告警待处理')">
+              <span>告警</span>
+              <span class="count-chip">3</span>
+            </button>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 Custom Single Select, Connected Multi-select & Connected Range Calendar -->
+    <section id="sec-2" class="mosaic-3 blora-row">
+      <div class="tile">
+        <div class="tile-head">
+          <div class="tile-title-group">
+            <span class="orbit-index">02</span>
+            <span class="tile-title">全自研单选下拉选择器</span>
+          </div>
+          <span class="tile-caption">零原生 &lt;select&gt;</span>
+        </div>
+        <div class="picker-shell" id="singlePicker">
+          <button class="picker-trigger" onclick="togglePicker('singlePicker', event)">
+            <span class="picker-val">
+              <span class="orbit-dot"></span>
+              <span id="singleLabel">亚太香港星轨区 (ap-hk-01)</span>
+            </span>
+            <svg class="i" width="14" height="14" style="color:var(--ink-3)" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+          </button>
+          <div class="picker-drop" id="singleDrop" onclick="event.stopPropagation()"></div>
+        </div>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head">
+          <div class="tile-title-group">
+            <span class="orbit-index">2B</span>
+            <span class="tile-title">可搜索连贯圆角多选标签框</span>
+          </div>
+          <span class="tile-caption">相邻选中自动融为一体</span>
+        </div>
+        <div class="picker-shell" id="multiPicker">
+          <button class="picker-trigger" onclick="togglePicker('multiPicker', event)">
+            <div class="tag-flow" id="multiTags"></div>
+            <svg class="i" width="14" height="14" style="color:var(--ink-3)" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+          </button>
+          <div class="picker-drop" onclick="event.stopPropagation()">
+            <input class="drop-search" id="multiSearch" placeholder="搜索挂载模块..." oninput="renderMultiOpts()" />
+            <div id="multiList"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head">
+          <div class="tile-title-group">
+            <span class="orbit-index">2C</span>
+            <span class="tile-title">全自研连贯区间日历选择器</span>
+          </div>
+          <span class="tile-caption">起止日期连成胶囊带</span>
+        </div>
+        <div class="picker-shell" id="calPicker">
+          <button class="picker-trigger" onclick="togglePicker('calPicker', event)">
+            <span class="picker-val">
+              <svg class="i" width="15" height="15" style="color:var(--blush-solid)" aria-hidden="true"><use href="#i-calendar"/></svg>
+              <span id="calLabel" style="font-family:var(--font-mono);font-size:12.5px;">2026-11-18 → 11-21</span>
+            </span>
+            <span class="status-pill ok" id="calSpanBadge">4 天窗口</span>
+          </button>
+          <div class="picker-drop cal-drop" onclick="event.stopPropagation()">
+            <div class="cal-head">
+              <button class="cal-nav-btn" onclick="shiftMonth(-1)">
+                <svg class="i" width="12" height="12" aria-hidden="true"><use href="#i-chevron-left"/></svg>
+              </button>
+              <span id="calMonthTitle">2026 年 11 月</span>
+              <button class="cal-nav-btn" onclick="shiftMonth(1)">
+                <svg class="i" width="12" height="12" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+              </button>
+            </div>
+            <div class="cal-weekdays"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+            <div class="cal-grid" id="calGrid"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 Coupled Inputs, Seamless List, Orbital Slider & Dashed Dropzone -->
+    <section id="sec-3" class="mosaic-3 blora-row">
+      <div class="tile">
+        <div class="tile-head">
+          <div class="tile-title-group">
+            <span class="orbit-index">03</span>
+            <span class="tile-title">清除框、密码框、邻接域名框与步进器</span>
+          </div>
+          <span class="tile-caption">柔槽分层</span>
+        </div>
+
+        <div class="field-box">
+          <svg class="i" width="14" height="14" style="color:var(--ink-3)" aria-hidden="true"><use href="#i-search"/></svg>
+          <input id="clearInput" value="demo-service-core" placeholder="输入节点标识..." oninput="document.getElementById('clearBtn').style.display=this.value?'grid':'none'" />
+          <button class="clear-btn" id="clearBtn" onclick="const el=document.getElementById('clearInput');el.value='';this.style.display='none';el.focus();">
+            <svg class="i" width="10" height="10" aria-hidden="true"><use href="#i-x"/></svg>
+          </button>
+        </div>
+
+        <div class="field-box">
+          <svg class="i" width="14" height="14" style="color:var(--ink-3)" aria-hidden="true"><use href="#i-lock"/></svg>
+          <input id="pwdInput" type="password" value="blora-orbit-key" placeholder="访问密钥" style="font-family:var(--font-mono);font-size:12.5px;letter-spacing:0.02em;" />
+          <button class="eye-btn" id="eyeBtn" aria-label="显示密钥" onclick="togglePwd()">
+            <svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-eye"/></svg>
+          </button>
+        </div>
+
+        <div class="addon-row">
+          <span class="addon-cap left">https://</span>
+          <input class="addon-mid" value="app-demo" />
+          <span class="addon-cap right">.example.com</span>
+        </div>
+
+        <div class="push-end" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:2px;">
+          <span style="font-size:12.5px;color:var(--ink-2);">轨道副本步进与开关</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="num-stepper">
+              <button class="step-btn dec" onclick="stepCount(-1)">
+                <svg class="i" width="12" height="12" aria-hidden="true"><use href="#i-minus"/></svg>
+              </button>
+              <span class="step-num" id="stepVal">6</span>
+              <button class="step-btn inc" onclick="stepCount(1)">
+                <svg class="i" width="12" height="12" aria-hidden="true"><use href="#i-plus"/></svg>
+              </button>
+            </div>
+            <button class="sw-pill on" id="mainSwitch" onclick="this.classList.toggle('on')" aria-label="自动容灾开关">
+              <span class="sw-knob"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head">
+          <div class="tile-title-group">
+            <span class="orbit-index">3B</span>
+            <span class="tile-title">无横线连贯多选列表与星轨选框</span>
+          </div>
+          <span class="tile-caption">相邻项自动无缝拼接</span>
+        </div>
+
+        <div class="seamless-list" id="inlineSeamlessList"></div>
+
+        <div class="ctrl-checks push-end" style="padding-top:2px;">
+          <div class="chk-item checked" onclick="cycleCheck(this)">
+            <span class="orb-box"><svg class="i" width="11" height="11" aria-hidden="true"><use href="#i-check"/></svg></span>
+            <span>热备守护</span>
+          </div>
+          <div class="chk-item indet" onclick="cycleCheck(this)">
+            <span class="orb-box"><svg class="i" width="11" height="11" aria-hidden="true"><use href="#i-minus"/></svg></span>
+            <span>半选同步</span>
+          </div>
+          <div class="chk-item checked" data-radio="r1" onclick="pickRadio(this)">
+            <span class="orb-radio"></span>
+            <span>BGP 优选</span>
+          </div>
+          <div class="chk-item" data-radio="r1" onclick="pickRadio(this)">
+            <span class="orb-radio"></span>
+            <span>直连专线</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head">
+          <div class="tile-title-group">
+            <span class="orbit-index">3C</span>
+            <span class="tile-title">星轨滑块、分段与虚线上传</span>
+          </div>
+          <span class="tile-caption" id="sliderReadout" style="font-family:var(--font-mono);color:var(--blush-ink);font-weight:620;">68%</span>
+        </div>
+
+        <div class="slider-block">
+          <div class="slider-track-wrap" id="orbitSlider">
+            <div class="slider-live-tip" id="sliderTip">68%</div>
+            <div class="slider-rail"><div class="slider-fill" id="sliderFill"></div></div>
+            <div class="slider-thumb" id="sliderThumb"></div>
+          </div>
+          <div class="slider-ticks"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
+        </div>
+
+        <div class="seg-bar" id="segBar">
+          <div class="seg-glider" id="segGlider" style="transform:translateX(100%);"></div>
+          <button class="seg-btn" onclick="pickSeg(0, this)">轻量 2G</button>
+          <button class="seg-btn active" onclick="pickSeg(1, this)">均衡 4G</button>
+          <button class="seg-btn" onclick="pickSeg(2, this)">星轨 8G</button>
+        </div>
+
+        <div class="dropzone push-end" id="dropZone" onclick="simulateUpload()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="event.preventDefault();this.classList.remove('dragover');simulateUpload()">
+          <div class="dz-left">
+            <div class="dz-icon">
+              <svg class="i" width="16" height="16" aria-hidden="true"><use href="#i-upload"/></svg>
+            </div>
+            <div>
+              <div style="font-size:12.8px;font-weight:580;" id="dzTitle">拖拽或点击上传星轨编排文件</div>
+              <div style="font-size:11.5px;color:var(--ink-3);font-family:var(--font-mono);" id="dzSub">.yml / .json · 柔和 1.5px 虚线槽</div>
+            </div>
+          </div>
+          <span class="status-pill sync" id="dzBadge">待上传</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 Line-Free Connected Data Table & Collapsible File Tree -->
+    <section id="sec-4" class="mosaic-asym blora-row">
+      <div class="tile">
+        <div class="tile-head">
+          <div class="tile-title-group">
+            <span class="orbit-index">04</span>
+            <span class="tile-title">无分隔线连贯选中数据表（柔和雾粉批量栏）</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button class="btn btn-ghost" style="height:29px;padding:0 10px;font-size:12px;" onclick="sortTable()">
+              <span>按延迟排序</span>
+              <svg class="i" width="12" height="12" aria-hidden="true"><use href="#i-arrow-up-down"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="bulk-bar" id="bulkBar">
+          <span id="bulkText">已连贯选中 2 个星轨节点</span>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-elev" style="height:27px;padding:0 11px;font-size:12px;" onclick="pushToast('批量热迁移已排入轨道')">批量热迁移</button>
+            <button class="btn btn-ghost" style="height:27px;padding:0 9px;font-size:12px;" onclick="clearTableSel()">清空选择</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="table-head">
+            <div class="chk-item" id="selectAllBox" onclick="toggleAllRows()">
+              <span class="orb-box"><svg class="i" width="11" height="11" aria-hidden="true"><use href="#i-check"/></svg></span>
+            </div>
+            <span>实例节点</span>
+            <span>状态</span>
+            <span>星轨扇区</span>
+            <span style="text-align:right;">轨道延迟</span>
+          </div>
+          <div class="t-body" id="tableBody"></div>
+        </div>
+
+        <div class="push-end" style="display:flex;align-items:center;justify-content:space-between;padding-top:4px;">
+          <span style="font-size:12px;color:var(--ink-3);">相邻多选行自动连成整体色面，无行间横线</span>
+          <div class="pager" id="pagerBar">
+            <button class="page-btn active" onclick="pickPage(this, 1)">1</button>
+            <button class="page-btn" onclick="pickPage(this, 2)">2</button>
+            <button class="page-btn" onclick="pickPage(this, 3)">3</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head">
+          <div class="tile-title-group">
+            <span class="orbit-index">4B</span>
+            <span class="tile-title">可折叠配置树与一键复制终端片段</span>
+          </div>
+          <span class="tile-caption">点击目录展开折叠</span>
+        </div>
+
+        <div class="tree-list">
+          <div class="tree-node" onclick="toggleFolder('folder1', this)">
+            <svg class="i chev" width="11" height="11" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+            <svg class="i" width="14" height="14" style="color:var(--sand-solid)" aria-hidden="true"><use href="#i-folder"/></svg>
+            <span style="font-weight:580;">blora-ui-kit/</span>
+          </div>
+          <div class="tree-children" id="folder1"><div class="tree-inner">
+            <div class="tree-node active" onclick="selectTreeFile(this, 'cli apply -f orbit-mesh.yml --canary', '4.2 KB', '2 小时前', '已签名')">
+              <svg class="i" width="13" height="13" aria-hidden="true"><use href="#i-file"/></svg>
+              <span>orbit-mesh.yml</span>
+            </div>
+            <div class="tree-node" onclick="selectTreeFile(this, 'cli token rotate --cluster ap-hk-01', '1.1 KB', '昨天 18:20', '已加密')">
+              <svg class="i" width="13" height="13" aria-hidden="true"><use href="#i-file"/></svg>
+              <span>config-keys.json</span>
+            </div>
+            <div class="tree-node" onclick="selectTreeFile(this, 'cli snapshot verify --ring cold-820g', '860 B', '3 天前', '已签名')">
+              <svg class="i" width="13" height="13" aria-hidden="true"><use href="#i-file"/></svg>
+              <span>snapshot-policy.toml</span>
+            </div>
+          </div></div>
+          <div class="tree-node closed" onclick="toggleFolder('folder2', this)">
+            <svg class="i chev" width="11" height="11" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+            <svg class="i" width="14" height="14" style="color:var(--blush-track)" aria-hidden="true"><use href="#i-folder"/></svg>
+            <span style="font-weight:580;">policies/</span>
+          </div>
+          <div class="tree-children collapsed" id="folder2"><div class="tree-inner">
+            <div class="tree-node" onclick="selectTreeFile(this, 'cli policy lint ./policies/rate-limit.rego', '2.7 KB', '5 天前', '待审阅')">
+              <svg class="i" width="13" height="13" aria-hidden="true"><use href="#i-file"/></svg>
+              <span>rate-limit.rego</span>
+            </div>
+            <div class="tree-node" onclick="selectTreeFile(this, 'cli policy lint ./policies/geo-fence.rego', '1.9 KB', '1 周前', '已签名')">
+              <svg class="i" width="13" height="13" aria-hidden="true"><use href="#i-file"/></svg>
+              <span>geo-fence.rego</span>
+            </div>
+          </div></div>
+        </div>
+
+        <dl class="file-meta push-end">
+          <div><dt>大小</dt><dd id="metaSize">4.2 KB</dd></div>
+          <div><dt>修改</dt><dd id="metaTime">2 小时前</dd></div>
+          <div><dt>校验</dt><dd id="metaSign">已签名</dd></div>
+        </dl>
+
+        <div class="code-box">
+          <span id="codeText" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">cli apply -f orbit-mesh.yml --canary</span>
+          <button class="btn btn-elev" style="height:28px;padding:0 10px;font-size:11.5px;" onclick="copyCmd(this)">复制指令</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 Dynamic Closable Tabs, Constellation Stepper, Context Menu & Accordion -->
+    <section id="sec-5" class="mosaic-2 blora-row">
+      <div class="tile">
+        <div class="tile-head">
+          <div class="tile-title-group">
+            <span class="orbit-index">05</span>
+            <span class="tile-title">动态可增删页签与星轨步骤导航</span>
+          </div>
+          <button class="btn btn-surface" style="height:28px;padding:0 10px;font-size:12px;" onclick="addNewTab()">
+            <svg class="i" width="11" height="11" aria-hidden="true"><use href="#i-plus"/></svg>
+            <span>新增页签</span>
+          </button>
+        </div>
+
+        <div class="tabs-bar" id="tabsBar"></div>
+        <div class="tab-pane" id="tabContent"></div>
+
+        <div class="constellation-steps push-end" id="stepTrack">
+          <button class="c-step done" onclick="setStep(0)">
+            <span class="c-orb"><svg class="i" width="11" height="11" aria-hidden="true"><use href="#i-check"/></svg></span>
+            <div>
+              <div style="font-size:12.5px;font-weight:580;">镜像校验</div>
+              <div style="font-size:11px;opacity:0.75;">SHA256 已签名</div>
+            </div>
+          </button>
+          <button class="c-step current" onclick="setStep(1)">
+            <span class="c-orb">2</span>
+            <div>
+              <div style="font-size:12.5px;font-weight:580;">星轨编排</div>
+              <div style="font-size:11px;opacity:0.75;">分批注入中</div>
+            </div>
+          </button>
+          <button class="c-step" onclick="setStep(2)">
+            <span class="c-orb">3</span>
+            <div>
+              <div style="font-size:12.5px;font-weight:580;">全网切流</div>
+              <div style="font-size:11px;opacity:0.75;">等待探针就绪</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head">
+          <div class="tile-title-group">
+            <span class="orbit-index">5B</span>
+            <span class="tile-title">全自研右键上下文菜单与柔和手风琴折叠</span>
+          </div>
+          <span class="tile-caption">零浏览器原生菜单</span>
+        </div>
+
+        <div class="ctx-zone" oncontextmenu="openCtxMenu(event)" onclick="openCtxMenu(event)">
+          <div style="display:flex;align-items:center;gap:9px;">
+            <svg class="i" width="16" height="16" aria-hidden="true"><use href="#i-mouse-pointer-click"/></svg>
+            <span>在此区域点击鼠标右键（或直接轻点）唤起自研菜单</span>
+          </div>
+          <span class="status-pill sync">右键体验</span>
+        </div>
+
+        <div class="acc-stack">
+          <div class="acc-card open">
+            <button class="acc-trigger" onclick="this.parentElement.classList.toggle('open')">
+              <span>为什么瓷砖外角 20px，而缝角只有 6px？</span>
+              <svg class="i" width="13" height="13" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+            </button>
+            <div class="acc-body"><div><p>布局沿用与分裂按钮、域名拼接框相同的邻接规则：一组的外侧用大圆角包住，相邻处收成小圆角加 6px 窄缝。行与行之间同样是 6px，全页只有一种缝宽，节奏统一，也不需要外层灰框。</p></div></div>
+          </div>
+          <div class="acc-card">
+            <button class="acc-trigger" onclick="this.parentElement.classList.toggle('open')">
+              <span>圆弧星轨几何如何兼顾识别度与柔和感？</span>
+              <svg class="i" width="13" height="13" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+            </button>
+            <div class="acc-body"><div><p>全部圆弧均采用圆头笔触（round linecap）搭配低饱和雾粉与暖杏色阶，不加黑框、不加硬描边，在清亮浅底上呈现安静利落的秩序感。</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 Semantic Alerts, Avatar Stack, Skeleton Toggle & Empty State -->
+    <section id="sec-6" class="mosaic-2 blora-row">
+      <div class="tile">
+        <div class="tile-head">
+          <div class="tile-title-group">
+            <span class="orbit-index">06</span>
+            <span class="tile-title">温和语义提示条与协作星轨头像组</span>
+          </div>
+          <span class="tile-caption">零刺眼荧光红绿</span>
+        </div>
+
+        <div class="alert-stack">
+          <div class="alert-strip blush">
+            <svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-clock"/></svg>
+            <span>边缘节点配置已同步至全部 24 个示例服务实例。</span>
+          </div>
+          <div class="alert-strip sand">
+            <svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-triangle-alert"/></svg>
+            <span>东京可用区将于 03:00 执行例行快照整理，预计无感切换。</span>
+          </div>
+          <div class="alert-strip rose">
+            <svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-circle-x"/></svg>
+            <span>备用隧道 ap-sg-03 证书剩余 5 天到期，建议提前轮换。</span>
+          </div>
+        </div>
+
+        <div class="avatar-row push-end" style="padding-top:2px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="avatar-stack">
+              <span class="av-orb" style="background:var(--blush-fill);color:var(--blush-ink);">A1</span>
+              <span class="av-orb" style="background:var(--sand-fill);color:var(--sand-ink);">B2</span>
+              <span class="av-orb" style="background:var(--rose-fill);color:var(--rose-ink);">C3</span>
+              <span class="av-orb" style="background:var(--bg-slot);color:var(--ink-2);">+4</span>
+            </div>
+            <span style="font-size:12.5px;color:var(--ink-2);">7 位团队协作者在线值守</span>
+          </div>
+          <button class="btn btn-blush" style="height:30px;padding:0 12px;font-size:12px;" onclick="pushToast('已发送协作邀请链接')">邀请协作</button>
+        </div>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head">
+          <div class="tile-title-group">
+            <span class="orbit-index">6B</span>
+            <span class="tile-title">骨架屏加载切换与柔和空状态复位</span>
+          </div>
+          <button class="btn btn-surface" style="height:28px;padding:0 10px;font-size:12px;" onclick="toggleSkel()">切换骨架态</button>
+        </div>
+
+        <div class="well-surface" id="skelContainer">
+          <div id="realPreview" style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+            <div>
+              <div style="font-weight:600;font-size:13px;">边缘路由网关服务 v2.8</div>
+              <div style="font-size:12px;color:var(--ink-2);">最近一次心跳检测：1.2 秒前 · 吞吐稳定 840 Mbps</div>
+            </div>
+            <span class="status-pill ok">在线运行</span>
+          </div>
+          <div id="skelPreview" style="display:none;flex-direction:column;gap:8px;">
+            <div class="skel-bar" style="width:58%;"></div>
+            <div class="skel-bar" style="width:84%;height:10px;"></div>
+          </div>
+        </div>
+
+        <div class="empty-card push-end">
+          <div style="display:flex;align-items:center;gap:11px;">
+            <div class="orbit-mark" style="background:var(--bg-ctrl);">
+              <svg class="i" width="18" height="18" style="color:var(--blush-solid)" aria-hidden="true"><use href="#i-inbox"/></svg>
+            </div>
+            <div>
+              <div style="font-size:13px;font-weight:590;">暂无待审批的跨域迁移任务</div>
+              <div style="font-size:12px;color:var(--ink-3);">所有边缘轨道配额均已自动平衡</div>
+            </div>
+          </div>
+          <button class="btn btn-elev" style="height:31px;padding:0 12px;font-size:12px;" onclick="pushToast('已发起全网巡检扫描')">立即巡检</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- Custom Context Menu -->
+<div class="ctx-menu" id="ctxMenu">
+  <button class="menu-opt" onclick="pushToast('已复制节点星轨地址');closeCtx()">复制星轨地址</button>
+  <button class="menu-opt" onclick="pushToast('已生成即时热备快照');closeCtx()">创建即时快照</button>
+  <button class="menu-opt danger" onclick="pushToast('节点已切入排空维护态');closeCtx()">排空并隔离节点</button>
+</div>
+
+<!-- Modal Dialog (with Custom Select, zero native <select>) -->
+<div class="scrim" id="modalScrim" onclick="if(event.target===this)toggleModal(false)">
+  <div class="modal-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <span style="font-size:15px;font-weight:650;">新建星轨集群节点</span>
+      <button class="btn btn-surface btn-icon" style="width:28px;height:28px;" onclick="toggleModal(false)">
+        <svg class="i" width="12" height="12" aria-hidden="true"><use href="#i-x"/></svg>
+      </button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <label style="font-size:12px;color:var(--ink-2);">节点名称</label>
+      <div class="field-box"><input value="demo-edge-node-04" /></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <label style="font-size:12px;color:var(--ink-2);">目标星轨扇区（全自研下拉）</label>
+      <div class="picker-shell" id="modalPicker">
+        <button class="picker-trigger" onclick="togglePicker('modalPicker', event)">
+          <span class="picker-val"><span class="orbit-dot"></span><span id="modalPickLabel">东京低延迟扇区 (ap-tyo-02)</span></span>
+          <svg class="i" width="14" height="14" style="color:var(--ink-3)" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+        </button>
+        <div class="picker-drop" onclick="event.stopPropagation()">
+          <button class="menu-opt active" onclick="pickModalOpt('东京低延迟扇区 (ap-tyo-02)', this)">东京低延迟扇区 (ap-tyo-02)</button>
+          <button class="menu-opt" onclick="pickModalOpt('亚太香港星轨区 (ap-hk-01)', this)">亚太香港星轨区 (ap-hk-01)</button>
+          <button class="menu-opt" onclick="pickModalOpt('新加坡边缘扇区 (ap-sg-02)', this)">新加坡边缘扇区 (ap-sg-02)</button>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;padding-top:4px;">
+      <button class="btn btn-surface" onclick="toggleModal(false)">取消</button>
+      <button class="btn btn-primary" onclick="toggleModal(false);pushToast('新星轨节点已创建并入网')">创建并入网</button>
+    </div>
+  </div>
+</div>
+
+<!-- Slide-Over Drawer -->
+<div class="scrim" id="drawerScrim" onclick="if(event.target===this)toggleDrawer(false)"></div>
+<aside class="drawer-panel" id="drawerPanel">
+  <div style="display:flex;flex-direction:column;gap:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <span style="font-size:15px;font-weight:650;">侧滑星轨遥测舱</span>
+      <button class="btn btn-surface btn-icon" style="width:28px;height:28px;" onclick="toggleDrawer(false)">
+        <svg class="i" width="12" height="12" aria-hidden="true"><use href="#i-x"/></svg>
+      </button>
+    </div>
+    <div class="well-surface" style="display:flex;flex-direction:column;gap:8px;">
+      <div style="font-size:12px;color:var(--ink-3);">当前活跃主节点</div>
+      <div style="font-size:14px;font-weight:620;">app-node-alpha</div>
+      <div style="font-size:12px;color:var(--ink-2);">TLS 1.3 双向证书已锚定 · 零丢包运行 42 天</div>
+    </div>
+    <div class="well-surface" style="display:flex;flex-direction:column;gap:8px;">
+      <div style="font-size:12px;color:var(--ink-3);">自动快照策略</div>
+      <div style="font-size:12.8px;color:var(--ink-1);">每 6 小时增量归档至冷备星轨环</div>
+    </div>
+  </div>
+  <button class="btn btn-primary" style="width:100%;" onclick="toggleDrawer(false);pushToast('遥测舱配置已保存')">保存遥测配置</button>
+</aside>
+
+<!-- Command Palette (⌘K) -->
+<div class="scrim" id="cmdScrim" onclick="if(event.target===this)closeCmd()">
+  <div class="cmd-card">
+    <div class="field-box" style="margin-bottom:8px;">
+      <svg class="i" width="14" height="14" style="color:var(--blush-solid)" aria-hidden="true"><use href="#i-search"/></svg>
+      <input id="cmdInput" placeholder="输入星轨指令或跳转模块..." oninput="renderCmdList()" />
+    </div>
+    <div id="cmdList" style="display:flex;flex-direction:column;gap:2px;"></div>
+  </div>
+</div>
+
+<!-- Light Floating Toast Stack -->
+<div class="toast-stack" id="toastStack"></div>
+
+<script>
+  // Theme Switcher
+  // ---- 动效工具 ----
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  // 重新触发一次性动画：移除类 → 强制回流 → 加回
+  function replay(el, cls) {
+    if (!el) return;
+    el.classList.remove(cls);
+    void el.offsetWidth;
+    el.classList.add(cls);
+  }
+  // 布局 / 主题这类整页变化，用 View Transition 做交叉淡化；不支持时直接切换
+  function withTransition(fn) {
+    if (document.startViewTransition && !reduceMotion.matches) document.startViewTransition(fn);
+    else fn();
+  }
+
+  // 内容驱动的高度变化（auto 无法 CSS 过渡）：记录旧高度 → 改内容 → 量新高度 → 用 Web Animations 平滑过渡
+  // 先量当前（可能正在动画中的）高度再取消旧动画，连续点击也不会跳
+  function animateHeights(els, mutate, dur = 300) {
+    els = els.filter(Boolean);
+    if (reduceMotion.matches || !els.length) { mutate(); return; }
+    const from = els.map(el => el.getBoundingClientRect().height);
+    els.forEach(el => el.getAnimations().forEach(a => { if (a.id === 'auto-height') a.cancel(); }));
+    mutate();
+    els.forEach((el, i) => {
+      const to = el.getBoundingClientRect().height;
+      if (Math.abs(to - from[i]) < 1) return;
+      const a = el.animate(
+        [{ height: from[i] + 'px', overflow: 'hidden' }, { height: to + 'px', overflow: 'hidden' }],
+        { duration: dur, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+      );
+      a.id = 'auto-height';
+    });
+  }
+  // 整块出现 / 消失（如批量栏）：高度、上下内边距，以及它与上一个元素之间的 flex 间距一起从 0 过渡
+  function revealBlock(el, show, dur = 280) {
+    if (el.classList.contains('show') === show) return;
+    if (reduceMotion.matches) { el.classList.toggle('show', show); return; }
+    el.getAnimations().forEach(a => { if (a.id === 'reveal') a.cancel(); });
+    el.style.overflow = 'hidden';
+    if (show) el.classList.add('show');
+    const cs = getComputedStyle(el);
+    const gap = parseFloat(getComputedStyle(el.parentElement).rowGap) || 0;
+    const full = { height: el.offsetHeight + 'px', paddingTop: cs.paddingTop, paddingBottom: cs.paddingBottom, marginTop: '0px', opacity: 1 };
+    const zero = { height: '0px', paddingTop: '0px', paddingBottom: '0px', marginTop: -gap + 'px', opacity: 0 };
+    const a = el.animate(show ? [zero, full] : [full, zero], { duration: dur, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+    a.id = 'reveal';
+    a.onfinish = () => { el.style.overflow = ''; if (!show) el.classList.remove('show'); };
+  }
+
+  function toggleTheme() {
+    withTransition(() => {
+      const html = document.documentElement;
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      document.getElementById('themeBtn').textContent = next === 'dark' ? '浅色模式' : '深色模式';
+    });
+  }
+
+  // Smooth Jump + Scroll Spy
+  const jumpPills = [...document.querySelectorAll('#jumpNav .jump-pill')];
+  const railBtns = [...document.querySelectorAll('#railTrack .rail-btn')];
+  let spyLock = 0;
+  let activePillIdx = 0;
+  function setActivePill(idx) {
+    jumpPills.forEach((b, i) => b.classList.toggle('active', i === idx));
+    railBtns.forEach((b, i) => b.classList.toggle('active', i === idx));
+    if (idx === activePillIdx) return;
+    activePillIdx = idx;
+    moveRailGlider();
+    // 窄屏导航横滑时，把当前项滚到可见区域（只横向滚动导航本身，不动页面）
+    const nav = document.getElementById('jumpNav');
+    if (nav.scrollWidth > nav.clientWidth) {
+      const pill = jumpPills[idx];
+      const delta = pill.getBoundingClientRect().left - nav.getBoundingClientRect().left;
+      nav.scrollTo({ left: nav.scrollLeft + delta - 12, behavior: 'smooth' });
+    }
+  }
+  function jumpToIdx(idx) {
+    setActivePill(idx);
+    spyLock = Date.now() + 900; // 平滑滚动期间不让 scroll spy 抢高亮
+    document.getElementById('sec-' + (idx + 1)).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function jumpTo(id, btn) { jumpToIdx(jumpPills.indexOf(btn)); }
+
+  // 导航模式：侧栏 rail / 顶栏 top（二选一，记住选择）
+  // ≤900px 一律用顶栏；≤1280px 侧栏自动收成图标栏
+  const pageWrap = document.getElementById('pageWrap');
+  const mqForceTop = matchMedia('(max-width: 900px)');
+  const mqAutoCollapse = matchMedia('(max-width: 1280px)');
+  const store = {
+    get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} }
+  };
+  let navMode = store.get('blora-nav') || 'rail';
+  let railUserCollapsed = store.get('blora-rail-collapsed') === '1';
+  function moveRailGlider() {
+    const btn = railBtns[activePillIdx];
+    const glider = document.getElementById('railGlider');
+    if (!btn || !btn.offsetParent) return;
+    glider.style.height = btn.offsetHeight + 'px';
+    glider.style.transform = `translateY(${btn.offsetTop}px)`;
+  }
+  function applyNav() {
+    const rail = navMode === 'rail' && !mqForceTop.matches;
+    const auto = rail && mqAutoCollapse.matches;
+    pageWrap.classList.toggle('nav-rail', rail);
+    pageWrap.classList.toggle('rail-auto', auto);
+    pageWrap.classList.toggle('rail-collapsed', rail && (auto || railUserCollapsed));
+    moveRailGlider();
+  }
+  function setNavMode(mode) {
+    navMode = mode;
+    store.set('blora-nav', mode);
+    applyNav(); // 列宽、侧栏、顶栏、页头品牌都由 CSS 过渡连贯完成
+    pushToast(mode === 'rail' ? '已切换为侧栏导航' : '已切换为顶栏导航');
+  }
+  function toggleRailCollapse() {
+    if (pageWrap.classList.contains('rail-auto') || !pageWrap.classList.contains('nav-rail')) return;
+    railUserCollapsed = !railUserCollapsed;
+    store.set('blora-rail-collapsed', railUserCollapsed ? '1' : '0');
+    applyNav(); // 宽度 212 ↔ 64 连续过渡，图标不移动
+  }
+  // 收起状态的气泡是 fixed 定位，悬停时按按钮位置放到右侧
+  document.querySelectorAll('.side-rail .rail-btn').forEach(btn => {
+    btn.addEventListener('mouseenter', () => {
+      const tip = btn.querySelector('.rail-tip');
+      if (!tip) return;
+      const r = btn.getBoundingClientRect();
+      const rail = document.getElementById('sideRail').getBoundingClientRect();
+      tip.style.left = (rail.right + 10) + 'px';
+      tip.style.top = (r.top + r.height / 2) + 'px';
+    });
+  });
+  mqForceTop.addEventListener('change', applyNav);
+  mqAutoCollapse.addEventListener('change', applyNav);
+  // 首次进入直接落到保存的状态，不播放展开过渡
+  pageWrap.classList.add('nav-instant');
+  applyNav();
+  requestAnimationFrame(() => requestAnimationFrame(() => pageWrap.classList.remove('nav-instant')));
+  function runSpy() {
+    if (Date.now() < spyLock) return;
+    const line = 96;
+    let idx = 0;
+    for (let i = 1; i <= 6; i++) {
+      if (document.getElementById('sec-' + i).getBoundingClientRect().top <= line) idx = i - 1;
+    }
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) idx = 5;
+    setActivePill(idx);
+  }
+  window.addEventListener('scroll', runSpy, { passive: true });
+
+  // Sticky nav: 吸顶后浮起阴影
+  new IntersectionObserver(([e]) => {
+    document.getElementById('jumpStrip').classList.toggle('stuck', !e.isIntersecting);
+  }, { rootMargin: '-12px 0px 0px 0px' }).observe(document.getElementById('navSentinel'));
+
+  // Icon toolbar (coupled)
+  function pickView(btn) {
+    btn.parentElement.querySelectorAll('.btn').forEach(b => {
+      b.classList.toggle('btn-elev', b === btn);
+      b.classList.toggle('btn-ghost', b !== btn);
+    });
+    pushToast('已切换至' + btn.getAttribute('aria-label'));
+  }
+
+  // Password reveal
+  function togglePwd() {
+    const inp = document.getElementById('pwdInput');
+    const show = inp.type === 'password';
+    inp.type = show ? 'text' : 'password';
+    const eye = document.getElementById('eyeBtn');
+    eye.style.color = show ? 'var(--blush-ink)' : '';
+    eye.setAttribute('aria-label', show ? '隐藏密钥' : '显示密钥');
+  }
+
+  // Toast (Light, soft porcelain pill)
+  function pushToast(msg) {
+    const stack = document.getElementById('toastStack');
+    const el = document.createElement('div');
+    el.className = 'toast-pill';
+    el.innerHTML = `<span class="orbit-dot" style="width:8px;height:8px;"></span><span>${msg}</span>`;
+    stack.appendChild(el);
+    setTimeout(() => { el.classList.add('leaving'); setTimeout(() => el.remove(), 220); }, 2400);
+  }
+
+  // Async Button
+  function triggerAsync(btn) {
+    if (btn.dataset.busy) return;
+    btn.dataset.busy = '1';
+    btn.innerHTML = `<svg class="i spin" width="14" height="14" style="color:var(--blush-solid)" aria-hidden="true"><use href="#i-loader-circle"/></svg><span>星轨校准中...</span>`;
+    setTimeout(() => {
+      delete btn.dataset.busy;
+      btn.innerHTML = `<svg class="i" width="14" height="14" style="color:var(--blush-solid)" aria-hidden="true"><use href="#i-check"/></svg><span>轨道已同步</span>`;
+      pushToast('边缘轨道同步校验完成');
+    }, 950);
+  }
+
+  // Popovers & Pickers
+  function closeAllPops() {
+    document.querySelectorAll('.float-panel').forEach(p => p.classList.remove('open'));
+    document.querySelectorAll('.picker-shell').forEach(p => p.classList.remove('open'));
+    closeCtx();
+  }
+  function togglePop(id, e) {
+    e.stopPropagation();
+    const target = document.getElementById(id);
+    const was = target.classList.contains('open');
+    closeAllPops();
+    if (!was) target.classList.add('open');
+  }
+  function togglePicker(id, e) {
+    e.stopPropagation();
+    const shell = document.getElementById(id);
+    const was = shell.classList.contains('open');
+    closeAllPops();
+    if (!was) shell.classList.add('open');
+  }
+  function pickSplit(label) {
+    closeAllPops();
+    pushToast('已切换发布模式：' + label);
+  }
+  document.addEventListener('click', closeAllPops);
+
+  // Single Select Picker
+  const singleRegions = [
+    '亚太香港星轨区 (ap-hk-01)',
+    '新加坡边缘扇区 (ap-sg-02)',
+    '东京低延迟扇区 (ap-tyo-02)',
+    '法兰克福中继环 (eu-fra-01)'
+  ];
+  let singleIdx = 0;
+  function renderSingle() {
+    const drop = document.getElementById('singleDrop');
+    drop.innerHTML = singleRegions.map((r, i) => `
+      <button class="menu-opt ${i === singleIdx ? 'active' : ''}" onclick="singleIdx=${i};document.getElementById('singleLabel').textContent='${r}';renderSingle();closeAllPops();">
+        <span>${r}</span>
+        ${i === singleIdx ? '<svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-check"/></svg>' : ''}
+      </button>
+    `).join('');
+  }
+  renderSingle();
+
+  // Multi Select Picker with Connected Adjacent Radii
+  const multiItems = [
+    { id: 'panel', name: '核心控制台', sel: true },
+    { id: 'hub', name: '门户站点', sel: true },
+    { id: 'pass', name: '统一鉴权', sel: false },
+    { id: 'tunnel', name: '流量加速', sel: true },
+    { id: 'snap', name: '自动冷备环', sel: false }
+  ];
+  let shownTagIds = null; // 首次渲染不做动画，之后只给新加的标签弹入
+  function renderMultiTags() {
+    const box = document.getElementById('multiTags');
+    const selected = multiItems.filter(x => x.sel);
+    const prevIds = shownTagIds;
+    shownTagIds = new Set(selected.map(x => x.id));
+    const trigger = box.closest('.picker-trigger');
+    animateHeights(prevIds ? [trigger] : [], () => {
+    if (!selected.length) {
+      box.innerHTML = `<span style="color:var(--ink-3);font-size:12.5px;">点击选择挂载模块...</span>`;
+      return;
+    }
+    box.innerHTML = selected.map(x => `
+      <span class="tag-chip ${prevIds && !prevIds.has(x.id) ? 'chip-in' : ''}">${x.name}
+        <button onclick="event.stopPropagation();toggleMultiItem('${x.id}')">
+          <svg class="i" width="10" height="10" aria-hidden="true"><use href="#i-x"/></svg>
+        </button>
+      </span>
+    `).join('');
+    });
+  }
+  function renderMultiOpts() {
+    const q = (document.getElementById('multiSearch').value || '').toLowerCase();
+    const filtered = multiItems.filter(x => x.name.toLowerCase().includes(q));
+    const list = document.getElementById('multiList');
+    list.innerHTML = filtered.map((item, idx) => {
+      const prevSel = idx > 0 && filtered[idx - 1].sel;
+      const nextSel = idx < filtered.length - 1 && filtered[idx + 1].sel;
+      const cls = ['menu-opt', item.sel ? 'sel' : '', item.sel && prevSel ? 'join-top' : '', item.sel && nextSel ? 'join-bot' : ''].filter(Boolean).join(' ');
+      return `<button class="${cls}" onclick="toggleMultiItem('${item.id}')">
+        <span>${item.name}</span>
+        ${item.sel ? '<svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-check"/></svg>' : ''}
+      </button>`;
+    }).join('');
+  }
+  function toggleMultiItem(id) {
+    const it = multiItems.find(x => x.id === id);
+    if (it) it.sel = !it.sel;
+    renderMultiTags();
+    renderMultiOpts();
+  }
+  renderMultiTags();
+  renderMultiOpts();
+
+  // Range Calendar with Connected Pill Band
+  let calYear = 2026, calMonth = 10; // Nov (0-indexed)
+  let rangeStart = 18, rangeEnd = 21;
+  function shiftMonth(delta) {
+    calMonth += delta;
+    if (calMonth < 0) { calMonth = 11; calYear--; }
+    if (calMonth > 11) { calMonth = 0; calYear++; }
+    renderCal();
+    const grid = document.getElementById('calGrid');
+    grid.classList.remove('anim-next', 'anim-prev');
+    replay(grid, delta > 0 ? 'anim-next' : 'anim-prev');
+  }
+  function renderCal() {
+    document.getElementById('calMonthTitle').textContent = `${calYear} 年 ${calMonth + 1} 月`;
+    const firstDay = new Date(calYear, calMonth, 1).getDay();
+    const days = new Date(calYear, calMonth + 1, 0).getDate();
+    let html = '';
+    for (let i = 0; i < firstDay; i++) html += `<span class="cal-day muted"></span>`;
+    for (let d = 1; d <= days; d++) {
+      let cls = 'cal-day';
+      if (rangeStart && rangeEnd) {
+        if (d === rangeStart && d === rangeEnd) cls += ' range-single';
+        else if (d === rangeStart) cls += ' range-start';
+        else if (d === rangeEnd) cls += ' range-end';
+        else if (d > rangeStart && d < rangeEnd) cls += ' in-range';
+      } else if (d === rangeStart) {
+        cls += ' range-single';
+      }
+      html += `<button class="${cls}" onclick="pickCalDay(${d})">${d}</button>`;
+    }
+    document.getElementById('calGrid').innerHTML = html;
+    const mStr = String(calMonth + 1).padStart(2, '0');
+    if (rangeStart && rangeEnd) {
+      document.getElementById('calLabel').textContent = `${calYear}-${mStr}-${String(rangeStart).padStart(2,'0')} → ${mStr}-${String(rangeEnd).padStart(2,'0')}`;
+      document.getElementById('calSpanBadge').textContent = `${rangeEnd - rangeStart + 1} 天窗口`;
+    } else if (rangeStart) {
+      document.getElementById('calLabel').textContent = `${calYear}-${mStr}-${String(rangeStart).padStart(2,'0')} → 选择结束日`;
+      document.getElementById('calSpanBadge').textContent = `点选终点`;
+    }
+  }
+  function pickCalDay(d) {
+    if (!rangeStart || (rangeStart && rangeEnd)) {
+      rangeStart = d;
+      rangeEnd = null;
+    } else {
+      if (d < rangeStart) { rangeEnd = rangeStart; rangeStart = d; }
+      else rangeEnd = d;
+    }
+    renderCal();
+  }
+  renderCal();
+
+  // Number Stepper
+  function stepCount(delta) {
+    const el = document.getElementById('stepVal');
+    const cur = parseInt(el.textContent, 10);
+    const v = Math.max(1, Math.min(32, cur + delta));
+    if (v === cur) return;
+    el.innerHTML = `<span>${v}</span>`;
+    el.classList.remove('up', 'down');
+    replay(el, delta > 0 ? 'up' : 'down');
+  }
+
+  // Inline Multi-Select List with Connected Adjacent Radii
+  const inlineMods = [
+    { name: '核心调度服务', ver: 'v2.4', sel: true },
+    { name: '边缘路由网关', ver: 'v1.9', sel: true },
+    { name: '身份认证中心', ver: 'v3.1', sel: false },
+    { name: '动态快照归档', ver: 'v1.6', sel: true }
+  ];
+  function renderInlineSeamless(justIdx) {
+    const wrap = document.getElementById('inlineSeamlessList');
+    wrap.innerHTML = inlineMods.map((m, i) => {
+      const prev = i > 0 && inlineMods[i - 1].sel;
+      const next = i < inlineMods.length - 1 && inlineMods[i + 1].sel;
+      const cls = ['s-item', m.sel ? 'sel' : '', m.sel && prev ? 'join-top' : '', m.sel && next ? 'join-bot' : '', i === justIdx ? 'just' : ''].filter(Boolean).join(' ');
+      return `<button class="${cls}" onclick="inlineMods[${i}].sel=!inlineMods[${i}].sel;renderInlineSeamless(${i})">
+        <span class="s-left">
+          <span>${m.name}</span>
+          <span class="s-ver">${m.ver}</span>
+        </span>
+        ${m.sel ? '<svg class="i s-check" aria-hidden="true"><use href="#i-check"/></svg>' : ''}
+      </button>`;
+    }).join('');
+  }
+  renderInlineSeamless();
+
+  // Checkboxes & Radios
+  function cycleCheck(el) {
+    if (el.classList.contains('indet')) {
+      el.classList.remove('indet');
+      el.classList.add('checked');
+      el.querySelector('.orb-box').innerHTML = `<svg class="i" width="11" height="11" aria-hidden="true"><use href="#i-check"/></svg>`;
+    } else {
+      el.classList.toggle('checked');
+    }
+  }
+  function pickRadio(el) {
+    const grp = el.dataset.radio;
+    document.querySelectorAll(`[data-radio="${grp}"]`).forEach(r => r.classList.remove('checked'));
+    el.classList.add('checked');
+  }
+
+  // Pointer-Capture Orbital Slider synced to Top Orbital Ring!
+  const slider = document.getElementById('orbitSlider');
+  function updateSliderPct(pct) {
+    const clamped = Math.max(5, Math.min(100, Math.round(pct)));
+    document.getElementById('sliderFill').style.width = clamped + '%';
+    document.getElementById('sliderThumb').style.left = clamped + '%';
+    document.getElementById('sliderTip').style.left = clamped + '%';
+    document.getElementById('sliderTip').textContent = clamped + '%';
+    document.getElementById('sliderReadout').textContent = clamped + '%';
+    document.getElementById('metricLoadVal').textContent = clamped + '%';
+    document.getElementById('metricLoadMini').textContent = clamped;
+    const circ = 2 * Math.PI * 21; // ~131.95
+    document.getElementById('metricLoadArc').style.strokeDasharray = `${(clamped / 100 * circ).toFixed(1)} 140`;
+  }
+  function sliderFromEvent(e) {
+    const rect = slider.getBoundingClientRect();
+    updateSliderPct(((e.clientX - rect.left) / rect.width) * 100);
+  }
+  slider.addEventListener('pointerdown', e => {
+    slider.setPointerCapture(e.pointerId);
+    slider.classList.add('dragging');
+    sliderFromEvent(e);
+  });
+  slider.addEventListener('pointermove', e => {
+    if (slider.classList.contains('dragging')) sliderFromEvent(e);
+  });
+  slider.addEventListener('pointerup', () => slider.classList.remove('dragging'));
+
+  // Segmented Glider
+  function pickSeg(idx, btn) {
+    document.querySelectorAll('#segBar .seg-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('segGlider').style.transform = `translateX(${idx * 100}%)`;
+  }
+
+  // 1.5px Dashed Upload Dropzone
+  function simulateUpload() {
+    const dz = document.getElementById('dropZone');
+    if (dz.classList.contains('uploading')) return;
+    const b = document.getElementById('dzBadge');
+    dz.classList.remove('done');
+    dz.classList.add('uploading');
+    document.getElementById('dzTitle').textContent = '正在上传 orbit-blora-v4.yml';
+    document.getElementById('dzSub').textContent = '16.4 KB · 校验星轨签名中…';
+    b.className = 'status-pill sync';
+    b.textContent = '上传中';
+    setTimeout(() => {
+      dz.classList.remove('uploading');
+      dz.classList.add('done');
+      document.getElementById('dzTitle').textContent = 'orbit-blora-v4.yml 已就绪';
+      document.getElementById('dzSub').textContent = '16.4 KB · 星轨签名校验通过';
+      b.className = 'status-pill ok';
+      b.textContent = '已完成';
+      pushToast('配置文件 orbit-blora-v4.yml 校验通过');
+    }, reduceMotion.matches ? 0 : 1000);
+  }
+
+  // Line-Free Connected Data Table
+  let sortAsc = true;
+  const tableRows = [
+    { id: 1, name: 'app-node-alpha', status: '畅通', cls: 'ok', region: 'ap-hk-01', ms: 11, sel: true },
+    { id: 2, name: 'api-gateway-01', status: '畅通', cls: 'ok', region: 'ap-hk-01', ms: 14, sel: true },
+    { id: 3, name: 'auth-service-04', status: '同步中', cls: 'sync', region: 'ap-tyo-02', ms: 26, sel: false },
+    { id: 4, name: 'web-edge-03', status: '待轮换', cls: 'warn', region: 'ap-sg-02', ms: 34, sel: false }
+  ];
+  function renderTable(justIdx) {
+    const body = document.getElementById('tableBody');
+    body.innerHTML = tableRows.map((r, i) => {
+      const prev = i > 0 && tableRows[i - 1].sel;
+      const next = i < tableRows.length - 1 && tableRows[i + 1].sel;
+      const cls = ['t-row', r.sel ? 'sel' : '', r.sel && prev ? 'join-top' : '', r.sel && next ? 'join-bot' : '', i === justIdx ? 'just' : ''].filter(Boolean).join(' ');
+      return `<div class="${cls}" onclick="tableRows[${i}].sel=!tableRows[${i}].sel;renderTable(${i})">
+        <div class="chk-item ${r.sel ? 'checked' : ''}">
+          <span class="orb-box"><svg class="i" width="11" height="11" aria-hidden="true"><use href="#i-check"/></svg></span>
+        </div>
+        <span style="font-weight:580;">${r.name}</span>
+        <span><span class="status-pill ${r.cls}">${r.status}</span></span>
+        <span style="font-family:var(--font-mono);font-size:12px;color:var(--ink-2);">${r.region}</span>
+        <span style="text-align:right;font-family:var(--font-mono);font-size:12.5px;">${r.ms} ms</span>
+      </div>`;
+    }).join('');
+    const count = tableRows.filter(x => x.sel).length;
+    const bar = document.getElementById('bulkBar');
+    revealBlock(bar, count > 0);
+    document.getElementById('bulkText').textContent = `已连贯选中 ${count} 个星轨节点`;
+    document.getElementById('selectAllBox').classList.toggle('checked', count === tableRows.length);
+  }
+  function toggleAllRows() {
+    const all = tableRows.every(x => x.sel);
+    tableRows.forEach(x => x.sel = !all);
+    renderTable();
+  }
+  function clearTableSel() {
+    tableRows.forEach(x => x.sel = false);
+    renderTable();
+  }
+  function sortTable() {
+    sortAsc = !sortAsc;
+    tableRows.sort((a, b) => sortAsc ? a.ms - b.ms : b.ms - a.ms);
+    renderTable();
+  }
+  function pickPage(btn, p) {
+    document.querySelectorAll('#pagerBar .page-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    pushToast(`已切换至第 ${p} 页节点视图`);
+  }
+  renderTable();
+
+  // File Tree & Copy Command
+  function toggleFolder(id, node) {
+    const collapsed = document.getElementById(id).classList.toggle('collapsed');
+    if (node) node.classList.toggle('closed', collapsed);
+  }
+  function selectTreeFile(el, cmd, size, time, sign) {
+    document.querySelectorAll('.tree-children .tree-node').forEach(n => n.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('codeText').textContent = cmd;
+    if (size) document.getElementById('metaSize').textContent = size;
+    if (time) document.getElementById('metaTime').textContent = time;
+    if (sign) document.getElementById('metaSign').textContent = sign;
+  }
+  function copyCmd(btn) {
+    const txt = document.getElementById('codeText').textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).catch(() => {});
+    pushToast('终端指令已复制至剪贴板');
+    if (!btn || btn.dataset.copied) return;
+    btn.dataset.copied = '1';
+    const original = btn.innerHTML;
+    btn.innerHTML = `<svg class="i" width="12" height="12" aria-hidden="true"><use href="#i-check"/></svg><span>已复制</span>`;
+    replay(btn, 'copied');
+    btn.style.color = 'var(--blush-ink)';
+    setTimeout(() => {
+      btn.innerHTML = original;
+      btn.style.color = '';
+      btn.classList.remove('copied');
+      replay(btn, 'anim-fade');
+      delete btn.dataset.copied;
+    }, 1400);
+  }
+
+  // Dynamic Closable Tabs
+  let tabs = [
+    { id: 't1', title: '拓扑总览', body: '当前共 4 个跨国星轨扇区在线，主干隧道采用圆弧冗余双栈路由，切换耗时低于 15 ms。' },
+    { id: 't2', title: '证书策略', body: '所有边缘实例均启用 72 小时短期自动签发令牌，无需手动挂载静态私钥。' },
+    { id: 't3', title: '审计流水', body: '今日已完成 12 次无感配置同步，全部校验哈希一致。' }
+  ];
+  let activeTab = 't1';
+  let tabSeq = 4;
+  let newTabId = null;
+  let shownTabId = null;
+  function renderTabs() {
+    const bar = document.getElementById('tabsBar');
+    const pane = document.getElementById('tabContent');
+    animateHeights(shownTabId === null ? [] : [bar, pane], () => {
+    bar.innerHTML = tabs.map(t => `
+      <button class="tab-pill ${t.id === activeTab ? 'active' : ''} ${t.id === newTabId ? 'tab-new' : ''}" onclick="activeTab='${t.id}';renderTabs()">
+        <span>${t.title}</span>
+        ${tabs.length > 1 ? `<span class="tab-close" onclick="event.stopPropagation();closeTab('${t.id}')"><svg class="i" width="9" height="9" aria-hidden="true"><use href="#i-x"/></svg></span>` : ''}
+      </button>
+    `).join('');
+    newTabId = null;
+    const cur = tabs.find(x => x.id === activeTab) || tabs[0];
+    pane.textContent = cur.body;
+    if (shownTabId !== null && shownTabId !== cur.id) replay(pane, 'anim-fade');
+    shownTabId = cur.id;
+    });
+  }
+  function addNewTab() {
+    const id = 't' + (tabSeq++);
+    tabs.push({ id, title: `星轨分片 #${tabSeq - 1}`, body: `新建星轨分片视图 #${tabSeq - 1} 已就绪，支持独立配置限流阈值与日志采样率。` });
+    activeTab = id;
+    newTabId = id;
+    renderTabs();
+  }
+  function closeTab(id) {
+    tabs = tabs.filter(x => x.id !== id);
+    if (activeTab === id) activeTab = tabs[0].id;
+    renderTabs();
+  }
+  renderTabs();
+
+  // Constellation Stepper
+  function setStep(idx) {
+    document.querySelectorAll('#stepTrack .c-step').forEach((el, i) => {
+      const next = 'c-step ' + (i < idx ? 'done' : i === idx ? 'current' : '');
+      const changed = el.className.trim() !== next.trim();
+      el.className = next;
+      const orb = el.querySelector('.c-orb');
+      orb.innerHTML = i < idx
+        ? `<svg class="i" width="11" height="11" aria-hidden="true"><use href="#i-check"/></svg>`
+        : String(i + 1);
+      // 状态变了：圆点里的数字 / 对勾从小弹到原尺寸，而不是瞬间替换
+      if (changed && !reduceMotion.matches) {
+        orb.animate([{ transform: 'scale(0.55)', opacity: 0.4 }, { transform: 'none', opacity: 1 }], { duration: 280, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' });
+      }
+    });
+  }
+
+  // Right-Click Custom Context Menu
+  function openCtxMenu(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    closeAllPops();
+    const menu = document.getElementById('ctxMenu');
+    menu.style.left = Math.min(e.clientX, window.innerWidth - 210) + 'px';
+    menu.style.top = Math.min(e.clientY, window.innerHeight - 135) + 'px';
+    menu.classList.add('open');
+  }
+  function closeCtx() {
+    document.getElementById('ctxMenu').classList.remove('open');
+  }
+
+  // Skeleton Toggle
+  let isSkel = false;
+  function toggleSkel() {
+    isSkel = !isSkel;
+    const real = document.getElementById('realPreview');
+    const skel = document.getElementById('skelPreview');
+    animateHeights([document.getElementById('skelContainer')], () => {
+      real.style.display = isSkel ? 'none' : 'flex';
+      skel.style.display = isSkel ? 'flex' : 'none';
+    });
+    replay(isSkel ? skel : real, 'anim-fade');
+  }
+
+  // Modal & Drawer
+  function toggleModal(open) {
+    document.getElementById('modalScrim').classList.toggle('open', open);
+  }
+  function pickModalOpt(label, btn) {
+    document.getElementById('modalPickLabel').textContent = label;
+    btn.parentElement.querySelectorAll('.menu-opt').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    closeAllPops();
+  }
+  function toggleDrawer(open) {
+    document.getElementById('drawerScrim').classList.toggle('open', open);
+    document.getElementById('drawerPanel').classList.toggle('open', open);
+  }
+
+  // Command Palette (⌘K)
+  const cmds = [
+    { label: '新建星轨集群节点', act: () => toggleModal(true) },
+    { label: '打开侧滑星轨遥测舱', act: () => toggleDrawer(true) },
+    { label: '切换浅色 / 深色模式', act: () => toggleTheme() },
+    { label: '切换导航：侧栏 / 顶栏', act: () => setNavMode(navMode === 'rail' ? 'top' : 'rail') },
+    { label: '跳转至无分隔线连贯数据表', act: () => jumpToIdx(3) }
+  ];
+  function openCmd() {
+    document.getElementById('cmdScrim').classList.add('open');
+    const inp = document.getElementById('cmdInput');
+    inp.value = '';
+    renderCmdList();
+    setTimeout(() => inp.focus(), 40);
+  }
+  function closeCmd() {
+    document.getElementById('cmdScrim').classList.remove('open');
+  }
+  function renderCmdList() {
+    const q = (document.getElementById('cmdInput').value || '').toLowerCase();
+    const list = document.getElementById('cmdList');
+    list.innerHTML = cmds.filter(c => c.label.toLowerCase().includes(q)).map((c, idx) => `
+      <button class="menu-opt" onclick="closeCmd();cmds[${cmds.indexOf(c)}].act()">
+        <span>${c.label}</span>
+        <kbd class="kbd" aria-label="Enter"><svg class="i" aria-hidden="true"><use href="#i-corner-down-left"/></svg></kbd>
+      </button>
+    `).join('');
+  }
+  document.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      openCmd();
+    } else if ((e.metaKey || e.ctrlKey) && e.key === '\\') {
+      e.preventDefault();
+      toggleRailCollapse();
+    } else if (e.key === 'Escape') {
+      closeCmd();
+      toggleModal(false);
+      toggleDrawer(false);
+      closeAllPops();
+    }
+  });
+
+  // ---- 载入：指标圆环从 0 绘制到目标值；入场动画结束后移除类 ----
+  (function introMotion() {
+    const arcs = [...document.querySelectorAll('.orbit-ring-wrap circle:nth-of-type(2)')];
+    if (!reduceMotion.matches && arcs[0] && arcs[0].animate) {
+      arcs.forEach((a, i) => {
+        const target = getComputedStyle(a).strokeDasharray;
+        a.animate(
+          [{ strokeDasharray: '0px 140px' }, { strokeDasharray: target }],
+          { duration: 1000, delay: 120 + i * 70, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'backwards' }
+        );
+      });
+    }
+    setTimeout(() => pageWrap.classList.remove('page-loading'), 1200);
+  })();
+
+  /* 防孤行：把段落最后 5 个字（含标点；英文按整词）用 nowrap 绑在一起，
+     第一行照常排满，末行至少 4–5 个字，不再出现「署。」这样的单字孤行 */
+  function bindTail(el, n = 5) {
+    if (el.dataset.tail) return;
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let last = null;
+    while (walker.nextNode()) if (walker.currentNode.textContent.trim()) last = walker.currentNode;
+    if (!last) return;
+    const txt = last.textContent.replace(/\s+$/, '');
+    if (txt.length < n * 2) return;
+    let cut = txt.length - n;
+    // 末尾如果是英文/数字，退到词首，避免把单词拆开
+    while (cut > 0 && /[A-Za-z0-9.\-_]/.test(txt[cut - 1]) && /[A-Za-z0-9.\-_]/.test(txt[cut])) cut--;
+    if (cut <= 0) return;
+    const span = document.createElement('span');
+    span.style.whiteSpace = 'nowrap';
+    span.textContent = txt.slice(cut);
+    last.textContent = txt.slice(0, cut);
+    last.after(span);
+    el.dataset.tail = '1';
+  }
+  const TAIL_SEL = 'p, .tile-sub, .page-sub, .tile-caption, .kpi-foot, .orbit-sub';
+  const bindTails = (root = document) => root.querySelectorAll(TAIL_SEL).forEach(el => bindTail(el));
+  bindTails();
+
+  /* ---------------- 选中滑块（单选组共用） ----------------
+     不改原有点击逻辑：监听组内 class 变化与重绘（页签会整段重新渲染），选中项变了就把滑块连续移过去；
+     容器尺寸变化（目录展开折叠、换行、窗口缩放）时滑块即时跟随，不加过渡。
+     选中项被折叠区裁掉、或整组不可见时，滑块隐藏 */
+  function attachGlide(host, itemSel, activeSel, opt = {}) {
+    if (typeof host === 'string') host = document.querySelector(host);
+    if (!host || host._glide) return;
+    host._glide = true;
+    host.classList.add('glide-host');
+    if (opt.tray) host.classList.add('glide-tray');
+    if (opt.bg) host.style.setProperty('--glide-bg', opt.bg);
+    if (opt.shadow) host.style.setProperty('--glide-shadow', opt.shadow);
+    const pill = document.createElement('span');
+    pill.className = 'glide-pill';
+    pill.setAttribute('aria-hidden', 'true');
+    const still = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let placed = false, raf = 0, instantNext = false;
+    const clipped = (el, r) => {
+      for (let p = el.parentElement; p && p !== host; p = p.parentElement) {
+        if (getComputedStyle(p).overflow === 'visible') continue;
+        const c = p.getBoundingClientRect();
+        if (c.height < 1 || r.bottom > c.bottom + 1 || r.top < c.top - 1) return true;
+      }
+      return false;
+    };
+    const place = instant => {
+      if (!pill.isConnected) host.prepend(pill);
+      host.querySelectorAll(itemSel).forEach(el => { if (!el.classList.contains('glide-item')) el.classList.add('glide-item'); });
+      const a = host.querySelector(activeSel);
+      host.querySelectorAll('[data-glide-on]').forEach(el => { if (el !== a) el.removeAttribute('data-glide-on'); });
+      const r = a && a.getBoundingClientRect();
+      if (!a || !host.offsetParent || !r.width || clipped(a, r)) {
+        if (a) a.removeAttribute('data-glide-on');
+        pill.style.opacity = '0';
+        placed = false;
+        return;
+      }
+      if (!a.hasAttribute('data-glide-on')) a.setAttribute('data-glide-on', '');
+      const hr = host.getBoundingClientRect();
+      const x = r.left - hr.left - host.clientLeft + host.scrollLeft;
+      const y = r.top - hr.top - host.clientTop + host.scrollTop;
+      const radius = getComputedStyle(a).borderRadius;
+      const jump = instant || !placed || still();
+      if (jump) pill.style.transition = 'none';
+      pill.style.width = r.width + 'px';
+      pill.style.height = r.height + 'px';
+      pill.style.borderRadius = radius;
+      pill.style.transform = `translate(${x}px, ${y}px)`;
+      pill.style.opacity = '1';
+      if (jump) { pill.getBoundingClientRect(); pill.style.transition = ''; }
+      if (opt.tray) host.style.borderRadius = `calc(${radius} + 3px)`;
+      placed = true;
+    };
+    const schedule = instant => {
+      instantNext = instantNext || instant;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => { const i = instantNext; instantNext = false; place(i); });
+    };
+    new MutationObserver(ms => {
+      if (ms.every(m => m.target === pill || (m.type === 'attributes' && m.attributeName === 'class' && m.target.classList.contains('glide-item') && m.oldValue && m.oldValue.replace(' glide-item', '') === m.target.className.replace(' glide-item', '')))) return;
+      schedule(false);
+    }).observe(host, { subtree: true, childList: true, attributes: true, attributeFilter: ['class'], attributeOldValue: true });
+    new ResizeObserver(() => schedule(true)).observe(host);
+    window.addEventListener('resize', () => schedule(true));
+    place(true);
+  }
+
+  attachGlide('#viewPair', '.btn', '.btn-elev', { bg: 'var(--bg-ctrl)', shadow: 'var(--ctrl-lift)' });
+  attachGlide('#pagerBar', '.page-btn', '.page-btn.active', { bg: 'var(--blush-fill)', tray: true });
+  attachGlide('#tabsBar', '.tab-pill', '.tab-pill.active', { bg: 'var(--blush-fill)', tray: true });
+  attachGlide('#jumpNav', '.jump-pill', '.jump-pill.active', { bg: 'var(--blush-fill)' });
+  attachGlide('.tree-list', '.tree-node', '.tree-node.active', { bg: 'var(--blush-soft)' });
+</script>
+</body>
+</html>

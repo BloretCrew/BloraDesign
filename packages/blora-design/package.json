@@ -1,0 +1,61 @@
+{
+  "name": "@bloret-crew/blora-design",
+  "version": "3.0.0-alpha.0",
+  "description": "Blora Design：Bloret 的设计系统。普通 HTML + 一份 CSS + 一个自动接管的运行时",
+  "license": "Apache-2.0",
+  "author": "Rhedar <rhedarliu@outlook.com>",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BloretCrew/BloraDesign.git",
+    "directory": "packages/blora-design"
+  },
+  "homepage": "https://github.com/BloretCrew/BloraDesign",
+  "keywords": [
+    "design-system",
+    "ui",
+    "css",
+    "blora",
+    "blora-design"
+  ],
+  "sideEffects": [
+    "*.css",
+    "./dist/blora.js"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/blora.js"
+    },
+    "./blora.css": "./dist/blora.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build && tsc -p tsconfig.build.json && node scripts/build-css.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@bloret-crew/cortado": "^0.1.0"
+  },
+  "browserslist": [
+    "last 2 Chrome major versions",
+    "last 2 Edge major versions",
+    "last 2 Safari major versions",
+    "last 2 Firefox major versions"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.11",
+    "browserslist": "^4.29.6",
+    "lightningcss": "^1.33.0",
+    "typescript": "~6.0.3",
+    "vite": "^8.4.0",
+    "vitest": "^5.1.2",
+    "yaml": "^2.9.1"
+  }
+}

@@ -1,0 +1,286 @@
+# Blora Design 3.0 · 重构方案
+
+> 仓库：`BloretCrew/BloraDesign`（2026-11-27 清空 2.0，从零开始，不沿用 2.0 的任何东西）
+> 视觉真值：`reference/` 里的组件全集和 4 个 demo 页；规范：根目录 `DESIGN.md`；颜色来自 Cortado
+
+## 进度
+
+| 阶段   | 状态                  |
+| ------ | --------------------- |
+| ⓪ 准备 | ✅ 完成（2026-11-27） |
+| ① 基础 | 下一步                |
+| ② – ⑥  | 未开始                |
+
+**第 ⓪ 阶段交付了什么**
+
+- 2.0 完整备份到本地后，清空了 GitHub 仓库（分支、标签、Releases、旧 PR），`main` 从一个全新的根提交开始。
+- pnpm monorepo：TypeScript、Vite（构建库）、Lightning CSS（打包 CSS）、Vitest、ESLint、Prettier、stylelint、Changesets；GitHub Actions 在 Node 24 / 26 上跑 `pnpm verify`。
+- `@bloret-crew/blora-design`：能构建出 `dist/blora.css`（声明好全部 `bd.*` 层，打包进 Cortado）和 `dist/blora.js`。
+- `@bloret-crew/stylelint-config-blora`：禁止写死颜色、渐变、描边和直接引用 Cortado，本仓库自己的 CSS 从第一天起就用它检查。
+- `DESIGN.md` 改为 3.0 写法：`bd-` 命名、组件名表（含与参考页旧类名的对照）、「不出现原生控件」一节；YAML 新增 `cortado` 一栏，作为生成 `--bd-*` 变量的来源，测试会核对它与 Cortado 的实际色值。
+- 参考页复制进 `reference/`，改为引用 npm 上的 Cortado。
+- 包：Cortado 已发布到 npm（`@bloret-crew/cortado@0.1.0`）。
+
+---
+
+## 1. 目标
+
+**只要用 Blora Design 3.0 加 DESIGN.md，任何人（包括 AI）写出来的页面都能达到现在 demo 的视觉水准。**
+
+拆成四个可检验的目标：
+
+1. **好写**：一份 CSS 加一个 JS 就能用。写的是普通 HTML，Vue、React、服务端模板、纯静态页都能直接写，不需要初始化和销毁。
+2. **难写错**：构图规则写在布局组件里；状态由 ARIA 属性驱动；用了不合规范的写法，检查工具会报错。
+3. **处处一致**：页面上没有一处是浏览器或系统原生控件的外观，所有东西都是 Blora 画的。
+4. **规范和代码不会对不上**：设计变量直接从 DESIGN.md 生成，组件示例同时是文档、测试和截图对比的基准。
+
+**不做的事**
+
+- 不追求组件数量。只做设计过、用得到的组件，新组件必须先设计确认。
+- 不做多主题。只有 Cortado 一套配色，分浅色和深色。
+- 不绑任何前端框架。
+- 不兼容 2.0。
+
+---
+
+## 2. 命名：统一 `bd-`
+
+Blora 是品牌，Blora Design 是设计系统，所以所有对外名字都用 `bd`。
+
+| 东西             | 写法                                             | 例子                                                                                |
+| ---------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------- |
+| 组件             | `bd-<组件>`                                      | `bd-tile`、`bd-seg`、`bd-select`                                                    |
+| 组件内部的部件   | 优先用语义元素和 role；不够时用 `data-part`      | `.bd-seg > [role=tab]`、`<span data-part="end">`                                    |
+| 变体             | `data-<维度>`                                    | `data-tone="rose"`、`data-size="sm"`、`data-variant="ghost"`                        |
+| 布局参数         | `data-<参数>`                                    | `data-cols="3"`、`data-span="2"`、`data-grow`                                       |
+| 状态             | 只用 ARIA 或原生状态，不加 `.active` 类          | `aria-selected`、`aria-expanded`、`aria-current`、`:checked`、`[open]`、`:disabled` |
+| 语义变量         | `--bd-*`                                         | `--bd-ink-1`、`--bd-surface-tile`、`--bd-radius-tile`                               |
+| 调色板变量       | `--cortado-*`（由 Cortado 提供，页面里不直接用） | `--cortado-rosewater-285`                                                           |
+| CSS 层           | `@layer bd.*`                                    | `bd.reset, bd.tokens, bd.base, bd.layout, bd.components, bd.motion, bd.utilities`   |
+| 事件             | `bd-<动作>`                                      | `bd-change`、`bd-open`、`bd-close`、`bd-sort`                                       |
+| 交给框架控制状态 | `data-bd-controlled`                             | 见 §5.3                                                                             |
+| JS 接口          | ESM 具名导出；CDN 版挂在 `window.BloraDesign`    | `toast()`、`confirm()`、`openCommand()`                                             |
+
+**写法规则（会写进 DESIGN.md，由检查工具强制）**
+
+- 类名只用来表示「这是什么组件」，变体、状态、参数一律不写成类名。这样一个元素最多带一个 `bd-` 类，读的时候一眼就知道它是什么。
+- 事件名用连字符，不用冒号（Vue 的 `@bd:change` 会被解析错）。
+- 页面和业务代码只能用 `--bd-*` 语义变量，不能直接用 `--cortado-*`，更不能写死颜色。
+
+---
+
+## 3. 浏览器原生能力：只借用行为，不保留任何原生外观
+
+**原生元素只能当作承载行为和语义的底子，外观必须 100% 由 Blora 重画。凡是自带浏览器或系统界面的东西，一律替换成 Blora 组件。**
+
+### 3.1 逐项处理
+
+| 原生东西                                                 | 3.0 里怎么处理                                                                                                                                                      |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<select>`、`<option>`、`<datalist>`，以及它们的下拉菜单 | **完全不用**。用 `bd-select`（单选、多选、标签式、可搜索）。值放在组件里的隐藏 `<input>` 中，表单照常提交                                                           |
+| `<input type=date/time/month/week>` 和系统日期面板       | **不用**。用 `bd-date`：文本输入框加 Blora 日历浮层                                                                                                                 |
+| `<input type=color>`                                     | 不用；需要时设计 `bd-color`                                                                                                                                         |
+| `<input type=range>`                                     | 不用。用 `bd-slider`（`role=slider`，带刻度和实时数值提示）                                                                                                         |
+| `<input type=number>` 的上下箭头                         | 不用。用 `bd-stepper`：文本框（`inputmode=numeric`）加两侧按钮                                                                                                      |
+| `<input type=file>` 的「选择文件」按钮                   | 不用。用 `bd-dropzone`。点击后弹出的**系统文件选择窗口**属于操作系统，网页无法替换，这是唯一的例外                                                                  |
+| `<input type=search>` 的清除按钮                         | 去掉，用 Blora 自己的清除按钮                                                                                                                                       |
+| `<input type=password>` 的显示密码按钮（Edge）           | 去掉，用 Blora 的眼睛按钮                                                                                                                                           |
+| checkbox / radio                                         | 保留原生 `<input>`（为了表单、键盘和无障碍），但用 `appearance: none` 后全部重画                                                                                    |
+| 文本框、多行文本框                                       | 保留元素，外观全部重画：光标颜色、占位文字、选中文字颜色、自动填充的底色（盖掉浏览器的黄色或蓝色）、调整大小的拖拽角                                                |
+| `<progress>`、`<meter>`                                  | 不用。用 `bd-progress` 和 `bd-ring`                                                                                                                                 |
+| `<details>` / `<summary>`                                | 可以用来承载折叠行为，但去掉默认三角标记，展开和收起由 Blora 加高度过渡                                                                                             |
+| `<dialog>`                                               | 只借用它的顶层显示、焦点约束和 Esc 关闭。默认边框、内边距和 `::backdrop` 全部重置，遮罩由 Blora 画                                                                  |
+| `popover` 属性                                           | 只借用顶层显示和点击外部关闭。默认的边框、内边距和定位全部重置                                                                                                      |
+| 滚动条                                                   | **不显示原生滚动条**。所有滚动区域（包括整个页面）用 `bd-scroll`：隐藏原生滚动条，叠加一条 Blora 自己画的细滑块，滚动本身仍然是原生的，触控板惯性和键盘滚动不受影响 |
+| `title` 属性的悬浮提示                                   | **禁止使用**。用 `data-tip` 或 `bd-tooltip`；运行时会把遗漏的 `title` 自动转成 Blora 提示作为兜底，检查工具同时报错                                                 |
+| 表单校验气泡                                             | 不用。运行时自动给带 `bd-field` 的表单加 `novalidate`，错误信息由 `bd-field` 显示在字段下方                                                                         |
+| `alert()`、`confirm()`、`prompt()`                       | 禁止使用。用 `toast()`、`confirm()`、`bd-modal`，返回 Promise                                                                                                       |
+| 默认焦点框 `outline`                                     | 全局去掉，统一用 Blora 的聚焦光晕，只在键盘操作时显示（`:focus-visible`）                                                                                           |
+| 文字选中色、点按高亮                                     | `::selection` 用 Blora 的颜色；去掉移动端点按时的灰色高亮                                                                                                           |
+| 默认按钮、链接、表单字体                                 | 全部重置，统一继承 Blora 的字体排版                                                                                                                                 |
+| 右键菜单                                                 | 默认保留浏览器的右键菜单；只有业务定义了 `bd-context` 的区域才替换成 Blora 菜单                                                                                     |
+| 拖拽时的预览图                                           | 用 Blora 的拖拽影子（看板卡片已有这种写法）                                                                                                                         |
+
+**无法替换的（不在网页范围内）**
+
+- 系统文件选择窗口、权限请求弹窗、浏览器自身的界面。
+- 拼写检查的红色波浪线：可以关掉，不能改样式。
+
+### 3.2 怎么保证没有遗漏
+
+- `blora check` 新增一条「原生外观」检查：页面上任何元素只要计算后的 `appearance` 不是 `none`，或者出现了 `<select>`、`<progress>`、`title` 属性、原生滚动条、原生日期输入框，就报错。
+- 重置样式层 `bd.reset` 负责把以上能重置的都重置掉。即使业务写了原生元素，看起来也不会是系统样式。
+
+---
+
+## 4. 设计变量：DESIGN.md 就是源头
+
+```
+Cortado palette.json ──┐
+                       ├─► 生成脚本 ──► tokens.css（--bd-*，浅色和深色）
+DESIGN.md 的 YAML ─────┘            ├─► tokens.json（给 Flutter 等其他平台）
+（引用 Cortado 色名）               └─► tokens.d.ts（JS 里按名字取值时有类型提示）
+```
+
+- **三层**：Cortado 调色板 → `--bd-*` 语义变量（墨色、表面、强调色、状态色、圆角、间距、阴影、动效时长和缓动）→ 组件内部变量（只在组件 CSS 里用）。
+- **深色模式**：默认跟随 `prefers-color-scheme`；在 `<html>` 上写 `data-theme="light|dark"` 可以强制指定。
+- **密度**：`data-density="compact"` 切到 DESIGN.md 里的紧凑间距；可以写在页面上，也可以写在某个局部容器上。
+- **规则**：改颜色去 Cortado 改；改语义（比如「次要文字用哪个灰」）去 DESIGN.md 改。两处改完重新生成，组件代码不用动。
+- 生成时会检查：YAML 里每个引用都要在 Cortado 里存在；对比度要达标（主按钮白字 2.64:1 这个已知问题，在第 ① 阶段一起解决）。
+
+---
+
+## 5. 框架结构
+
+### 5.1 四层
+
+| 层                                  | 负责什么                                                   | 内容                                                                                                                                                                                                                    |
+| ----------------------------------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **重置与基础** `bd.reset` `bd.base` | 去掉所有原生外观；字体排版；聚焦光晕；文字选中色；滚动     | 字体、字号层级（标题、正文、说明、等宽数字、长文阅读）                                                                                                                                                                  |
+| **构图层** `bd.layout`              | 页面骨架和格子构图。**「空」和「不精致」主要在这一层解决** | `bd-app`（侧栏胶囊加内容区）、`bd-mosaic`（细缝拼图）、`bd-tile`、`bd-head`（编号、标题、说明、右侧槽位）、`bd-stack`、`bd-cols`（等量列）、`bd-tray`、`data-grow`（只允许图表、时间格、滚动列表撑满高度）、`bd-scroll` |
+| **组件层** `bd.components`          | 单个组件                                                   | 见 §6                                                                                                                                                                                                                   |
+| **动效层** `bd.motion` + 运行时     | 所有连续动画                                               | 选中底滑动、FLIP 位移、高度过渡、浮层进出、数字滚动、步骤点弹出、减弱动效                                                                                                                                               |
+
+### 5.2 运行时 `blora.js`
+
+- **自动接管**：在页面根节点监听 DOM 变化。出现认识的 `bd-` 组件就挂上行为，元素被移除就自动清理。Vue 重新渲染、路由切换、局部刷新都不用管，也没有初始化和销毁接口。
+- **每个行为都是一个独立模块**，形式统一为 `(元素) => 清理函数`，比如 `seg`、`tabs`、`select`、`menu`、`modal`、`table`、`tree`、`kanban`。体积大的（日期、命令面板、表格排序）按需动态加载。
+- **公共底座**：
+  - 浮层管理：层叠顺序、焦点约束、Esc、点击外部关闭、滚动锁定。
+  - 定位：优先用 CSS 锚点定位，浏览器不支持时用内置的小段 JS 兜底，不引第三方库。
+  - 键盘：方向键和 Home/End 导航（roving tabindex）、快捷键注册。
+  - 动效：选中底滑动、FLIP、高度过渡。
+- **JS 加载前页面就是对的**：选中项在 CSS 里就有自己的选中底，JS 加载后再换成会滑动的选中底，所以不会闪。
+- **接口很少**：`toast()`、`confirm()`、`openCommand()`、`enhance(元素)`（极少数需要手动接管时用），加上各组件的 `bd-*` 事件。
+
+### 5.3 状态归谁管
+
+- **默认**：运行时管理状态。比如点击页签，运行时改 `aria-selected`，然后发出 `bd-change` 事件。
+- **加上 `data-bd-controlled`**：运行时只发事件，不改状态，由 Vue 等框架通过绑定 `aria-selected` 来控制。运行时监听这个属性的变化，照样会播放动画。
+- 两种模式只差一个属性，组件的 HTML 结构完全一样。
+
+### 5.4 体积目标
+
+- CSS 压缩后不超过 45KB。
+- JS 核心压缩后不超过 25KB，按需加载的模块另算。
+- 第三方运行时依赖只有 Lucide 图标（按需打包）。
+
+---
+
+## 6. 组件清单
+
+第一批全部来自现在已经确认的视觉（`components.html` 和 4 个 demo），没有一个是新设计的。
+
+| 分类       | 组件                                                                                                                                                                                      |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 构图       | app 外壳、侧栏胶囊、顶栏、mosaic、tile、head（编号徽标 01 / 1B）、stack、cols、tray、角落弧线 `bd-corner`                                                                                 |
+| 基础       | button（主要 / 次要 / 幽灵 / 图标）、icon、kbd、status pill、tag chip、avatar orb                                                                                                         |
+| 导航       | seg（视图切换）、tabs（可关闭、可新增）、pager、jump nav、tree、steps、breadcrumb、目录 toc                                                                                               |
+| 输入       | field（标签、说明、错误）、input（前后缀、密码眼睛）、textarea、select（单选 / 多选 / 标签式 / 搜索）、date / calendar、stepper、slider、switch、checkbox、radio（含 orb 单选）、dropzone |
+| 数据展示   | table（排序、多选、批量操作栏）、seamless list、spec rows、ring 读数、kpi、progress、code block（含复制）、prose 长文、accordion、empty state、skeleton                                   |
+| 反馈与浮层 | toast、alert 提醒格、tooltip、popover、popconfirm、menu / dropdown、context menu、modal、drawer、command palette                                                                          |
+
+**模式（pattern）**：只提供示例，不做成组件。包括看板、收件箱、日程、设置页、账单套餐卡、文档阅读页。它们由上面的组件拼成，示例同时就是验收页面。
+
+**新组件的流程**：先在 `site/` 里画出设计，你确认 → 写进 DESIGN.md → 写 HTML 示例 → 实现 → 通过检查。
+
+---
+
+## 7. 质量保证
+
+### 7.1 `blora check <url|目录>`
+
+用无头浏览器分别在 1380、1024、375 三个宽度、浅色和深色下打开页面，逐项检查：
+
+| 检查       | 规则                                                   |
+| ---------- | ------------------------------------------------------ |
+| 空白       | 每个格子内部的纵向空白不超过 40px（滚动区域除外）      |
+| 压缩       | 弹性布局里没有被压得比内容还矮的元素                   |
+| 光晕裁切   | 可聚焦控件在会裁切内容的祖先元素里，四周至少留出 3px   |
+| 原生外观   | 见 §3.2                                                |
+| 写死颜色   | 计算后的颜色必须能在设计变量里找到，渐变、描边一律报错 |
+| 对比度     | 文字对比度达到 DESIGN.md 规定的阈值                    |
+| 选中底对齐 | 选中底和选中项的位置、尺寸误差为 0                     |
+| 溢出       | 横向不滚动，文字不溢出容器                             |
+| 点击区域   | 移动端可点击元素不小于 32px                            |
+| 减弱动效   | 开启「减弱动态效果」后，没有位移动画                   |
+
+失败时会指出具体是哪个格子、违反了 DESIGN.md 的哪一节，并附上截图。
+
+### 7.2 静态检查
+
+- **stylelint 规则包**：禁止写死颜色、渐变、`border`，禁止使用 `--cortado-*`；圆角、间距、阴影、动效时长只能用 `--bd-*` 变量。
+- **HTML 检查**：禁止 `<select>`、`title` 属性、`alert(`，禁止同一个元素带多个 `bd-` 组件类，禁止用类名表示状态。
+
+### 7.3 测试
+
+- **组件示例即测试用例**：每个组件的 HTML 示例只写一份（`recipes/`），同时用作文档示例、Playwright 交互测试、截图对比基准和 axe 无障碍检查的输入。
+- **验收页面**：4 个 demo 和组件全集页全部改成只用框架写，在 CI 里做截图对比。
+
+### 7.4 CI
+
+每个 PR 都要跑：设计变量生成 → 代码检查 → 单元测试 → 组件示例交互测试 → 截图对比 → `blora check` 跑全部验收页面 → 体积检查。
+
+---
+
+## 8. 文档站和给 AI 的入口
+
+- **文档站** `site/`：由 `recipes/` 生成，发布在 GitHub Pages。每个组件一页，包括实时预览、可复制的 HTML、所有状态、对应的 DESIGN.md 规则，以及「这样写对、这样写错」的对照。另有 4 个 demo 和组件全集页。
+- **给 AI 用**：
+  - npm 包里一起发布 `DESIGN.md`、`llms.txt`（组件索引加每个示例的链接）和 `recipes/`。
+  - 再附一个 agent skill：告诉 AI 先读 DESIGN.md，照着示例拼页面，写完跑 `blora check` 自查，有报错就修。
+
+---
+
+## 9. 仓库结构
+
+```
+BloraDesign/
+  DESIGN.md                  规范，同时是设计变量的来源
+  AGENTS.md                  给在本仓库里干活的 AI 看的说明
+  packages/
+    blora-design/            npm：@bloret-crew/blora-design
+      src/
+        tokens/              生成的 tokens.css、tokens.json
+        css/                 reset、base、layout、components/*、motion
+        runtime/             core（接管、浮层、定位、键盘、动效）
+        behaviors/           seg、tabs、select、table…（每个行为一个文件）
+      dist/                  blora.css、blora.js、blora.cdn.js、按需加载的模块
+    check/                   npm：@bloret-crew/blora-check（命令 blora check，第 ③ 阶段加入）
+    stylelint-config/        npm：@bloret-crew/stylelint-config-blora
+  recipes/                   每个组件的 HTML 示例：<组件>/<场景>.html
+  reference/                 视觉真值：3.0 之前的组件全集和 4 个 demo（旧类名）
+  site/                      文档站（第 ④ 阶段加入）
+  scripts/                   生成设计变量、生成文档站、生成 llms.txt
+```
+
+- **工具链**：pnpm workspace、Vite（构建库和文档站）、Vitest、Playwright、Changesets、Lightning CSS（压缩和语法降级）。
+- **支持的浏览器**：Chrome、Edge、Safari、Firefox 的最近两个大版本，以及 Electron。
+- **Cortado**：单独发布到公开 npm，包名 `@bloret-crew/cortado`（MIT），作为 blora-design 的依赖。
+- **许可证**：Apache-2.0。
+
+---
+
+## 10. 分阶段推进
+
+| 阶段                 | 做什么                                                                                                              | 验收标准                                                                              |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| **⓪ 准备** ✅        | 清空仓库；搭好 monorepo、工具链和 CI 骨架；发布 Cortado 包；DESIGN.md 改成 `bd-` 命名，并补上「不出现原生控件」一节 | 空项目能构建，CI 能跑通                                                               |
+| **① 基础**           | 生成设计变量；完成重置样式（去掉所有原生外观）、字体排版、构图层、`bd-scroll`、运行时底座、动效层；解决主按钮对比度 | 只用框架拼出控制台 demo 的页面骨架，三个宽度下截图和现在的版本一致；原生外观检查为 0  |
+| **② 组件**           | 按依赖顺序实现：基础 → 导航 → 输入 → 数据展示 → 浮层。每个组件都是示例、CSS、行为、测试一起交付                     | 组件全集页和 4 个 demo 全部只用框架重写，截图和现在的版本一致，`blora check` 全部通过 |
+| **③ 检查工具**       | 完成 `blora check`、stylelint 规则包、HTML 检查；接进 CI                                                            | 一组故意写错的页面能逐条被拦下，且指向正确的规则                                      |
+| **④ 文档与 AI 入口** | 文档站、`llms.txt`、agent skill                                                                                     | 用一个全新上下文的 AI 只读文档写一个新页面，一次就能通过 `blora check`                |
+| **⑤ 发布与试用**     | 发布 3.0.0-alpha；用 BloraPanel（Vue 3）做第一个真实项目来试用，把发现的问题补回框架；稳定后发布 3.0.0              | 真实项目的页面全部通过检查，你确认视觉达标                                            |
+| **⑥ 扩展**           | 新组件按 §6 的流程增加                                                                                              | 每个新组件都经过你确认                                                                |
+
+第 ② 阶段的「只用框架重写 demo」和第 ④ 阶段的「全新 AI 一次写对」，是判断这个框架到底好不好用的两个关键验收。
+
+---
+
+## 11. 已确认的决定（2026-11-27）
+
+| 事项           | 决定                                                                                                    |
+| -------------- | ------------------------------------------------------------------------------------------------------- |
+| npm 包名和版本 | `@bloret-crew/blora-design`，从 3.0.0 开始（先发 3.0.0-alpha）                                          |
+| Cortado        | 发布到公开 npm，包名 `@bloret-crew/cortado`。npm 包只含调色板，Blora 的语义映射由 3.0 的 DESIGN.md 生成 |
+| 许可证         | Blora Design 3.0 用 Apache-2.0。Cortado 保持 MIT，因为它基于 Catppuccin 的 MIT 颜色，需要保留原许可声明 |

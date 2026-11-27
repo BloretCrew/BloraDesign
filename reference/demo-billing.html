@@ -1,0 +1,3354 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Blora Design — 账单与套餐演示</title>
+<link rel="stylesheet" href="../node_modules/@bloret-crew/cortado/dist/cortado.css">
+<style>
+  /* ============ 设计变量：与 components.html 完全一致 ============ */
+  :root {
+    --bg-canvas: var(--cortado-slate-55);
+    --bg-tile: var(--cortado-slate-0);
+    --bg-tile-tint: var(--cortado-slate-40);
+    --bg-well: var(--cortado-slate-40);
+    --bg-ctrl: var(--cortado-slate-0);
+    --bg-slot: var(--cortado-slate-65);
+    --bg-slot-hover: var(--cortado-slate-95);
+    --bg-float: var(--cortado-slate-0);
+    --dash-line: var(--cortado-slate-125);
+
+    --ink-1: var(--cortado-slate-710);
+    --ink-2: var(--cortado-slate-510);
+    --ink-3: var(--cortado-slate-365);
+    --ink-4: var(--cortado-slate-240);
+
+    --blush-solid: var(--cortado-rosewater-285);
+    --blush-solid-hover: var(--cortado-rosewater-320);
+    --blush-track: var(--cortado-rosewater-230);
+    --blush-fill: var(--cortado-rosewater-105);
+    --blush-fill-hover: var(--cortado-rosewater-140);
+    --blush-soft: var(--cortado-rosewater-55);
+    --blush-soft-hover: var(--cortado-rosewater-90);
+    --blush-ink: var(--cortado-rosewater-525);
+
+    --sand-solid: var(--cortado-apricot-255);
+    --sand-fill: var(--cortado-apricot-90);
+    --sand-soft: var(--cortado-apricot-50);
+    --sand-ink: var(--cortado-apricot-505);
+
+    --rose-solid: var(--cortado-flamingo-350);
+    --rose-fill: var(--cortado-flamingo-120);
+    --rose-soft: var(--cortado-flamingo-60);
+    --rose-ink: var(--cortado-flamingo-510);
+
+    --r-tile: 20px;
+    --r-seam: 6px;
+    --gap: 6px;
+    --r-ctrl: 12px;
+    --r-pill: 999px;
+
+    --ctrl-lift: 0 1px 2.5px rgba(34, 36, 48, 0.045);
+    --float-shadow: 0 14px 34px rgba(32, 34, 48, 0.09), 0 2px 8px rgba(32, 34, 48, 0.04);
+    --focus-halo: 0 0 0 3px color-mix(in srgb, var(--blush-solid) 22%, transparent);
+
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    --rail-w: 208px;
+    --rail-w-collapsed: 64px;
+    --rail-pad: 10px;
+    --rail-icon: 19px;   /* 收起时按钮 44×44 正方形，图标居中：(64 − 20 − 19) / 2 = 12.5 */
+    --rail-icon-x: calc((var(--rail-w-collapsed) - var(--rail-pad) * 2 - var(--rail-icon)) / 2);
+    --r-rail-item: calc(var(--r-tile) - var(--rail-pad));
+    --rail-dur: 0.34s;
+
+    --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --font-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  html[data-theme="dark"] {
+    --bg-canvas: var(--cortado-slate-800);
+    --bg-tile: var(--cortado-slate-745);
+    --bg-tile-tint: var(--cortado-slate-730);
+    --bg-well: var(--cortado-slate-765);
+    --bg-ctrl: var(--cortado-slate-705);
+    --bg-slot: var(--cortado-slate-670);
+    --bg-slot-hover: var(--cortado-slate-625);
+    --bg-float: var(--cortado-slate-705);
+    --dash-line: var(--cortado-slate-605);
+
+    --ink-1: var(--cortado-slate-50);
+    --ink-2: var(--cortado-slate-220);
+    --ink-3: var(--cortado-slate-380);
+    --ink-4: var(--cortado-slate-505);
+
+    --blush-solid-hover: var(--cortado-rosewater-250);
+    --blush-track: var(--cortado-rosewater-370);
+    --blush-fill: var(--cortado-rosewater-675);
+    --blush-fill-hover: var(--cortado-rosewater-635);
+    --blush-soft: var(--cortado-rosewater-720);
+    --blush-soft-hover: var(--cortado-rosewater-690);
+    --blush-ink: var(--cortado-rosewater-135);
+
+    --sand-fill: var(--cortado-apricot-660);
+    --sand-soft: var(--cortado-apricot-715);
+    --sand-ink: var(--cortado-apricot-105);
+
+    --rose-fill: var(--cortado-flamingo-675);
+    --rose-soft: var(--cortado-flamingo-725);
+    --rose-ink: var(--cortado-flamingo-135);
+
+    --ctrl-lift: 0 1px 3px rgba(0, 0, 0, 0.22);
+    --float-shadow: 0 16px 38px rgba(0, 0, 0, 0.42), 0 2px 8px rgba(0, 0, 0, 0.24);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg-canvas);
+    color: var(--ink-1);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  button, input { font-family: inherit; font-size: inherit; color: inherit; border: none; outline: none; background: none; }
+  button { cursor: pointer; user-select: none; }
+  svg { display: block; flex-shrink: 0; }
+  .mono { font-family: var(--font-mono); }
+  .muted { color: var(--ink-3); }
+
+  /* ============ 应用外壳：侧栏 + 主区 ============ */
+  .app {
+    max-width: 1480px;
+    margin: 10px auto;
+    padding: 0 10px;
+    display: grid;
+    grid-template-columns: var(--rail-w) minmax(0, 1fr);
+    column-gap: var(--gap);
+    align-items: start;
+    transition: grid-template-columns var(--rail-dur) var(--ease-out);
+  }
+  .app.rail-collapsed { grid-template-columns: var(--rail-w-collapsed) minmax(0, 1fr); }
+  /* 主区至少和侧栏一样高，最后一行（.grow）撑满剩余高度，页面下方不再悬空 */
+  .main { min-width: 0; min-height: calc(100vh - 20px); display: flex; flex-direction: column; gap: var(--gap); }
+
+  /* ---- 侧栏（规则同 v2：图标横坐标固定，宽度连续变化） ---- */
+  .side-rail {
+    position: sticky;
+    top: 10px;
+    z-index: 50;
+    height: calc(100vh - 20px);
+    min-width: 0;
+    background: var(--bg-tile);
+    border-radius: var(--r-tile);
+    padding: 14px var(--rail-pad) var(--rail-pad);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .rail-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 6px 20px;
+    white-space: nowrap;
+  }
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--blush-soft);
+    color: var(--blush-solid);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+  .brand-title { font-size: 15px; font-weight: 650; letter-spacing: -0.01em; }
+  .rail-section {
+    max-height: 24px;
+    padding: 0 12px 6px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 11px;
+    color: var(--ink-4);
+    letter-spacing: 0.04em;
+    transition: max-height var(--rail-dur) var(--ease-out), padding var(--rail-dur) var(--ease-out), opacity 0.2s ease;
+  }
+  .rail-track { position: relative; display: flex; flex-direction: column; gap: 2px; }
+  .rail-glider {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 40px;
+    border-radius: var(--r-rail-item);
+    background: var(--blush-soft);
+    transition: transform 0.3s var(--ease-out);
+    pointer-events: none;
+  }
+  .rail-btn {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 40px;
+    padding: 0 10px 0 var(--rail-icon-x);
+    border-radius: var(--r-rail-item);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 12.8px;
+    font-weight: 500;
+    color: var(--ink-2);
+    text-align: left;
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+  .rail-btn svg { width: var(--rail-icon); height: var(--rail-icon); }
+  .rail-btn > .rail-text:not(.rail-count) { flex: 1; min-width: 0; overflow: hidden; }
+  .rail-btn:not(.active):hover { background: var(--bg-well); color: var(--ink-1); }
+  .rail-btn.active { color: var(--blush-ink); font-weight: 600; }
+  .rail-count {
+    flex-shrink: 0;
+    min-width: 20px;
+    padding: 0 6px;
+    border-radius: var(--r-pill);
+    background: var(--bg-well);
+    color: var(--ink-3);
+    font-size: 10.5px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 18px;
+  }
+  .rail-btn.active .rail-count { background: var(--bg-tile); color: var(--blush-ink); }
+  .side-rail .rail-text { transition: opacity 0.2s ease 0.08s; }
+  .rail-foot { margin-top: auto; display: flex; flex-direction: column; gap: 2px; }
+  .rail-plan {
+    max-height: 96px;
+    margin-bottom: 6px;
+    padding: 11px 12px;
+    overflow: hidden;
+    white-space: nowrap;
+    border-radius: var(--r-rail-item);
+    background: var(--bg-well);
+    transition: max-height var(--rail-dur) var(--ease-out), padding var(--rail-dur) var(--ease-out), margin var(--rail-dur) var(--ease-out), opacity 0.2s ease;
+  }
+  .rail-plan-row { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--ink-2); }
+  .meter { height: 5px; border-radius: var(--r-pill); background: var(--bg-slot); overflow: hidden; margin-top: 7px; }
+  .meter > i { display: block; height: 100%; border-radius: inherit; background: var(--blush-track); }
+  .rail-foot .rail-btn { color: var(--ink-3); }
+  .rail-collapse-ico { transition: transform var(--rail-dur) var(--ease-out); }
+  .rail-tip {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 120;
+    transform: translate(-4px, -50%);
+    padding: 6px 11px;
+    border-radius: 9px;
+    background: var(--bg-float);
+    color: var(--ink-1);
+    box-shadow: var(--float-shadow);
+    font-size: 11.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+  .app.rail-collapsed .side-rail .rail-text { opacity: 0; transition-delay: 0s; }
+  .app.rail-collapsed .rail-section { max-height: 0; padding-top: 0; padding-bottom: 0; }
+  .app.rail-collapsed .rail-plan { max-height: 0; padding-top: 0; padding-bottom: 0; margin-bottom: 0; }
+  .app.rail-collapsed .rail-btn:hover .rail-tip { opacity: 1; transform: translate(0, -50%); }
+  .app.rail-collapsed .rail-collapse-ico { transform: rotate(180deg); }
+  .app.rail-auto .rail-collapse-btn { display: none; }
+  .no-anim, .no-anim * { transition: none !important; }
+
+  /* ---- 顶栏 ---- */
+  .topbar {
+    background: var(--bg-tile);
+    border-radius: var(--r-tile);
+    padding: 10px 10px 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 56px;
+  }
+  .crumbs { display: flex; align-items: center; gap: 6px; min-width: 0; font-size: 12.8px; color: var(--ink-3); white-space: nowrap; }
+  .crumbs b { color: var(--ink-1); font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
+  .crumbs button { color: var(--ink-3); transition: color 0.15s ease; }
+  .crumbs button:hover { color: var(--ink-1); }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+  .global-search { width: 240px; }
+  .avatar {
+    width: 33px;
+    height: 33px;
+    border-radius: 50%;
+    background: var(--sand-fill);
+    color: var(--sand-ink);
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 650;
+    flex-shrink: 0;
+  }
+  .bell-dot { position: relative; }
+  .bell-dot::after {
+    content: "";
+    position: absolute;
+    top: 8px;
+    right: 9px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--blush-solid);
+    box-shadow: 0 0 0 2px var(--bg-well);
+  }
+  .mobile-nav { display: none; }
+
+  /* ============ 场景容器 ============ */
+  .scene { display: none; flex-direction: column; gap: var(--gap); }
+  .scene.active { display: flex; flex: 1; animation: sceneIn 0.36s var(--ease-out) backwards; }
+  .scene .grow { flex: 1; }
+  .tab-pane.active { flex: 1; }
+  @keyframes sceneIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* 页面标题：直接放在画布上，不套格子，给页面留呼吸 */
+  .page-head {
+    padding: 18px 6px 12px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .page-title { font-size: 21px; font-weight: 650; letter-spacing: -0.015em; display: flex; align-items: center; gap: 10px; }
+  .page-sub { margin-top: 3px; font-size: 13px; color: var(--ink-3); }
+  .page-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+  /* ============ 格子与拼接规则（同 v2） ============ */
+  .tile {
+    background: var(--bg-tile);
+    padding: 20px 22px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .tile-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 28px; }
+  .tile-title { font-size: 13.5px; font-weight: 620; }
+  .tile-sub { font-size: 12px; color: var(--ink-3); }
+  .row { display: grid; gap: var(--gap); }
+  .row-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .row-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .row-2-wide { grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); }
+  .row-2-info { grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); }
+  .row-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .row-1 { grid-template-columns: minmax(0, 1fr); }
+  /* 横向一组：两端外角 20，相邻处 6 */
+  .row > * { border-radius: var(--r-seam); }
+  .row > :first-child { border-top-left-radius: var(--r-tile); border-bottom-left-radius: var(--r-tile); }
+  .row > :last-child { border-top-right-radius: var(--r-tile); border-bottom-right-radius: var(--r-tile); }
+  /* 纵向一组（设置页）：上下两端外角 20 */
+  .stack { display: flex; flex-direction: column; gap: var(--gap); }
+  .stack > * { border-radius: var(--r-seam); }
+  .stack > :first-child { border-top-left-radius: var(--r-tile); border-top-right-radius: var(--r-tile); }
+  .stack > :last-child { border-bottom-left-radius: var(--r-tile); border-bottom-right-radius: var(--r-tile); }
+
+  /* ============ 基础组件（尺寸同 v2 收紧后的版本） ============ */
+  .btn {
+    height: 33px;
+    padding: 0 14px;
+    border-radius: var(--r-pill);
+    font-size: 12.5px;
+    font-weight: 560;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn-primary { background: var(--blush-solid); color: var(--cortado-slate-0); }
+  .btn-primary:hover { background: var(--blush-solid-hover); }
+  .btn-blush { background: var(--blush-fill); color: var(--blush-ink); }
+  .btn-blush:hover { background: var(--blush-fill-hover); }
+  .btn-surface { background: var(--bg-well); color: var(--ink-1); }
+  .btn-surface:hover { background: var(--bg-slot); }
+  .btn-ghost { color: var(--ink-2); }
+  .btn-ghost:hover { background: var(--bg-well); color: var(--ink-1); }
+  .btn-rose { background: var(--rose-soft); color: var(--rose-ink); }
+  .btn-rose:hover { background: var(--rose-fill); }
+  .btn-elev { background: var(--bg-ctrl); color: var(--ink-1); box-shadow: var(--ctrl-lift); }
+  .btn-icon { width: 33px; padding: 0; }
+  .btn-sm { height: 27px; padding: 0 11px; font-size: 11.5px; }
+  .btn-sm.btn-icon { width: 27px; padding: 0; }
+
+  .kbd {
+    height: 18px;
+    min-width: 18px;
+    padding: 0 5px;
+    border-radius: 6px;
+    background: var(--bg-ctrl);
+    box-shadow: var(--ctrl-lift);
+    color: var(--ink-3);
+    font-size: 11px;
+    font-weight: 620;
+    display: inline-flex;
+    align-items: center;
+    gap: 2.5px;
+    flex-shrink: 0;
+  }
+  .kbd svg { width: 10px; height: 10px; }
+
+  .field {
+    height: 36px;
+    padding: 0 11px;
+    border-radius: var(--r-ctrl);
+    background: var(--bg-well);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .field:focus-within { background: var(--bg-ctrl); box-shadow: var(--focus-halo); }
+  .field input { flex: 1; min-width: 0; height: 100%; }
+  .field input::placeholder { color: var(--ink-4); }
+  .field svg { color: var(--ink-3); }
+
+  /* 自研下拉 */
+  .select { position: relative; }
+  .select-trigger {
+    width: 100%;
+    height: 36px;
+    padding: 0 11px 0 12px;
+    border-radius: var(--r-ctrl);
+    background: var(--bg-well);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-weight: 520;
+    text-align: left;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .select-trigger:hover { background: var(--bg-slot); }
+  .select.open .select-trigger { background: var(--bg-ctrl); box-shadow: var(--focus-halo); }
+  .select-trigger > svg:last-child { color: var(--ink-3); transition: transform 0.24s var(--ease-out); }
+  .select.open .select-trigger > svg:last-child { transform: rotate(180deg); }
+  .menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 100%;
+    z-index: 90;
+    padding: 6px;
+    border-radius: 15px;
+    background: var(--bg-float);
+    box-shadow: var(--float-shadow);
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+    transform-origin: top left;
+    transition: opacity 0.16s ease, transform 0.22s var(--ease-out), visibility 0s linear 0.22s;
+  }
+  .menu.right { left: auto; right: 0; transform-origin: top right; }
+  .select.open .menu, .menu.open { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
+  .menu-opt {
+    width: 100%;
+    padding: 7px 10px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    font-size: 12.5px;
+    text-align: left;
+    white-space: nowrap;
+    transition: background-color 0.12s ease;
+  }
+  .menu-opt:hover { background: var(--bg-well); }
+  .menu-opt.active { background: var(--blush-soft); color: var(--blush-ink); font-weight: 560; }
+  .menu-opt.danger { color: var(--rose-ink); }
+  .menu-opt.danger:hover { background: var(--rose-soft); }
+  .menu-sep { height: 1px; margin: 5px 8px; background: var(--bg-well); }
+
+  /* 分段控件 */
+  .seg {
+    position: relative;
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    padding: 3px;
+    border-radius: 11px;
+    background: var(--bg-well);
+  }
+  .seg-glider {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 0;
+    border-radius: 8px;
+    background: var(--bg-ctrl);
+    box-shadow: var(--ctrl-lift);
+    transition: transform 0.26s var(--ease-out), width 0.26s var(--ease-out);
+  }
+  .seg-btn {
+    position: relative;
+    z-index: 1;
+    height: 28px;
+    padding: 0 12px;
+    font-size: 12px;
+    font-weight: 560;
+    color: var(--ink-3);
+    white-space: nowrap;
+    transition: color 0.18s ease;
+  }
+  .seg-btn.active { color: var(--ink-1); }
+  .seg-btn .n { margin-left: 4px; font-family: var(--font-mono); font-size: 10.5px; opacity: 0.7; }
+
+  .switch {
+    width: 36px;
+    height: 20px;
+    padding: 3px;
+    border-radius: var(--r-pill);
+    background: var(--bg-slot);
+    display: inline-flex;
+    flex-shrink: 0;
+    transition: background-color 0.18s ease;
+  }
+  .switch i { width: 14px; height: 14px; border-radius: 50%; background: var(--cortado-slate-0); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12); transition: transform 0.22s var(--ease-pop); }
+  .switch.on { background: var(--blush-solid); }
+  .switch.on i { transform: translateX(16px); }
+
+  .check {
+    width: 17px;
+    height: 17px;
+    border-radius: 6px;
+    background: var(--bg-slot);
+    color: var(--cortado-slate-0);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    transition: background-color 0.14s ease;
+  }
+  .check svg { opacity: 0; transform: scale(0.4); transition: transform 0.22s var(--ease-pop), opacity 0.15s ease; }
+  .check.on, .check.part { background: var(--blush-solid); }
+  .check.on svg, .check.part svg { opacity: 1; transform: none; }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 9px;
+    border-radius: var(--r-pill);
+    font-size: 11.5px;
+    font-weight: 580;
+    white-space: nowrap;
+  }
+  .pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.75; }
+  .pill.run { background: var(--sand-soft); color: var(--sand-ink); }
+  .pill.stop { background: var(--bg-well); color: var(--ink-3); }
+  .pill.warn { background: var(--rose-soft); color: var(--rose-ink); }
+  .pill.sync { background: var(--blush-soft); color: var(--blush-ink); }
+  .pill.plain::before { display: none; }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 8px;
+    border-radius: 7px;
+    background: var(--bg-well);
+    color: var(--ink-2);
+    font-size: 11.5px;
+    font-weight: 550;
+  }
+
+  .tabs { display: flex; gap: 4px; padding: 0 2px; }
+  .tab {
+    height: 31px;
+    padding: 0 14px;
+    border-radius: var(--r-pill);
+    color: var(--ink-2);
+    font-size: 12.8px;
+    font-weight: 560;
+    transition: background-color 0.18s ease, color 0.18s ease;
+  }
+  .tab:hover { color: var(--ink-1); background: var(--bg-tile); }
+  .tab.active { background: var(--bg-tile); color: var(--ink-1); box-shadow: var(--ctrl-lift); }
+  .tab-pane { display: none; flex-direction: column; gap: var(--gap); }
+  .tab-pane.active { display: flex; animation: sceneIn 0.3s var(--ease-out) backwards; }
+
+  /* ============ 1. 总览 ============ */
+  .kpi { gap: 10px; }
+  .kpi-label { font-size: 12px; color: var(--ink-3); display: flex; align-items: center; justify-content: space-between; }
+  .kpi-value { font-size: 26px; font-weight: 650; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1.15; }
+  .kpi-value small { font-size: 13px; font-weight: 560; color: var(--ink-3); margin-left: 2px; }
+  .kpi-foot { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--ink-3); }
+  .delta { display: inline-flex; align-items: center; gap: 2px; padding: 1px 6px; border-radius: 6px; font-weight: 600; font-size: 11px; }
+  .delta.up { background: var(--sand-soft); color: var(--sand-ink); }
+  .delta.good-down { background: var(--sand-soft); color: var(--sand-ink); }
+  .delta.bad { background: var(--rose-soft); color: var(--rose-ink); }
+  .spark { width: 64px; height: 24px; }
+
+  .chart-wrap { position: relative; height: 230px; }
+  .chart-svg { width: 100%; height: 100%; overflow: visible; }
+  .chart-grid line { stroke: var(--bg-well); stroke-width: 1; }
+  .chart-line { fill: none; stroke: var(--blush-solid); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .chart-line.b { stroke: var(--sand-solid); stroke-dasharray: 4 4; }
+  .chart-draw { animation: chartDraw 0.9s var(--ease-out) backwards; }
+  @keyframes chartDraw { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  .chart-x { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; color: var(--ink-4); font-family: var(--font-mono); }
+  .chart-y { position: absolute; left: 0; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: space-between; font-size: 10.5px; color: var(--ink-4); font-family: var(--font-mono); pointer-events: none; }
+  .chart-guide { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--bg-slot); opacity: 0; transition: opacity 0.15s ease; pointer-events: none; }
+  .chart-dot { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--blush-solid); box-shadow: 0 0 0 3px var(--bg-tile); opacity: 0; transition: opacity 0.15s ease; pointer-events: none; }
+  .chart-tip {
+    position: absolute;
+    top: 0;
+    padding: 7px 10px;
+    border-radius: 10px;
+    background: var(--bg-float);
+    box-shadow: var(--float-shadow);
+    font-size: 11.5px;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translate(-50%, -4px);
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+  }
+  .chart-wrap.hover .chart-guide, .chart-wrap.hover .chart-dot, .chart-wrap.hover .chart-tip { opacity: 1; }
+  .legend { display: flex; align-items: center; gap: 14px; font-size: 11.5px; color: var(--ink-3); }
+  .legend i { display: inline-block; width: 10px; height: 3px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+
+  .feed { display: flex; flex-direction: column; }
+  .feed-item { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 10px; padding: 9px 0; align-items: start; }
+  .feed-ico { width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center; }
+  .feed-ico.blush { background: var(--blush-soft); color: var(--blush-ink); }
+  .feed-ico.sand { background: var(--sand-soft); color: var(--sand-ink); }
+  .feed-ico.rose { background: var(--rose-soft); color: var(--rose-ink); }
+  .feed-ico.well { background: var(--bg-well); color: var(--ink-2); }
+  .feed-text { font-size: 12.8px; line-height: 1.45; }
+  .feed-text b { font-weight: 600; }
+  .feed-meta { font-size: 11.5px; color: var(--ink-3); margin-top: 1px; }
+  .feed-time { font-size: 11px; color: var(--ink-4); white-space: nowrap; padding-top: 2px; }
+
+  /* ============ 2. 实例列表 ============ */
+  .toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .toolbar .field { width: 240px; }
+  .toolbar .select { width: 150px; }
+  .toolbar-spacer { flex: 1; }
+  .bulk {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 7px 8px 7px 14px;
+    border-radius: 12px;
+    background: var(--blush-soft);
+    color: var(--blush-ink);
+    font-size: 12.5px;
+    font-weight: 560;
+  }
+  .bulk.show { display: flex; animation: dropIn 0.24s var(--ease-out) backwards; }
+  @keyframes dropIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+  .table { display: flex; flex-direction: column; }
+  .tr {
+    display: grid;
+    /* 全部按比例分配：宽屏时间距均匀，不会只拉开某一列 */
+    grid-template-columns: 26px minmax(170px, 2fr) minmax(80px, 0.9fr) minmax(96px, 1fr) minmax(112px, 1.1fr) minmax(120px, 1.2fr) minmax(90px, 0.9fr) 22px;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px;
+    min-height: 48px;
+    border-radius: 11px;
+  }
+  .tr.head { min-height: 34px; font-size: 11.5px; color: var(--ink-3); }
+  .tbody .tr { cursor: pointer; transition: background-color 0.12s ease; }
+  .tbody .tr:hover { background: var(--bg-well); }
+  .tbody .tr.sel { background: var(--blush-soft); }
+  .tbody .tr.sel:hover { background: var(--blush-soft-hover); }
+  .tbody .tr.sel.jt { border-top-left-radius: 0; border-top-right-radius: 0; }
+  .tbody .tr.sel.jb { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+  .tr .name { font-weight: 600; font-size: 12.8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tr .sub { font-size: 11px; color: var(--ink-3); font-family: var(--font-mono); }
+  .tr .cell-mono { font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); }
+  .tr .go { color: var(--ink-4); transition: transform 0.18s var(--ease-out), color 0.15s ease; }
+  .tbody .tr:hover .go { color: var(--ink-2); transform: translateX(2px); }
+  .cpu { display: flex; align-items: center; gap: 8px; font-size: 11.5px; font-family: var(--font-mono); color: var(--ink-2); }
+  .cpu .meter { width: 56px; margin: 0; }
+  .meter.hot > i { background: var(--rose-solid); }  /* 超过 85% 用告警色 */
+  .tfoot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 4px; font-size: 12px; color: var(--ink-3); }
+  .pager { display: inline-flex; gap: 4px; }
+  .page-btn {
+    min-width: 28px;
+    height: 28px;
+    padding: 0 8px;
+    border-radius: 8px;
+    background: var(--bg-well);
+    font-size: 12px;
+    color: var(--ink-2);
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .page-btn:hover { background: var(--bg-slot); }
+  .page-btn.active { background: var(--blush-fill); color: var(--blush-ink); font-weight: 620; }
+  .page-btn:disabled { opacity: 0.4; cursor: default; }
+  .empty-row { padding: 36px 0; text-align: center; color: var(--ink-3); font-size: 12.8px; }
+
+  /* ============ 3. 实例详情 ============ */
+  .back-btn { color: var(--ink-3); }
+  .kv { display: grid; grid-template-columns: 96px minmax(0, 1fr); row-gap: 12px; column-gap: 12px; font-size: 12.8px; }
+  .kv dt { color: var(--ink-3); }
+  .kv dd { display: flex; align-items: center; gap: 6px; min-width: 0; flex-wrap: wrap; }
+  .copy-btn { width: 22px; height: 22px; border-radius: 7px; color: var(--ink-3); display: grid; place-items: center; transition: background-color 0.15s ease, color 0.15s ease; }
+  .copy-btn:hover { background: var(--bg-well); color: var(--ink-1); }
+  .usage { display: flex; flex-direction: column; gap: 16px; }
+  .usage-row { display: flex; flex-direction: column; gap: 7px; }
+  .usage-top { display: flex; justify-content: space-between; font-size: 12.5px; }
+  .usage-top b { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .usage .meter { height: 7px; margin: 0; }
+  .usage .meter > i { transition: width 0.8s var(--ease-out); }
+  .timeline { display: flex; flex-direction: column; }
+  .tl-item { position: relative; display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; gap: 12px; padding-bottom: 16px; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-item::before { content: ""; position: absolute; left: 8px; top: 18px; bottom: 2px; width: 2px; border-radius: 2px; background: var(--bg-well); }
+  .tl-item:last-child::before { display: none; }
+  .tl-dot { width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; margin-top: 1px; }
+  .tl-dot::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .tl-dot.sand { background: var(--sand-soft); color: var(--sand-solid); }
+  .tl-dot.blush { background: var(--blush-soft); color: var(--blush-solid); }
+  .tl-dot.rose { background: var(--rose-soft); color: var(--rose-solid); }
+  .log {
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--bg-well);
+    font-family: var(--font-mono);
+    font-size: 11.8px;
+    line-height: 1.85;
+    color: var(--ink-2);
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .log .t { color: var(--ink-4); }
+  .log .w { color: var(--rose-ink); }
+  .log .i { color: var(--sand-ink); }
+
+  /* ============ 4. 设置 ============ */
+  .settings-layout {
+    display: grid;
+    grid-template-columns: 208px minmax(0, 1fr);
+    gap: var(--gap);
+    align-items: start;
+  }
+  .settings-nav {
+    position: sticky;
+    top: 10px;
+    padding: 10px;
+    border-radius: var(--r-tile);
+    background: var(--bg-tile);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .settings-nav button {
+    height: 36px;
+    padding: 0 12px;
+    border-radius: var(--r-rail-item);   /* 同心：20 − 10 */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12.8px;
+    font-weight: 500;
+    color: var(--ink-2);
+    text-align: left;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .settings-nav button:hover { background: var(--bg-well); color: var(--ink-1); }
+  .settings-nav button.active { background: var(--blush-soft); color: var(--blush-ink); font-weight: 600; }
+  .settings-nav svg { width: 15px; height: 15px; }
+  .settings-section { scroll-margin-top: 16px; }
+  .member { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto auto; gap: 12px; align-items: center; padding: 8px 0; }
+  .member + .member { border-top: 0; }
+  .member .avatar { width: 34px; height: 34px; }
+  .member-name { font-size: 12.8px; font-weight: 600; }
+  .member-mail { font-size: 11.5px; color: var(--ink-3); }
+  .form-row {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 24px;
+    align-items: center;
+    padding: 4px 0;
+  }
+  .form-row + .form-row { margin-top: 8px; }
+  .form-label { font-size: 12.8px; font-weight: 560; }
+  .form-hint { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; font-weight: 400; }
+  .form-control { max-width: 380px; width: 100%; }
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 6px 0; }
+  .toggle-row + .toggle-row { margin-top: 6px; }
+  .danger-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .savebar {
+    position: fixed;
+    left: 50%;
+    bottom: 18px;
+    z-index: 70;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 7px 7px 7px 18px;
+    border-radius: var(--r-pill);
+    background: var(--bg-float);
+    box-shadow: var(--float-shadow);
+    font-size: 12.8px;
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transform: translate(-50%, 16px);
+    transition: opacity 0.2s ease, transform 0.3s var(--ease-out), visibility 0s linear 0.3s;
+  }
+  .savebar.show { visibility: visible; opacity: 1; transform: translate(-50%, 0); transition-delay: 0s; }
+  .savebar .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--blush-solid); }
+
+  /* ============ 5. 开始使用（空状态） ============ */
+  .hero { padding: 30px 32px; gap: 0; justify-content: center; }
+  .eyebrow { align-self: flex-start; margin-bottom: 14px; }
+  .hero-art { width: 112px; height: 82px; margin-bottom: 16px; }
+  .hero h2 { font-size: 20px; font-weight: 650; letter-spacing: -0.015em; }
+  .hero p { max-width: 460px; margin: 8px 0 20px; color: var(--ink-3); font-size: 13px; line-height: 1.65; }
+  .hero-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .hero .progress-line { margin-top: 24px; max-width: 420px; }
+  .row-hero { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); }
+  .term {
+    flex: 1;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: var(--bg-well);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 2;
+    color: var(--ink-2);
+  }
+  .term .p { color: var(--blush-solid); user-select: none; }
+  .term .c { color: var(--ink-4); }
+  .res-card { flex-direction: row; align-items: center; gap: 14px; cursor: pointer; transition: background-color 0.18s ease; }
+  .res-card:hover { background: var(--bg-tile-tint); }
+  .res-ico { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; flex-shrink: 0; }
+  .res-card h3 { font-size: 13px; font-weight: 620; }
+  .res-card p { font-size: 12px; color: var(--ink-3); margin-top: 1px; }
+  .res-card .go { margin-left: auto; color: var(--ink-4); transition: transform 0.18s var(--ease-out), color 0.15s ease; }
+  .res-card:hover .go { transform: translateX(3px); color: var(--ink-2); }
+
+  /* 总览第三行 */
+  .rank { display: flex; flex-direction: column; }
+  .rank-item { display: grid; grid-template-columns: 18px minmax(0, 1fr) 120px 42px; gap: 12px; align-items: center; padding: 8px 10px; margin: 0 -10px; border-radius: 10px; cursor: pointer; transition: background-color 0.12s ease; }
+  .rank-item:hover { background: var(--bg-well); }
+  .rank-no { font-family: var(--font-mono); font-size: 11px; color: var(--ink-4); }
+  .rank-item .meter { margin: 0; }
+  .rank-pct { text-align: right; font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); }
+  .region-list { display: flex; flex-direction: column; gap: 14px; }
+  .region-row { display: grid; grid-template-columns: 96px minmax(0, 1fr) 70px; gap: 12px; align-items: center; font-size: 12.5px; }
+  .region-row .meter { margin: 0; height: 7px; }
+  .region-row .meter > i { transition: width 0.8s var(--ease-out); }
+  .region-meta { text-align: right; font-size: 11.5px; color: var(--ink-3); font-family: var(--font-mono); }
+  .step-card { gap: 10px; }
+  .step-top { display: flex; align-items: center; justify-content: space-between; }
+  .step-no {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 650;
+    background: var(--bg-well);
+    color: var(--ink-2);
+  }
+  .step-card.done .step-no { background: var(--sand-solid); color: var(--cortado-slate-0); }
+  .step-card.current .step-no { background: var(--blush-solid); color: var(--cortado-slate-0); }
+  .step-card h3 { font-size: 13.5px; font-weight: 620; }
+  .step-card p { font-size: 12.3px; color: var(--ink-3); line-height: 1.6; flex: 1; }
+  .step-card .btn { align-self: flex-start; }
+  .progress-line { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--ink-3); }
+  .progress-line .meter { flex: 1; margin: 0; height: 6px; }
+  .progress-line .meter > i { transition: width 0.6s var(--ease-out); }
+
+  /* ============ 弹窗 / Toast ============ */
+  .scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 180;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(28, 30, 42, 0.24);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease, visibility 0s linear 0.24s;
+  }
+  .scrim.open { visibility: visible; opacity: 1; transition-delay: 0s; }
+  .modal {
+    width: 100%;
+    max-width: 440px;
+    padding: 22px;
+    border-radius: 20px;
+    background: var(--bg-tile);
+    box-shadow: var(--float-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transform: translateY(10px) scale(0.97);
+    transition: transform 0.28s var(--ease-out);
+  }
+  .scrim.open .modal { transform: none; }
+  .modal-head { display: flex; align-items: center; justify-content: space-between; }
+  .modal-head h3 { font-size: 15px; font-weight: 650; }
+  .modal label { display: block; margin-bottom: 6px; font-size: 12px; color: var(--ink-2); }
+  .modal-foot { display: flex; justify-content: flex-end; gap: 8px; padding-top: 4px; }
+  .modal .seg { display: grid; }
+
+  .toasts { position: fixed; right: 22px; bottom: 22px; z-index: 250; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+  .toast {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 15px;
+    border-radius: var(--r-pill);
+    background: var(--bg-float);
+    box-shadow: var(--float-shadow);
+    font-size: 12.8px;
+    font-weight: 550;
+    animation: toastIn 0.32s var(--ease-out) backwards;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .toast::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--blush-solid); box-shadow: 0 0 0 3px var(--blush-fill); }
+  .toast.leaving { opacity: 0; transform: translateY(8px) scale(0.96); }
+  @keyframes toastIn { from { opacity: 0; transform: translateY(12px) scale(0.96); } to { opacity: 1; transform: none; } }
+
+  /* ============ 紧凑精致：回到 v2 的尺寸体系 ============
+     正文 13、按钮 33、输入 36（见上方基础组件）；这里只收紧容器与间距：
+     · 整体限宽 1240px 居中，两侧留白，格子不被拉得过宽
+     · 格子内边距 18/20、行距收紧，信息密度介于 v2 组件页与普通后台之间 */
+  .app { max-width: 1760px; margin: 12px auto; padding: 0 12px; }   /* 铺满窗口，只留 12px；超宽屏最多 1760 */
+  .side-rail { top: 12px; height: calc(100vh - 24px); }
+  .main { min-height: calc(100vh - 24px); }
+
+  .topbar { min-height: 52px; padding: 8px 8px 8px 18px; }
+  .page-head { padding: 14px 4px 8px; }
+  .page-title { font-size: 20px; }
+  .page-sub { font-size: 12.5px; margin-top: 2px; }
+  .tile { padding: 18px 20px; gap: 12px; }
+  .tile-head { min-height: 26px; }
+
+  /* 总览 */
+  .kpi { position: relative; gap: 6px; padding-top: 16px; padding-bottom: 16px; }
+  .kpi-value { font-size: 24px; }
+  .spark { position: absolute; top: 15px; right: 18px; }
+  .chart-wrap { height: 200px; }
+  .chart-line { stroke-width: 3.2; }
+  .chart-line.b { stroke-width: 2.4; stroke-dasharray: 6 5; }
+  .feed-item { grid-template-columns: 32px minmax(0, 1fr) auto; gap: 11px; padding: 7px 0; }
+  .feed-ico { width: 32px; height: 32px; border-radius: 10px; }
+  .feed-ico svg { width: 16px; height: 16px; }
+  .feed-text { font-size: 13px; }
+  .rank-item { padding: 7px 10px; }
+  .region-list { gap: 13px; }
+  .region-row { grid-template-columns: 92px minmax(0, 1fr) auto; }
+  .region-meta { white-space: nowrap; min-width: 82px; }
+
+  /* 列表 */
+  .tr { min-height: 46px; }
+
+  /* 开始使用 */
+  .hero { padding: 24px 28px; }
+  .eyebrow { margin-bottom: 12px; }
+  .hero h2 { font-size: 19px; }
+  .hero p { margin: 6px 0 16px; }
+  .hero .progress-line { margin-top: 18px; }
+  .term { font-size: 12.5px; line-height: 1.9; padding: 13px 15px; }
+  .step-card { gap: 8px; }
+  .res-card { gap: 12px; padding-top: 15px; padding-bottom: 15px; }
+  .tpl-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 4px 0; }
+  .tpl-card { gap: 10px; cursor: pointer; transition: background-color 0.18s ease; }
+  .tpl-card:hover { background: var(--bg-tile-tint); }
+  .tpl-badge { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; font-family: var(--font-mono); font-size: 12px; font-weight: 700; }
+  .tpl-body h3 { font-size: 13.5px; font-weight: 620; }
+  .tpl-body p { font-size: 12px; color: var(--ink-3); margin-top: 1px; }
+  .tpl-meta { font-size: 11.5px; color: var(--ink-4); }
+
+  /* 设置 */
+  .settings-layout { grid-template-columns: 196px minmax(0, 1fr); }
+  .form-row { grid-template-columns: 190px minmax(0, 1fr); }
+  .form-row + .form-row { margin-top: 6px; }
+  .toggle-row + .toggle-row { margin-top: 4px; }
+
+  /* ============ 内容放大一号（容器尺寸不变） ============
+     宽度、格子内边距、间距都沿用上面的紧凑值，只把格子里的文字与控件放大一档 */
+  html, body { font-size: 14px; }
+
+  .rail-btn { font-size: 13.5px; }
+  .rail-count { font-size: 11px; }
+  .rail-section { font-size: 11.5px; }
+  .brand-title { font-size: 15.5px; }
+  .rail-plan-row { font-size: 12px; }
+
+  .crumbs { font-size: 13.5px; }
+  .avatar { width: 35px; height: 35px; font-size: 12.5px; }
+
+  .btn { height: 35px; padding: 0 13px; font-size: 13.5px; }
+  .btn-icon { width: 35px; }
+  .btn-sm { height: 29px; padding: 0 12px; font-size: 12.5px; }
+  .btn-sm.btn-icon { width: 29px; }
+  .kbd { height: 19px; font-size: 11.5px; }
+  .field, .select-trigger { height: 38px; }
+  .menu-opt { font-size: 13.5px; padding: 8px 11px; }
+  .seg-btn { height: 30px; padding: 0 13px; font-size: 13px; }
+  .seg-btn .n { font-size: 11px; }
+  .check { width: 18px; height: 18px; }
+  .pill { font-size: 12px; }
+  .chip { height: 24px; font-size: 12px; }
+  .tab { height: 33px; font-size: 13.5px; }
+
+  .page-title { font-size: 22px; }
+  .page-sub { font-size: 13.5px; }
+  .tile-title { font-size: 14.5px; }
+  .tile-sub { font-size: 12.5px; }
+
+  .kpi-label { font-size: 13px; }
+  .kpi-value { font-size: 27px; }
+  .kpi-value small { font-size: 14px; }
+  .kpi-foot { font-size: 12.5px; }
+  .delta { font-size: 11.5px; }
+  .chart-x { font-size: 11.5px; }
+  .chart-y { font-size: 11px; }
+  .legend { font-size: 12px; }
+  .chart-tip { font-size: 12.5px; }
+
+  .feed-item { grid-template-columns: 34px minmax(0, 1fr) auto; gap: 12px; }
+  .feed-ico { width: 34px; height: 34px; border-radius: 11px; }
+  .feed-ico svg { width: 17px; height: 17px; }
+  .feed-text { font-size: 13.5px; }
+  .feed-meta { font-size: 12px; }
+  .feed-time { font-size: 11.5px; }
+  .rank-no { font-size: 11.5px; }
+  .rank-pct { font-size: 12.5px; }
+  .region-row { grid-template-columns: 100px minmax(0, 1fr) auto; font-size: 13.5px; }
+  .region-meta { font-size: 12px; min-width: 88px; }
+
+  .tr { min-height: 50px; }
+  .tr.head { font-size: 12px; }
+  .tr .name { font-size: 13.5px; }
+  .tr .sub { font-size: 11.5px; }
+  .tr .cell-mono, .cpu { font-size: 12.5px; }
+  .tfoot { font-size: 12.5px; }
+  .bulk { font-size: 13px; }
+  .page-btn { min-width: 30px; height: 30px; font-size: 12.5px; }
+
+  .kv { font-size: 13.5px; grid-template-columns: 104px minmax(0, 1fr); }
+  .usage-top { font-size: 13.5px; }
+  .log { font-size: 12.5px; }
+
+  .settings-nav button { font-size: 13.5px; }
+  .form-label { font-size: 13.5px; }
+  .form-hint { font-size: 12px; }
+  .member-name { font-size: 13.5px; }
+  .member-mail { font-size: 12px; }
+  .member .avatar { width: 36px; height: 36px; }
+  .member { grid-template-columns: 36px minmax(0, 1fr) auto auto; }
+
+  .hero h2 { font-size: 21px; }
+  .hero p { font-size: 14px; }
+  .progress-line { font-size: 12.5px; }
+  .term { font-size: 13px; }
+  .step-no { width: 28px; height: 28px; font-size: 12px; }
+  .step-card h3 { font-size: 14.5px; }
+  .step-card p { font-size: 13px; }
+  .res-ico { width: 40px; height: 40px; }
+  .res-ico svg { width: 18px; height: 18px; }
+  .res-card h3 { font-size: 14px; }
+  .res-card p { font-size: 12.5px; }
+  .tpl-badge { width: 36px; height: 36px; font-size: 12.5px; }
+  .tpl-body h3 { font-size: 14px; }
+  .tpl-body p { font-size: 12.5px; }
+  .tpl-meta { font-size: 12px; }
+
+  .modal-head h3 { font-size: 16px; }
+  .modal label { font-size: 12.5px; }
+  .toast { font-size: 13.5px; }
+  .savebar { font-size: 13.5px; }
+
+  /* ============ 密度与层级（第二轮） ============
+     · 描述文字加深一档（--ink-desc），标题加粗，主次更分明
+     · 卡片内容横向排布、底部对齐，减少「宽卡片 + 一行字」的空洞感 */
+  :root { --ink-desc: var(--cortado-slate-455); }
+  html[data-theme="dark"] { --ink-desc: var(--cortado-slate-270); }
+
+  .page-title { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+  .page-sub, .tile-sub, .feed-meta, .form-hint, .member-mail,
+  .step-card p, .res-card p, .tpl-body p, .hero p, .kpi-foot, .region-meta, .tr .sub { color: var(--ink-desc); }
+  .tile-title { font-size: 15px; font-weight: 650; }
+  .tile-sub { font-size: 12.8px; }
+  .kpi-label { font-size: 13px; font-weight: 560; color: var(--ink-2); }
+  .kpi-value { font-size: 30px; font-weight: 700; letter-spacing: -0.025em; }
+  .kpi-value small { font-weight: 600; }
+  .spark { width: 64px; height: 24px; top: 16px; right: 18px; }
+  .feed-text b, .tr .name, .member-name { font-weight: 650; }
+  .rail-btn.active, .settings-nav button.active { font-weight: 650; }
+
+  /* 开始使用：欢迎区左右两栏 */
+  .hero { padding: 24px 30px; }
+  .hero-split { display: flex; align-items: center; gap: 28px; }
+  .hero-copy { flex: 1; min-width: 0; }
+  .hero h2 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+  .hero p { font-size: 14.5px; line-height: 1.7; max-width: 520px; }
+  .hero-ring { position: relative; width: 132px; height: 132px; flex-shrink: 0; margin-right: 8px; }
+  .hero-ring-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .hero-ring-text b { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+  .hero-ring-text span { font-size: 12px; color: var(--ink-desc); }
+
+  /* 步骤卡：编号在左，底部对齐元信息与操作 */
+  .step-card { flex-direction: row; align-items: stretch; gap: 14px; }
+  .step-no { width: 32px; height: 32px; font-size: 13px; flex-shrink: 0; }
+  .step-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+  .step-title { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 32px; }
+  .step-card h3 { font-size: 15.5px; font-weight: 650; }
+  .step-card p { font-size: 13.5px; line-height: 1.6; }
+  .step-foot { margin-top: auto; padding-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .step-meta { font-size: 12.5px; color: var(--ink-3); }
+  .step-card .btn { align-self: auto; }
+
+  .res-card h3, .tpl-body h3 { font-weight: 650; }
+
+  /* 设置：右侧概览栏 */
+  .settings-layout { grid-template-columns: 196px minmax(0, 1fr) 300px; }
+  .settings-aside { position: sticky; top: 12px; }
+  .aside-stat { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; color: var(--ink-2); }
+  .aside-stat b { font-size: 22px; font-weight: 700; color: var(--ink-1); letter-spacing: -0.02em; }
+  .aside-kv { display: grid; grid-template-columns: auto 1fr; row-gap: 9px; column-gap: 12px; font-size: 13.5px; padding: 4px 0; }
+  .aside-kv dt { color: var(--ink-desc); }
+  .aside-kv dd { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .aside-log { display: flex; flex-direction: column; gap: 11px; font-size: 13px; }
+  .aside-log b { font-weight: 650; }
+  .aside-log span { display: block; font-size: 12px; color: var(--ink-3); margin-top: 1px; }
+  .form-control { max-width: 520px; }
+  @media (max-width: 1280px) {
+    .settings-layout { grid-template-columns: 196px minmax(0, 1fr); }
+    .settings-aside { display: none; }
+  }
+
+  /* 模板行：标题格 + 4 张模板卡拼成一行，标题不再悬在画布上 */
+  .row-tpl { grid-template-columns: minmax(170px, 0.82fr) repeat(4, minmax(0, 1fr)); }
+  .tpl-intro { justify-content: space-between; background: var(--bg-tile-tint); }
+  .tpl-intro p { margin-top: 3px; font-size: 13px; line-height: 1.55; color: var(--ink-desc); }
+  .tpl-all {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blush-ink);
+    transition: gap 0.18s var(--ease-out);
+  }
+  .tpl-all:hover { gap: 7px; }
+  @media (max-width: 1100px) {
+    .row-tpl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .row.row-tpl > * { border-radius: var(--r-seam); }
+    .row.row-tpl > .tpl-intro { grid-column: 1 / -1; flex-direction: row; align-items: center; border-top-left-radius: var(--r-tile); border-top-right-radius: var(--r-tile); }
+    .row.row-tpl > .tpl-intro .tpl-all { align-self: center; }
+    .row.row-tpl > :nth-child(4) { border-bottom-left-radius: var(--r-tile); }
+    .row.row-tpl > :nth-child(5) { border-bottom-right-radius: var(--r-tile); }
+  }
+  @media (max-width: 640px) {
+    .row-tpl { grid-template-columns: minmax(0, 1fr); }
+    .row.row-tpl > :nth-child(4) { border-bottom-left-radius: var(--r-seam); }
+    .row.row-tpl > :nth-child(5) { border-bottom-left-radius: var(--r-tile); }
+  }
+
+  /* Lucide 图标：线性、圆头；小尺寸时加粗笔画保持清晰 */
+  svg.i { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+  svg.i[width="9"], svg.i[width="10"] { stroke-width: 3; }
+  svg.i[width="11"], svg.i[width="12"] { stroke-width: 2.6; }
+  svg.i[width="13"], svg.i[width="14"] { stroke-width: 2.2; }
+
+  /* 页头：不再悬在画布上，做成横跨整行的格子（标题 + 说明 + 本页操作） */
+  .page-head {
+    background: var(--bg-tile);
+    border-radius: var(--r-tile);
+    padding: 18px 20px 18px 24px;
+    align-items: center;
+  }
+  .page-title { font-size: 22px; }
+  .page-head .tabs { flex-basis: 100%; margin: 4px 0 -4px -6px; padding: 0; }
+  .page-head .tab:hover { background: var(--bg-well); }
+  .page-head .tab.active { background: var(--blush-soft); color: var(--blush-ink); box-shadow: none; }
+
+  /* ============ 侧栏微调 ============
+     · Logo 浅粉底 + 雾粉标志；圆环缺口对准右上角同色实心小点
+     · Logo 与导航按钮统一 44×44，左右、顶部都离侧栏边 10px；圆角同心 32 − 10 = 22（见文末「侧栏：胶囊形」）
+     · 顶栏 64px 高，中心 = 12 + 32 = 44 = 侧栏 Logo 中心（12 + 10 + 22），左上角对齐成一条线 */
+  .side-rail { padding-top: var(--rail-pad); }
+  .rail-brand { padding: 0 0 18px; gap: 12px; }
+  .rail-brand .logo-mark {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-rail-item);
+    background: var(--blush-soft);   /* 浅粉底 + 雾粉标志 */
+    color: var(--blush-solid);
+  }
+  .rail-brand .logo-mark svg { width: 22px; height: 22px; }
+  .rail-glider { height: 44px; }
+  .rail-btn { height: 44px; }
+  .side-rail svg.i { stroke-width: 1.9; }
+  .topbar { min-height: 64px; }
+
+  /* ============ 精致化（第三轮）：保持缩放，调整搭配 ============
+     圆角梯度：格子 20 → 内嵌面板 12 → 图标底 10 → 标签 7 → 按钮胶囊
+     字重：标题 600、大数字 620、按钮 540；配角（编号、图标底、进度环）缩小一档 */
+  :root { --r-inner: 12px; --r-icon: 10px; }
+  .tile, .page-head, .topbar, .side-rail { box-shadow: 0 1px 2px rgba(30, 32, 46, 0.04); }
+  html[data-theme="dark"] .tile,
+  html[data-theme="dark"] .page-head,
+  html[data-theme="dark"] .topbar,
+  html[data-theme="dark"] .side-rail { box-shadow: none; }
+
+  /* 字重与字号 */
+  .page-eyebrow {
+    display: block;
+    margin-bottom: 5px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+  }
+  .page-title { font-size: 20px; font-weight: 640; letter-spacing: -0.01em; }
+  .page-sub { font-size: 13px; margin-top: 3px; }
+  .tile-title { font-size: 14.5px; font-weight: 600; }
+  .tile-sub { font-size: 12.5px; }
+  .btn { font-weight: 540; }
+  .pill { font-size: 11.5px; font-weight: 560; padding: 2px 9px; }
+  .crumbs b, .rail-btn.active, .settings-nav button.active, .tab.active { font-weight: 600; }
+  .feed-text b, .tr .name, .member-name, .rank-item div > div:first-child { font-weight: 600; }
+
+  /* 总览 */
+  .kpi-label { font-size: 12.5px; font-weight: 500; color: var(--ink-3); }
+  .kpi-value { font-size: 28px; font-weight: 620; letter-spacing: -0.03em; }
+  .kpi-value small { font-size: 13px; font-weight: 500; margin-left: 3px; }
+  .feed-ico { border-radius: var(--r-icon); }
+  .kpi-value, .rank-pct, .region-meta, .page-btn, .tfoot, .usage-top b, .aside-kv dd { font-variant-numeric: tabular-nums; }
+
+  /* 开始使用 */
+  .hero h2 { font-size: 23px; font-weight: 640; letter-spacing: -0.015em; }
+  .hero p { font-size: 13.5px; line-height: 1.75; }
+  .eyebrow { font-size: 11.5px; margin-bottom: 12px; }
+  .hero-ring svg circle { stroke-width: 9; }
+  .hero-ring-text b { font-size: 22px; font-weight: 620; font-variant-numeric: tabular-nums; }
+  .hero-ring-text span { font-size: 11px; letter-spacing: 0.04em; margin-top: 1px; }
+  .term { border-radius: var(--r-inner); font-size: 12.5px; line-height: 1.9; }
+  .step-no { width: 26px; height: 26px; font-size: 11.5px; }
+  .step-no svg { width: 12px; height: 12px; }
+  .step-title { min-height: 26px; }
+  .step-card { gap: 12px; }
+  .step-card h3 { font-size: 14.5px; font-weight: 600; }
+  .step-card p { font-size: 13px; line-height: 1.7; }
+  .step-meta { font-size: 12px; color: var(--ink-4); }
+  .res-ico { width: 36px; height: 36px; border-radius: var(--r-icon); }
+  .res-ico svg { width: 17px; height: 17px; }
+  .res-card h3, .tpl-body h3 { font-size: 13.5px; font-weight: 600; }
+  .res-card p, .tpl-body p { font-size: 12.5px; }
+  .tpl-badge { width: 32px; height: 32px; border-radius: 9px; font-size: 11.5px; }
+  .tpl-meta { font-family: var(--font-mono); font-size: 11px; color: var(--ink-4); }
+  .tpl-intro .tile-title { font-size: 14.5px; }
+
+  /* 列表 / 详情 / 设置 */
+  .chip { border-radius: 7px; font-weight: 500; }
+  .log { border-radius: var(--r-inner); }
+  .kv dt, .aside-kv dt { font-weight: 400; }
+  .form-label { font-weight: 560; }
+  .aside-stat b { font-weight: 620; }
+
+  /* ============ 节奏修正：间距不随字号放大（字号、控件尺寸不变） ============
+     内边距 16/18、格内间距 10；正文行高 1.55；段落 pretty 换行不留单字孤行 */
+  .tile { padding: 16px 18px; gap: 10px; }
+  p { text-wrap: pretty; }
+  h1, h2, h3, .tile-title, .page-title { text-wrap: balance; line-height: 1.35; }
+  .page-head { padding: 16px 20px; }
+  .page-eyebrow { margin-bottom: 4px; }
+  .page-sub, .tile-sub { margin-top: 2px; text-wrap: pretty; }
+  .kpi-foot, .tr .sub, .region-meta, .feed-text, .form-hint { text-wrap: pretty; }
+  /* 中文的 pretty 拦不住两三个字的孤行，末尾由 bindTail() 绑字处理 */
+
+  /* 开始使用 */
+  .hero { padding: 22px 26px; }
+  .hero p { line-height: 1.6; margin: 6px 0 16px; }
+  .hero .eyebrow { margin-bottom: 10px; }
+  .term { line-height: 1.75; padding: 12px 14px; }
+  .res-card p, .tpl-body p { line-height: 1.5; }
+
+  /* 步骤卡：编号并入标题行，描述与底部吃满整张卡的宽度 */
+  .step-card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr;
+    column-gap: 10px;
+    row-gap: 6px;
+  }
+  .step-main { display: contents; }
+  .step-no { grid-column: 1; grid-row: 1; align-self: center; }
+  .step-title { grid-column: 2; grid-row: 1; min-height: 26px; }
+  .step-card p { grid-column: 1 / -1; grid-row: 2; line-height: 1.55; }
+  .step-foot { grid-column: 1 / -1; grid-row: 3; align-self: end; margin-top: 0; padding-top: 6px; }
+  /* 编号与 v2 的 .orbit-index 统一：24px 浅底圆 + 深色等宽字；状态只换色调，不用实心 */
+  .step-no { width: 24px; height: 24px; font-size: 11.5px; font-weight: 600; background: var(--bg-well); color: var(--ink-3); }
+  .step-no svg { width: 12px; height: 12px; stroke-width: 2.6; }
+  .step-card.done .step-no { background: var(--sand-soft); color: var(--sand-ink); }
+  .step-card.current .step-no { background: var(--blush-soft); color: var(--blush-ink); }
+  .step-title { min-height: 24px; }
+
+  /* ============ 账单与套餐演示（demo-billing）专用 ============
+     沿用全部节奏规则：格子 16/18、圆角梯度 20 / 12 / 10 / 7 / 胶囊、标题 600、数字 620 + 等宽数字
+     高度差由「内嵌浅底面板」吸收（套餐功能清单、余额面板），不在卡片中部留空洞 */
+  .btn:disabled { opacity: 0.45; cursor: default; pointer-events: none; }
+  .tile-foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .hint { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--ink-desc); min-width: 0; }
+  .head-right { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+  .seg-sm .seg-btn { height: 26px; padding: 0 11px; font-size: 12.5px; }
+  .save-tag { margin-left: 6px; padding: 1px 6px; border-radius: 6px; background: var(--sand-soft); color: var(--sand-ink); font-size: 10.5px; font-weight: 600; }
+  .pill.tone-sand { background: var(--sand-soft); color: var(--sand-ink); }
+  .pill.tone-rose { background: var(--rose-soft); color: var(--rose-ink); }
+  .ico-well { width: 34px; height: 34px; border-radius: var(--r-icon); display: grid; place-items: center; flex-shrink: 0; background: var(--bg-well); color: var(--ink-2); }
+  .ico-well.sm { width: 32px; height: 32px; }
+  .ico-well.blush { background: var(--blush-soft); color: var(--blush-ink); }
+  .ico-well.sand { background: var(--sand-soft); color: var(--sand-ink); }
+  .ico-well.rose { background: var(--rose-soft); color: var(--rose-ink); }
+  .menu-opt:disabled { opacity: 0.45; cursor: default; background: none; }
+  .menu-trigger { color: var(--ink-3); }
+  .card-menu.open .menu-trigger { background: var(--bg-well); color: var(--ink-1); }
+  .meter.warn > i { background: var(--sand-solid); }
+  .meter.over > i { background: var(--rose-solid); }
+  [data-w] { transition: width 0.8s var(--ease-out), flex-basis 0.8s var(--ease-out); }
+
+  /* ---- 套餐卡：价格区等高对齐，功能清单放进浅底面板并撑满，长短不一也不留空洞 ---- */
+  .plans .plan { gap: 12px; }
+  .plan-head { display: flex; align-items: center; gap: 10px; min-height: 30px; }
+  .plan-ico { width: 30px; height: 30px; border-radius: var(--r-icon); display: grid; place-items: center; flex-shrink: 0; background: var(--bg-well); color: var(--ink-2); }
+  .plan.current .plan-ico { background: var(--sand-soft); color: var(--sand-ink); }
+  .plan.recommended .plan-ico { background: var(--blush-fill); color: var(--blush-ink); }
+  .plan-name { flex: 1; min-width: 0; font-size: 14.5px; font-weight: 600; }
+  .plan-desc { font-size: 13px; line-height: 1.55; color: var(--ink-desc); min-height: 3.1em; }
+  .plan-price { display: flex; align-items: baseline; min-height: 40px; }
+  .plan-price .cur { font-size: 16px; font-weight: 560; color: var(--ink-2); margin-right: 2px; }
+  .plan-price .price { font-size: 32px; font-weight: 620; letter-spacing: -0.03em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .plan-price .price.text { font-size: 24px; letter-spacing: -0.01em; }
+  .plan-price .per { margin-left: 5px; font-size: 12.5px; color: var(--ink-3); }
+  .plan-note { margin-top: -6px; min-height: 19px; font-size: 12.5px; color: var(--ink-desc); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .plan-cta { width: 100%; }
+  .plan-cta.is-current { opacity: 1; background: var(--bg-well); color: var(--ink-3); }
+  .plan-feats {
+    flex: 1;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 14px;
+    border-radius: var(--r-inner);
+    background: var(--bg-tile-tint);
+  }
+  .plan-feats li { display: flex; gap: 8px; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+  .plan-feats li svg { margin-top: 3.5px; color: var(--sand-solid); }
+  .plan-feats .lead { font-size: 12px; color: var(--ink-3); }
+  .plan.recommended .plan-feats { background: color-mix(in srgb, var(--bg-tile-tint) 72%, transparent); }
+
+  /* ---- 功能对比表：推荐列用一条连续浅粉底色标出（无描边） ---- */
+  .cmp-scroll { overflow-x: auto; margin: 0 -6px; padding: 0 6px; scrollbar-width: thin; }
+  .cmp { min-width: 720px; display: flex; flex-direction: column; }
+  .cmp-row {
+    display: grid;
+    grid-template-columns: minmax(170px, 1.35fr) repeat(4, minmax(0, 1fr));
+    min-height: 40px;
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--ink-2);
+    transition: background-color 0.12s ease;
+  }
+  .cmp-row > * { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 0 10px; text-align: center; font-variant-numeric: tabular-nums; }
+  .cmp-row > :first-child { justify-content: flex-start; text-align: left; padding-left: 12px; color: var(--ink-1); }
+  .cmp-row:not(.head):not(.group):hover { background: var(--bg-well); }
+  .cmp-row.head { min-height: 44px; font-weight: 600; color: var(--ink-1); }
+  .cmp-row.head > :first-child { color: var(--ink-3); font-weight: 500; }
+  .cmp-row.group { min-height: 34px; }
+  .cmp-row.group > * { align-items: flex-end; padding-bottom: 6px; }
+  .cmp-row.group > :first-child { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; color: var(--ink-4); }
+  .cmp .hl { background: color-mix(in srgb, var(--blush-soft) 72%, transparent); }
+  .cmp-row:first-child .hl { border-radius: 10px 10px 0 0; }
+  .cmp-row:last-child .hl { border-radius: 0 0 10px 10px; }
+  .cmp .yes { color: var(--sand-solid); }
+  .cmp .no { color: var(--ink-4); }
+
+  /* ---- 常见问题：手风琴，0fr → 1fr 连续展开 ---- */
+  .faq { display: flex; flex-direction: column; gap: 4px; }
+  .faq-item { border-radius: var(--r-inner); background: var(--bg-tile-tint); }
+  .faq-q {
+    width: 100%;
+    min-height: 44px;
+    padding: 11px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13.5px;
+    font-weight: 560;
+    text-align: left;
+  }
+  .faq-q svg { color: var(--ink-3); transition: transform 0.28s var(--ease-out); }
+  .faq-item.open .faq-q svg { transform: rotate(180deg); }
+  .faq-a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.32s var(--ease-out); }
+  .faq-a > div { overflow: hidden; }
+  .faq-a p { padding: 0 14px 13px; font-size: 13px; line-height: 1.6; color: var(--ink-desc); }
+  .faq-item.open .faq-a { grid-template-rows: 1fr; }
+
+  .ent-desc { font-size: 13px; line-height: 1.55; color: var(--ink-desc); }
+  .ent-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .ent-list li { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .ent-list b { display: block; font-size: 13.5px; font-weight: 560; }
+  .ent-list span.sub { display: block; font-size: 12px; color: var(--ink-desc); }
+
+  /* ---- 用量 ---- */
+  .kpi-ico { position: absolute; top: 14px; right: 16px; width: 30px; height: 30px; border-radius: var(--r-icon); display: grid; place-items: center; background: var(--bg-well); color: var(--ink-3); }
+  .kpi-ico.blush { background: var(--blush-soft); color: var(--blush-ink); }
+  .kpi-ico.rose { background: var(--rose-soft); color: var(--rose-ink); }
+  .kpi-ico.sand { background: var(--sand-soft); color: var(--sand-ink); }
+  .kpi-foot.col { flex-direction: column; align-items: stretch; gap: 5px; }
+  .kpi-foot.col .meter { margin: 0; }
+  .kpi-foot.split { justify-content: space-between; min-height: 29px; }
+  .kpi-foot.split > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .chart-fill { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+  .chart-fill .chart-wrap { flex: 1; height: auto; min-height: 200px; }
+  .chart-fill .chart-svg { position: absolute; inset: 0; }
+
+  .quota { display: flex; flex-direction: column; gap: 13px; }
+  .quota-row { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; column-gap: 12px; row-gap: 6px; align-items: center; }
+  .quota-row > .ico-well { grid-row: 1 / span 2; }
+  .quota-name { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 13.5px; font-weight: 560; white-space: nowrap; }
+  .quota-val { font-size: 12.5px; color: var(--ink-desc); text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .quota-val b { color: var(--ink-1); font-weight: 600; }
+  .quota-row .meter { grid-column: 2 / -1; margin: 0; height: 6px; }
+
+  .cost-list { display: flex; flex-direction: column; gap: 2px; }
+  .cost-item { display: grid; grid-template-columns: 34px minmax(0, 1fr) 110px 80px; gap: 12px; align-items: center; padding: 8px 10px; margin: 0 -10px; border-radius: var(--r-inner); transition: background-color 0.12s ease; }
+  .cost-item:hover { background: var(--bg-well); }
+  .cost-name { font-size: 13.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cost-sub { font-size: 12px; color: var(--ink-desc); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cost-item .meter { margin: 0; height: 6px; }
+  .cost-amt { text-align: right; font-size: 13.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  .bd-total { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .bd-total b { font-size: 26px; font-weight: 620; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .bd-total b small { font-size: 14px; font-weight: 500; color: var(--ink-3); }
+  .bd-total span { font-size: 12.5px; color: var(--ink-desc); }
+  .stack-bar { display: flex; gap: 3px; height: 12px; }
+  .stack-bar > i { display: block; height: 100%; flex: 0 1 0%; min-width: 0; border-radius: 3px; }
+  .stack-bar > i:first-child { border-radius: 6px 3px 3px 6px; }
+  .stack-bar > i:last-child { border-radius: 3px 6px 6px 3px; }
+  .bd-list { display: flex; flex-direction: column; }
+  .bd-row { display: grid; grid-template-columns: 10px minmax(0, 1fr) 52px 88px; gap: 10px; align-items: center; padding: 6px 0; font-size: 13px; }
+  .bd-dot { width: 10px; height: 10px; border-radius: 3px; }
+  .bd-pct { text-align: right; font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); }
+  .bd-amt { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* ---- 发票 ---- */
+  .inv .tr { grid-template-columns: minmax(170px, 1.4fr) minmax(100px, 0.8fr) minmax(110px, 0.8fr) minmax(90px, 0.8fr) minmax(150px, 1.1fr) 32px; }
+  .inv .tr .name { font-family: var(--font-mono); font-size: 13px; font-weight: 560; }
+  .inv .tr .sub { font-family: var(--font-sans); }
+  .inv .c-amt { text-align: right; }
+  .amt { font-size: 13.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .amt.refund { color: var(--ink-3); font-weight: 500; text-decoration: line-through; text-decoration-color: var(--ink-4); }
+  .pay-cell { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 12.5px; color: var(--ink-2); white-space: nowrap; }
+  .pay-cell .mono { font-size: 12px; }
+  .pay-cell .ico-mini { width: 26px; height: 18px; border-radius: 5px; display: grid; place-items: center; background: var(--bg-well); color: var(--ink-3); flex-shrink: 0; }
+  .inv-body { min-height: 0; }
+  .inv-body .tbody { display: flex; flex-direction: column; }
+  .empty-state { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 44px 16px 40px; text-align: center; }
+  .empty-ico { width: 46px; height: 46px; margin-bottom: 6px; border-radius: 50%; display: grid; place-items: center; background: var(--bg-well); color: var(--ink-3); }
+  .empty-state h3 { font-size: 14.5px; font-weight: 600; }
+  .empty-state p { max-width: 340px; font-size: 13px; line-height: 1.55; color: var(--ink-desc); }
+  .empty-state .btn { margin-top: 8px; }
+
+  /* ---- 支付方式 ---- */
+  .alert-tile { flex-direction: row; align-items: center; gap: 14px; background: var(--sand-soft); }
+  .alert-tile .ico-well { background: var(--sand-fill); color: var(--sand-ink); }
+  .alert-body { flex: 1; min-width: 0; }
+  .alert-title { font-size: 13.5px; font-weight: 600; }
+  .alert-body p { margin-top: 2px; font-size: 13px; line-height: 1.55; color: var(--ink-2); }
+  .alert-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+
+  .brand-badge {
+    position: relative;
+    width: 52px;
+    height: 34px;
+    border-radius: 7px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 0 6px 5px;
+    flex-shrink: 0;
+    color: var(--cortado-slate-0);
+    font-family: var(--font-mono);
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+  .brand-badge::before { content: ""; position: absolute; top: 7px; left: 7px; width: 10px; height: 7px; border-radius: 2px; background: rgba(255, 255, 255, 0.6); }
+  .brand-badge.visa, .card-preview[data-brand="visa"] { background: var(--blush-solid); }
+  .brand-badge.mc, .card-preview[data-brand="mc"] { background: var(--sand-solid); }
+  .brand-badge.up, .card-preview[data-brand="up"] { background: var(--cortado-slate-345); }
+  .brand-badge.mini { width: 26px; height: 18px; border-radius: 5px; padding: 0; font-size: 0; }
+  .brand-badge.mini::before { top: 4px; left: 4px; width: 6px; height: 4px; border-radius: 1.5px; }
+
+  .card-list { display: flex; flex-direction: column; gap: 2px; }
+  .card-row { display: grid; grid-template-columns: 52px minmax(0, 1fr) auto 29px; gap: 12px; align-items: center; padding: 9px 10px; margin: 0 -10px; border-radius: var(--r-inner); transition: background-color 0.12s ease; }
+  .card-row:hover { background: var(--bg-well); }
+  .card-name { display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+  .card-name .mono { font-size: 12.5px; font-weight: 500; letter-spacing: 0.02em; }
+  .card-sub { font-size: 12px; color: var(--ink-desc); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .card-tags { display: flex; gap: 4px; }
+  .menu-trigger { width: 29px; height: 29px; border-radius: var(--r-pill); display: grid; place-items: center; transition: background-color 0.15s ease, color 0.15s ease; }
+  .menu-trigger:hover { background: var(--bg-well); color: var(--ink-1); }
+  .balance-row { margin-top: auto; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 14px; border-radius: var(--r-inner); background: var(--bg-tile-tint); }
+  .balance-row b { display: block; font-size: 13.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .balance-row span.sub { display: block; font-size: 12px; color: var(--ink-desc); }
+  .balance-row .ico-well { background: var(--bg-tile); }
+
+  .addcard { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr); gap: 18px; align-items: center; }
+  .card-preview {
+    aspect-ratio: 1.586;
+    padding: 16px 18px;
+    border-radius: var(--r-inner);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: var(--cortado-slate-0);
+    font-family: var(--font-mono);
+    background: var(--cortado-slate-270);
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--rose-solid) 18%, transparent);
+    transition: background 0.4s ease;
+  }
+  .cp-top { display: flex; align-items: center; justify-content: space-between; }
+  .cp-chip { width: 30px; height: 22px; border-radius: 5px; background: rgba(255, 255, 255, 0.55); }
+  .cp-brand { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; }
+  .cp-num { font-size: 14px; letter-spacing: 0.08em; white-space: nowrap; overflow: hidden; font-variant-numeric: tabular-nums; }
+  .cp-bottom { display: flex; justify-content: space-between; gap: 12px; min-width: 0; }
+  .cp-bottom > div { min-width: 0; }
+  .cp-bottom > div:last-child { text-align: right; flex-shrink: 0; }
+  .cp-bottom span { display: block; font-size: 9.5px; letter-spacing: 0.08em; opacity: 0.75; }
+  .cp-bottom b { display: block; font-size: 12px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-sans); }
+  .addcard-fields { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  .f { display: flex; flex-direction: column; min-width: 0; }
+  .f-label { display: block; margin-bottom: 6px; font-size: 12.5px; font-weight: 500; color: var(--ink-2); }
+  .f-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .f .field .mono, .field input.mono { font-family: var(--font-mono); font-size: 13px; }
+  .f-err { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 0.26s var(--ease-out), opacity 0.2s ease; }
+  .f-err > div { overflow: hidden; }
+  .f-err span { display: block; padding-top: 5px; font-size: 12px; color: var(--rose-ink); }
+  .f.invalid .f-err { grid-template-rows: 1fr; opacity: 1; }
+  .f.invalid .field { background: var(--rose-soft); box-shadow: 0 0 0 3px color-mix(in srgb, var(--rose-solid) 16%, transparent); }
+  .shake { animation: fShake 0.36s var(--ease-out); }
+  @keyframes fShake { 0%, 100% { transform: none; } 20% { transform: translateX(-4px); } 40% { transform: translateX(4px); } 60% { transform: translateX(-2px); } 80% { transform: translateX(2px); } }
+  .addcard-fields .toggle-row { padding: 2px 0; }
+
+  .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 14px; }
+  .form-grid .span-2 { grid-column: 1 / -1; }
+  .form-grid .select { width: 100%; }
+  .deliver .toggle-row + .toggle-row { margin-top: 2px; }
+
+  /* ================= 签名层：v2 / seam 的识别性语法 =================
+     · 编号：每行第一个格子 01、02…，同行其余 1B、1C…（CSS 计数器，无需写进标记）
+     · 托盘：.tray 浅灰蓝底 + 白色小格，圆角 12 → 7（内缩 5，同心）
+     · 星轨环：.kpi-ring 替代右上角图标，读数在环心
+     · 等宽：金额、额度、计数、右侧小标签 */
+  :root { --tray: var(--cortado-slate-30); --r-tray: 12px; --r-cell: 7px; }
+  html[data-theme="dark"] { --tray: var(--cortado-slate-755); }
+
+  /* 1. 格子标题语法 */
+  .scene { counter-reset: srow; }
+  .scene .row:has(.tile-title) { counter-increment: srow; counter-reset: scell; }
+  .scene .row > .tile:has(.tile-title) { counter-increment: scell; }
+  .tile-head .tile-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 650; letter-spacing: -0.005em; }
+  .tile-head .tile-title::before {
+    content: counter(srow) counter(scell, upper-alpha);
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--blush-soft);
+    color: var(--blush-ink);
+    font: 600 11px/1 var(--font-mono);
+    letter-spacing: -0.02em;
+  }
+  .scene .row > .tile:first-child .tile-title::before { content: counter(srow, decimal-leading-zero); }
+  .tile-head > div > .tile-title + .tile-sub { padding-left: 32px; margin-top: 1px; font-size: 12px; line-height: 1.5; color: var(--ink-desc); }  /* DESIGN.md v2：caption 12 / ink-description */
+  /* 标题右侧的说明 → 等宽小标签 */
+  .tile-head > .tile-title + .tile-sub,
+  .tile-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-4);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .tile-tag { text-transform: uppercase; letter-spacing: 0.08em; font-size: 10.5px; }
+
+  /* 2. 托盘层 */
+  .tray {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 5px;
+    border-radius: var(--r-tray);
+    background: var(--tray);
+  }
+  /* 不用 !important：删除卡片时 WAAPI 要动画 padding / margin，!important 会盖过动画 */
+  .tile .tray > *, .tile .tray > *:hover {
+    margin: 0;
+    padding: 9px 12px;
+    border-radius: var(--r-cell);
+    background: var(--bg-tile);
+    box-shadow: 0 1px 2px rgba(30, 33, 48, 0.05);
+  }
+  html[data-theme="dark"] .tray > * { box-shadow: none; }
+  .tray .ico-well { border-radius: var(--r-cell); }
+
+  /* 3. 星轨环 */
+  .kpi-ring { position: absolute; top: 14px; right: 16px; width: 44px; height: 44px; display: grid; place-items: center; }
+  .kpi-ring svg { position: absolute; inset: 0; }
+  .kpi-ring b { font: 600 11px/1 var(--font-mono); color: var(--ink-2); }
+  .kpi-ring.over b { color: var(--rose-ink); }
+
+  /* 4. 等宽数字 */
+  .kpi-value, .quota-val, .cost-amt, .price, .inv-amt, .tfoot { font-variant-numeric: tabular-nums; }
+  .quota-val, .cost-amt { font-family: var(--font-mono); font-size: 12px; }
+  .quota-val b, .cost-amt b { font-weight: 600; }
+  .kpi-label { font-size: 12px; font-weight: 600; color: var(--ink-3); letter-spacing: 0.01em; }
+  @media (max-width: 640px) {
+    .tile .tray > *, .tile .tray > *:hover { padding: 9px 10px; }
+    .tray .card-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  }
+
+  /* ============ 套餐卡：内容等量 + 组内紧、组间松 ============
+     · 四张卡都是同一组 4 行规格（标签 / 等宽值），等高行不再需要拉伸内面板
+     · 完整功能清单放在下方功能对比表里
+     · 间距：标题→说明 6，价格→备注 2，组与组之间 14；按钮落在卡底 */
+  .plans .plan { gap: 0; }
+  .plans .plan-desc { margin-top: 6px; min-height: 0; }
+  .plans .plan-price { margin-top: 14px; min-height: 0; }
+  .plans .plan-price .price { font-size: 30px; }
+  .plans .plan-price .price.text { font-size: 22px; line-height: 1.25; }
+  .plans .plan-note { margin-top: 2px; min-height: 0; font-size: 12px; color: var(--ink-3); }
+  .plan-specs {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 5px;
+    border-radius: var(--r-tray, 12px);
+    background: var(--tray, var(--bg-tile-tint));
+  }
+  .plan-specs .spec {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: var(--r-cell, 7px);
+    background: var(--bg-tile);
+    font-size: 12px;
+    color: var(--ink-3);
+  }
+  .plan-specs .spec b {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 560;
+    color: var(--ink-1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-variant-numeric: tabular-nums;
+  }
+  .plan.recommended .plan-specs { background: color-mix(in srgb, var(--blush-soft) 70%, var(--tray)); }
+  .plan-extra { margin-top: 8px; padding-left: 2px; font-size: 12px; color: var(--ink-3); }
+  .plans .plan-cta { margin-top: auto; }
+  .plans .plan-extra { margin-bottom: 14px; }
+
+  /* 托盘里的开关行、构成图例：去掉行间外边距，小格之间统一 4px */
+  .tile .tray > .toggle-row + .toggle-row { margin-top: 0; }
+  .tile .deliver-tray > .toggle-row { padding: 10px 12px; }
+  .bd-list.tray { gap: 4px; }
+
+  /* 地址表单：宽格子里改三列，省掉一行，输入框不再拉得过长 */
+  #addrTile .form-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #addrTile .form-grid > .f:first-child { grid-column: span 2; }
+  #addrTile .form-grid > .f:last-child { grid-column: 1 / -1; }
+  @media (max-width: 640px) {
+    #addrTile .form-grid { grid-template-columns: minmax(0, 1fr); }
+    #addrTile .form-grid > .f:first-child, #addrTile .form-grid > .f:last-child { grid-column: auto; }
+  }
+
+  /* 费用构成底部：三格对比读数，固定在格子底部 */
+  .bd-foot { margin-top: auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+  .bd-foot > div { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-radius: var(--r-cell); background: var(--tray); }
+  .bd-foot span { font-size: 11.5px; color: var(--ink-3); }
+  .bd-foot b { font: 600 13px/1.3 var(--font-mono); color: var(--ink-1); font-variant-numeric: tabular-nums; }
+  .bd-foot b.bad { color: var(--rose-ink); }
+
+  .tray .quota-name { flex-wrap: wrap; row-gap: 3px; min-width: 0; }
+
+  /* ============ 功能对比：改组合 + 托盘分组 ============
+     · 对比表放左侧 1.75 份，常见问题与企业版上下叠在右侧，列宽从 ~370 收到 ~140
+     · 每个分组是一个托盘：白色行小格，组名是托盘上方的小标签
+     · 推荐列不用色带，只把数值换成雾粉墨色 */
+  .row-cmp { grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); }
+  .col-stack { display: flex; flex-direction: column; gap: var(--gap); min-width: 0; }
+  .col-stack > .tile { flex: 0 0 auto; border-radius: var(--r-seam); }
+  .col-stack > .tile:last-child { flex: 1 1 auto; }
+  .col-stack > :first-child { border-top-right-radius: var(--r-tile); }
+  .col-stack > :last-child { border-bottom-right-radius: var(--r-tile); }
+  .scene .col-stack > .tile:has(.tile-title) { counter-increment: scell; }
+  .scene .row > .col-stack .tile-title::before { content: counter(srow) counter(scell, upper-alpha); }
+
+  .cmp { min-width: 640px; gap: 0; }
+  .cmp-row { grid-template-columns: minmax(150px, 1.25fr) repeat(4, minmax(0, 1fr)); min-height: 32px; font-size: 13px; }
+  .cmp-row.head { min-height: 36px; font-size: 13px; }
+  .cmp-row.head > * { gap: 5px; }
+  .cmp-tray { gap: 3px; padding: 4px; }
+  .tile .cmp-tray > .cmp-row,
+  .tile .cmp-tray > .cmp-row:hover { padding: 0; min-height: 32px; border-radius: var(--r-cell); background: var(--bg-tile); }
+  .cmp-tray > .cmp-row > :first-child { padding-left: 10px; color: var(--ink-2); }
+  .cmp-glabel { margin: 10px 0 5px 12px; font-size: 11.5px; font-weight: 600; letter-spacing: 0.04em; color: var(--ink-3); }
+  .cmp .hl, .cmp-row:first-child .hl, .cmp-row:last-child .hl { background: none; border-radius: 0; }
+  .cmp-tray .hl { color: var(--blush-ink); font-weight: 600; }
+  .cmp-tray .yes.hl { color: var(--blush-solid); }
+  .cmp-price { font-variant-numeric: tabular-nums; }
+  @media (max-width: 1100px) {
+    .row-cmp { grid-template-columns: minmax(0, 1fr); }
+    .row-cmp > .cmp-tile { border-radius: var(--r-tile) var(--r-tile) var(--r-seam) var(--r-seam); }
+    .col-stack > .tile, .col-stack > :first-child { border-radius: var(--r-seam); }
+    .col-stack > :last-child { border-radius: var(--r-seam) var(--r-seam) var(--r-tile) var(--r-tile); }
+  }
+
+  /* ============ 推荐套餐：角落几何线（替代色块与渐变） ============
+     右上角三道同心细弧（圆心在角外 12px），一颗小点落在最外弧上；
+     弧线从「推荐」标签后面穿出，最外弧止于说明文字上方，不压字 */
+  .plan.recommended { position: relative; overflow: hidden; isolation: isolate; background: var(--bg-tile); }
+  .plan-corner { position: absolute; top: 0; right: 0; width: 80px; height: 56px; z-index: -1; pointer-events: none; }
+  .plan-corner circle { fill: none; stroke: var(--blush-fill); stroke-width: 1; }
+  .plan-corner circle:first-child { stroke: var(--blush-track); opacity: 0.7; }
+  .plan-corner .dot { fill: var(--blush-solid); stroke: none; }
+
+  .ent-list.tray { list-style: none; gap: 4px; }
+
+  /* ============ 参考实现对齐 DESIGN.md v2 ============
+     · 卡片徽标、卡面预览：渐变 → 平涂；卡面右上角三道细弧（支付方式页唯一一处几何标记）
+     · 到期提醒：白色格子 + 暖杏状态标签 + 暖杏图标底，不整块染色
+     · 常见问题、套餐规格：标成 .tray；FAQ 条目是托盘里的白色小格
+     · 字重上限 650 */
+  .brand-badge.visa, .card-preview[data-brand="visa"] { background: var(--blush-solid); }
+  .brand-badge.mc, .card-preview[data-brand="mc"] { background: var(--sand-solid); }
+  .brand-badge.up, .card-preview[data-brand="up"] { background: var(--cortado-slate-345); }
+  .card-preview { position: relative; overflow: hidden; isolation: isolate; background: var(--cortado-slate-270); }
+  .cp-arcs { position: absolute; top: 0; right: 0; width: 96px; height: 72px; z-index: -1; pointer-events: none; }
+  .cp-arcs circle { fill: none; stroke: rgba(255, 255, 255, 0.32); stroke-width: 1; }
+  .brand-badge, .cp-brand { font-weight: 650; }
+
+  .alert-tile { background: var(--bg-tile); }
+  .alert-tile .ico-well { background: var(--sand-soft); color: var(--sand-ink); }
+  .alert-title { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; }
+
+  .tile .faq.tray > .faq-item, .tile .faq.tray > .faq-item:hover { padding: 0; }
+  .faq.tray .faq-q { min-height: 40px; padding: 10px 12px; }
+  .faq.tray .faq-a p { padding: 0 12px 12px; }
+  .tile .plan-specs.tray > .spec, .tile .plan-specs.tray > .spec:hover { padding: 7px 10px; }
+
+  /* ============ 响应式 ============ */
+  .search-icon-btn { display: none !important; }  /* 手机上替代搜索框，见 ≤640px */
+  @media (max-width: 1100px) {
+    .row-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .row-4 > * { border-radius: var(--r-seam); }
+    .row-4 > :nth-child(1) { border-top-left-radius: var(--r-tile); }
+    .row-4 > :nth-child(2) { border-top-right-radius: var(--r-tile); }
+    .row-4 > :nth-child(3) { border-bottom-left-radius: var(--r-tile); }
+    .row-4 > :nth-child(4) { border-bottom-right-radius: var(--r-tile); }
+    .tr { grid-template-columns: 26px minmax(160px, 2fr) minmax(80px, 0.9fr) minmax(96px, 1fr) minmax(110px, 1.2fr) 22px; }
+    .tr > .c-spec, .tr > .c-time { display: none; }
+    .global-search { width: 190px; }
+  }
+  @media (max-width: 900px) {
+    .app { display: block; padding: 0 10px; }
+    .side-rail { display: none; }
+    .mobile-nav {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 6px;
+      border-radius: var(--r-tile);
+      background: var(--bg-tile);
+    }
+    .mobile-nav::-webkit-scrollbar { display: none; }
+    .mobile-nav button {
+      flex-shrink: 0;
+      height: 30px;
+      padding: 0 13px;
+      border-radius: var(--r-pill);
+      color: var(--ink-2);
+      font-size: 12.5px;
+      font-weight: 560;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+    .mobile-nav button.active { background: var(--blush-soft); color: var(--blush-ink); }
+    .row-2, .row-2-wide, .row-2-info, .row-3 { grid-template-columns: minmax(0, 1fr); }
+    .row-2 > *, .row-2-wide > *, .row-2-info > *, .row-3 > * { border-radius: var(--r-seam); }
+    .row-2 > :first-child, .row-2-wide > :first-child, .row-2-info > :first-child, .row-3 > :first-child { border-top-left-radius: var(--r-tile); border-top-right-radius: var(--r-tile); }
+    .row-2 > :last-child, .row-2-wide > :last-child, .row-2-info > :last-child, .row-3 > :last-child { border-bottom-left-radius: var(--r-tile); border-bottom-right-radius: var(--r-tile); }
+    .form-row { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+    .settings-layout { grid-template-columns: minmax(0, 1fr); }
+    .settings-nav { position: static; flex-direction: row; overflow-x: auto; scrollbar-width: none; padding: 6px; }
+    .settings-nav button { flex-shrink: 0; }
+    .row-hero { grid-template-columns: minmax(0, 1fr); }
+    .row-hero > :first-child { border-radius: var(--r-tile) var(--r-tile) var(--r-seam) var(--r-seam); }
+    .row-hero > :last-child { border-radius: var(--r-seam) var(--r-seam) var(--r-tile) var(--r-tile); }
+    .form-control { max-width: none; }
+  }
+  @media (max-width: 640px) {
+    .app { margin: 8px auto; padding: 0 8px; }
+    .topbar { padding: 8px 8px 8px 16px; min-height: 50px; }
+    .global-search { display: none; }
+    .search-icon-btn { display: inline-flex !important; }
+    .tile { padding: 16px; gap: 12px; }
+    .region-row { grid-template-columns: 80px minmax(0, 1fr) auto; }
+    .rank-item { grid-template-columns: 18px minmax(0, 1fr) 64px 38px; }
+    .page-head { padding: 14px 16px; }
+    .page-title { font-size: 19px; }
+    .kpi-value { font-size: 22px; }
+    .spark { display: none; }
+    .chart-wrap { height: 180px; }
+    .toolbar .field, .toolbar .select { width: 100%; flex: 1 1 100%; }
+    .toolbar .seg { width: 100%; }
+    .toolbar-spacer { display: none; }
+    .tr { grid-template-columns: 26px minmax(0, 1fr) auto 18px; gap: 10px; padding: 0 8px; }
+    .tr > .c-region, .tr > .c-cpu { display: none; }
+    .hero { padding: 20px 18px; }
+    .hero-split { gap: 16px; }
+    .hero-ring { width: 96px; height: 96px; margin-right: 0; }
+    .hero-ring svg { width: 96px; height: 96px; }
+    .hero-ring-text b { font-size: 19px; }
+    .hero h2 { font-size: 21px; }
+    .rank-item { grid-template-columns: 18px minmax(0, 1fr) 70px 38px; }
+    .member { grid-template-columns: 34px minmax(0, 1fr) auto; }
+    .member > .btn { display: none; }
+    .tfoot { flex-wrap: wrap; }
+    .toasts { left: 12px; right: 12px; bottom: 12px; align-items: center; }
+    .savebar { left: 12px; right: 12px; bottom: 12px; transform: translateY(16px); justify-content: space-between; }
+    .savebar.show { transform: none; }
+  }
+  /* ============ 账单演示：窄屏 ============ */
+  @media (max-width: 1100px) {
+    .inv .tr { grid-template-columns: minmax(150px, 1.4fr) minmax(96px, 0.8fr) minmax(100px, 0.8fr) minmax(84px, 0.8fr) 32px; }
+    .inv .tr > .c-pay { display: none; }
+    /* 支付方式：两块上下排列；添加新卡保持卡面在左、字段在右，不再拉高整行 */
+    .row-2-info { grid-template-columns: minmax(0, 1fr); }
+    .row-2-info > * { border-radius: var(--r-seam); }
+    .row-2-info > :first-child { border-top-left-radius: var(--r-tile); border-top-right-radius: var(--r-tile); }
+    .row-2-info > :last-child { border-bottom-left-radius: var(--r-tile); border-bottom-right-radius: var(--r-tile); }
+    .cost-item { grid-template-columns: 34px minmax(0, 1fr) 80px 76px; }
+  }
+  @media (max-width: 900px) {
+    .head-right .legend { display: none; }
+  }
+  @media (max-width: 640px) {
+    .addcard { grid-template-columns: minmax(0, 1fr); }
+    .card-preview { width: 100%; max-width: 300px; }
+    /* 发票状态分段：窄屏去掉计数并收窄内边距，五段放进一行 */
+    #invSeg { width: 100%; }
+    #invSeg .seg-btn { flex: 1; padding: 0 4px; min-width: 0; }
+    #invSeg .n { display: none; }
+    .row-4.plans { grid-template-columns: minmax(0, 1fr); }
+    .row.row-4.plans > * { border-radius: var(--r-seam); }
+    .row.row-4.plans > :first-child { border-top-left-radius: var(--r-tile); border-top-right-radius: var(--r-tile); }
+    .row.row-4.plans > :last-child { border-bottom-left-radius: var(--r-tile); border-bottom-right-radius: var(--r-tile); }
+    .plan-desc { min-height: 0; }
+    .inv .tr { grid-template-columns: minmax(0, 1fr) auto auto 29px; gap: 10px; padding: 0 8px; }
+    .inv .tr > .c-date { display: none; }
+    .cost-item { grid-template-columns: 34px minmax(0, 1fr) 76px; }
+    .cost-item .meter { display: none; }
+    .form-grid { grid-template-columns: minmax(0, 1fr); }
+    .alert-tile { flex-wrap: wrap; }
+    .alert-actions { width: 100%; padding-left: 48px; }
+    .kpi-ico { display: none; }
+    .tile-foot { flex-wrap: wrap; }
+    .bd-row { grid-template-columns: 10px minmax(0, 1fr) 46px 80px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0s !important;
+      transition-duration: 0.01ms !important;
+      transition-delay: 0s !important;
+    }
+  }
+
+  /* ============ 侧栏：胶囊形 ============
+     收起时侧栏 64 宽 → 外圆角 32（宽度的一半），按钮 44 → 同心 32 − 10 = 22：收起是正圆，展开是胶囊。
+     侧栏只装按钮，属于「只装小块」的容器，同心规则成立。
+     只在 .side-rail 作用域里重定义 --r-rail-item：设置页分区导航、文章目录这类格子里的导航仍是 20 − 10 */
+  .side-rail {
+    --r-rail: 32px;
+    --r-rail-item: calc(var(--r-rail) - var(--rail-pad));
+    border-radius: var(--r-rail);
+  }
+
+  /* ============ 选中滑块（单选组共用） ============
+     单选组的选中底是一块独立的「滑块」，选中项变化时连续滑过去，而不是在两个按钮之间跳。
+     组内其余项是透明底时滑块直接垫在下面；组内项各自有底色的（分页、页签）改成托盘：整组一块凹槽底，项透明 */
+  .glide-host { position: relative; isolation: isolate; }
+  .glide-pill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: var(--glide-bg, var(--blush-soft));
+    box-shadow: var(--glide-shadow, none);
+    transition: transform 0.34s var(--ease-out), width 0.34s var(--ease-out), height 0.34s var(--ease-out), border-radius 0.34s var(--ease-out), opacity 0.18s ease;
+    will-change: transform;
+  }
+  .glide-host .glide-item { position: relative; z-index: 1; }
+  .glide-host [data-glide-on] { background: transparent !important; box-shadow: none !important; }
+  .glide-tray { background: var(--bg-well); padding: 3px; gap: 2px; }
+  .glide-tray .glide-item { background: transparent; }
+  .glide-tray .glide-item:not([data-glide-on]):hover { background: var(--bg-slot); }
+  @media (prefers-reduced-motion: reduce) { .glide-pill { transition: none; } }
+</style>
+</head>
+<body>
+<!-- Lucide 图标（ISC License · lucide.dev），内联为 sprite，离线可用 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-app-window" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2" /> <path d="M10 4v4" /> <path d="M2 8h20" /> <path d="M6 4v4" /></symbol>
+  <symbol id="i-arrow-up-down" viewBox="0 0 24 24"><path d="m21 16-4 4-4-4" /> <path d="M17 20V4" /> <path d="m3 8 4-4 4 4" /> <path d="M7 4v16" /></symbol>
+  <symbol id="i-badge-alert" viewBox="0 0 24 24"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" /> <line x1="12" x2="12" y1="8" y2="12" /> <line x1="12" x2="12.01" y1="16" y2="16" /></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /> <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4" /> <path d="M16 2v4" /> <rect width="18" height="18" x="3" y="4" rx="2" /> <path d="M3 10h18" /></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol>
+  <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
+  <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" /></symbol>
+  <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" /></symbol>
+  <symbol id="i-circle-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /> <path d="m15 9-6 6" /> <path d="m9 9 6 6" /></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /> <polyline points="12 6 12 12 16 14" /></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2" /> <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></symbol>
+  <symbol id="i-corner-down-left" viewBox="0 0 24 24"><polyline points="9 10 4 15 9 20" /> <path d="M20 4v7a4 4 0 0 1-4 4H4" /></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7 10 12 15 17 10" /> <line x1="12" x2="12" y1="15" y2="3" /></symbol>
+  <symbol id="i-ellipsis" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1" /> <circle cx="19" cy="12" r="1" /> <circle cx="5" cy="12" r="1" /></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /> <circle cx="12" cy="12" r="3" /></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" /> <path d="M14 2v4a2 2 0 0 0 2 2h4" /></symbol>
+  <symbol id="i-file-text" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" /> <path d="M14 2v4a2 2 0 0 0 2 2h4" /> <path d="M10 9H8" /> <path d="M16 13H8" /> <path d="M16 17H8" /></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" /></symbol>
+  <symbol id="i-inbox" viewBox="0 0 24 24"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12" /> <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /> <path d="M12 16v-4" /> <path d="M12 8h.01" /></symbol>
+  <symbol id="i-layout-dashboard" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1" /> <rect width="7" height="5" x="14" y="3" rx="1" /> <rect width="7" height="9" x="14" y="12" rx="1" /> <rect width="7" height="5" x="3" y="16" rx="1" /></symbol>
+  <symbol id="i-layout-grid" viewBox="0 0 24 24"><rect width="7" height="7" x="3" y="3" rx="1" /> <rect width="7" height="7" x="14" y="3" rx="1" /> <rect width="7" height="7" x="14" y="14" rx="1" /> <rect width="7" height="7" x="3" y="14" rx="1" /></symbol>
+  <symbol id="i-layout-template" viewBox="0 0 24 24"><rect width="18" height="7" x="3" y="3" rx="1" /> <rect width="9" height="7" x="3" y="14" rx="1" /> <rect width="5" height="7" x="16" y="14" rx="1" /></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M3 12h.01" /> <path d="M3 18h.01" /> <path d="M3 6h.01" /> <path d="M8 12h13" /> <path d="M8 18h13" /> <path d="M8 6h13" /></symbol>
+  <symbol id="i-loader-circle" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /> <path d="M7 11V7a5 5 0 0 1 10 0v4" /></symbol>
+  <symbol id="i-message-square" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14" /></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></symbol>
+  <symbol id="i-mouse-pointer-click" viewBox="0 0 24 24"><path d="M14 4.1 12 6" /> <path d="m5.1 8-2.9-.8" /> <path d="m6 12-1.9 2" /> <path d="M7.2 2.2 8 5.1" /> <path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z" /></symbol>
+  <symbol id="i-orbit" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /> <circle cx="19" cy="5" r="2" /> <circle cx="5" cy="19" r="2" /> <path d="M10.4 21.9a10 10 0 0 0 9.941-15.416" /> <path d="M13.5 2.1a10 10 0 0 0-9.841 15.416" /></symbol>
+  <symbol id="i-panel-left" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" /> <path d="M9 3v18" /></symbol>
+  <symbol id="i-panel-left-close" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" /> <path d="M9 3v18" /> <path d="m16 15-3-3 3-3" /></symbol>
+  <symbol id="i-panel-top" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" /> <path d="M3 9h18" /></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14" /> <path d="M12 5v14" /></symbol>
+  <symbol id="i-rectangle-horizontal" viewBox="0 0 24 24"><rect width="20" height="12" x="2" y="6" rx="2" /></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" /> <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" /> <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" /> <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /></symbol>
+  <symbol id="i-rotate-cw" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" /> <path d="M21 3v5h-5" /></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /> <path d="m21 21-4.3-4.3" /></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24"><rect width="20" height="8" x="2" y="2" rx="2" ry="2" /> <rect width="20" height="8" x="2" y="14" rx="2" ry="2" /> <line x1="6" x2="6.01" y1="6" y2="6" /> <line x1="6" x2="6.01" y1="18" y2="18" /></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /> <circle cx="12" cy="12" r="3" /></symbol>
+  <symbol id="i-sliders-horizontal" viewBox="0 0 24 24"><line x1="21" x2="14" y1="4" y2="4" /> <line x1="10" x2="3" y1="4" y2="4" /> <line x1="21" x2="12" y1="12" y2="12" /> <line x1="8" x2="3" y1="12" y2="12" /> <line x1="21" x2="16" y1="20" y2="20" /> <line x1="12" x2="3" y1="20" y2="20" /> <line x1="14" x2="14" y1="2" y2="6" /> <line x1="8" x2="8" y1="10" y2="14" /> <line x1="16" x2="16" y1="18" y2="22" /></symbol>
+  <symbol id="i-square-chevron-down" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" /> <path d="m16 10-4 4-4-4" /></symbol>
+  <symbol id="i-table" viewBox="0 0 24 24"><path d="M12 3v18" /> <rect width="18" height="18" x="3" y="3" rx="2" /> <path d="M3 9h18" /> <path d="M3 15h18" /></symbol>
+  <symbol id="i-triangle-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /> <path d="M12 9v4" /> <path d="M12 17h.01" /></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="17 8 12 3 7 8" /> <line x1="12" x2="12" y1="3" y2="15" /></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" /></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" /></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18" /> <path d="m6 6 12 12" /></symbol>
+  <symbol id="i-building-2" viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" /> <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" /> <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" /> <path d="M10 6h4" /> <path d="M10 10h4" /> <path d="M10 14h4" /> <path d="M10 18h4" /></symbol>
+  <symbol id="i-cpu" viewBox="0 0 24 24"><rect width="16" height="16" x="4" y="4" rx="2" /> <rect width="6" height="6" x="9" y="9" rx="1" /> <path d="M15 2v2" /> <path d="M15 20v2" /> <path d="M2 15h2" /> <path d="M2 9h2" /> <path d="M20 15h2" /> <path d="M20 9h2" /> <path d="M9 2v2" /> <path d="M9 20v2" /></symbol>
+  <symbol id="i-credit-card" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2" /> <line x1="2" x2="22" y1="10" y2="10" /></symbol>
+  <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3" /> <path d="M3 5V19A9 3 0 0 0 21 19V5" /> <path d="M3 12A9 3 0 0 0 21 12" /></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><path d="m12 14 4-4" /> <path d="M3.34 19a10 10 0 1 1 17.32 0" /></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /> <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /> <path d="M2 12h20" /></symbol>
+  <symbol id="i-hard-drive" viewBox="0 0 24 24"><line x1="22" x2="2" y1="12" y2="12" /> <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /> <line x1="6" x2="6.01" y1="16" y2="16" /> <line x1="10" x2="10.01" y1="16" y2="16" /></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2" /> <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></symbol>
+  <symbol id="i-network" viewBox="0 0 24 24"><rect x="16" y="16" width="6" height="6" rx="1" /> <rect x="2" y="16" width="6" height="6" rx="1" /> <rect x="9" y="2" width="6" height="6" rx="1" /> <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" /> <path d="M12 12V8" /></symbol>
+  <symbol id="i-package" viewBox="0 0 24 24"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" /> <path d="M12 22V12" /> <path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7" /> <path d="m7.5 4.27 9 5.15" /></symbol>
+  <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z" /> <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" /> <path d="M12 17.5v-11" /></symbol>
+  <symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /></symbol>
+  <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" /> <path d="M20 3v4" /> <path d="M22 5h-4" /> <path d="M4 17v2" /> <path d="M5 18H3" /></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></symbol>
+  <symbol id="i-trending-up" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17" /> <polyline points="16 7 22 7 22 13" /></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" /> <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /></symbol>
+</svg>
+
+
+<div class="app" id="app">
+
+  <!-- ================= 侧栏 ================= -->
+  <aside class="side-rail" id="sideRail" aria-label="主导航">
+    <div class="rail-brand">
+      <div class="logo-mark">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.8" stroke-dasharray="34.98 9" stroke-linecap="round" transform="rotate(-4 10 10)"/><circle cx="10" cy="10" r="2.6" fill="currentColor"/><circle cx="15.5" cy="5.2" r="1.8" fill="currentColor"/></svg>
+      </div>
+      <span class="brand-title rail-text">Blora Cloud</span>
+    </div>
+
+    <div class="rail-section rail-text">账单</div>
+    <div class="rail-track" id="railTrack">
+      <div class="rail-glider" id="railGlider"></div>
+      <button class="rail-btn" data-go="plans">
+        <svg class="i" width="1.6" aria-hidden="true"><use href="#i-package"/></svg>
+        <span class="rail-text">套餐</span>
+        <span class="rail-tip">套餐</span>
+      </button>
+      <button class="rail-btn" data-go="usage">
+        <svg class="i" width="1.6" aria-hidden="true"><use href="#i-gauge"/></svg>
+        <span class="rail-text">用量</span><span class="rail-count rail-text">64%</span>
+        <span class="rail-tip">用量</span>
+      </button>
+      <button class="rail-btn" data-go="invoices">
+        <svg class="i" width="1.6" aria-hidden="true"><use href="#i-receipt"/></svg>
+        <span class="rail-text">发票</span><span class="rail-count rail-text" id="railInvCount">2</span>
+        <span class="rail-tip">发票</span>
+      </button>
+      <button class="rail-btn" data-go="payment">
+        <svg class="i" width="1.6" aria-hidden="true"><use href="#i-credit-card"/></svg>
+        <span class="rail-text">支付方式</span>
+        <span class="rail-tip">支付方式</span>
+      </button>
+    </div>
+
+    <div class="rail-foot">
+      <div class="rail-plan rail-text">
+        <div class="rail-plan-row"><span>专业版 · 本期预算</span><b style="color:var(--ink-1);">64%</b></div>
+        <div class="meter"><i style="width:64%"></i></div>
+      </div>
+      <button class="rail-btn rail-collapse-btn" onclick="toggleRail()">
+        <svg class="i rail-collapse-ico" width="1.6" aria-hidden="true"><use href="#i-panel-left-close"/></svg>
+        <span class="rail-text">收起侧栏</span>
+        <span class="rail-tip">展开侧栏</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= 主区 ================= -->
+  <div class="main">
+
+    <header class="topbar">
+      <nav class="crumbs" id="crumbs"></nav>
+      <div class="topbar-right">
+        <label class="field global-search">
+          <svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-search"/></svg>
+          <input placeholder="搜索发票号或金额…" id="globalSearch" />
+          <kbd class="kbd"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>K</span></kbd>
+        </label>
+        <button class="btn btn-surface btn-icon search-icon-btn" aria-label="搜索" onclick="go('invoices');setTimeout(()=>document.getElementById('invSearch').focus(),350)">
+          <svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-search"/></svg>
+        </button>
+        <button class="btn btn-surface btn-icon" id="themeBtn" aria-label="切换深色模式" onclick="toggleTheme()">
+          <svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-moon"/></svg>
+        </button>
+        <button class="btn btn-surface btn-icon bell-dot" aria-label="通知" onclick="toast('你有 1 张发票待支付')">
+          <svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-bell"/></svg>
+        </button>
+        <span class="avatar">RH</span>
+      </div>
+    </header>
+
+    <nav class="mobile-nav" id="mobileNav">
+      <button data-go="plans">套餐</button>
+      <button data-go="usage">用量</button>
+      <button data-go="invoices">发票</button>
+      <button data-go="payment">支付方式</button>
+    </nav>
+
+    <!-- ================= 场景 1：套餐 ================= -->
+    <section class="scene" data-scene="plans">
+      <div class="page-head">
+        <div>
+          <span class="page-eyebrow">Plans</span>
+          <h1 class="page-title">套餐与价格</h1>
+          <p class="page-sub">当前为专业版，下次续费在 12 月 14 日。按年付费相当于少付两个月。</p>
+        </div>
+        <div class="page-actions">
+          <div class="seg" id="cycleSeg">
+            <div class="seg-glider"></div>
+            <button class="seg-btn active" data-v="m">按月付</button>
+            <button class="seg-btn" data-v="y">按年付<span class="save-tag">省 17%</span></button>
+          </div>
+          <button class="btn btn-surface" onclick="toast('已通知销售顾问，1 个工作日内联系你')">
+            <svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-mail"/></svg>
+            联系销售
+          </button>
+        </div>
+      </div>
+
+      <div class="row row-4 plans">
+        <div class="tile plan" data-plan="free">
+          <div class="plan-head">
+            <span class="plan-ico"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-package"/></svg></span>
+            <span class="plan-name">免费版</span>
+          </div>
+          <p class="plan-desc">个人项目与功能试用，无需绑卡。</p>
+          <div class="plan-price"><span class="cur">¥</span><b class="price" data-m="0" data-y="0">0</b><span class="per">/ 月</span></div>
+          <div class="plan-note" data-m="永久免费" data-y="永久免费">永久免费</div>
+          <div class="plan-specs tray"><div class="spec"><span>实例</span><b>1 · 共享 CPU</b></div><div class="spec"><span>构建</span><b>100 分钟 / 月</b></div><div class="spec"><span>日志保留</span><b>1 天</b></div><div class="spec"><span>支持</span><b>社区论坛</b></div></div>
+          <div class="plan-extra">适合试用与个人项目</div>
+          <button class="btn btn-surface plan-cta" onclick="toast('降级会在本期结束后生效')">降级到免费版</button>
+        </div>
+
+        <div class="tile plan current" data-plan="pro">
+          <div class="plan-head">
+            <span class="plan-ico"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-rocket"/></svg></span>
+            <span class="plan-name">专业版</span>
+            <span class="pill tone-sand plain">当前套餐</span>
+          </div>
+          <p class="plan-desc">独立开发者和小团队，超出部分按量计费。</p>
+          <div class="plan-price"><span class="cur">¥</span><b class="price" data-m="99" data-y="82">99</b><span class="per">/ 月</span></div>
+          <div class="plan-note" data-m="按月付费，随时可以取消" data-y="按年付 ¥984，省 ¥204">按月付费，随时可以取消</div>
+          <div class="plan-specs tray"><div class="spec"><span>实例</span><b>5 · 2 vCPU</b></div><div class="spec"><span>构建</span><b>2,000 分钟 / 月</b></div><div class="spec"><span>日志保留</span><b>7 天</b></div><div class="spec"><span>支持</span><b>邮件 · 1 工作日</b></div></div>
+          <div class="plan-extra">含自定义域名与自动 HTTPS</div>
+          <button class="btn plan-cta is-current" disabled>当前套餐</button>
+        </div>
+
+        <div class="tile plan recommended" data-plan="team">
+          <svg class="plan-corner" viewBox="0 0 80 56" aria-hidden="true">
+            <circle cx="92" cy="-12" r="34"/>
+            <circle cx="92" cy="-12" r="48"/>
+            <circle cx="92" cy="-12" r="62"/>
+            <circle cx="70" cy="46" r="2.4" class="dot"/>
+          </svg>
+          <div class="plan-head">
+            <span class="plan-ico"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-users"/></svg></span>
+            <span class="plan-name">团队版</span>
+            <span class="pill sync plain"><svg class="i" width="11" height="11" aria-hidden="true"><use href="#i-sparkles"/></svg>推荐</span>
+          </div>
+          <p class="plan-desc">多人协作、预览环境和更高的可用性保障。</p>
+          <div class="plan-price"><span class="cur">¥</span><b class="price" data-m="299" data-y="249">299</b><span class="per">/ 月</span></div>
+          <div class="plan-note" data-m="按月付费，随时可以取消" data-y="按年付 ¥2,988，省 ¥600">按月付费，随时可以取消</div>
+          <div class="plan-specs tray"><div class="spec"><span>实例</span><b>20 · 8 vCPU</b></div><div class="spec"><span>构建</span><b>10,000 分钟 / 月</b></div><div class="spec"><span>日志保留</span><b>30 天 · 告警</b></div><div class="spec"><span>支持</span><b>工单 · 2 小时</b></div></div>
+          <div class="plan-extra">另含预览环境、99.95% SLA</div>
+          <button class="btn btn-primary plan-cta" onclick="toast('升级立即生效，差价计入下一张发票')">升级到团队版</button>
+        </div>
+
+        <div class="tile plan" data-plan="enterprise">
+          <div class="plan-head">
+            <span class="plan-ico"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-building-2"/></svg></span>
+            <span class="plan-name">企业版</span>
+          </div>
+          <p class="plan-desc">私有网络、合规审计与专属支持，按规模定价。</p>
+          <div class="plan-price"><b class="price text">按需定价</b></div>
+          <div class="plan-note">按年签约，支持对公转账</div>
+          <div class="plan-specs tray"><div class="spec"><span>实例</span><b>不限</b></div><div class="spec"><span>构建</span><b>不限 · 专属构建机</b></div><div class="spec"><span>日志保留</span><b>365 天 · 审计</b></div><div class="spec"><span>支持</span><b>专属客户经理</b></div></div>
+          <div class="plan-extra">另含 SSO、私有网络</div>
+          <button class="btn btn-blush plan-cta" onclick="toast('已打开预约演示表单')">预约演示</button>
+        </div>
+      </div>
+
+      <div class="row row-cmp grow">
+        <div class="tile cmp-tile">
+          <div class="tile-head">
+            <div><div class="tile-title">功能对比</div><div class="tile-sub">所有套餐都包含自动 HTTPS、全球 CDN 与每日备份</div></div>
+            <button class="btn btn-ghost btn-sm" onclick="toast('已下载完整对比表 PDF')">
+              <svg class="i" width="13" height="13" aria-hidden="true"><use href="#i-download"/></svg>
+              下载 PDF
+            </button>
+          </div>
+          <div class="cmp-scroll"><div class="cmp" id="cmp"></div></div>
+        </div>
+        <div class="col-stack">
+          <div class="tile">
+            <div class="tile-head"><div class="tile-title">常见问题</div><span class="tile-tag">FAQ · 4</span></div>
+            <div class="faq tray" id="faq">
+              <div class="faq-item open">
+                <button class="faq-q" aria-expanded="true">升级或降级后如何计费？<svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+                <div class="faq-a"><div><p>升级立即生效，本期剩余天数按新旧套餐的差价折算，计入下一张发票；降级在当前计费周期结束后生效，在此之前仍可使用原套餐的全部功能。</p></div></div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-q" aria-expanded="false">超出套餐额度会怎样？<svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+                <div class="faq-a"><div><p>服务不会中断。超出部分按量计费：出网流量 ¥0.50/GB，构建 ¥0.02/分钟，月末合并到发票里。你也可以在「用量」页设置预算上限，到达后自动暂停预览环境。</p></div></div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-q" aria-expanded="false">可以开具增值税专用发票吗？<svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+                <div class="faq-a"><div><p>可以。在「支付方式」里填写开票信息，专票会在付款后 3 个工作日内寄出。</p></div></div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-q" aria-expanded="false">如何取消订阅？<svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+                <div class="faq-a"><div><p>随时降级到免费版即可，数据保留 30 天。</p></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="tile">
+            <div class="tile-head"><div class="tile-title">需要更大的规模？</div><span class="pill sync plain">企业版</span></div>
+            <p class="ent-desc">私有部署、合规审计和专属支持，按团队规模定制价格。</p>
+            <ul class="ent-list tray">
+              <li><span class="ico-well sm blush"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-shield-check"/></svg></span><div><b>等保三级与 SOC 2</b><span class="sub">审计日志保留 365 天</span></div></li>
+              <li><span class="ico-well sm sand"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-globe"/></svg></span><div><b>多区域容灾</b><span class="sub">RPO 小于 5 分钟</span></div></li>
+              <li><span class="ico-well sm rose"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-star"/></svg></span><div><b>专属客户经理</b><span class="sub">7×24 小时电话支持</span></div></li>
+            </ul>
+            <div class="tile-foot">
+              <span class="hint">平均 1 个工作日内回复</span>
+              <button class="btn btn-primary" onclick="toast('已打开预约演示表单')">预约演示</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 场景 2：用量 ================= -->
+    <section class="scene" data-scene="usage">
+      <div class="page-head">
+        <div>
+          <span class="page-eyebrow">Usage</span>
+          <h1 class="page-title">用量与费用</h1>
+          <p class="page-sub">本期 11 月 14 日 – 12 月 13 日，还剩 17 天</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-surface" onclick="toast('已导出本期用量 CSV')">
+            <svg class="i" width="13" height="13" aria-hidden="true"><use href="#i-download"/></svg>
+            导出 CSV
+          </button>
+          <button class="btn btn-primary" onclick="go('plans')">
+            <svg class="i" width="13" height="13" aria-hidden="true"><use href="#i-sparkles"/></svg>
+            升级套餐
+          </button>
+        </div>
+      </div>
+
+      <div class="row row-4">
+        <div class="tile kpi">
+          <div class="kpi-label">本期费用</div>
+          <span class="kpi-ring"><svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="18" fill="none" stroke="var(--bg-well)" stroke-width="4"/><circle cx="22" cy="22" r="18" fill="none" stroke="var(--blush-solid)" stroke-width="4" stroke-linecap="round" stroke-dasharray="72.4 113.1" transform="rotate(-90 22 22)"/></svg><b>64</b></span>
+          <div class="kpi-value">¥1,286<small>.40</small></div>
+          <div class="kpi-foot col"><div class="meter"><i data-w="64" style="width:0"></i></div><span>预算 ¥2,000 · 已用 64%</span></div>
+        </div>
+        <div class="tile kpi">
+          <div class="kpi-label">预计本期</div>
+          <span class="kpi-ring over"><svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="18" fill="none" stroke="var(--bg-well)" stroke-width="4"/><circle cx="22" cy="22" r="18" fill="none" stroke="var(--rose-solid)" stroke-width="4" stroke-linecap="round" stroke-dasharray="113.1 113.1" transform="rotate(-90 22 22)"/></svg><b>107</b></span>
+          <div class="kpi-value">¥2,140</div>
+          <div class="kpi-foot"><span class="delta bad">超预算 7%</span>按近 7 天的速度估算</div>
+        </div>
+        <div class="tile kpi">
+          <div class="kpi-label">账户余额</div>
+          <span class="kpi-ico sand"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-wallet"/></svg></span>
+          <div class="kpi-value">¥3,560<small>.00</small></div>
+          <div class="kpi-foot">默认卡扣款失败时自动使用</div>
+        </div>
+        <div class="tile kpi">
+          <div class="kpi-label">超额费用</div>
+          <span class="kpi-ico rose"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-triangle-alert"/></svg></span>
+          <div class="kpi-value">¥186<small>.40</small></div>
+          <div class="kpi-foot"><span class="delta bad">+¥62</span>主要来自出网流量</div>
+        </div>
+      </div>
+
+      <div class="row row-2-wide">
+        <div class="tile">
+          <div class="tile-head">
+            <div><div class="tile-title">每日费用</div><div class="tile-sub" id="costSub">本期前 13 天，与上期同期对比</div></div>
+            <div class="head-right">
+              <div class="legend"><span><i style="background:var(--blush-solid)"></i>本期</span><span><i style="background:var(--sand-solid)"></i>上期</span></div>
+              <div class="seg seg-sm" id="costSeg">
+                <div class="seg-glider"></div>
+                <button class="seg-btn active" data-v="daily">按日</button>
+                <button class="seg-btn" data-v="cum">累计</button>
+              </div>
+            </div>
+          </div>
+          <div class="chart-fill">
+            <div class="chart-wrap" id="costChart"></div>
+            <div class="chart-x" id="costX"></div>
+          </div>
+        </div>
+        <div class="tile">
+          <div class="tile-head">
+            <div><div class="tile-title">套餐额度</div><div class="tile-sub">专业版 · 每个计费周期重置</div></div>
+            <button class="btn btn-ghost btn-sm" onclick="toast('已打开预算设置')">设置预算</button>
+          </div>
+          <div class="quota tray" id="quota">
+            <div class="quota-row">
+              <span class="ico-well"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-cpu"/></svg></span>
+              <span class="quota-name">计算时长</span>
+              <span class="quota-val"><b>3,420</b> / 5,000 vCPU·时</span>
+              <span class="meter"><i data-w="68" style="width:0"></i></span>
+            </div>
+            <div class="quota-row">
+              <span class="ico-well"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-rocket"/></svg></span>
+              <span class="quota-name">构建分钟<span class="pill tone-sand plain">接近上限</span></span>
+              <span class="quota-val"><b>1,840</b> / 2,000 分钟</span>
+              <span class="meter warn"><i data-w="92" style="width:0"></i></span>
+            </div>
+            <div class="quota-row">
+              <span class="ico-well"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-network"/></svg></span>
+              <span class="quota-name">出网流量<span class="pill tone-rose plain">超出 18%</span></span>
+              <span class="quota-val"><b>1.18</b> / 1 TB</span>
+              <span class="meter over"><i data-w="100" style="width:0"></i></span>
+            </div>
+            <div class="quota-row">
+              <span class="ico-well"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-hard-drive"/></svg></span>
+              <span class="quota-name">存储与备份</span>
+              <span class="quota-val"><b>42</b> / 100 GB</span>
+              <span class="meter"><i data-w="42" style="width:0"></i></span>
+            </div>
+            <div class="quota-row">
+              <span class="ico-well"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-users"/></svg></span>
+              <span class="quota-name">团队成员<span class="pill stop plain">已满</span></span>
+              <span class="quota-val"><b>3</b> / 3 位</span>
+              <span class="meter"><i data-w="100" style="width:0"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row row-2 grow">
+        <div class="tile">
+          <div class="tile-head">
+            <div><div class="tile-title">费用最高的资源</div><div class="tile-sub">本期累计，含按量计费部分</div></div>
+            <button class="btn btn-ghost btn-sm" onclick="toast('已打开资源费用明细')">全部资源</button>
+          </div>
+          <div class="cost-list tray">
+            <div class="cost-item">
+              <span class="ico-well blush"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-cpu"/></svg></span>
+              <div style="min-width:0;"><div class="cost-name" title="media-transcoder-batch-worker-ap-southeast-production-replica-02">media-transcoder-batch-worker-ap-southeast-production-replica-02</div><div class="cost-sub">计算 · 8 vCPU · 亚太 · 新加坡</div></div>
+              <span class="meter"><i data-w="100" style="width:0"></i></span>
+              <span class="cost-amt">¥318.60</span>
+            </div>
+            <div class="cost-item">
+              <span class="ico-well rose"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-globe"/></svg></span>
+              <div style="min-width:0;"><div class="cost-name">cdn-origin-02</div><div class="cost-sub">出网流量 · 742 GB</div></div>
+              <span class="meter over"><i data-w="77" style="width:0"></i></span>
+              <span class="cost-amt">¥246.20</span>
+            </div>
+            <div class="cost-item">
+              <span class="ico-well"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-server"/></svg></span>
+              <div style="min-width:0;"><div class="cost-name">api-gateway-01</div><div class="cost-sub">计算 · 4 vCPU</div></div>
+              <span class="meter"><i data-w="45" style="width:0"></i></span>
+              <span class="cost-amt">¥142.80</span>
+            </div>
+            <div class="cost-item">
+              <span class="ico-well sand"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-database"/></svg></span>
+              <div style="min-width:0;"><div class="cost-name">orders-db-primary</div><div class="cost-sub">数据库存储 · 120 GB · 每日备份</div></div>
+              <span class="meter"><i data-w="30" style="width:0"></i></span>
+              <span class="cost-amt">¥96.40</span>
+            </div>
+            <div class="cost-item">
+              <span class="ico-well"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-rocket"/></svg></span>
+              <div style="min-width:0;"><div class="cost-name">checkout-web 预览环境 × 6</div><div class="cost-sub">构建与预览</div></div>
+              <span class="meter"><i data-w="20" style="width:0"></i></span>
+              <span class="cost-amt">¥64.10</span>
+            </div>
+          </div>
+        </div>
+        <div class="tile">
+          <div class="tile-head"><div class="tile-title">费用构成</div><span class="tile-tag">MTD · 5 items</span></div>
+          <div class="bd-total"><b>¥1,286<small>.40</small></b><span>其中按量计费 ¥1,187.40</span></div>
+          <div class="stack-bar">
+            <i data-w="41.8" data-prop="flexBasis" style="background:var(--blush-solid)"></i>
+            <i data-w="27" data-prop="flexBasis" style="background:var(--rose-solid)"></i>
+            <i data-w="12.8" data-prop="flexBasis" style="background:var(--sand-solid)"></i>
+            <i data-w="10.7" data-prop="flexBasis" style="background:var(--blush-track)"></i>
+            <i data-w="7.7" data-prop="flexBasis" style="background:var(--ink-4)"></i>
+          </div>
+          <div class="bd-list tray">
+            <div class="bd-row"><span class="bd-dot" style="background:var(--blush-solid)"></span><span>计算</span><span class="bd-pct">41.8%</span><span class="bd-amt">¥538.20</span></div>
+            <div class="bd-row"><span class="bd-dot" style="background:var(--rose-solid)"></span><span>出网流量</span><span class="bd-pct">27.0%</span><span class="bd-amt">¥346.80</span></div>
+            <div class="bd-row"><span class="bd-dot" style="background:var(--sand-solid)"></span><span>构建</span><span class="bd-pct">12.8%</span><span class="bd-amt">¥164.60</span></div>
+            <div class="bd-row"><span class="bd-dot" style="background:var(--blush-track)"></span><span>存储与备份</span><span class="bd-pct">10.7%</span><span class="bd-amt">¥137.80</span></div>
+            <div class="bd-row"><span class="bd-dot" style="background:var(--ink-4)"></span><span>专业版月费</span><span class="bd-pct">7.7%</span><span class="bd-amt">¥99.00</span></div>
+          </div>
+          <div class="bd-foot"><div><span>较上期同期</span><b class="bad">+12.4%</b></div><div><span>预测本期</span><b>¥2,140</b></div><div><span>日均</span><b>¥98.9</b></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 场景 3：发票 ================= -->
+    <section class="scene" data-scene="invoices">
+      <div class="page-head">
+        <div>
+          <span class="page-eyebrow">Invoices</span>
+          <h1 class="page-title">发票</h1>
+          <p class="page-sub" id="invSub">共 18 张发票</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-surface" onclick="go('payment');setTimeout(()=>document.getElementById('addrTile').scrollIntoView({behavior:'smooth',block:'center'}),120)">
+            <svg class="i" width="13" height="13" aria-hidden="true"><use href="#i-building-2"/></svg>
+            开票信息
+          </button>
+          <button class="btn btn-primary" onclick="toast('正在打包下载 2026 年全部发票')">
+            <svg class="i" width="13" height="13" aria-hidden="true"><use href="#i-download"/></svg>
+            下载全部
+          </button>
+        </div>
+      </div>
+
+      <div class="row row-3">
+        <div class="tile kpi">
+          <div class="kpi-label">2026 年已支付</div>
+          <span class="kpi-ico sand"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-receipt"/></svg></span>
+          <div class="kpi-value" id="kpiPaid"></div>
+          <div class="kpi-foot split"><span id="kpiPaidFoot"></span></div>
+        </div>
+        <div class="tile kpi">
+          <div class="kpi-label">待支付</div>
+          <span class="kpi-ico blush"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-clock"/></svg></span>
+          <div class="kpi-value" id="kpiDue"></div>
+          <div class="kpi-foot split"><span>11 月 28 日自动从 Visa •••• 4242 扣款</span></div>
+        </div>
+        <div class="tile kpi">
+          <div class="kpi-label">逾期</div>
+          <span class="kpi-ico rose"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-triangle-alert"/></svg></span>
+          <div class="kpi-value" id="kpiOver"></div>
+          <div class="kpi-foot split"><span>尾号 8210 的卡扣款失败</span><button class="btn btn-rose btn-sm" onclick="go('payment')">去处理</button></div>
+        </div>
+      </div>
+
+      <div class="row row-1 grow">
+        <div class="tile inv">
+          <div class="toolbar">
+            <label class="field">
+              <svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-search"/></svg>
+              <input id="invSearch" placeholder="发票号或金额" />
+            </label>
+            <div class="seg" id="invSeg">
+              <div class="seg-glider"></div>
+              <button class="seg-btn active" data-v="all">全部<span class="n" data-count="all"></span></button>
+              <button class="seg-btn" data-v="paid">已支付<span class="n" data-count="paid"></span></button>
+              <button class="seg-btn" data-v="due">待支付<span class="n" data-count="due"></span></button>
+              <button class="seg-btn" data-v="over">逾期<span class="n" data-count="over"></span></button>
+              <button class="seg-btn" data-v="refund">已退款<span class="n" data-count="refund"></span></button>
+            </div>
+            <span class="toolbar-spacer"></span>
+            <div class="select" id="yearSelect">
+              <button class="select-trigger"><span id="yearLabel">2026 年</span><svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+              <div class="menu right"></div>
+            </div>
+          </div>
+
+          <div class="table">
+            <div class="tr head">
+              <span>发票号</span><span class="c-date">开票日期</span><span class="c-amt">金额</span><span>状态</span><span class="c-pay">支付方式</span><span></span>
+            </div>
+            <div class="inv-body" id="invBody"></div>
+          </div>
+
+          <div class="tfoot" style="margin-top:auto;">
+            <span id="invPageInfo"></span>
+            <div class="pager" id="invPager"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 场景 4：支付方式 ================= -->
+    <section class="scene" data-scene="payment">
+      <div class="page-head">
+        <div>
+          <span class="page-eyebrow">Payment methods</span>
+          <h1 class="page-title">支付方式</h1>
+          <p class="page-sub">扣款顺序：默认卡 → 账户余额 → 其他卡片</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary" onclick="focusAddCard()">
+            <svg class="i" width="13" height="13" aria-hidden="true"><use href="#i-plus"/></svg>
+            添加卡片
+          </button>
+        </div>
+      </div>
+
+      <div class="row row-1" id="expiryAlert">
+        <div class="tile alert-tile">
+          <span class="ico-well"><svg class="i" width="16" height="16" aria-hidden="true"><use href="#i-triangle-alert"/></svg></span>
+          <div class="alert-body">
+            <div class="alert-title"><span class="pill tone-sand plain">即将到期</span>尾号 8210 的万事达卡将于 12 月到期</div>
+            <p>到期后会改用账户余额扣款。建议现在更新有效期，避免 12 月 14 日的续费失败。</p>
+          </div>
+          <div class="alert-actions">
+            <button class="btn btn-elev btn-sm" onclick="focusAddCard()">更新卡片</button>
+            <button class="btn btn-ghost btn-icon btn-sm" aria-label="关闭提醒" onclick="dismissAlert()"><svg class="i" width="13" height="13" aria-hidden="true"><use href="#i-x"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row row-2-info">
+        <div class="tile">
+          <div class="tile-head">
+            <div><div class="tile-title">已保存的支付方式</div><div class="tile-sub" id="cardCount">3 张卡片 · 1 个账户余额</div></div>
+          </div>
+          <div class="card-list tray" id="cardList"></div>
+          <div class="balance-row">
+            <span class="ico-well"><svg class="i" width="15" height="15" aria-hidden="true"><use href="#i-wallet"/></svg></span>
+            <div style="min-width:0;"><b>账户余额 ¥3,560.00</b><span class="sub">默认卡扣款失败时自动使用</span></div>
+            <button class="btn btn-surface btn-sm" onclick="toast('已打开充值页面')">充值</button>
+          </div>
+        </div>
+
+        <div class="tile" id="addCardTile">
+          <div class="tile-head">
+            <div><div class="tile-title">添加新卡</div><div class="tile-sub">支持 Visa、万事达与银联，卡号加密存储</div></div>
+            <span class="pill tone-sand plain"><svg class="i" width="11" height="11" aria-hidden="true"><use href="#i-shield-check"/></svg>PCI DSS</span>
+          </div>
+          <div class="addcard">
+            <div class="card-preview" id="cardPreview" data-brand="card">
+              <svg class="cp-arcs" viewBox="0 0 96 72" aria-hidden="true"><circle cx="108" cy="-14" r="40"/><circle cx="108" cy="-14" r="58"/><circle cx="108" cy="-14" r="76"/></svg>
+              <div class="cp-top"><span class="cp-chip"></span><span class="cp-brand" id="cpBrand">CARD</span></div>
+              <div class="cp-num" id="cpNum">•••• •••• •••• ••••</div>
+              <div class="cp-bottom">
+                <div><span>持卡人</span><b id="cpName">持卡人姓名</b></div>
+                <div><span>有效期</span><b id="cpExp">MM/YY</b></div>
+              </div>
+            </div>
+            <div class="addcard-fields">
+              <div class="f" id="fNo">
+                <label class="f-label" for="ccNo">卡号</label>
+                <label class="field"><svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-credit-card"/></svg><input id="ccNo" class="mono" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" /></label>
+                <div class="f-err"><div><span>请输入完整的 16 位卡号</span></div></div>
+              </div>
+              <div class="f-2">
+                <div class="f" id="fExp">
+                  <label class="f-label" for="ccExp">有效期</label>
+                  <label class="field"><input id="ccExp" class="mono" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" /></label>
+                  <div class="f-err"><div><span>格式为 MM/YY，且未过期</span></div></div>
+                </div>
+                <div class="f" id="fCvc">
+                  <label class="f-label" for="ccCvc">安全码</label>
+                  <label class="field"><input id="ccCvc" class="mono" inputmode="numeric" autocomplete="cc-csc" placeholder="CVC" /></label>
+                  <div class="f-err"><div><span>卡背面的 3 位数字</span></div></div>
+                </div>
+              </div>
+              <div class="f" id="fName">
+                <label class="f-label" for="ccName">持卡人姓名</label>
+                <label class="field"><input id="ccName" autocomplete="cc-name" placeholder="与卡面一致" /></label>
+                <div class="f-err"><div><span>请填写持卡人姓名</span></div></div>
+              </div>
+              <div class="toggle-row">
+                <div class="form-label">设为默认支付方式<div class="form-hint">下次续费从这张卡扣款</div></div>
+                <button class="switch" id="ccDefault" aria-label="设为默认支付方式"><i></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="tile-foot">
+            <span class="hint"><svg class="i" width="13" height="13" aria-hidden="true"><use href="#i-lock"/></svg>保存后只显示卡号后 4 位</span>
+            <div style="display:flex;gap:6px;">
+              <button class="btn btn-ghost" onclick="resetCardForm()">清空</button>
+              <button class="btn btn-primary" onclick="saveCard()">保存卡片</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row row-2-wide grow">
+        <div class="tile" id="addrTile">
+          <div class="tile-head">
+            <div><div class="tile-title">账单地址与开票信息</div><div class="tile-sub">显示在每一张发票上</div></div>
+          </div>
+          <div class="form-grid">
+            <div class="f span-2">
+              <label class="f-label" for="aCompany">公司名称</label>
+              <label class="field"><input id="aCompany" data-addr value="上海晶格云计算科技有限公司（华东研发与运营中心）" /></label>
+            </div>
+            <div class="f">
+              <label class="f-label" for="aTax">纳税人识别号</label>
+              <label class="field"><input id="aTax" class="mono" data-addr value="91310115MA1K4QXR2T" /></label>
+            </div>
+            <div class="f">
+              <label class="f-label" for="aMail">账单邮箱</label>
+              <label class="field"><svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-mail"/></svg><input id="aMail" data-addr value="finance@blora-labs.com" /></label>
+            </div>
+            <div class="f">
+              <span class="f-label">国家 / 地区</span>
+              <div class="select" id="countrySelect">
+                <button class="select-trigger"><span id="countryLabel">中国大陆</span><svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+                <div class="menu"></div>
+              </div>
+            </div>
+            <div class="f">
+              <label class="f-label" for="aZip">邮政编码</label>
+              <label class="field"><input id="aZip" class="mono" data-addr value="201203" /></label>
+            </div>
+            <div class="f span-2">
+              <label class="f-label" for="aAddr">详细地址</label>
+              <label class="field"><svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-building-2"/></svg><input id="aAddr" data-addr value="上海市浦东新区张江高科技园区碧波路 690 号 3 号楼 12 层" /></label>
+            </div>
+          </div>
+          <div class="tile-foot">
+            <span class="hint" id="addrHint">修改会从下一张发票开始生效</span>
+            <div style="display:flex;gap:6px;">
+              <button class="btn btn-ghost" id="addrReset" onclick="resetAddr()" disabled>撤销</button>
+              <button class="btn btn-primary" id="addrSave" onclick="saveAddr()" disabled>保存</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="tile deliver">
+          <div class="tile-head"><div><div class="tile-title">发票寄送</div><div class="tile-sub">付款成功后自动开具</div></div></div>
+          <div class="tray deliver-tray">
+            <div class="toggle-row"><div class="form-label">电子发票自动发送<div class="form-hint">发送到账单邮箱，附 PDF 与 OFD 两种格式</div></div><button class="switch on" data-toggle aria-label="电子发票自动发送"><i></i></button></div>
+            <div class="toggle-row"><div class="form-label">抄送财务<div class="form-hint">accounting@blora-labs.com</div></div><button class="switch on" data-toggle aria-label="抄送财务"><i></i></button></div>
+            <div class="toggle-row"><div class="form-label">纸质发票<div class="form-hint">每季度合并邮寄一次，比电子发票晚 3 个工作日</div></div><button class="switch" data-toggle aria-label="纸质发票"><i></i></button></div>
+            <div class="toggle-row"><div class="form-label">发票抬头使用英文<div class="form-hint">用于境外报销</div></div><button class="switch" data-toggle aria-label="发票抬头使用英文"><i></i></button></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script>
+  /* ---------------- 工具 ---------------- */
+  const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
+  const money = v => v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const yuan = v => '¥' + money(v);
+  const yuanParts = v => { const [i, d] = money(v).split('.'); return `¥${i}<small>.${d}</small>`; };
+
+  /* 防孤行：把段落最后 5 个字（含标点；英文按整词）用 nowrap 绑在一起 */
+  function bindTail(el, n = 5) {
+    if (el.dataset.tail) return;
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let last = null;
+    while (walker.nextNode()) if (walker.currentNode.textContent.trim()) last = walker.currentNode;
+    if (!last) return;
+    const txt = last.textContent.replace(/\s+$/, '');
+    if (txt.length < n * 2) return;
+    let cut = txt.length - n;
+    while (cut > 0 && /[A-Za-z0-9.\-_]/.test(txt[cut - 1]) && /[A-Za-z0-9.\-_]/.test(txt[cut])) cut--;
+    if (cut <= 0) return;
+    const span = document.createElement('span');
+    span.style.whiteSpace = 'nowrap';
+    span.textContent = txt.slice(cut);
+    last.textContent = txt.slice(0, cut);
+    last.after(span);
+    el.dataset.tail = '1';
+  }
+  const TAIL_SEL = 'p, .tile-sub, .page-sub, .form-hint';
+  const bindTails = (root = document) => root.querySelectorAll(TAIL_SEL).forEach(el => bindTail(el));
+
+  function toast(msg) {
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.textContent = msg;
+    $('#toasts').appendChild(el);
+    setTimeout(() => { el.classList.add('leaving'); setTimeout(() => el.remove(), 220); }, 2400);
+  }
+  function toggleTheme() {
+    const html = document.documentElement;
+    const apply = () => html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    if (document.startViewTransition && !reduceMotion.matches) document.startViewTransition(apply); else apply();
+  }
+
+  /* 高度连续变化：量旧高度 → 改内容 → 量新高度 → WAAPI 补间，内容切换不跳 */
+  function animateHeight(el, mutate) {
+    const from = el.getBoundingClientRect().height;
+    mutate();
+    const to = el.getBoundingClientRect().height;
+    if (reduceMotion.matches || Math.abs(from - to) < 1) return;
+    el.style.overflow = 'hidden';
+    el.animate([{ height: from + 'px' }, { height: to + 'px' }], { duration: 300, easing: EASE })
+      .onfinish = () => { el.style.overflow = ''; };
+  }
+  /* 收起并移除：连同后面的间距一起收掉（gap 用负 margin 抵消） */
+  function collapseOut(el, gap, done) {
+    const h = el.getBoundingClientRect().height;
+    const cs = getComputedStyle(el);
+    el.style.overflow = 'hidden';
+    el.style.pointerEvents = 'none';
+    const a = el.animate([
+      { height: h + 'px', paddingTop: cs.paddingTop, paddingBottom: cs.paddingBottom, marginBottom: '0px', opacity: 1 },
+      { height: '0px', paddingTop: '0px', paddingBottom: '0px', marginBottom: -gap + 'px', opacity: 0 }
+    ], { duration: reduceMotion.matches ? 1 : 300, easing: EASE, fill: 'forwards' });
+    a.onfinish = () => { el.remove(); done && done(); };
+  }
+  function expandIn(el, gap) {
+    if (reduceMotion.matches) return;
+    const h = el.getBoundingClientRect().height;
+    const cs = getComputedStyle(el);
+    el.style.overflow = 'hidden';
+    el.animate([
+      { height: '0px', paddingTop: '0px', paddingBottom: '0px', marginBottom: -gap + 'px', opacity: 0 },
+      { height: h + 'px', paddingTop: cs.paddingTop, paddingBottom: cs.paddingBottom, marginBottom: '0px', opacity: 1 }
+    ], { duration: 320, easing: EASE }).onfinish = () => { el.style.overflow = ''; };
+  }
+  /* 条形从 0 长到目标值（宽度或 flex-basis） */
+  function growBars(root) {
+    const bars = $$('[data-w]', root);
+    bars.forEach(b => { b.style.transition = 'none'; b.style[b.dataset.prop || 'width'] = '0%'; });
+    root.getBoundingClientRect();
+    requestAnimationFrame(() => requestAnimationFrame(() => bars.forEach(b => {
+      b.style.transition = '';
+      b.style[b.dataset.prop || 'width'] = b.dataset.w + '%';
+    })));
+  }
+  /* 数字补间（价格切换按月 / 按年） */
+  function tweenNumber(el, to, dur = 460) {
+    const from = +(el.dataset.cur || el.textContent.replace(/\D/g, '') || 0);
+    el.dataset.cur = to;
+    if (reduceMotion.matches || from === to) { el.textContent = to.toLocaleString('en-US'); return; }
+    const t0 = performance.now();
+    const step = now => {
+      const k = Math.min(1, (now - t0) / dur);
+      const e = 1 - Math.pow(1 - k, 3);
+      el.textContent = Math.round(from + (to - from) * e).toLocaleString('en-US');
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+  /* 文案替换：淡出 → 换字 → 淡入（同一行内，不改变高度） */
+  function swapText(el, text) {
+    if (el.textContent === text) return;
+    if (reduceMotion.matches) { el.textContent = text; return; }
+    el.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(-3px)' }], { duration: 120, easing: 'ease-in' })
+      .onfinish = () => {
+        el.textContent = text;
+        el.animate([{ opacity: 0, transform: 'translateY(3px)' }, { opacity: 1, transform: 'none' }], { duration: 220, easing: EASE });
+      };
+  }
+
+  /* ---------------- 分段控件 ---------------- */
+  function initSeg(seg, onChange) {
+    const glider = $('.seg-glider', seg);
+    const place = () => {
+      const a = $('.seg-btn.active', seg);
+      if (!a || !a.offsetWidth) return;
+      glider.style.width = a.offsetWidth + 'px';
+      glider.style.transform = `translateX(${a.offsetLeft}px)`;
+    };
+    $$('.seg-btn', seg).forEach(b => b.addEventListener('click', () => {
+      if (b.classList.contains('active')) return;
+      $$('.seg-btn', seg).forEach(x => x.classList.toggle('active', x === b));
+      place();
+      onChange && onChange(b.dataset.v);
+    }));
+    seg._place = place;
+    requestAnimationFrame(place);
+    return place;
+  }
+  const placeAllSegs = () => $$('.seg').forEach(s => s._place && s._place());
+  window.addEventListener('resize', placeAllSegs);
+
+  /* ---------------- 下拉与行内菜单（事件委托，动态行也能用） ---------------- */
+  function closeMenus(except) { $$('.select.open').forEach(s => s !== except && s.classList.remove('open')); }
+  document.addEventListener('click', e => {
+    const trig = e.target.closest('.select-trigger, .menu-trigger');
+    if (trig) {
+      const sel = trig.closest('.select');
+      const open = !sel.classList.contains('open');
+      closeMenus(sel);
+      sel.classList.toggle('open', open);
+      return;
+    }
+    if (!e.target.closest('.select')) closeMenus();
+  });
+  function initSelect(sel, items, current, onPick) {
+    const menu = $('.menu', sel);
+    const render = () => {
+      menu.innerHTML = items.map(it => `<button class="menu-opt ${it.id === current ? 'active' : ''}" data-id="${it.id}"><span>${it.label}</span>${it.id === current ? '<svg class="i" width="13" height="13" aria-hidden="true"><use href="#i-check"/></svg>' : ''}</button>`).join('');
+    };
+    render();
+    menu.addEventListener('click', e => {
+      const b = e.target.closest('.menu-opt');
+      if (!b) return;
+      current = b.dataset.id;
+      render();
+      sel.classList.remove('open');
+      onPick(current, items.find(i => i.id === current));
+    });
+    sel._set = id => { current = id; render(); };
+  }
+
+  /* ---------------- 侧栏：收起 / 自动收起 / 高亮滑块 ---------------- */
+  const app = $('#app');
+  const mqAuto = matchMedia('(max-width: 1280px)');
+  let railUserCollapsed = localStorage.getItem('scenes-rail') === '1';
+  function applyRail() {
+    app.classList.toggle('rail-auto', mqAuto.matches);
+    app.classList.toggle('rail-collapsed', mqAuto.matches || railUserCollapsed);
+  }
+  function toggleRail() {
+    if (mqAuto.matches) return;
+    railUserCollapsed = !railUserCollapsed;
+    try { localStorage.setItem('scenes-rail', railUserCollapsed ? '1' : '0'); } catch (e) {}
+    applyRail();
+  }
+  mqAuto.addEventListener('change', applyRail);
+  app.classList.add('no-anim');
+  applyRail();
+  requestAnimationFrame(() => requestAnimationFrame(() => app.classList.remove('no-anim')));
+  $$('.side-rail .rail-btn').forEach(btn => btn.addEventListener('mouseenter', () => {
+    const tip = $('.rail-tip', btn);
+    const r = btn.getBoundingClientRect();
+    tip.style.left = ($('#sideRail').getBoundingClientRect().right + 10) + 'px';
+    tip.style.top = (r.top + r.height / 2) + 'px';
+  }));
+  function moveGlider() {
+    const a = $('#railTrack .rail-btn.active');
+    const g = $('#railGlider');
+    g.style.opacity = a ? 1 : 0;
+    if (a) g.style.transform = `translateY(${a.offsetTop}px)`;
+  }
+
+  /* ---------------- 路由 ---------------- */
+  const PAGES = { plans: '套餐', usage: '用量', invoices: '发票', payment: '支付方式' };
+  let scene = null;
+  /* 星轨环：WAAPI 动画 stroke-dasharray（CSS 过渡在部分浏览器不插值）；首屏与减少动效时不播放 */
+  function animateRings(root) {
+    if (reduceMotion.matches) return;
+    $$('.kpi-ring circle[stroke-dasharray]', root).forEach(arc => {
+      const [on, c] = arc.getAttribute('stroke-dasharray').split(' ');
+      arc.animate([{ strokeDasharray: `0 ${c}` }, { strokeDasharray: `${on} ${c}` }], { duration: 700, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+    });
+  }
+  function go(name, push = true) {
+    if (!PAGES[name]) name = 'plans';
+    if (name === scene) return;
+    const firstPaint = scene === null;
+    scene = name;
+    $$('.scene').forEach(s => s.classList.toggle('active', s.dataset.scene === name));
+    $$('[data-go]').forEach(b => b.classList.toggle('active', b.dataset.go === name));
+    moveGlider();
+    $('#crumbs').innerHTML = `<button onclick="go('plans')">Blora Labs</button><span style="color:var(--ink-4)">/</span><button onclick="go('plans')">账单</button><span style="color:var(--ink-4)">/</span><b>${PAGES[name]}</b>`;
+    if (push) history.replaceState(null, '', '#' + name);
+    window.scrollTo({ top: 0 });
+    requestAnimationFrame(placeAllSegs);
+    if (name === 'usage') { drawChart('costChart', 'costX', costData()); growBars($('[data-scene="usage"]')); if (!firstPaint) animateRings($('[data-scene="usage"]')); }
+    if (name === 'invoices') renderInvoices(false);
+  }
+  $$('[data-go]').forEach(b => b.addEventListener('click', () => go(b.dataset.go)));
+
+  /* ---------------- 套餐：按月 / 按年 ---------------- */
+  initSeg($('#cycleSeg'), v => {
+    $$('.plan .price[data-m]').forEach(el => tweenNumber(el, +el.dataset[v]));
+    $$('.plan-note[data-m]').forEach(el => swapText(el, el.dataset[v]));
+    $$('.cmp-price[data-m]').forEach(el => swapText(el, el.dataset[v]));
+  });
+
+  const CMP_HEAD = [
+    ['免费版', '', '¥0', '¥0'],
+    ['专业版', '<span class="pill tone-sand plain">当前</span>', '¥99 / 月', '¥82 / 月'],
+    ['团队版', '<span class="pill sync plain">推荐</span>', '¥299 / 月', '¥249 / 月'],
+    ['企业版', '', '按需', '按需']
+  ];
+  const CMP = [
+    { g: '计算与部署' },
+    ['实例数量', '1', '5', '20', '不限'],
+    ['单实例规格上限', '共享 CPU', '2 vCPU / 4 GB', '8 vCPU / 16 GB', '定制'],
+    ['构建分钟 / 月', '100', '2,000', '10,000', '不限'],
+    ['自定义域名', false, true, true, true],
+    ['预览环境', false, false, true, true],
+    { g: '协作' },
+    ['团队成员', '1', '3', '10', '不限'],
+    ['角色与权限', false, false, true, true],
+    ['SSO 单点登录', false, false, false, true],
+    { g: '支持与合规' },
+    ['日志保留', '1 天', '7 天', '30 天', '365 天'],
+    ['可用性 SLA', false, '99.9%', '99.95%', '99.99%'],
+    ['技术支持', '社区', '邮件 · 1 个工作日', '工单 · 2 小时', '专属客户经理']
+  ];
+  function renderCmp() {
+    const HL = 2;
+    const ico = n => `<svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+    const cell = (v, i) => {
+      const hl = i === HL ? ' hl' : '';
+      if (v === true) return `<span class="yes${hl}" aria-label="包含">${ico('check')}</span>`;
+      if (v === false) return `<span class="no${hl}" aria-label="不包含">${ico('minus')}</span>`;
+      return `<span class="${hl.trim()}">${v}</span>`;
+    };
+    // 表头 → 价格托盘 → 每个分组一个托盘（组名是托盘上方的小标签，不再单独占一整行空格子）
+    let html = `<div class="cmp-row head"><span>功能</span>${CMP_HEAD.map(([n, tag], i) => `<span class="${i === HL ? 'hl' : ''}">${n}${tag}</span>`).join('')}</div>`;
+    html += `<div class="tray cmp-tray"><div class="cmp-row"><span>价格</span>${CMP_HEAD.map(([, , m, y], i) => `<span class="cmp-price ${i === HL ? 'hl' : ''}" data-m="${m}" data-y="${y}">${m}</span>`).join('')}</div></div>`;
+    let open = false;
+    CMP.forEach(r => {
+      if (r.g) { html += `${open ? '</div>' : ''}<div class="cmp-glabel">${r.g}</div><div class="tray cmp-tray">`; open = true; }
+      else html += `<div class="cmp-row"><span>${r[0]}</span>${r.slice(1).map(cell).join('')}</div>`;
+    });
+    if (open) html += '</div>';
+    $('#cmp').innerHTML = html;
+  }
+  renderCmp();
+
+  $$('.faq-q').forEach(q => q.addEventListener('click', () => {
+    const item = q.parentElement;
+    item.classList.toggle('open');
+    q.setAttribute('aria-expanded', item.classList.contains('open'));
+  }));
+
+  /* ---------------- 用量：费用曲线 ---------------- */
+  const COST = {
+    x: ['11/14', '11/16', '11/18', '11/20', '11/22', '11/24', '11/26'],
+    a: [82, 86, 79, 91, 95, 88, 102, 110, 104, 98, 112, 121, 118],
+    b: [76, 80, 78, 82, 85, 83, 88, 92, 90, 87, 94, 96, 95]
+  };
+  const cumulate = arr => arr.reduce((acc, v, i) => { acc.push((acc[i - 1] || 0) + v); return acc; }, []);
+  let costMode = 'daily';
+  const costData = () => costMode === 'daily'
+    ? { x: COST.x, a: COST.a, b: COST.b, pre: '¥' }
+    : { x: COST.x, a: cumulate(COST.a), b: cumulate(COST.b), pre: '¥' };
+  initSeg($('#costSeg'), v => {
+    costMode = v;
+    swapText($('#costSub'), v === 'daily' ? '本期前 13 天，与上期同期对比' : '本期累计费用，与上期同期对比');
+    drawChart('costChart', 'costX', costData());
+  });
+  function drawChart(id, xId, d) {
+    const wrap = document.getElementById(id);
+    const W = 600, H = 200, padL = 40;
+    const all = d.a.concat(d.b || []);
+    const max = Math.ceil(Math.max(...all) * 1.15 / 10) * 10;
+    const pts = arr => arr.map((v, i) => [padL + (W - padL) * i / (arr.length - 1), H - (v / max) * H]);
+    // Catmull-Rom 转三次贝塞尔：拐点圆润，曲线仍经过每个数据点
+    const line = p => p.map((q, i) => {
+      if (!i) return 'M' + q[0].toFixed(1) + ' ' + q[1].toFixed(1);
+      const p0 = p[i - 2] || p[i - 1], p1 = p[i - 1], p3 = p[i + 1] || q, k = 1 / 6;
+      const c1 = [p1[0] + (q[0] - p0[0]) * k, p1[1] + (q[1] - p0[1]) * k];
+      const c2 = [q[0] - (p3[0] - p1[0]) * k, q[1] - (p3[1] - p1[1]) * k];
+      return 'C' + [c1, c2, q].map(c => c[0].toFixed(1) + ' ' + c[1].toFixed(1)).join(' ');
+    }).join(' ');
+    const pa = pts(d.a);
+    const area = line(pa) + ` L${W} ${H} L${padL} ${H} Z`;
+    const grid = [0.25, 0.5, 0.75, 1].map(f => `<line x1="${padL}" x2="${W}" y1="${H - H * f}" y2="${H - H * f}"/>`).join('');
+    wrap.innerHTML = `
+      <svg class="chart-svg chart-draw" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+        <g class="chart-grid">${grid}</g>
+        <g>
+          <path d="${area}" fill="var(--blush-solid)" fill-opacity="0.1"/>
+          ${d.b ? `<path class="chart-line b" d="${line(pts(d.b))}"/>` : ''}
+          <path class="chart-line" d="${line(pa)}"/>
+        </g>
+      </svg>
+      <div class="chart-y"><span>${d.pre}${max.toLocaleString('en-US')}</span><span>${d.pre}${(max / 2).toLocaleString('en-US')}</span><span>0</span></div>
+      <div class="chart-guide"></div><div class="chart-dot"></div><div class="chart-tip"></div>`;
+    const xEl = document.getElementById(xId);
+    xEl.innerHTML = d.x.map(t => `<span>${t}</span>`).join('');
+    xEl.style.paddingLeft = (padL / W * 100) + '%';
+    const guide = $('.chart-guide', wrap), dot = $('.chart-dot', wrap), tip = $('.chart-tip', wrap);
+    wrap.onmousemove = e => {
+      const r = wrap.getBoundingClientRect();
+      const fx = (e.clientX - r.left) / r.width * W;
+      let idx = Math.round((fx - padL) / (W - padL) * (d.a.length - 1));
+      idx = Math.max(0, Math.min(d.a.length - 1, idx));
+      const [x, y] = pa[idx];
+      const px = x / W * r.width, py = y / H * r.height;
+      guide.style.left = px + 'px';
+      dot.style.left = px + 'px';
+      dot.style.top = py + 'px';
+      tip.style.left = Math.min(Math.max(px, 70), r.width - 70) + 'px';
+      tip.innerHTML = `<b>第 ${idx + 1} 天 · ${d.pre}${d.a[idx].toLocaleString('en-US')}</b>${d.b ? ` <span class="muted">· 上期 ${d.pre}${d.b[idx].toLocaleString('en-US')}</span>` : ''}`;
+      wrap.classList.add('hover');
+    };
+    wrap.onmouseleave = () => wrap.classList.remove('hover');
+  }
+
+  /* ---------------- 发票 ---------------- */
+  const AMOUNTS = [286.40, 241.10, 99.00, 213.75, 198.30, 176.20, 99.00, 154.90, 132.40, 99.00, 121.60, 99.00, 147.30, 108.80, 99.00, 99.00, 112.45, 99.00];
+  const INVOICES = AMOUNTS.map((amount, i) => {
+    const d = new Date(2026, 10 - i, 14);
+    const y = d.getFullYear(), m = d.getMonth() + 1, m2 = m === 12 ? 1 : m + 1;
+    const status = i === 0 ? 'due' : i === 1 ? 'over' : (i === 2 || i === 6) ? 'refund' : 'paid';
+    const pay = i === 1 ? 'mc' : i % 3 === 0 && i > 0 ? 'bal' : 'visa';
+    return {
+      no: `INV-${y}${String(m).padStart(2, '0')}-${1840 - i * 37}`,
+      year: String(y),
+      date: `${y}-${String(m).padStart(2, '0')}-14`,
+      period: `${m} 月 14 日 – ${m2} 月 13 日${status === 'refund' ? ' · 重复扣款已退回' : ''}`,
+      amount, status, pay
+    };
+  });
+  const INV_STATUS = { paid: ['run', '已支付'], due: ['sync', '待支付'], over: ['warn', '逾期'], refund: ['stop', '已退款'] };
+  const PAY_LABEL = { visa: ['visa', 'Visa', '4242'], mc: ['mc', '万事达', '8210'] };
+  const YEARS = [{ id: '2026', label: '2026 年' }, { id: '2025', label: '2025 年' }, { id: 'all', label: '全部年份' }];
+  const INV_PAGE = 8;
+  const invState = { q: '', status: 'all', year: '2026', page: 1 };
+
+  function payCell(p) {
+    if (p === 'bal') return `<span class="ico-mini"><svg class="i" width="11" height="11" aria-hidden="true"><use href="#i-wallet"/></svg></span>账户余额`;
+    const [cls, label, last4] = PAY_LABEL[p];
+    return `<span class="brand-badge mini ${cls}"></span>${label} <span class="mono">•••• ${last4}</span>`;
+  }
+  const invBase = () => {
+    const q = invState.q.trim().toLowerCase();
+    return INVOICES.filter(it => (invState.year === 'all' || it.year === invState.year) &&
+      (!q || it.no.toLowerCase().includes(q) || money(it.amount).includes(q) || String(it.amount).includes(q)));
+  };
+  function renderInvoices(anim = true) {
+    const base = invBase();
+    const rows = base.filter(it => invState.status === 'all' || it.status === invState.status);
+    const pages = Math.max(1, Math.ceil(rows.length / INV_PAGE));
+    invState.page = Math.min(invState.page, pages);
+    const start = (invState.page - 1) * INV_PAGE;
+    const view = rows.slice(start, start + INV_PAGE);
+    const body = $('#invBody');
+    const paint = () => {
+      if (!view.length) {
+        const yl = (YEARS.find(y => y.id === invState.year) || {}).label;
+        const sl = invState.status === 'all' ? '' : `「${INV_STATUS[invState.status][1]}」`;
+        const why = invState.q ? `没有找到包含「${invState.q.trim()}」的发票，检查一下发票号或金额。` : `${invState.year === 'all' ? '所有年份' : yl}都没有${sl}发票，换个筛选条件试试。`;
+        body.innerHTML = `<div class="empty-state">
+          <span class="empty-ico"><svg class="i" width="20" height="20" aria-hidden="true"><use href="#i-inbox"/></svg></span>
+          <h3>没有符合条件的发票</h3>
+          <p>${why}</p>
+          <button class="btn btn-surface btn-sm" onclick="resetInv()">清除筛选</button>
+        </div>`;
+      } else {
+        body.innerHTML = '<div class="tbody">' + view.map(it => {
+          const [pc, pl] = INV_STATUS[it.status];
+          return `<div class="tr" data-no="${it.no}">
+            <div style="min-width:0;"><div class="name">${it.no}</div><div class="sub">${it.period}</div></div>
+            <span class="c-date cell-mono">${it.date}</span>
+            <span class="c-amt amt ${it.status === 'refund' ? 'refund' : ''}">${yuan(it.amount)}</span>
+            <span><span class="pill ${pc}">${pl}</span></span>
+            <span class="c-pay pay-cell">${payCell(it.pay)}</span>
+            <button class="btn btn-ghost btn-icon btn-sm" data-dl aria-label="下载 PDF"><svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-download"/></svg></button>
+          </div>`;
+        }).join('') + '</div>';
+      }
+      bindTails(body);
+    };
+    anim ? animateHeight(body, paint) : paint();
+    if (anim && !reduceMotion.matches) body.firstElementChild.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 240, easing: 'ease-out' });
+
+    $('#invPageInfo').textContent = rows.length ? `显示 ${start + 1}–${start + view.length}，共 ${rows.length} 张` : '共 0 张';
+    $('#invPager').innerHTML =
+      `<button class="page-btn" ${invState.page === 1 ? 'disabled' : ''} data-p="${invState.page - 1}" aria-label="上一页">‹</button>` +
+      Array.from({ length: pages }, (_, i) => `<button class="page-btn ${i + 1 === invState.page ? 'active' : ''}" data-p="${i + 1}">${i + 1}</button>`).join('') +
+      `<button class="page-btn" ${invState.page === pages ? 'disabled' : ''} data-p="${invState.page + 1}" aria-label="下一页">›</button>`;
+    const counts = { all: base.length, paid: 0, due: 0, over: 0, refund: 0 };
+    base.forEach(it => counts[it.status]++);
+    $$('#invSeg [data-count]').forEach(n => { n.textContent = counts[n.dataset.count]; });
+    $('#invSeg')._place && $('#invSeg')._place();
+  }
+  function resetInv() {
+    invState.q = ''; invState.status = 'all'; invState.page = 1;
+    $('#invSearch').value = '';
+    $$('#invSeg .seg-btn').forEach(b => b.classList.toggle('active', b.dataset.v === 'all'));
+    $('#invSeg')._place();
+    renderInvoices();
+  }
+  function renderInvKpis() {
+    const y26 = INVOICES.filter(it => it.year === '2026');
+    const paid = y26.filter(it => it.status === 'paid');
+    const refund = y26.filter(it => it.status === 'refund');
+    const sum = arr => arr.reduce((s, it) => s + it.amount, 0);
+    const due = INVOICES.filter(it => it.status === 'due'), over = INVOICES.filter(it => it.status === 'over');
+    $('#kpiPaid').innerHTML = yuanParts(sum(paid));
+    $('#kpiPaidFoot').textContent = `共 ${paid.length} 张，另有 ${refund.length} 张已退款 ${yuan(sum(refund))}`;
+    $('#kpiDue').innerHTML = yuanParts(sum(due));
+    $('#kpiOver').innerHTML = yuanParts(sum(over));
+    $('#invSub').textContent = `共 ${INVOICES.length} 张发票 · 待支付 ${yuan(sum(due) + sum(over))}`;
+    $('#railInvCount').textContent = due.length + over.length;
+  }
+  initSeg($('#invSeg'), v => { invState.status = v; invState.page = 1; renderInvoices(); });
+  initSelect($('#yearSelect'), YEARS, '2026', (id, it) => {
+    invState.year = id; invState.page = 1;
+    $('#yearLabel').textContent = it.label;
+    renderInvoices();
+  });
+  $('#invSearch').addEventListener('input', e => { invState.q = e.target.value; invState.page = 1; renderInvoices(); });
+  $('#invPager').addEventListener('click', e => {
+    const b = e.target.closest('.page-btn');
+    if (!b || b.disabled) return;
+    invState.page = +b.dataset.p;
+    renderInvoices();
+  });
+  $('#invBody').addEventListener('click', e => {
+    const row = e.target.closest('.tr');
+    if (!row) return;
+    if (e.target.closest('[data-dl]')) { toast(`正在下载 ${row.dataset.no}.pdf`); return; }
+    toast(`已打开发票 ${row.dataset.no}`);
+  });
+  $('#globalSearch').addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    invState.q = e.target.value; invState.page = 1; invState.year = 'all';
+    $('#invSearch').value = e.target.value;
+    $('#yearLabel').textContent = '全部年份';
+    $('#yearSelect')._set('all');
+    if (scene === 'invoices') renderInvoices(); else go('invoices');
+  });
+  renderInvKpis();
+
+  /* ---------------- 支付方式 ---------------- */
+  const BRAND = { visa: 'Visa', mc: '万事达', up: '银联', card: '银行卡' };
+  const BRAND_TAG = { visa: 'VISA', mc: 'MC', up: 'UP', card: 'CARD' };
+  const cards = [
+    { id: 'c1', brand: 'visa', last4: '4242', exp: '08/28', holder: 'RHEDAR CHEN', def: true },
+    { id: 'c2', brand: 'mc', last4: '8210', exp: '12/26', holder: 'RHEDAR CHEN', expiring: true },
+    { id: 'c3', brand: 'up', last4: '0067', exp: '03/29', holder: '上海晶格云计算科技有限公司华东研发与运营中心对公结算账户' }
+  ];
+  function cardRow(c) {
+    return `<div class="card-row" data-id="${c.id}">
+      <span class="brand-badge ${c.brand === 'card' ? 'up' : c.brand}">${BRAND_TAG[c.brand]}</span>
+      <div style="min-width:0;"><div class="card-name">${BRAND[c.brand]}<span class="mono">•••• ${c.last4}</span></div><div class="card-sub" title="${c.holder}">有效期 ${c.exp} · ${c.holder}</div></div>
+      <span class="card-tags">${c.def ? '<span class="pill sync plain">默认</span>' : ''}${c.expiring ? '<span class="pill warn plain">即将到期</span>' : ''}</span>
+      <div class="select card-menu">
+        <button class="menu-trigger" aria-label="更多操作"><svg class="i" width="14" height="14" aria-hidden="true"><use href="#i-ellipsis"/></svg></button>
+        <div class="menu right">
+          <button class="menu-opt" data-act="default" ${c.def ? 'disabled' : ''}>设为默认</button>
+          <button class="menu-opt" data-act="edit">编辑有效期</button>
+          <div class="menu-sep"></div>
+          <button class="menu-opt danger" data-act="delete">删除</button>
+        </div>
+      </div>
+    </div>`;
+  }
+  function renderCards(newId) {
+    $('#cardList').innerHTML = cards.map(cardRow).join('');
+    $('#cardCount').textContent = `${cards.length} 张卡片 · 1 个账户余额`;
+    if (newId) expandIn($(`.card-row[data-id="${newId}"]`), 2);
+  }
+  $('#cardList').addEventListener('click', e => {
+    const opt = e.target.closest('[data-act]');
+    if (!opt) return;
+    const row = opt.closest('.card-row');
+    const c = cards.find(x => x.id === row.dataset.id);
+    closeMenus();
+    if (opt.dataset.act === 'default') {
+      cards.forEach(x => { x.def = x === c; });
+      renderCards();
+      const r = $(`.card-row[data-id="${c.id}"]`);
+      if (!reduceMotion.matches) r.animate([{ backgroundColor: 'var(--blush-soft)' }, { backgroundColor: 'transparent' }], { duration: 1200, easing: 'ease-out' });
+      toast(`${BRAND[c.brand]} •••• ${c.last4} 已设为默认`);
+    } else if (opt.dataset.act === 'edit') {
+      focusAddCard();
+      toast('在右侧重新填写这张卡的信息即可');
+    } else if (c.def) {
+      toast('默认卡不能删除，请先把其他卡设为默认');
+    } else {
+      collapseOut(row, 2, () => {
+        cards.splice(cards.indexOf(c), 1);
+        $('#cardCount').textContent = `${cards.length} 张卡片 · 1 个账户余额`;
+        toast(`已删除 ${BRAND[c.brand]} •••• ${c.last4}`);
+      });
+    }
+  });
+  renderCards();
+
+  function dismissAlert() {
+    const a = $('#expiryAlert');
+    if (a) collapseOut(a, 6);
+  }
+  function focusAddCard() {
+    $('#addCardTile').scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'center' });
+    setTimeout(() => $('#ccNo').focus({ preventScroll: true }), 380);
+  }
+
+  /* 添加新卡：输入即格式化，卡面实时预览，保存时逐项校验 */
+  const ccNo = $('#ccNo'), ccExp = $('#ccExp'), ccCvc = $('#ccCvc'), ccName = $('#ccName');
+  const digits = v => v.replace(/\D/g, '');
+  const detectBrand = d => /^4/.test(d) ? 'visa' : /^(5[1-5]|2[2-7])/.test(d) ? 'mc' : /^62/.test(d) ? 'up' : 'card';
+  const BRAND_FULL = { visa: 'VISA', mc: 'MASTERCARD', up: 'UNIONPAY', card: 'CARD' };
+  function updatePreview() {
+    const d = digits(ccNo.value);
+    const brand = d ? detectBrand(d) : 'card';
+    $('#cardPreview').dataset.brand = brand;
+    $('#cpBrand').textContent = BRAND_FULL[brand];
+    $('#cpNum').textContent = (d + '•'.repeat(16)).slice(0, 16).replace(/(.{4})(?=.)/g, '$1 ');
+    $('#cpName').textContent = ccName.value.trim() || '持卡人姓名';
+    $('#cpExp').textContent = ccExp.value || 'MM/YY';
+  }
+  function setInvalid(f, bad) {
+    const was = f.classList.contains('invalid');
+    f.classList.toggle('invalid', bad);
+    if (bad && !was && !reduceMotion.matches) {
+      const field = $('.field', f);
+      field.classList.remove('shake');
+      void field.offsetWidth;
+      field.classList.add('shake');
+    }
+  }
+  ccNo.addEventListener('input', () => {
+    const d = digits(ccNo.value).slice(0, 16);
+    ccNo.value = d.replace(/(\d{4})(?=\d)/g, '$1 ');
+    if (d.length === 16) setInvalid($('#fNo'), false);
+    updatePreview();
+  });
+  ccExp.addEventListener('input', () => {
+    const d = digits(ccExp.value).slice(0, 4);
+    ccExp.value = d.length > 2 ? d.slice(0, 2) + '/' + d.slice(2) : d;
+    if (expOk(ccExp.value)) setInvalid($('#fExp'), false);
+    updatePreview();
+  });
+  ccCvc.addEventListener('input', () => {
+    ccCvc.value = digits(ccCvc.value).slice(0, 4);
+    if (ccCvc.value.length >= 3) setInvalid($('#fCvc'), false);
+  });
+  ccName.addEventListener('input', () => {
+    if (ccName.value.trim()) setInvalid($('#fName'), false);
+    updatePreview();
+  });
+  $('#ccDefault').addEventListener('click', e => e.currentTarget.classList.toggle('on'));
+  function expOk(v) {
+    const m = /^(0[1-9]|1[0-2])\/(\d{2})$/.exec(v);
+    if (!m) return false;
+    const mm = +m[1], yy = +m[2];
+    return yy > 26 || (yy === 26 && mm >= 11);
+  }
+  function resetCardForm() {
+    [ccNo, ccExp, ccCvc, ccName].forEach(i => { i.value = ''; });
+    $$('.addcard-fields .f').forEach(f => f.classList.remove('invalid'));
+    $('#ccDefault').classList.remove('on');
+    updatePreview();
+  }
+  function saveCard() {
+    const d = digits(ccNo.value);
+    const checks = [
+      [$('#fNo'), d.length === 16],
+      [$('#fExp'), expOk(ccExp.value)],
+      [$('#fCvc'), ccCvc.value.length >= 3],
+      [$('#fName'), !!ccName.value.trim()]
+    ];
+    checks.forEach(([f, ok]) => setInvalid(f, !ok));
+    const firstBad = checks.find(([, ok]) => !ok);
+    if (firstBad) { $('input', firstBad[0]).focus(); return; }
+    const makeDefault = $('#ccDefault').classList.contains('on');
+    const c = { id: 'c' + Date.now(), brand: detectBrand(d), last4: d.slice(-4), exp: ccExp.value, holder: ccName.value.trim().toUpperCase(), def: makeDefault };
+    if (makeDefault) cards.forEach(x => { x.def = false; });
+    cards.push(c);
+    renderCards(c.id);
+    resetCardForm();
+    toast(`已添加 ${BRAND[c.brand]} •••• ${c.last4}`);
+  }
+
+  /* 账单地址：有改动才能保存 / 撤销 */
+  const ADDR_COUNTRIES = [{ id: 'cn', label: '中国大陆' }, { id: 'hk', label: '中国香港' }, { id: 'sg', label: '新加坡' }, { id: 'us', label: '美国' }];
+  let addrCountry = 'cn';
+  const addrSnapshot = () => $$('[data-addr]').map(i => i.value).join('\u0001') + '\u0001' + addrCountry;
+  let addrSaved = addrSnapshot();
+  function addrDirty() {
+    const dirty = addrSnapshot() !== addrSaved;
+    $('#addrSave').disabled = !dirty;
+    $('#addrReset').disabled = !dirty;
+    swapText($('#addrHint'), dirty ? '有未保存的修改' : '修改会从下一张发票开始生效');
+  }
+  $$('[data-addr]').forEach(i => i.addEventListener('input', addrDirty));
+  initSelect($('#countrySelect'), ADDR_COUNTRIES, 'cn', (id, it) => { addrCountry = id; $('#countryLabel').textContent = it.label; addrDirty(); });
+  function saveAddr() { addrSaved = addrSnapshot(); addrDirty(); toast('开票信息已保存，下一张发票生效'); }
+  function resetAddr() {
+    const vals = addrSaved.split('\u0001');
+    $$('[data-addr]').forEach((i, n) => { i.value = vals[n]; });
+    addrCountry = vals[vals.length - 1];
+    $('#countrySelect')._set(addrCountry);
+    $('#countryLabel').textContent = ADDR_COUNTRIES.find(c => c.id === addrCountry).label;
+    addrDirty();
+  }
+  $$('[data-toggle]').forEach(s => s.addEventListener('click', () => {
+    s.classList.toggle('on');
+    toast(`${s.getAttribute('aria-label')}：已${s.classList.contains('on') ? '开启' : '关闭'}`);
+  }));
+
+  document.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); const g = $('#globalSearch'); g.offsetParent ? g.focus() : go('invoices'); }
+    if ((e.metaKey || e.ctrlKey) && e.key === '\\') { e.preventDefault(); toggleRail(); }
+    if (e.key === 'Escape') closeMenus();
+  });
+
+  /* ---------------- 启动 ---------------- */
+  renderInvoices(false);
+  go((location.hash || '#plans').slice(1), false);
+  window.addEventListener('hashchange', () => go(location.hash.slice(1), false));
+  bindTails();
+
+  /* ---------------- 选中滑块（单选组共用） ----------------
+     不改原有点击逻辑：监听组内 class 变化与重绘（页签会整段重新渲染），选中项变了就把滑块连续移过去；
+     容器尺寸变化（目录展开折叠、换行、窗口缩放）时滑块即时跟随，不加过渡。
+     选中项被折叠区裁掉、或整组不可见时，滑块隐藏 */
+  function attachGlide(host, itemSel, activeSel, opt = {}) {
+    if (typeof host === 'string') host = document.querySelector(host);
+    if (!host || host._glide) return;
+    host._glide = true;
+    host.classList.add('glide-host');
+    if (opt.tray) host.classList.add('glide-tray');
+    if (opt.bg) host.style.setProperty('--glide-bg', opt.bg);
+    if (opt.shadow) host.style.setProperty('--glide-shadow', opt.shadow);
+    const pill = document.createElement('span');
+    pill.className = 'glide-pill';
+    pill.setAttribute('aria-hidden', 'true');
+    const still = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let placed = false, raf = 0, instantNext = false;
+    const clipped = (el, r) => {
+      for (let p = el.parentElement; p && p !== host; p = p.parentElement) {
+        if (getComputedStyle(p).overflow === 'visible') continue;
+        const c = p.getBoundingClientRect();
+        if (c.height < 1 || r.bottom > c.bottom + 1 || r.top < c.top - 1) return true;
+      }
+      return false;
+    };
+    const place = instant => {
+      if (!pill.isConnected) host.prepend(pill);
+      host.querySelectorAll(itemSel).forEach(el => { if (!el.classList.contains('glide-item')) el.classList.add('glide-item'); });
+      const a = host.querySelector(activeSel);
+      host.querySelectorAll('[data-glide-on]').forEach(el => { if (el !== a) el.removeAttribute('data-glide-on'); });
+      const r = a && a.getBoundingClientRect();
+      if (!a || !host.offsetParent || !r.width || clipped(a, r)) {
+        if (a) a.removeAttribute('data-glide-on');
+        pill.style.opacity = '0';
+        placed = false;
+        return;
+      }
+      if (!a.hasAttribute('data-glide-on')) a.setAttribute('data-glide-on', '');
+      const hr = host.getBoundingClientRect();
+      const x = r.left - hr.left - host.clientLeft + host.scrollLeft;
+      const y = r.top - hr.top - host.clientTop + host.scrollTop;
+      const radius = getComputedStyle(a).borderRadius;
+      const jump = instant || !placed || still();
+      if (jump) pill.style.transition = 'none';
+      pill.style.width = r.width + 'px';
+      pill.style.height = r.height + 'px';
+      pill.style.borderRadius = radius;
+      pill.style.transform = `translate(${x}px, ${y}px)`;
+      pill.style.opacity = '1';
+      if (jump) { pill.getBoundingClientRect(); pill.style.transition = ''; }
+      if (opt.tray) host.style.borderRadius = `calc(${radius} + 3px)`;
+      placed = true;
+    };
+    const schedule = instant => {
+      instantNext = instantNext || instant;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => { const i = instantNext; instantNext = false; place(i); });
+    };
+    new MutationObserver(ms => {
+      if (ms.every(m => m.target === pill || (m.type === 'attributes' && m.attributeName === 'class' && m.target.classList.contains('glide-item') && m.oldValue && m.oldValue.replace(' glide-item', '') === m.target.className.replace(' glide-item', '')))) return;
+      schedule(false);
+    }).observe(host, { subtree: true, childList: true, attributes: true, attributeFilter: ['class'], attributeOldValue: true });
+    new ResizeObserver(() => schedule(true)).observe(host);
+    window.addEventListener('resize', () => schedule(true));
+    place(true);
+  }
+
+  attachGlide('#invPager', '.page-btn', '.page-btn.active', { bg: 'var(--blush-fill)', tray: true });
+  attachGlide('#mobileNav', 'button', 'button.active', { bg: 'var(--blush-soft)' });
+</script>
+</body>
+</html>

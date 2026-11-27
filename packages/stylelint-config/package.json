@@ -1,0 +1,35 @@
+{
+  "name": "@bloret-crew/stylelint-config-blora",
+  "version": "3.0.0-alpha.0",
+  "description": "Blora Design 的 stylelint 规则：禁止写死颜色、渐变、描边，以及直接引用 Cortado 调色板",
+  "license": "Apache-2.0",
+  "author": "Rhedar <rhedarliu@outlook.com>",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BloretCrew/BloraDesign.git",
+    "directory": "packages/stylelint-config"
+  },
+  "keywords": [
+    "stylelint",
+    "stylelint-config",
+    "blora-design"
+  ],
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js"
+  ],
+  "peerDependencies": {
+    "stylelint": ">=17"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "stylelint": "^18.1.0",
+    "vitest": "^5.1.2"
+  }
+}

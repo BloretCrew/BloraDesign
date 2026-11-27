@@ -1,0 +1,5 @@
+packages:
+  - packages/*
+minimumReleaseAgeExclude:
+  - '@bloret-crew/cortado@0.1.0'
+  - vite@8.4.0

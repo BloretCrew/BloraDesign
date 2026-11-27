@@ -1,0 +1,3 @@
+{
+  "extends": ["@bloret-crew/stylelint-config-blora"]
+}
