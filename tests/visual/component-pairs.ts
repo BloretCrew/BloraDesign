@@ -572,10 +572,13 @@ PAIRS.push(
     size: false,
   },
   {
+  // 参考页的图标底没有设不收缩，标题较宽时（Linux 的中文字体）会被挤窄；框架固定 32，不比宽度
+  {
     name: '上传区 · 图标底',
     ref: `${C} .dz-icon`,
     ours: `${FORM} #drop > [data-part="icon"]`,
-    props: SURF,
+    props: ['height', 'backgroundColor', 'color', 'borderTopLeftRadius'],
+    size: false,
   },
   {
     name: '上传区 · 文字',
