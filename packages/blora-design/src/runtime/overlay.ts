@@ -12,6 +12,8 @@ export interface PopoverOptions {
   matchWidth?: boolean;
   /** 水平对齐：start 左对齐、end 右对齐 */
   align?: 'start' | 'end';
+  /** 按哪个元素定位（默认就是触发元素；分裂按钮按整组定位） */
+  reference?: HTMLElement;
   /** 打开 / 关闭时回调 */
   onToggle?: (open: boolean) => void;
 }
@@ -34,7 +36,7 @@ export function popover(
   anchor.setAttribute('aria-controls', panel.id);
 
   const place = (): void => {
-    const r = anchor.getBoundingClientRect();
+    const r = (opt.reference ?? anchor).getBoundingClientRect();
     if (opt.matchWidth) panel.style.minWidth = `${r.width}px`;
     const pw = panel.offsetWidth;
     const ph = panel.offsetHeight;

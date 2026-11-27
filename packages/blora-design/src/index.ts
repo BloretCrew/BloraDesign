@@ -7,7 +7,10 @@
 import { start } from './runtime/core';
 import { registerData } from './runtime/data';
 import { registerDate } from './runtime/date';
+import { registerDialogs } from './runtime/dialog';
+import { registerFeedback } from './runtime/feedback';
 import { registerForm } from './runtime/form';
+import { registerMenus } from './runtime/menu';
 import { registerNav } from './runtime/nav';
 import { registerPager } from './runtime/pager';
 import { registerRail } from './runtime/rail';
@@ -24,6 +27,9 @@ export const version: string = __BD_VERSION__;
 
 export { enhance } from './runtime/core';
 export { animateHeight, flip, reducedMotion } from './runtime/motion';
+export { openCommand } from './runtime/dialog';
+export { confirm, toast } from './runtime/feedback';
+export type { ConfirmOptions, ToastOptions } from './runtime/feedback';
 
 if (typeof document !== 'undefined') {
   registerRail();
@@ -38,6 +44,9 @@ if (typeof document !== 'undefined') {
   registerSelect();
   registerDate();
   registerData();
+  registerMenus();
+  registerDialogs();
+  registerFeedback();
   registerTail();
   start();
   startPageScroll();

@@ -1,0 +1,213 @@
+/*
+ * 弹窗 bd-modal、抽屉 bd-drawer、命令面板 bd-command：都写在原生 <dialog> 上（顶层、焦点约束、Esc 由浏览器负责），外观全部由 Blora 画。
+ * 遮罩：浅墨色 + 3px 模糊；弹窗从下方 10px、0.97 倍升起，命令面板从上方落下，抽屉从右侧滑入；关闭时反向。
+ *   <dialog class="bd-modal" aria-labelledby="t"><header><h2 id="t">标题</h2><button data-part="close" aria-label="关闭">×</button></header> 内容 <footer>操作</footer></dialog>
+ * 打开：任何元素写 data-bd-open="弹窗 id"，或者 dialog.showModal()；点遮罩关闭
+ */
+@layer bd.components {
+  :is(.bd-modal, .bd-drawer, .bd-command) {
+    --bd-dialog-from: translateY(10px) scale(0.97);
+
+    position: fixed;
+    margin: auto;
+    padding: 22px;
+    border-radius: var(--bd-radius-tile);
+    background: var(--bd-tile);
+    color: var(--bd-ink);
+    box-shadow: var(--bd-shadow-float);
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.2s ease,
+      transform 0.28s var(--bd-ease-out),
+      display 0.28s allow-discrete,
+      overlay 0.28s allow-discrete;
+  }
+
+  :is(.bd-modal, .bd-drawer, .bd-command):not([open]) {
+    opacity: 0;
+    transform: var(--bd-dialog-from);
+  }
+
+  @starting-style {
+    :is(.bd-modal, .bd-drawer, .bd-command)[open] {
+      opacity: 0;
+      transform: var(--bd-dialog-from);
+    }
+  }
+
+  :is(.bd-modal, .bd-drawer, .bd-command)::backdrop {
+    background: var(--bd-scrim);
+    backdrop-filter: blur(3px);
+    opacity: 1;
+    transition:
+      opacity 0.2s ease,
+      display 0.28s allow-discrete,
+      overlay 0.28s allow-discrete;
+  }
+
+  :is(.bd-modal, .bd-drawer, .bd-command):not([open])::backdrop {
+    opacity: 0;
+  }
+
+  @starting-style {
+    :is(.bd-modal, .bd-drawer, .bd-command)[open]::backdrop {
+      opacity: 0;
+    }
+  }
+
+  /* ---- 弹窗 ---- */
+  .bd-modal[open] {
+    display: flex;
+  }
+
+  .bd-modal {
+    flex-direction: column;
+    gap: 14px;
+    width: calc(100% - 40px);
+    max-width: 440px;
+    max-height: calc(100dvh - 40px);
+    overflow-y: auto;
+  }
+
+  :is(.bd-modal, .bd-drawer) > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    > :is(h2, h3) {
+      font-size: 15px;
+      font-weight: 650;
+      line-height: 1.4;
+    }
+
+    > p {
+      font-size: 12.5px;
+      color: var(--bd-ink-description);
+    }
+  }
+
+  :is(.bd-modal, .bd-drawer) [data-part='close'] {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--bd-well);
+    color: var(--bd-ink);
+    transition: background-color var(--bd-duration-hover) ease;
+  }
+
+  :is(.bd-modal, .bd-drawer) [data-part='close']:hover {
+    background: var(--bd-slot);
+  }
+
+  .bd-modal > footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  @media (max-width: 640px) {
+    .bd-modal {
+      padding: 18px;
+    }
+  }
+
+  /* ---- 抽屉：贴着窗口右侧，四周留 14px ---- */
+  .bd-drawer {
+    --bd-dialog-from: translateX(calc(100% + 24px));
+
+    inset: 14px 14px 14px auto;
+    width: 360px;
+    max-width: calc(100vw - 28px);
+    height: auto;
+    max-height: none;
+    margin: 0;
+    transition:
+      opacity 0.2s ease,
+      transform 0.32s var(--bd-ease-out),
+      display 0.32s allow-discrete,
+      overlay 0.32s allow-discrete;
+  }
+
+  .bd-drawer[open] {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .bd-drawer > :not(header, footer) {
+    min-height: 0;
+  }
+
+  .bd-drawer > footer > .bd-button {
+    width: 100%;
+  }
+
+  @media (max-width: 640px) {
+    .bd-drawer {
+      inset: 8px;
+      width: auto;
+      max-width: none;
+    }
+  }
+
+  /* ---- 命令面板 ---- */
+  .bd-command {
+    --bd-dialog-from: translateY(-10px) scale(0.98);
+
+    width: calc(100% - 40px);
+    max-width: 480px;
+    margin-top: 14vh;
+    padding: 12px;
+
+    > .bd-input {
+      margin-bottom: 8px;
+    }
+
+    [role='listbox'] {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+
+    [role='option'] {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 11px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 13.5px;
+      line-height: 1.4;
+      transition: background-color 0.12s ease;
+    }
+
+    [role='option']:is(:hover, [aria-selected='true']) {
+      background: var(--bd-well);
+    }
+
+    [role='option'] > .bd-kbd {
+      opacity: 0;
+      transition: opacity 0.12s ease;
+    }
+
+    [role='option']:is(:hover, [aria-selected='true']) > .bd-kbd {
+      opacity: 1;
+    }
+
+    [data-part='empty'] {
+      padding: 10px 11px;
+      font-size: 12.5px;
+      color: var(--bd-ink-tertiary);
+    }
+  }
+}

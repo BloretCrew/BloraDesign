@@ -52,8 +52,11 @@ const shadow = (v) =>
   String(v).replace(/\{\s*([\w.-]+)\s+([\d.]+%)\s*\}/g, (_, ref, pct) => {
     return `color-mix(in srgb, ${colorRef(ref)} ${pct}, transparent)`;
   });
+// scrim 是弹窗遮罩的颜色，输出为 --bd-scrim；其余是投影 --bd-shadow-*
 const shadowDecls = (mode) =>
-  Object.entries(d.elevation[mode]).map(([k, v]) => `--bd-shadow-${k}: ${shadow(v)};`);
+  Object.entries(d.elevation[mode]).map(([k, v]) =>
+    k === 'scrim' ? `--bd-scrim: ${shadow(v)};` : `--bd-shadow-${k}: ${shadow(v)};`,
+  );
 
 /* ---------- 字体、圆角、间距、动效 ---------- */
 const family = (f) => (/mono/i.test(f) ? 'var(--bd-font-mono)' : 'var(--bd-font-sans)');

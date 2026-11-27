@@ -39,4 +39,7 @@
 @import './components/data.css';
 @import './components/content.css';
 @import './components/states.css';
+@import './components/menu.css';
+@import './components/dialog.css';
+@import './components/feedback.css';
 @import './motion.css';

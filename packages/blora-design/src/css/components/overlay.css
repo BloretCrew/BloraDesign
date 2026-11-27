@@ -5,7 +5,8 @@
  */
 @layer bd.components {
   [data-bd-floating],
-  :is(.bd-select, .bd-date) > [popover] {
+  :is(.bd-select, .bd-date, .bd-menu, .bd-split, .bd-context, .bd-popover, .bd-popconfirm)
+    > [popover] {
     position: fixed;
     inset: auto;
     min-width: 210px;

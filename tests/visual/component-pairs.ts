@@ -1115,3 +1115,187 @@ PAIRS.push(
     size: false,
   },
 );
+
+const OV = '/recipes/components/overlay.html';
+const open = (page: string, sel: string): string => `${page}#click=${encodeURIComponent(sel)}`;
+const PANEL = [
+  'backgroundColor',
+  'borderTopLeftRadius',
+  'paddingTop',
+  'paddingLeft',
+  'boxShadow',
+  'minWidth',
+];
+
+PAIRS.push(
+  // ---- 分裂按钮、菜单 ----
+  {
+    name: '分裂按钮 · 主',
+    ref: `${C} #splitAnchor .split-main`,
+    ours: `${OV} #split > .bd-button:first-child`,
+    props: [
+      'height',
+      'paddingLeft',
+      'borderTopLeftRadius',
+      'borderTopRightRadius',
+      'backgroundColor',
+    ],
+  },
+  {
+    name: '分裂按钮 · 箭头',
+    ref: `${C} #splitAnchor .split-caret`,
+    ours: `${OV} #split > [data-part="trigger"]`,
+    props: ['height', 'width', 'borderTopLeftRadius', 'borderTopRightRadius'],
+  },
+  {
+    name: '菜单面板',
+    ref: `${open(C, '#splitAnchor .split-caret')} #splitMenu`,
+    ours: `${open(OV, '#split [data-part="trigger"]')} #split > [data-part="panel"]`,
+    props: PANEL,
+    size: false,
+  },
+  {
+    name: '菜单项 · 选中',
+    ref: `${open(C, '#splitAnchor .split-caret')} #splitMenu > .menu-opt.active`,
+    ours: `${open(OV, '#split [data-part="trigger"]')} #split [aria-checked="true"]`,
+    props: [...TEXT, 'backgroundColor', 'paddingTop', 'paddingLeft', 'borderTopLeftRadius'],
+    size: false,
+  },
+  {
+    name: '菜单项',
+    ref: `${open(C, '#splitAnchor .split-caret')} #splitMenu > .menu-opt:not(.active)`,
+    ours: `${open(OV, '#split [data-part="trigger"]')} #split [aria-checked="false"]`,
+    props: [...TEXT, 'paddingTop', 'paddingLeft'],
+    size: false,
+  },
+  // ---- 原位确认 ----
+  {
+    name: '原位确认',
+    ref: `${open(C, '#sec-1 .btn-rose')} #popConfirm`,
+    ours: `${open(OV, '#popconfirm > .bd-button')} #popconfirm > [data-part="panel"]`,
+    props: [
+      'width',
+      'paddingTop',
+      'paddingLeft',
+      'borderTopLeftRadius',
+      'backgroundColor',
+      'boxShadow',
+    ],
+    size: false,
+  },
+  {
+    name: '原位确认 · 标题',
+    ref: `${open(C, '#sec-1 .btn-rose')} .popconfirm-title`,
+    ours: `${open(OV, '#popconfirm > .bd-button')} #popconfirm [data-part="title"]`,
+    props: [...TEXT, 'marginBottom'],
+    size: false,
+  },
+  {
+    name: '原位确认 · 说明',
+    ref: `${open(C, '#sec-1 .btn-rose')} .popconfirm-desc`,
+    ours: `${open(OV, '#popconfirm > .bd-button')} #popconfirm [data-part="desc"]`,
+    props: [...TEXT, 'marginBottom'],
+    size: false,
+  },
+  // ---- 右键菜单 ----
+  {
+    name: '右键菜单',
+    ref: `${open(C, '.ctx-zone')} #ctxMenu`,
+    ours: `${open(OV, '#context')} #context > [data-part="panel"]`,
+    props: PANEL,
+    size: false,
+  },
+  {
+    name: '右键菜单 · 危险项',
+    ref: `${open(C, '.ctx-zone')} #ctxMenu > .danger`,
+    ours: `${open(OV, '#context')} #context [data-tone="rose"]`,
+    props: TEXT,
+    size: false,
+  },
+  // ---- 弹窗、抽屉、命令面板 ----
+  {
+    name: '弹窗',
+    ref: `${open(C, '.header-actions .btn-blush')} .modal-card`,
+    ours: `${open(OV, '#open-modal')} #modal`,
+    props: ['width', 'paddingTop', 'borderTopLeftRadius', 'backgroundColor', 'boxShadow', 'rowGap'],
+    size: false,
+  },
+  {
+    name: '弹窗 · 关闭按钮',
+    ref: `${open(C, '.header-actions .btn-blush')} .modal-card .btn-icon`,
+    ours: `${open(OV, '#open-modal')} #modal header [data-part="close"]`,
+    props: ['width', 'height', 'backgroundColor'],
+  },
+  {
+    name: '抽屉',
+    ref: `${open(C, '.header-actions .btn:nth-child(2)')} #drawerPanel`,
+    ours: `${open(OV, '#open-drawer')} #drawer`,
+    props: [
+      'width',
+      'top',
+      'right',
+      'bottom',
+      'paddingTop',
+      'borderTopLeftRadius',
+      'backgroundColor',
+    ],
+    size: false,
+  },
+  {
+    name: '命令面板',
+    ref: `${open(C, '.btn-search')} .cmd-card`,
+    ours: `${open(OV, '#open-command')} #command`,
+    props: ['width', 'paddingTop', 'borderTopLeftRadius', 'backgroundColor', 'boxShadow'],
+    size: false,
+  },
+  {
+    name: '命令面板 · 选项',
+    ref: `${open(C, '.btn-search')} #cmdList > .menu-opt`,
+    ours: `${open(OV, '#open-command')} #command [role="option"]`,
+    props: [...TEXT, 'paddingTop', 'paddingLeft', 'borderTopLeftRadius'],
+    size: false,
+  },
+  // ---- 提示条、提醒 ----
+  {
+    name: '提示条',
+    ref: `${open(C, '#sec-1 .btn-primary')} .toast-pill`,
+    ours: `${open(OV, '#toast-btn')} .bd-toast > [role="status"]`,
+    props: [
+      ...TEXT,
+      'backgroundColor',
+      'paddingTop',
+      'paddingLeft',
+      'borderTopLeftRadius',
+      'boxShadow',
+      'columnGap',
+    ],
+    size: false,
+  },
+  {
+    name: '提醒条',
+    ref: `${C} .alert-strip.blush`,
+    ours: `${OV} #alert-blush`,
+    props: [...TEXT, 'backgroundColor', 'paddingTop', 'paddingLeft', 'borderTopLeftRadius'],
+    size: false,
+  },
+  {
+    name: '提醒格',
+    ref: `${BILL}#payment .alert-tile`,
+    ours: `${OV} #alert-tile`,
+    props: ['backgroundColor', 'columnGap', 'paddingTop', 'paddingLeft'],
+    size: false,
+  },
+  {
+    name: '提醒格 · 图标底',
+    ref: `${BILL}#payment .alert-tile .ico-well`,
+    ours: `${OV} #alert-tile > [data-part="icon"]`,
+    props: SURF,
+  },
+  {
+    name: '提醒格 · 说明',
+    ref: `${BILL}#payment .alert-body p`,
+    ours: `${OV} #alert-tile [data-part="body"] > p`,
+    props: [...TEXT, 'lineHeight', 'marginTop'],
+    size: false,
+  },
+);

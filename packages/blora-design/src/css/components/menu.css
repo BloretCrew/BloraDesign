@@ -1,0 +1,193 @@
+/*
+ * 菜单与小浮层：
+ *   bd-menu        触发按钮 + 弹出菜单（role="menu"、role="menuitem"），危险项 data-tone="rose"，分组线 data-part="separator"
+ *   bd-split       分裂按钮：主按钮 + 右侧箭头按钮（data-part="trigger"）+ 菜单，两颗按钮贴在一起
+ *   bd-context     右键（或轻点）区域，里面放菜单面板，在指针处弹出
+ *   bd-popover     触发按钮 + 任意内容的浮层
+ *   bd-popconfirm  原位确认：标题、说明、取消 / 确认（data-part="cancel" / "confirm"）
+ *   悬浮提示：任何元素写 data-tip="文字"（不要用 title，它会露出浏览器原生的提示框）
+ * 面板的底座、定位和展开动画见 overlay.css；这里只管面板里的内容
+ */
+@layer bd.components {
+  :is(.bd-menu, .bd-split, .bd-context, .bd-popover, .bd-popconfirm) {
+    position: relative;
+  }
+
+  :is(.bd-menu, .bd-split) > [data-part='panel'] {
+    min-width: 210px;
+    padding: 6px;
+    border-radius: 15px;
+  }
+
+  .bd-context > [data-part='panel'] {
+    min-width: 196px;
+    padding: 6px;
+    border-radius: 14px;
+  }
+
+  [role='menu'] > :is([role='menuitem'], [role='menuitemradio'], [role='menuitemcheckbox']) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 11px;
+    border-radius: 10px;
+    text-align: left;
+    font-size: 13.5px;
+    line-height: 1.4;
+    color: var(--bd-ink);
+    transition: background-color 0.12s ease;
+  }
+
+  [role='menu']
+    > :is([role='menuitem'], [role='menuitemradio'], [role='menuitemcheckbox']):is(
+      :hover,
+      :focus-visible
+    ) {
+    background: var(--bd-well);
+    box-shadow: none;
+  }
+
+  [role='menu'] > [aria-checked='true'] {
+    background: var(--bd-blush-soft);
+    font-weight: 560;
+    color: var(--bd-blush-ink);
+  }
+
+  [role='menu'] > [aria-checked='true']::after {
+    content: '';
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    background: currentColor;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+  }
+
+  [role='menu'] > [data-tone='rose'] {
+    color: var(--bd-rose-ink);
+  }
+
+  [role='menu'] > [data-tone='rose']:is(:hover, :focus-visible) {
+    background: var(--bd-rose-soft);
+  }
+
+  /* 菜单项里的快捷键：悬停时才出现 */
+  [role='menu'] > * > .bd-kbd {
+    opacity: 0;
+    transition: opacity 0.12s ease;
+  }
+
+  [role='menu'] > :is(:hover, :focus-visible) > .bd-kbd {
+    opacity: 1;
+  }
+
+  [role='menu'] > [data-part='separator'] {
+    height: 1px;
+    margin: 5px 8px;
+    background: var(--bd-well);
+  }
+
+  /* ---- 分裂按钮 ---- */
+  .bd-split {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+
+    > .bd-button:first-child {
+      padding: 0 14px;
+      border-radius: var(--bd-radius-pill) 4px 4px var(--bd-radius-pill);
+    }
+
+    > [data-part='trigger'] {
+      width: 33px;
+      padding: 0;
+      border-radius: 4px var(--bd-radius-pill) var(--bd-radius-pill) 4px;
+    }
+
+    > [data-part='trigger'] > svg {
+      transition: transform 0.24s var(--bd-ease-out);
+    }
+
+    > [data-part='trigger'][aria-expanded='true'] > svg {
+      transform: rotate(180deg);
+    }
+  }
+
+  /* ---- 右键区域 ---- */
+  .bd-context:not(:has(> [data-part='panel']:popover-open)) {
+    cursor: context-menu;
+  }
+
+  /* ---- 原位确认 ---- */
+  .bd-popconfirm > [data-part='panel'] {
+    width: 248px;
+    min-width: 0;
+    padding: 13px 14px;
+
+    > [data-part='title'] {
+      margin-bottom: 4px;
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+
+    > [data-part='desc'] {
+      margin-bottom: 11px;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--bd-ink-description);
+    }
+
+    > [data-part='actions'] {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .bd-popconfirm > [data-part='panel'] {
+      width: min(248px, calc(100vw - 40px));
+    }
+  }
+
+  /* ---- 悬浮提示：运行时共用一个浮层 ---- */
+  .bd-tooltip {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    padding: 7px 12px;
+    border-radius: 10px;
+    background: var(--bd-float);
+    color: var(--bd-ink);
+    box-shadow: var(--bd-shadow-float);
+    white-space: nowrap;
+    font-size: 12.5px;
+    line-height: 1.5;
+    pointer-events: none;
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease,
+      display 0.15s allow-discrete,
+      overlay 0.15s allow-discrete;
+  }
+
+  .bd-tooltip:not(:popover-open) {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+
+  .bd-tooltip[data-placement='bottom']:not(:popover-open) {
+    transform: translateY(-3px);
+  }
+
+  @starting-style {
+    .bd-tooltip:popover-open {
+      opacity: 0;
+      transform: translateY(3px);
+    }
+  }
+}

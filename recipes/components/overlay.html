@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>反馈与浮层 · Blora Design</title>
+    <link rel="stylesheet" href="../../packages/blora-design/dist/blora.css" />
+    <script type="module" src="../../packages/blora-design/dist/blora.js"></script>
+  </head>
+  <body>
+    <main class="bd-page" style="max-width: 1200px; margin: 12px auto; padding: 0 12px">
+      <section class="bd-mosaic" data-cols="1">
+        <article class="bd-tile" data-variant="alert" id="alert-tile">
+          <span data-part="icon"
+            ><svg data-icon width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v4" />
+              <path d="M12 16h.01" /></svg
+          ></span>
+          <div data-part="body">
+            <h2><span class="bd-pill" data-tone="sand">即将到期</span>团队版将在 3 天后续费</h2>
+            <p>续费金额 ¥1,280，将从尾号 4242 的卡扣款。</p>
+          </div>
+          <div data-part="actions">
+            <button type="button" class="bd-button" data-variant="blush" data-size="sm">
+              管理订阅
+            </button>
+            <button
+              type="button"
+              class="bd-button"
+              data-variant="ghost"
+              data-shape="icon"
+              data-size="sm"
+              data-part="close"
+              aria-label="关闭提醒"
+            >
+              <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
+          </div>
+        </article>
+      </section>
+      <section class="bd-mosaic" data-cols="2">
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>分裂按钮、提示、原位确认</h2>
+            <p>点击直接交互</p>
+          </header>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px" id="row">
+            <div class="bd-split" id="split">
+              <button type="button" class="bd-button" data-variant="primary">立即发布</button>
+              <button
+                type="button"
+                class="bd-button"
+                data-variant="primary"
+                data-part="trigger"
+                aria-label="选择发布方式"
+              >
+                <svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
+              <div data-part="panel" popover role="menu">
+                <button type="button" role="menuitemradio" aria-checked="true">
+                  滚动无感热更新
+                </button>
+                <button type="button" role="menuitemradio" aria-checked="false">
+                  蓝绿双轨切流
+                </button>
+                <button type="button" role="menuitemradio" aria-checked="false">
+                  仅生成校验快照
+                </button>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="bd-button"
+              data-shape="icon"
+              aria-label="轨道说明"
+              data-tip="浅色柔和悬浮气泡 · 无突兀黑底"
+              id="tip"
+            >
+              <svg data-icon width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 16v-4" />
+                <path d="M12 8h.01" />
+              </svg>
+            </button>
+            <div class="bd-popconfirm" data-align="end" id="popconfirm">
+              <button type="button" class="bd-button" data-variant="rose">销毁节点</button>
+              <div data-part="panel" popover>
+                <p data-part="title">确认销毁边缘节点？</p>
+                <p data-part="desc">关联快照将保留 72 小时，期间可随时回滚恢复。</p>
+                <div data-part="actions">
+                  <button type="button" class="bd-button" data-size="sm" data-part="cancel">
+                    取消
+                  </button>
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="rose"
+                    data-size="sm"
+                    data-part="confirm"
+                  >
+                    确认销毁
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="bd-menu" id="menu">
+              <button type="button" class="bd-button" data-part="trigger">更多操作</button>
+              <div data-part="panel" popover role="menu">
+                <button type="button" role="menuitem">
+                  复制星轨地址 <kbd class="bd-kbd">C</kbd>
+                </button>
+                <button type="button" role="menuitem">创建即时快照</button>
+                <div data-part="separator" role="separator"></div>
+                <button type="button" role="menuitem" data-tone="rose">排空并隔离节点</button>
+              </div>
+            </div>
+          </div>
+          <div class="bd-alert" id="alert-blush">配额同步已完成，3 个扇区已切到新的路由表。</div>
+          <div class="bd-alert" data-tone="sand">本月用量已达 85%，接近套餐上限。</div>
+          <div class="bd-alert" data-tone="rose">web-edge-03 健康检查连续失败 3 次。</div>
+        </article>
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>右键菜单、弹窗、抽屉、命令面板</h2>
+            <p>零浏览器原生菜单</p>
+          </header>
+          <div
+            class="bd-context"
+            data-trigger="click"
+            id="context"
+            style="
+              padding: 15px;
+              border-radius: 13px;
+              background: var(--bd-well);
+              color: var(--bd-ink-secondary);
+            "
+          >
+            在此区域点击鼠标右键唤起菜单
+            <div data-part="panel" popover role="menu">
+              <button type="button" role="menuitem">复制星轨地址</button>
+              <button type="button" role="menuitem">创建即时快照</button>
+              <button type="button" role="menuitem" data-tone="rose">排空并隔离节点</button>
+            </div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px">
+            <button type="button" class="bd-button" data-bd-open="modal" id="open-modal">
+              新建节点
+            </button>
+            <button type="button" class="bd-button" data-bd-open="drawer" id="open-drawer">
+              遥测舱
+            </button>
+            <button type="button" class="bd-button" data-bd-open="command" id="open-command">
+              命令面板 <kbd class="bd-kbd">K</kbd>
+            </button>
+            <button type="button" class="bd-button" id="toast-btn">提示条</button>
+            <button type="button" class="bd-button" data-variant="rose" id="confirm-btn">
+              删除工作区
+            </button>
+          </div>
+        </article>
+      </section>
+      <dialog class="bd-modal" id="modal" aria-labelledby="modal-title">
+        <header>
+          <h2 id="modal-title">新建星轨集群节点</h2>
+          <button type="button" data-part="close" aria-label="关闭">
+            <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        </header>
+        <div class="bd-field">
+          <label data-part="label" for="node-name">节点名称</label>
+          <input class="bd-input" id="node-name" value="demo-edge-node-04" />
+        </div>
+        <footer>
+          <button type="button" class="bd-button" data-part="close">取消</button>
+          <button type="button" class="bd-button" data-variant="primary">创建</button>
+        </footer>
+      </dialog>
+      <dialog class="bd-drawer" id="drawer" aria-labelledby="drawer-title">
+        <header>
+          <h2 id="drawer-title">侧滑星轨遥测舱</h2>
+          <button type="button" data-part="close" aria-label="关闭">
+            <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        </header>
+        <dl class="bd-spec">
+          <div>
+            <dt>当前活跃主节点</dt>
+            <dd>app-node-alpha</dd>
+          </div>
+          <div>
+            <dt>自动快照</dt>
+            <dd>每 6 小时</dd>
+          </div>
+        </dl>
+        <footer>
+          <button type="button" class="bd-button" data-variant="primary" data-part="close">
+            保存遥测配置
+          </button>
+        </footer>
+      </dialog>
+      <dialog class="bd-command" id="command" data-shortcut="mod+k" aria-label="命令面板">
+        <div class="bd-input">
+          <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+          <input placeholder="输入星轨指令或跳转模块..." aria-label="搜索命令" />
+        </div>
+        <div role="listbox" aria-label="命令">
+          <div role="option">跳转到实例列表 <kbd class="bd-kbd">↵</kbd></div>
+          <div role="option">新建星轨节点 <kbd class="bd-kbd">↵</kbd></div>
+          <div role="option">切换深色模式 <kbd class="bd-kbd">↵</kbd></div>
+        </div>
+        <p data-part="empty">没有匹配的命令</p>
+      </dialog>
+    </main>
+    <script type="module">
+      import { confirm, toast } from '../../packages/blora-design/dist/blora.js';
+      document
+        .querySelector('#toast-btn')
+        .addEventListener('click', () => toast('遥测舱配置已保存'));
+      document.querySelector('#confirm-btn').addEventListener('click', async () => {
+        const ok = await confirm({
+          title: '删除工作区？',
+          description: '实例、快照和成员会被永久移除。',
+          confirmText: '删除',
+          tone: 'rose',
+        });
+        document.body.dataset.confirmed = String(ok);
+      });
+    </script>
+  </body>
+</html>
