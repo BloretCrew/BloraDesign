@@ -1,0 +1,14 @@
+/*
+ * Blora Design 3.0 · 页面模式（patterns）
+ *
+ * 看板、收件箱、日程、套餐卡、文档阅读页这类「由组件拼成的画面」（DESIGN.md · Components · 模式）。
+ * 它们不是组件：不进核心 blora.css，用 data-pattern="…" 挂样式，只用 --bd-* 变量。
+ * 需要时在 blora.css 之后引入：<link rel="stylesheet" href="…/patterns.css">
+ * recipes/pages/ 里的 4 个 demo 页就是它们的示例，整页像素比对保证复用时外观一致。
+ */
+@layer bd.patterns;
+
+@import './patterns/billing.css';
+@import './patterns/team.css';
+@import './patterns/docs.css';
+@import './patterns/components.css';

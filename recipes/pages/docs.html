@@ -1,0 +1,1924 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blora Docs · 文档与帮助中心</title>
+    <!-- 第 ② 阶段验收页：只用框架重写 reference/demo-docs.html（帮助中心、文章、更新日志、搜索） -->
+    <link rel="stylesheet" href="../../packages/blora-design/dist/blora.css" />
+    <link rel="stylesheet" href="../../packages/blora-design/dist/patterns.css" />
+    <script type="module" src="../../packages/blora-design/dist/blora.js"></script>
+  </head>
+  <body>
+    <!-- Lucide 图标（ISC License · lucide.dev） -->
+    <svg hidden>
+      <symbol id="i-bell" viewBox="0 0 24 24">
+        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+      </symbol>
+      <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
+      <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" /></symbol>
+      <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" /></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <polyline points="12 6 12 12 16 14" />
+      </symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24">
+        <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+        <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+      </symbol>
+      <symbol id="i-file-text" viewBox="0 0 24 24">
+        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+        <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+        <path d="M10 9H8" />
+        <path d="M16 13H8" />
+        <path d="M16 17H8" />
+      </symbol>
+      <symbol id="i-message-square" viewBox="0 0 24 24">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+      </symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24">
+        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+      </symbol>
+      <symbol id="i-panel-left-close" viewBox="0 0 24 24">
+        <rect width="18" height="18" x="3" y="3" rx="2" />
+        <path d="M9 3v18" />
+        <path d="m16 15-3-3 3-3" />
+      </symbol>
+      <symbol id="i-rocket" viewBox="0 0 24 24">
+        <path
+          d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"
+        />
+        <path
+          d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"
+        />
+        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+      </symbol>
+      <symbol id="i-search" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </symbol>
+      <symbol id="i-users" viewBox="0 0 24 24">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </symbol>
+      <symbol id="i-x" viewBox="0 0 24 24">
+        <path d="M18 6 6 18" />
+        <path d="m6 6 12 12" />
+      </symbol>
+      <symbol id="i-book-open" viewBox="0 0 24 24">
+        <path d="M12 7v14" />
+        <path
+          d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
+        />
+      </symbol>
+      <symbol id="i-credit-card" viewBox="0 0 24 24">
+        <rect width="20" height="14" x="2" y="5" rx="2" />
+        <line x1="2" x2="22" y1="10" y2="10" />
+      </symbol>
+      <symbol id="i-git-branch" viewBox="0 0 24 24">
+        <line x1="6" x2="6" y1="3" y2="15" />
+        <circle cx="18" cy="6" r="3" />
+        <circle cx="6" cy="18" r="3" />
+        <path d="M18 9a9 9 0 0 1-9 9" />
+      </symbol>
+      <symbol id="i-globe" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+        <path d="M2 12h20" />
+      </symbol>
+      <symbol id="i-history" viewBox="0 0 24 24">
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+        <path d="M3 3v5h5" />
+        <path d="M12 7v5l4 2" />
+      </symbol>
+      <symbol id="i-key-round" viewBox="0 0 24 24">
+        <path
+          d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"
+        />
+        <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" />
+      </symbol>
+      <symbol id="i-life-buoy" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <path d="m4.93 4.93 4.24 4.24" />
+        <path d="m14.83 9.17 4.24-4.24" />
+        <path d="m14.83 14.83 4.24 4.24" />
+        <path d="m9.17 14.83-4.24 4.24" />
+        <circle cx="12" cy="12" r="4" />
+      </symbol>
+      <symbol id="i-link" viewBox="0 0 24 24">
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+      </symbol>
+      <symbol id="i-mail" viewBox="0 0 24 24">
+        <rect width="20" height="16" x="2" y="4" rx="2" />
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+      </symbol>
+      <symbol id="i-rss" viewBox="0 0 24 24">
+        <path d="M4 11a9 9 0 0 1 9 9" />
+        <path d="M4 4a16 16 0 0 1 16 16" />
+        <circle cx="5" cy="19" r="1" />
+      </symbol>
+      <symbol id="i-search-x" viewBox="0 0 24 24">
+        <path d="m13.5 8.5-5 5" />
+        <path d="m8.5 8.5 5 5" />
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </symbol>
+      <symbol id="i-sparkles" viewBox="0 0 24 24">
+        <path
+          d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"
+        />
+        <path d="M20 3v4" />
+        <path d="M22 5h-4" />
+        <path d="M4 17v2" />
+        <path d="M5 18H3" />
+      </symbol>
+      <symbol id="i-terminal" viewBox="0 0 24 24">
+        <polyline points="4 17 10 11 4 5" />
+        <line x1="12" x2="20" y1="19" y2="19" />
+      </symbol>
+      <symbol id="i-thumbs-down" viewBox="0 0 24 24">
+        <path d="M17 14V2" />
+        <path
+          d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"
+        />
+      </symbol>
+      <symbol id="i-thumbs-up" viewBox="0 0 24 24">
+        <path d="M7 10v12" />
+        <path
+          d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"
+        />
+      </symbol>
+      <symbol id="i-zap" viewBox="0 0 24 24">
+        <path
+          d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"
+        />
+      </symbol>
+      <symbol id="i-command" viewBox="0 0 24 24">
+        <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
+      </symbol>
+    </svg>
+
+    <div class="bd-app">
+      <nav class="bd-rail" aria-label="主导航">
+        <a data-part="brand" href="#help">
+          <span data-part="logo">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <circle
+                cx="10"
+                cy="10"
+                r="7"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-dasharray="34.98 9"
+                stroke-linecap="round"
+                transform="rotate(-4 10 10)"
+              />
+              <circle cx="10" cy="10" r="2.6" fill="currentColor" />
+              <circle cx="15.5" cy="5.2" r="1.8" fill="currentColor" />
+            </svg>
+          </span>
+          <span>Blora Docs</span>
+        </a>
+        <p data-part="section">文档</p>
+        <button type="button" data-go="help">
+          <svg data-icon aria-hidden="true"><use href="#i-life-buoy" /></svg><span>帮助中心</span>
+        </button>
+        <button type="button" data-go="article">
+          <svg data-icon aria-hidden="true"><use href="#i-book-open" /></svg><span>文章</span>
+        </button>
+        <button type="button" data-go="changelog">
+          <svg data-icon aria-hidden="true"><use href="#i-history" /></svg><span>更新日志</span
+          ><span data-part="count">v4.2</span>
+        </button>
+        <button type="button" data-go="search">
+          <svg data-icon aria-hidden="true"><use href="#i-search" /></svg><span>搜索</span
+          ><span data-part="count" id="railSearchCount">0</span>
+        </button>
+        <div data-part="foot">
+          <div data-part="note">
+            <span>入门路径 · 已读</span><data value="60">3 / 5</data>
+            <div class="bd-progress" aria-label="入门路径已读" aria-valuenow="60"></div>
+          </div>
+          <button type="button" data-part="collapse" aria-expanded="true" aria-label="收起侧栏">
+            <svg data-icon aria-hidden="true"><use href="#i-panel-left-close" /></svg
+            ><span>收起侧栏</span>
+          </button>
+        </div>
+      </nav>
+
+      <main class="bd-page">
+        <header class="bd-topbar">
+          <nav class="bd-breadcrumb" id="crumbs" aria-label="位置"></nav>
+          <div data-part="end">
+            <label class="bd-input" data-part="search">
+              <svg data-icon width="14" height="14" aria-hidden="true">
+                <use href="#i-search" />
+              </svg>
+              <input
+                placeholder="搜索文档、API…"
+                id="globalSearch"
+                aria-label="搜索文档"
+                autocomplete="off"
+              />
+              <kbd class="bd-kbd"
+                ><svg data-icon width="10" height="10" aria-hidden="true">
+                  <use href="#i-command" /></svg
+                >K</kbd
+              >
+            </label>
+            <button
+              type="button"
+              class="bd-button"
+              data-shape="icon"
+              aria-label="切换深色模式"
+              id="themeBtn"
+            >
+              <svg data-icon width="15" height="15" aria-hidden="true"><use href="#i-moon" /></svg>
+            </button>
+            <button
+              type="button"
+              class="bd-button"
+              data-shape="icon"
+              data-dot
+              aria-label="通知"
+              data-toast="文档团队回复了你的反馈"
+            >
+              <svg data-icon width="15" height="15" aria-hidden="true"><use href="#i-bell" /></svg>
+            </button>
+            <span class="bd-avatar" data-tone="sand">RH</span>
+          </div>
+        </header>
+
+        <!-- ============ 场景 1：帮助中心 ============ -->
+        <div data-part="view" data-scene="help" hidden>
+          <header class="bd-tile" data-variant="page">
+            <p data-part="eyebrow">Help center</p>
+            <h1>帮助中心</h1>
+            <p>
+              142 篇文档，覆盖部署、网络、账单与 API；找不到答案时，支持团队工作日 2 小时内回复。
+            </p>
+            <div data-part="end">
+              <button type="button" class="bd-button" data-toast="打开 API 参考">
+                <svg data-icon width="14" height="14" aria-hidden="true">
+                  <use href="#i-terminal" /></svg
+                >API 参考
+              </button>
+              <button
+                type="button"
+                class="bd-button"
+                data-variant="primary"
+                data-toast="已打开在线对话"
+              >
+                <svg data-icon width="14" height="14" aria-hidden="true">
+                  <use href="#i-message-square" /></svg
+                >联系支持
+              </button>
+            </div>
+          </header>
+
+          <section
+            class="bd-mosaic"
+            data-cols="2"
+            style="--bd-columns: minmax(0, 1.55fr) minmax(0, 1fr)"
+          >
+            <article class="bd-tile" data-pattern="help-search">
+              <header class="bd-head">
+                <h2>搜索文档</h2>
+                <p>输入问题、报错信息或环境变量名，例如“证书一直显示签发中”</p>
+                <div data-part="end"><span data-part="tag">⌘ K</span></div>
+              </header>
+              <form class="bd-input" data-size="lg" id="helpForm">
+                <svg data-icon width="17" height="17" aria-hidden="true">
+                  <use href="#i-search" />
+                </svg>
+                <input
+                  id="helpSearch"
+                  placeholder="搜索文档，例如：回滚部署"
+                  aria-label="搜索文档"
+                  autocomplete="off"
+                />
+                <button type="submit" class="bd-button" data-variant="primary">搜索</button>
+              </form>
+              <div data-part="group">
+                <header>热门搜索</header>
+                <div class="bd-tray" data-flow="wrap">
+                  <button type="button" data-q="域名">自定义域名</button>
+                  <button type="button" data-q="环境变量">环境变量</button>
+                  <button type="button" data-q="回滚">回滚部署</button>
+                  <button type="button" data-q="BLORA_DEPLOY_HOOK_SECRET">
+                    <code>BLORA_DEPLOY_HOOK_SECRET</code>
+                  </button>
+                </div>
+              </div>
+              <dl class="bd-stats">
+                <div>
+                  <dt>文档</dt>
+                  <dd>142<small>篇</small></dd>
+                </div>
+                <div>
+                  <dt>API 接口</dt>
+                  <dd>41<small>个</small></dd>
+                </div>
+                <div>
+                  <dt>本周更新</dt>
+                  <dd>9<small>篇</small></dd>
+                </div>
+              </dl>
+            </article>
+            <article class="bd-tile">
+              <header class="bd-head">
+                <h2>服务状态</h2>
+                <p>过去 30 天可用性，每格一天</p>
+                <div data-part="end">
+                  <span class="bd-pill" data-tone="sand" data-dot>全部正常</span>
+                </div>
+              </header>
+              <ul class="bd-tray" data-cols="2" data-pattern="uptime" id="statusList"></ul>
+              <footer data-part="foot" data-variant="tint">
+                <p>11 月 18 日 · 构建排队延迟 23 分钟，已解决</p>
+                <span data-part="tag">事件报告</span>
+              </footer>
+            </article>
+          </section>
+
+          <section class="bd-mosaic" data-cols="3" data-index="none" data-pattern="category-card">
+            <a class="bd-tile" href="#article" data-go="article">
+              <div class="bd-item">
+                <span data-part="icon" data-size="lg" data-tone="blush"
+                  ><svg data-icon width="17" height="17" aria-hidden="true">
+                    <use href="#i-rocket" /></svg
+                ></span>
+                <div><strong>快速上手</strong></div>
+                <span data-part="end">12 篇</span>
+              </div>
+              <p>十分钟部署第一个服务，从推送到上线。</p>
+              <footer data-part="foot">
+                <span>3 天前更新</span
+                ><span data-part="go"
+                  >浏览<svg data-icon width="13" height="13" aria-hidden="true">
+                    <use href="#i-chevron-right" /></svg
+                ></span>
+              </footer>
+            </a>
+            <a class="bd-tile" href="#article" data-go="article">
+              <div class="bd-item">
+                <span data-part="icon" data-size="lg" data-tone="sand"
+                  ><svg data-icon width="17" height="17" aria-hidden="true">
+                    <use href="#i-git-branch" /></svg
+                ></span>
+                <div><strong>部署与构建</strong></div>
+                <span data-part="end">31 篇</span>
+              </div>
+              <p>构建缓存、预览环境与一键回滚。</p>
+              <footer data-part="foot">
+                <span>昨天更新</span
+                ><span data-part="go"
+                  >浏览<svg data-icon width="13" height="13" aria-hidden="true">
+                    <use href="#i-chevron-right" /></svg
+                ></span>
+              </footer>
+            </a>
+            <a class="bd-tile" href="#article" data-go="article">
+              <div class="bd-item">
+                <span data-part="icon" data-size="lg" data-tone="rose"
+                  ><svg data-icon width="17" height="17" aria-hidden="true">
+                    <use href="#i-globe" /></svg
+                ></span>
+                <div><strong>域名与网络</strong></div>
+                <span data-part="end">24 篇</span>
+              </div>
+              <p>自定义域名、HTTPS 证书与私有网络。</p>
+              <footer data-part="foot">
+                <span>11 月 22 日更新</span
+                ><span data-part="go"
+                  >浏览<svg data-icon width="13" height="13" aria-hidden="true">
+                    <use href="#i-chevron-right" /></svg
+                ></span>
+              </footer>
+            </a>
+            <a class="bd-tile" href="#article" data-go="article">
+              <div class="bd-item">
+                <span data-part="icon" data-size="lg"
+                  ><svg data-icon width="17" height="17" aria-hidden="true">
+                    <use href="#i-key-round" /></svg
+                ></span>
+                <div><strong>环境变量与密钥</strong></div>
+                <span data-part="end">16 篇</span>
+              </div>
+              <p>按环境设置变量，无缝轮换签名密钥。</p>
+              <footer data-part="foot">
+                <span>11 月 8 日更新</span
+                ><span data-part="go"
+                  >浏览<svg data-icon width="13" height="13" aria-hidden="true">
+                    <use href="#i-chevron-right" /></svg
+                ></span>
+              </footer>
+            </a>
+            <a class="bd-tile" href="#article" data-go="article">
+              <div class="bd-item">
+                <span data-part="icon" data-size="lg" data-tone="sand"
+                  ><svg data-icon width="17" height="17" aria-hidden="true">
+                    <use href="#i-credit-card" /></svg
+                ></span>
+                <div><strong>账单与用量</strong></div>
+                <span data-part="end">18 篇</span>
+              </div>
+              <p>套餐、发票抬头与用量告警。</p>
+              <footer data-part="foot">
+                <span>11 月 3 日更新</span
+                ><span data-part="go"
+                  >浏览<svg data-icon width="13" height="13" aria-hidden="true">
+                    <use href="#i-chevron-right" /></svg
+                ></span>
+              </footer>
+            </a>
+            <a class="bd-tile" href="#article" data-go="article">
+              <div class="bd-item">
+                <span data-part="icon" data-size="lg" data-tone="blush"
+                  ><svg data-icon width="17" height="17" aria-hidden="true">
+                    <use href="#i-terminal" /></svg
+                ></span>
+                <div><strong>API 与 CLI</strong></div>
+                <span data-part="end">41 篇</span>
+              </div>
+              <p>REST API、Webhook 事件与命令行参考。</p>
+              <footer data-part="foot">
+                <span>2 天前更新</span
+                ><span data-part="go"
+                  >浏览<svg data-icon width="13" height="13" aria-hidden="true">
+                    <use href="#i-chevron-right" /></svg
+                ></span>
+              </footer>
+            </a>
+          </section>
+
+          <section
+            class="bd-mosaic"
+            data-cols="2"
+            style="--bd-columns: minmax(0, 1.75fr) minmax(0, 1fr)"
+          >
+            <article class="bd-tile">
+              <header class="bd-head">
+                <h2>热门文章</h2>
+                <p>过去 7 天阅读最多</p>
+                <div data-part="end">
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="ghost"
+                    data-size="sm"
+                    data-search=""
+                  >
+                    全部文章
+                  </button>
+                </div>
+              </header>
+              <div class="bd-tray" data-cols="2" data-pattern="popular">
+                <a class="bd-item" href="#article" data-go="article"
+                  ><span data-part="index" data-tone="blush">01</span>
+                  <div>
+                    <strong>绑定自定义域名</strong><small>域名与网络 · 11 月 22 日更新</small>
+                  </div>
+                  <span data-part="end">6 分钟</span></a
+                >
+                <a class="bd-item" href="#article" data-go="article"
+                  ><span data-part="index" data-tone="blush">02</span>
+                  <div>
+                    <strong>回滚到上一个成功的部署</strong
+                    ><small>部署与构建 · 11 月 16 日更新</small>
+                  </div>
+                  <span data-part="end">3 分钟</span></a
+                >
+                <a
+                  class="bd-item"
+                  href="#article"
+                  data-go="article"
+                  data-tip="为什么推送到 main 分支后预览环境没有更新？排查 Webhook、构建缓存与分支保护规则的完整步骤"
+                  ><span data-part="index" data-tone="blush">03</span>
+                  <div>
+                    <strong
+                      >为什么推送到 main 分支后预览环境没有更新？排查
+                      Webhook、构建缓存与分支保护规则的完整步骤</strong
+                    ><small>部署与构建 · 11 月 14 日更新</small>
+                  </div>
+                  <span data-part="end">9 分钟</span></a
+                >
+                <a class="bd-item" href="#article" data-go="article"
+                  ><span data-part="index">04</span>
+                  <div>
+                    <strong>在 CI 中使用 blora deploy --prebuilt</strong
+                    ><small>API 与 CLI · 11 月 12 日更新</small>
+                  </div>
+                  <span data-part="end">5 分钟</span></a
+                >
+                <a class="bd-item" href="#article" data-go="article"
+                  ><span data-part="index">05</span>
+                  <div>
+                    <strong>开具增值税专用发票</strong><small>账单与用量 · 11 月 3 日更新</small>
+                  </div>
+                  <span data-part="end">2 分钟</span></a
+                >
+                <a class="bd-item" href="#article" data-go="article"
+                  ><span data-part="index">06</span>
+                  <div>
+                    <strong>轮换 BLORA_DEPLOY_HOOK_SECRET 而不中断部署</strong
+                    ><small>环境变量与密钥 · 11 月 8 日更新</small>
+                  </div>
+                  <span data-part="end">4 分钟</span></a
+                >
+              </div>
+            </article>
+            <article class="bd-tile">
+              <header class="bd-head">
+                <h2>还没找到答案？</h2>
+                <p>生产事故 7×24 热线，30 分钟内响应</p>
+                <div data-part="end"><span data-part="tag">平均回复 1.6 h</span></div>
+              </header>
+              <div class="bd-tray" data-pattern="support-options">
+                <button type="button" class="bd-item" data-toast="已打开在线对话">
+                  <span data-part="icon" data-size="lg" data-tone="blush"
+                    ><svg data-icon width="17" height="17" aria-hidden="true">
+                      <use href="#i-message-square" /></svg
+                  ></span>
+                  <div>
+                    <strong>在线对话</strong><small>工作日 9:00–21:00 · 当前排队 3 人</small>
+                  </div>
+                  <svg data-icon data-part="go" width="14" height="14" aria-hidden="true">
+                    <use href="#i-chevron-right" />
+                  </svg>
+                </button>
+                <button type="button" class="bd-item" data-toast="打开工单表单">
+                  <span data-part="icon" data-size="lg" data-tone="sand"
+                    ><svg data-icon width="17" height="17" aria-hidden="true">
+                      <use href="#i-mail" /></svg
+                  ></span>
+                  <div>
+                    <strong>提交工单</strong><small>附上实例 ID 和请求 ID，排查会快很多</small>
+                  </div>
+                  <svg data-icon data-part="go" width="14" height="14" aria-hidden="true">
+                    <use href="#i-chevron-right" />
+                  </svg>
+                </button>
+                <button type="button" class="bd-item" data-toast="打开开发者社区">
+                  <span data-part="icon" data-size="lg"
+                    ><svg data-icon width="17" height="17" aria-hidden="true">
+                      <use href="#i-users" /></svg
+                  ></span>
+                  <div>
+                    <strong>开发者社区</strong><small>1.2 万名开发者，每天 300 多个新帖</small>
+                  </div>
+                  <svg data-icon data-part="go" width="14" height="14" aria-hidden="true">
+                    <use href="#i-chevron-right" />
+                  </svg>
+                </button>
+              </div>
+            </article>
+          </section>
+        </div>
+
+        <!-- ============ 场景 2：文章 ============ -->
+        <div data-part="view" data-scene="article" hidden>
+          <header class="bd-tile" data-variant="page">
+            <p data-part="eyebrow">Article · 域名与网络</p>
+            <h1>绑定自定义域名</h1>
+            <p>适用于所有套餐 · 阅读约 6 分钟 · 11 月 22 日更新</p>
+            <div data-part="end">
+              <button type="button" class="bd-button" data-variant="ghost" data-toast="链接已复制">
+                <svg data-icon width="14" height="14" aria-hidden="true"><use href="#i-link" /></svg
+                >复制链接
+              </button>
+              <button
+                type="button"
+                class="bd-button"
+                data-toast="在 GitHub 上打开 docs/networking/custom-domains.md"
+              >
+                <svg data-icon width="14" height="14" aria-hidden="true">
+                  <use href="#i-git-branch" /></svg
+                >在 GitHub 上编辑
+              </button>
+            </div>
+          </header>
+
+          <div
+            class="bd-layout"
+            id="doc"
+            style="--bd-columns: 208px minmax(0, 756px) minmax(280px, 1fr)"
+          >
+            <nav
+              class="bd-nav"
+              data-orientation="vertical"
+              data-density="compact"
+              data-spy
+              aria-label="本页目录"
+              id="toc"
+            >
+              <p data-part="label">On this page</p>
+              <a href="#a-overview" aria-current="location">概述</a>
+              <a href="#a-prepare">准备工作</a>
+              <a href="#a-dns">添加 DNS 记录</a>
+              <a href="#a-sub" data-level="2">子域名（推荐）</a>
+              <a href="#a-apex" data-level="2">根域名 apex</a>
+              <a href="#a-https">签发 HTTPS 证书</a>
+              <a href="#a-faq">常见问题</a>
+              <div class="bd-tile" data-variant="metric" data-inline data-pattern="toc-progress">
+                <p data-part="label">阅读进度</p>
+                <p data-part="foot" id="readLeft">约 6 分钟</p>
+                <div
+                  class="bd-ring"
+                  id="readRing"
+                  aria-label="阅读进度"
+                  aria-valuenow="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </nav>
+
+            <div data-part="main">
+              <article class="bd-tile" id="article">
+                <div class="bd-prose">
+                  <p data-part="lead">
+                    把 <code>app.example.com</code> 这样的自有域名指向 Blora
+                    上的实例后，访问者看到的就是你的品牌域名。HTTPS 证书由 Blora
+                    自动签发，并在到期前自动续期，不需要手动上传。
+                  </p>
+
+                  <h2 id="a-overview">概述</h2>
+                  <p>
+                    每个实例默认带有一个
+                    <code>*.blora.app</code>
+                    的二级域名。绑定自定义域名不会替换它，两个地址会同时可用；你可以在设置里把默认域名
+                    301 跳转到自定义域名。
+                  </p>
+                  <ul>
+                    <li>每个实例最多绑定 <strong>20</strong> 个域名，团队版可以申请提高上限。</li>
+                    <li>
+                      支持通配符域名，例如
+                      <code>*.preview.example.com</code>，适合为每个分支生成独立的预览地址。
+                    </li>
+                    <li>DNS 生效通常只需要几分钟，个别注册商最长可能需要 48 小时。</li>
+                  </ul>
+
+                  <h2 id="a-prepare">准备工作</h2>
+                  <ol>
+                    <li>确认你有域名 DNS 的管理权限，能够添加 CNAME、A 和 CAA 记录。</li>
+                    <li>
+                      在控制台打开目标实例，进入<strong>设置 › 域名</strong
+                      >，点击<strong>添加域名</strong>。
+                    </li>
+                    <li>如果域名之前接入过其他平台，先删除旧的 CNAME 记录，避免解析冲突。</li>
+                  </ol>
+
+                  <h2 id="a-dns">添加 DNS 记录</h2>
+                  <p>
+                    根据你要绑定的是子域名还是根域名，选择对应的记录类型。下表列出了最常见的几种情况：
+                  </p>
+                  <table
+                    class="bd-table"
+                    data-variant="tray"
+                    data-pattern="dns-records"
+                    style="
+                      --bd-table-columns: minmax(0, 137fr) minmax(0, 71fr) minmax(0, 85fr)
+                        minmax(0, 241fr) minmax(0, 62fr);
+                    "
+                  >
+                    <thead>
+                      <tr>
+                        <th>场景</th>
+                        <th>类型</th>
+                        <th>主机记录</th>
+                        <th>记录值</th>
+                        <th>TTL</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>子域名</td>
+                        <td><code>CNAME</code></td>
+                        <td><code>app</code></td>
+                        <td><code>edge.blora.app</code></td>
+                        <td><code>600</code></td>
+                      </tr>
+                      <tr>
+                        <td>根域名</td>
+                        <td><code>A</code></td>
+                        <td><code>@</code></td>
+                        <td><code>76.223.18.40</code></td>
+                        <td><code>600</code></td>
+                      </tr>
+                      <tr>
+                        <td>根域名（IPv6）</td>
+                        <td><code>AAAA</code></td>
+                        <td><code>@</code></td>
+                        <td><code>2600:1f18::40</code></td>
+                        <td><code>600</code></td>
+                      </tr>
+                      <tr>
+                        <td>证书授权</td>
+                        <td><code>CAA</code></td>
+                        <td><code>@</code></td>
+                        <td><code>0 issue "letsencrypt.org"</code></td>
+                        <td><code>3600</code></td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <h3 id="a-sub">子域名（推荐）</h3>
+                  <p>
+                    子域名使用 CNAME 记录指向 <code>edge.blora.app</code>，Blora
+                    会根据访问者所在区域自动选择最近的边缘节点。添加记录后，可以用下面的命令确认解析是否已经生效：
+                  </p>
+                  <figure class="bd-code">
+                    <figcaption>
+                      <span>bash</span
+                      ><button
+                        type="button"
+                        class="bd-button"
+                        data-variant="ghost"
+                        data-size="sm"
+                        data-part="copy"
+                      >
+                        <svg data-icon width="13" height="13" aria-hidden="true">
+                          <use href="#i-copy" /></svg
+                        ><span>复制</span>
+                      </button>
+                    </figcaption>
+                    <pre><span data-tone="comment"># 应该返回 edge.blora.app.</span>
+<span data-part="prompt">$ </span>dig +short app.example.com CNAME
+<span data-tone="comment"># 也可以用 CLI 立即触发一次校验</span>
+<span data-part="prompt">$ </span>blora domains verify app.example.com --instance web-edge-03</pre>
+                  </figure>
+                  <aside>
+                    <span class="bd-pill" data-tone="sand">提示</span>
+                    <p>
+                      修改记录前先把 TTL 调低到 600
+                      秒，出问题时可以更快地切回旧配置；确认稳定后再改回 3600。
+                    </p>
+                  </aside>
+
+                  <h3 id="a-apex">根域名 apex</h3>
+                  <p>
+                    大多数 DNS 服务商不允许在根域名上使用 CNAME。这种情况下请添加 A 记录（以及可选的
+                    AAAA 记录），或者使用服务商提供的 ALIAS / ANAME 记录指向
+                    <code>edge.blora.app</code>。
+                  </p>
+                  <p>
+                    如果希望 <code>example.com</code> 和
+                    <code>www.example.com</code>
+                    都能访问，建议把其中一个设为主域名，另一个在控制台里配置 301
+                    跳转，避免搜索引擎把它们当成两个站点。
+                  </p>
+
+                  <h2 id="a-https">签发 HTTPS 证书</h2>
+                  <p>
+                    DNS 生效后，Blora 会自动向 Let's Encrypt 申请证书，整个过程通常在 1
+                    分钟内完成。证书有效期 90 天，到期前 30
+                    天自动续期，续期失败时会给工作区管理员发送邮件。
+                  </p>
+                  <aside>
+                    <span class="bd-pill" data-tone="rose">注意</span>
+                    <p>
+                      如果域名设置了 CAA 记录，但没有包含
+                      <code>letsencrypt.org</code>，证书会一直停留在“签发中”。请按上表补充 CAA
+                      记录，然后在控制台点击<strong>重新签发</strong>。
+                    </p>
+                  </aside>
+                  <ul>
+                    <li>证书签发期间，HTTP 请求正常返回，HTTPS 请求会暂时使用默认证书。</li>
+                    <li>
+                      需要使用自有证书（例如 EV 证书）时，可以在<strong>域名 › 高级</strong>里上传
+                      PEM 格式的证书链与私钥。
+                    </li>
+                  </ul>
+
+                  <h2 id="a-faq">常见问题</h2>
+                  <div class="bd-accordion" data-variant="tray" data-pattern="faq">
+                    <details open>
+                      <summary>
+                        <span>域名已经指向 Blora，为什么控制台还显示“等待验证”？</span
+                        ><svg data-icon width="15" height="15" aria-hidden="true">
+                          <use href="#i-chevron-down" />
+                        </svg>
+                      </summary>
+                      <div>
+                        <p>
+                          控制台每 5
+                          分钟检查一次解析结果。如果你刚刚修改过记录，可以点击<strong>立即验证</strong>；如果仍然失败，用
+                          <code>dig</code> 检查是否还有旧的 A 记录和新的 CNAME 冲突。
+                        </p>
+                      </div>
+                    </details>
+                    <details>
+                      <summary>
+                        <span>可以把同一个域名同时绑定到两个实例吗？</span
+                        ><svg data-icon width="15" height="15" aria-hidden="true">
+                          <use href="#i-chevron-down" />
+                        </svg>
+                      </summary>
+                      <div>
+                        <p>
+                          不可以。一个域名同一时间只能绑定到一个实例；需要灰度切换时，请使用流量分配功能，把一定比例的请求转发到新实例。
+                        </p>
+                      </div>
+                    </details>
+                    <details>
+                      <summary>
+                        <span>开启 Cloudflare 代理（橙色云朵）会有影响吗？</span
+                        ><svg data-icon width="15" height="15" aria-hidden="true">
+                          <use href="#i-chevron-down" />
+                        </svg>
+                      </summary>
+                      <div>
+                        <p>
+                          可以使用，但需要把 SSL 模式设为 Full
+                          (strict)。首次签发证书时建议先关闭代理，签发成功后再重新开启。
+                        </p>
+                      </div>
+                    </details>
+                  </div>
+                </div>
+
+                <section data-pattern="article-feedback" id="feedback">
+                  <div class="bd-item">
+                    <div>
+                      <strong id="fbTitle">这篇文章有帮助吗？</strong
+                      ><small id="fbSub">你的反馈会直接发给文档团队</small>
+                    </div>
+                    <button
+                      type="button"
+                      class="bd-button"
+                      data-variant="elevated"
+                      data-size="sm"
+                      data-fb="up"
+                      aria-pressed="false"
+                    >
+                      <svg data-icon width="13" height="13" aria-hidden="true">
+                        <use href="#i-thumbs-up" /></svg
+                      >有帮助
+                    </button>
+                    <button
+                      type="button"
+                      class="bd-button"
+                      data-variant="elevated"
+                      data-size="sm"
+                      data-fb="down"
+                      aria-pressed="false"
+                    >
+                      <svg data-icon width="13" height="13" aria-hidden="true">
+                        <use href="#i-thumbs-down" /></svg
+                      >没帮助
+                    </button>
+                  </div>
+                  <form id="fbForm" hidden>
+                    <textarea
+                      class="bd-textarea"
+                      id="fbText"
+                      aria-label="反馈内容"
+                      placeholder="哪里没讲清楚？比如缺少某个注册商的截图，或者命令执行时报错。"
+                    ></textarea>
+                    <button type="submit" class="bd-button" data-variant="primary" data-size="sm">
+                      提交反馈
+                    </button>
+                  </form>
+                </section>
+                <footer data-part="foot" data-pattern="article-meta">
+                  <span>最后更新 2026-11-22 · 林舟 编辑 · 第 14 版</span>
+                </footer>
+              </article>
+
+              <nav
+                class="bd-mosaic"
+                data-cols="2"
+                data-index="none"
+                data-pattern="prev-next"
+                aria-label="上一篇与下一篇"
+                style="--bd-columns: repeat(2, minmax(0, 1fr))"
+              >
+                <a class="bd-tile" href="#article" data-toast="上一篇：环境变量与密钥"
+                  ><span
+                    ><svg data-icon width="12" height="12" aria-hidden="true">
+                      <use href="#i-chevron-left" /></svg
+                    >上一篇</span
+                  ><strong>环境变量与密钥</strong></a
+                >
+                <a
+                  class="bd-tile"
+                  href="#article"
+                  data-toast="下一篇：私有网络与固定出口 IP"
+                  rel="next"
+                  ><span
+                    >下一篇<svg data-icon width="12" height="12" aria-hidden="true">
+                      <use href="#i-chevron-right" /></svg></span
+                  ><strong>私有网络与固定出口 IP</strong></a
+                >
+              </nav>
+            </div>
+
+            <aside data-part="aside">
+              <article class="bd-tile">
+                <header class="bd-head">
+                  <h2>文章信息</h2>
+                  <div data-part="end"><span data-part="tag">第 14 版</span></div>
+                </header>
+                <dl class="bd-spec" data-pattern="article-info">
+                  <div>
+                    <dt>作者</dt>
+                    <dd>
+                      <span class="bd-avatar" data-size="sm" data-tone="sand">林</span
+                      ><span class="bd-avatar" data-size="sm" data-tone="blush">宋</span
+                      ><span class="bd-avatar" data-size="sm">+3</span>
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>更新于</dt>
+                    <dd>2026-11-22</dd>
+                  </div>
+                  <div>
+                    <dt>阅读时长</dt>
+                    <dd>约 6 分钟</dd>
+                  </div>
+                  <div>
+                    <dt>读者反馈</dt>
+                    <dd>94% 有帮助 · 1,284 票</dd>
+                  </div>
+                  <div>
+                    <dt>适用套餐</dt>
+                    <dd>
+                      <span class="bd-tag" data-shape="square">免费版</span
+                      ><span class="bd-tag" data-shape="square">团队版</span
+                      ><span class="bd-tag" data-shape="square">企业版</span>
+                    </dd>
+                  </div>
+                </dl>
+              </article>
+              <article class="bd-tile">
+                <header class="bd-head">
+                  <h2>相关文章</h2>
+                  <div data-part="end"><span data-part="tag">4 篇</span></div>
+                </header>
+                <div class="bd-tray" data-pattern="link-list">
+                  <button type="button" class="bd-item" data-toast="打开：为根域名配置 www 跳转">
+                    <svg data-icon width="14" height="14" aria-hidden="true">
+                      <use href="#i-file-text" />
+                    </svg>
+                    <div><p>为根域名配置 www 跳转</p></div>
+                    <span data-part="end">3 分钟</span>
+                  </button>
+                  <button type="button" class="bd-item" data-toast="打开：私有网络与固定出口 IP">
+                    <svg data-icon width="14" height="14" aria-hidden="true">
+                      <use href="#i-file-text" />
+                    </svg>
+                    <div><p>私有网络与固定出口 IP</p></div>
+                    <span data-part="end">5 分钟</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="bd-item"
+                    data-toast="打开：在 Cloudflare 代理下使用 Blora 自定义域名"
+                    data-tip="在 Cloudflare 代理下使用 Blora 自定义域名"
+                  >
+                    <svg data-icon width="14" height="14" aria-hidden="true">
+                      <use href="#i-file-text" />
+                    </svg>
+                    <div><p>在 Cloudflare 代理下使用 Blora 自定义域名</p></div>
+                    <span data-part="end">4 分钟</span>
+                  </button>
+                  <button type="button" class="bd-item" data-toast="打开：证书签发失败的排查清单">
+                    <svg data-icon width="14" height="14" aria-hidden="true">
+                      <use href="#i-file-text" />
+                    </svg>
+                    <div><p>证书签发失败的排查清单</p></div>
+                    <span data-part="end">7 分钟</span>
+                  </button>
+                </div>
+              </article>
+            </aside>
+          </div>
+        </div>
+
+        <!-- ============ 场景 3：更新日志 ============ -->
+        <div data-part="view" data-scene="changelog" hidden>
+          <header class="bd-tile" data-variant="page">
+            <p data-part="eyebrow">Changelog</p>
+            <h1>更新日志</h1>
+            <p>每周二发布；涉及破坏性变更时，会提前 30 天邮件通知工作区管理员。</p>
+            <div data-part="end">
+              <div class="bd-segmented" role="radiogroup" aria-label="变更类型" id="clSeg">
+                <button type="button" role="radio" data-value="all" aria-checked="true">
+                  全部<span data-part="count" data-clc="all"></span>
+                </button>
+                <button type="button" role="radio" data-value="feat">
+                  新功能<span data-part="count" data-clc="feat"></span>
+                </button>
+                <button type="button" role="radio" data-value="impr">
+                  改进<span data-part="count" data-clc="impr"></span>
+                </button>
+                <button type="button" role="radio" data-value="fix">
+                  修复<span data-part="count" data-clc="fix"></span>
+                </button>
+              </div>
+              <button type="button" class="bd-button" data-toast="已复制 RSS 地址">
+                <svg data-icon width="14" height="14" aria-hidden="true"><use href="#i-rss" /></svg
+                >RSS
+              </button>
+            </div>
+          </header>
+
+          <div class="bd-layout" style="--bd-columns: minmax(0, 1fr) 300px">
+            <div data-part="main" id="clList">
+              <article class="bd-tile" data-pattern="release">
+                <span class="bd-corner"></span>
+                <header class="bd-head">
+                  <h2>
+                    <code>v4.2.0</code><span>分支级环境变量与预览休眠</span
+                    ><span class="bd-pill" data-tone="blush">最新</span>
+                  </h2>
+                  <p>2026-11-24 发布 · 次版本</p>
+                  <div data-part="end"><span data-part="tag" data-count></span></div>
+                </header>
+                <p data-part="lead" data-extra>
+                  今年最大的一次部署体验更新：每个分支的预览环境都可以有自己的变量和休眠策略，构建日志也可以全文搜索了。
+                </p>
+                <ul class="bd-tray" data-cols="3" data-extra>
+                  <li class="bd-item" data-align="start">
+                    <div>
+                      <strong
+                        ><svg data-icon width="15" height="15" aria-hidden="true">
+                          <use href="#i-sparkles" /></svg
+                        >分支级环境变量</strong
+                      ><small data-wrap
+                        >在预览环境里覆盖生产环境的值，不再需要额外的测试实例。</small
+                      >
+                    </div>
+                  </li>
+                  <li class="bd-item" data-align="start">
+                    <div>
+                      <strong
+                        ><svg data-icon width="15" height="15" aria-hidden="true">
+                          <use href="#i-zap" /></svg
+                        >预览自动休眠</strong
+                      ><small data-wrap
+                        >闲置 30 分钟后自动休眠，休眠期间不计费，首个请求 2 秒内唤醒。</small
+                      >
+                    </div>
+                  </li>
+                  <li class="bd-item" data-align="start">
+                    <div>
+                      <strong
+                        ><svg data-icon width="15" height="15" aria-hidden="true">
+                          <use href="#i-search" /></svg
+                        >日志全文搜索</strong
+                      ><small data-wrap
+                        >支持正则表达式与时间范围筛选，结果可以直接定位到日志行。</small
+                      >
+                    </div>
+                  </li>
+                </ul>
+                <ul class="bd-tray" data-pattern="change-list">
+                  <li class="bd-item" data-tag="feat">
+                    <span class="bd-tag" data-shape="square" data-tone="blush">新功能</span>
+                    <div><p>预览环境支持按分支覆盖环境变量，生产环境的值不受影响。</p></div>
+                    <span data-part="end">预览环境</span>
+                  </li>
+                  <li class="bd-item" data-tag="feat">
+                    <span class="bd-tag" data-shape="square" data-tone="blush">新功能</span>
+                    <div><p>闲置 30 分钟的预览环境会自动休眠，休眠期间不计费。</p></div>
+                    <span data-part="end">预览环境</span>
+                  </li>
+                  <li class="bd-item" data-tag="feat">
+                    <span class="bd-tag" data-shape="square" data-tone="blush">新功能</span>
+                    <div><p>构建日志支持全文搜索，可以用正则表达式匹配报错。</p></div>
+                    <span data-part="end">构建日志</span>
+                  </li>
+                  <li class="bd-item" data-tag="impr">
+                    <span class="bd-tag" data-shape="square" data-tone="sand">改进</span>
+                    <div><p>构建缓存命中率提升到 92%，Node.js 项目的平均构建时间缩短 41%。</p></div>
+                    <span data-part="end">构建</span>
+                  </li>
+                  <li class="bd-item" data-tag="impr">
+                    <span class="bd-tag" data-shape="square" data-tone="sand">改进</span>
+                    <div><p>部署历史可以按提交者和分支筛选。</p></div>
+                    <span data-part="end">部署历史</span>
+                  </li>
+                  <li class="bd-item" data-tag="fix">
+                    <span class="bd-tag" data-shape="square">修复</span>
+                    <div><p>修复了在部署详情页快速切换标签时，日志偶尔重复显示的问题。</p></div>
+                    <span data-part="end">部署详情</span>
+                  </li>
+                  <li class="bd-item" data-tag="fix">
+                    <span class="bd-tag" data-shape="square">修复</span>
+                    <div><p>修复了时区设为 UTC 时，图表横轴日期少一天的问题。</p></div>
+                    <span data-part="end">用量图表</span>
+                  </li>
+                </ul>
+              </article>
+
+              <article class="bd-tile" data-pattern="release">
+                <header class="bd-head">
+                  <h2><code>v4.1.3</code><span>补丁更新</span></h2>
+                  <p>2026-11-19 发布 · 稳定性修复</p>
+                  <div data-part="end"><span data-part="tag" data-count></span></div>
+                </header>
+                <ul class="bd-tray" data-pattern="change-list">
+                  <li class="bd-item" data-tag="fix">
+                    <span class="bd-tag" data-shape="square">修复</span>
+                    <div><p>修复了在 Safari 17 中拖拽上传配置文件时偶发的页面卡死。</p></div>
+                    <span data-part="end">控制台</span>
+                  </li>
+                </ul>
+              </article>
+
+              <article class="bd-tile" data-pattern="release">
+                <header class="bd-head">
+                  <h2><code>v4.1.2</code><span>补丁更新</span></h2>
+                  <p>2026-11-14 发布 · CLI 与成员邀请</p>
+                  <div data-part="end"><span data-part="tag" data-count></span></div>
+                </header>
+                <ul class="bd-tray" data-pattern="change-list">
+                  <li class="bd-item" data-tag="impr">
+                    <span class="bd-tag" data-shape="square" data-tone="sand">改进</span>
+                    <div>
+                      <p>
+                        CLI 的
+                        <code>blora logs --follow</code> 在网络中断后会自动重连，并从断点继续输出。
+                      </p>
+                    </div>
+                    <span data-part="end">CLI</span>
+                  </li>
+                  <li class="bd-item" data-tag="fix">
+                    <span class="bd-tag" data-shape="square">修复</span>
+                    <div><p>修复了邀请链接过期后仍然显示“接受邀请”按钮的问题。</p></div>
+                    <span data-part="end">团队成员</span>
+                  </li>
+                </ul>
+              </article>
+
+              <article class="bd-tile" data-pattern="release">
+                <header class="bd-head">
+                  <h2><code>v4.1.0</code><span>账单页面重新设计</span></h2>
+                  <p>2026-11-05 发布 · 次版本</p>
+                  <div data-part="end"><span data-part="tag" data-count></span></div>
+                </header>
+                <p data-part="lead" data-extra>
+                  用量、发票和付款方式合并到同一个页面，按成员和项目拆分的费用一目了然。
+                </p>
+                <ul class="bd-tray" data-pattern="change-list">
+                  <li class="bd-item" data-tag="feat">
+                    <span class="bd-tag" data-shape="square" data-tone="blush">新功能</span>
+                    <div><p>新增按项目拆分的费用明细，可以导出为 CSV。</p></div>
+                    <span data-part="end">账单</span>
+                  </li>
+                  <li class="bd-item" data-tag="feat">
+                    <span class="bd-tag" data-shape="square" data-tone="blush">新功能</span>
+                    <div><p>用量达到 80% 和 100% 时可以发送 Webhook 通知。</p></div>
+                    <span data-part="end">用量告警</span>
+                  </li>
+                  <li class="bd-item" data-tag="impr">
+                    <span class="bd-tag" data-shape="square" data-tone="sand">改进</span>
+                    <div>
+                      <p>
+                        部署钩子的签名密钥
+                        <code>BLORA_DEPLOY_HOOK_SECRET</code> 现在支持无缝轮换：生成新值后，旧值会在
+                        24 小时内继续有效，CI 可以从容地切换。
+                      </p>
+                    </div>
+                    <span data-part="end">部署钩子</span>
+                  </li>
+                  <li class="bd-item" data-tag="impr">
+                    <span class="bd-tag" data-shape="square" data-tone="sand">改进</span>
+                    <div><p>发票抬头支持保存多个，开票时一键选择。</p></div>
+                    <span data-part="end">发票</span>
+                  </li>
+                  <li class="bd-item" data-tag="fix">
+                    <span class="bd-tag" data-shape="square">修复</span>
+                    <div><p>修复了月初第一天用量图表为空的问题。</p></div>
+                    <span data-part="end">用量图表</span>
+                  </li>
+                </ul>
+              </article>
+
+              <article class="bd-tile" data-pattern="release">
+                <header class="bd-head">
+                  <h2>
+                    <code>v4.0.0</code><span>全新边缘网络</span
+                    ><span class="bd-pill" data-tone="blush">大版本</span>
+                  </h2>
+                  <p>2026-10-21 发布 · 需要更新 DNS</p>
+                  <div data-part="end"><span data-part="tag" data-count></span></div>
+                </header>
+                <p data-part="lead" data-extra>
+                  所有自定义域名已迁移到新的 Anycast 边缘网络，亚太首字节时间平均降低 38%。旧 A 记录
+                  76.223.10.12 将在 2027 年 1 月停止服务，迁移期间新旧地址同时可用。
+                </p>
+                <ul class="bd-tray" data-pattern="change-list">
+                  <li class="bd-item" data-tag="feat">
+                    <span class="bd-tag" data-shape="square" data-tone="blush">新功能</span>
+                    <div><p>全新 Anycast 边缘网络，覆盖 14 个区域、62 个节点。</p></div>
+                    <span data-part="end">边缘网络</span>
+                  </li>
+                  <li class="bd-item" data-tag="feat">
+                    <span class="bd-tag" data-shape="square" data-tone="blush">新功能</span>
+                    <div><p>支持 IPv6（AAAA 记录）。</p></div>
+                    <span data-part="end">域名</span>
+                  </li>
+                  <li class="bd-item" data-tag="feat">
+                    <span class="bd-tag" data-shape="square" data-tone="blush">新功能</span>
+                    <div><p>通配符域名可以为每个分支自动生成预览地址。</p></div>
+                    <span data-part="end">域名</span>
+                  </li>
+                  <li class="bd-item" data-tag="impr">
+                    <span class="bd-tag" data-shape="square" data-tone="sand">改进</span>
+                    <div><p>证书签发平均耗时从 4 分钟缩短到 40 秒。</p></div>
+                    <span data-part="end">HTTPS 证书</span>
+                  </li>
+                </ul>
+                <div data-part="actions" data-extra>
+                  <button type="button" class="bd-button" data-size="sm" data-go="article">
+                    <svg data-icon width="13" height="13" aria-hidden="true">
+                      <use href="#i-book-open" /></svg
+                    >阅读迁移指南
+                  </button>
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="ghost"
+                    data-size="sm"
+                    data-toast="打开完整发布说明"
+                  >
+                    完整发布说明
+                  </button>
+                </div>
+              </article>
+            </div>
+
+            <aside data-part="aside">
+              <article class="bd-tile">
+                <header class="bd-head">
+                  <h2>订阅更新</h2>
+                  <p>每月一封摘要，可以随时退订</p>
+                </header>
+                <form class="bd-toolbar" data-pattern="subscribe" id="subForm" novalidate>
+                  <label class="bd-input"
+                    ><svg data-icon width="14" height="14" aria-hidden="true">
+                      <use href="#i-mail" /></svg
+                    ><input
+                      id="subEmail"
+                      placeholder="you@example.com"
+                      aria-label="邮箱"
+                      autocomplete="off"
+                  /></label>
+                  <button type="submit" class="bd-button" data-variant="primary">订阅</button>
+                </form>
+              </article>
+              <article class="bd-tile">
+                <header class="bd-head">
+                  <h2>即将发布</h2>
+                  <div data-part="end"><span data-part="tag">Roadmap</span></div>
+                </header>
+                <ul class="bd-tray">
+                  <li class="bd-item">
+                    <div><strong>多区域主备自动切换</strong><small>预计 12 月上旬</small></div>
+                    <span class="bd-pill" data-tone="sand">测试中</span>
+                  </li>
+                  <li class="bd-item">
+                    <div><strong>按成员拆分的用量报表</strong><small>预计 2027 年 1 月</small></div>
+                    <span class="bd-pill">计划中</span>
+                  </li>
+                  <li class="bd-item">
+                    <div>
+                      <strong>Terraform Provider 2.0</strong><small>预计 2027 年第一季度</small>
+                    </div>
+                    <span class="bd-pill">计划中</span>
+                  </li>
+                </ul>
+              </article>
+              <article class="bd-tile">
+                <header class="bd-head">
+                  <h2>发布节奏</h2>
+                  <div data-part="end"><span data-part="tag">2026</span></div>
+                </header>
+                <dl class="bd-tray" data-cols="2" data-pattern="release-cadence">
+                  <div>
+                    <dt>发布版本</dt>
+                    <dd>48</dd>
+                  </div>
+                  <div>
+                    <dt>平均修复时长</dt>
+                    <dd>1.8<small>天</small></dd>
+                  </div>
+                  <div>
+                    <dt>修复问题</dt>
+                    <dd>126</dd>
+                  </div>
+                  <div>
+                    <dt>破坏性变更</dt>
+                    <dd>0</dd>
+                  </div>
+                </dl>
+              </article>
+            </aside>
+          </div>
+        </div>
+
+        <!-- ============ 场景 4：搜索 ============ -->
+        <div data-part="view" data-scene="search" hidden>
+          <header class="bd-tile" data-variant="page">
+            <p data-part="eyebrow">Search</p>
+            <h1>搜索结果</h1>
+            <p>在文档、API 参考、更新日志和社区帖子里搜索；多个关键词用空格分隔。</p>
+            <div data-part="end">
+              <button type="button" class="bd-button" data-toast="打开 API 参考">
+                <svg data-icon width="14" height="14" aria-hidden="true">
+                  <use href="#i-terminal" /></svg
+                >API 参考
+              </button>
+            </div>
+          </header>
+
+          <div class="bd-layout" style="--bd-columns: minmax(0, 1fr) 300px">
+            <div data-part="main">
+              <article class="bd-tile" data-pattern="search-results">
+                <header class="bd-head">
+                  <h2>匹配的内容</h2>
+                  <p id="srSub">输入关键词搜索全部文档</p>
+                  <div data-part="end">
+                    <div class="bd-segmented" role="radiogroup" aria-label="排序" id="sortSeg">
+                      <button type="button" role="radio" data-value="rel" aria-checked="true">
+                        相关度
+                      </button>
+                      <button type="button" role="radio" data-value="new">最新</button>
+                    </div>
+                  </div>
+                </header>
+                <div class="bd-toolbar">
+                  <label class="bd-input" data-part="search">
+                    <svg data-icon width="15" height="15" aria-hidden="true">
+                      <use href="#i-search" />
+                    </svg>
+                    <input
+                      id="docSearch"
+                      placeholder="搜索文档、API、更新日志…"
+                      aria-label="搜索文档"
+                      autocomplete="off"
+                    />
+                    <button type="button" data-part="clear" aria-label="清空">
+                      <svg data-icon width="12" height="12" aria-hidden="true">
+                        <use href="#i-x" />
+                      </svg>
+                    </button>
+                  </label>
+                  <div class="bd-segmented" role="radiogroup" aria-label="内容类型" id="typeSeg">
+                    <button type="button" role="radio" data-value="all" aria-checked="true">
+                      全部<span data-part="count" data-tc="all"></span>
+                    </button>
+                    <button type="button" role="radio" data-value="article">
+                      文章<span data-part="count" data-tc="article"></span>
+                    </button>
+                    <button type="button" role="radio" data-value="api">
+                      API<span data-part="count" data-tc="api"></span>
+                    </button>
+                    <button type="button" role="radio" data-value="changelog">
+                      更新日志<span data-part="count" data-tc="changelog"></span>
+                    </button>
+                    <button type="button" role="radio" data-value="community">
+                      社区<span data-part="count" data-tc="community"></span>
+                    </button>
+                  </div>
+                </div>
+                <div data-part="results" id="srWrap"></div>
+                <footer data-part="foot" data-variant="tint">
+                  <p>没找到想要的？换个说法，或者直接问人。</p>
+                  <div data-part="actions">
+                    <button
+                      type="button"
+                      class="bd-button"
+                      data-variant="ghost"
+                      data-size="sm"
+                      data-toast="打开开发者社区"
+                    >
+                      去社区提问
+                    </button>
+                    <button
+                      type="button"
+                      class="bd-button"
+                      data-size="sm"
+                      data-toast="已打开在线对话"
+                    >
+                      联系支持
+                    </button>
+                  </div>
+                </footer>
+              </article>
+            </div>
+            <aside data-part="aside">
+              <article class="bd-tile">
+                <header class="bd-head">
+                  <h2>按产品筛选</h2>
+                  <div data-part="end">
+                    <button
+                      type="button"
+                      class="bd-button"
+                      data-variant="ghost"
+                      data-size="sm"
+                      id="clearProducts"
+                    >
+                      清除
+                    </button>
+                  </div>
+                </header>
+                <div class="bd-tray" data-pattern="product-filter" id="productChips"></div>
+              </article>
+              <article class="bd-tile">
+                <header class="bd-head">
+                  <h2>最近搜索</h2>
+                  <div data-part="end"><span data-part="tag">本机</span></div>
+                </header>
+                <div class="bd-tray" data-pattern="link-list" id="recentList"></div>
+              </article>
+            </aside>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script type="module">
+      // 业务逻辑：场景切换、服务状态、阅读进度、反馈、更新日志筛选、搜索。组件行为全部由 blora.js 提供。
+      import { animateHeight, toast } from '../../packages/blora-design/dist/blora.js';
+
+      const $ = (s, el = document) => el.querySelector(s);
+      const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+      const esc = (s) =>
+        String(s).replace(
+          /[&<>"]/g,
+          (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c],
+        );
+      const icon = (id, size = 14) =>
+        `<svg data-icon width="${size}" height="${size}" aria-hidden="true"><use href="#i-${id}" /></svg>`;
+
+      /* ---------------- 场景 ---------------- */
+      const CRUMBS = {
+        help: [['帮助中心']],
+        article: [['帮助中心', 'help'], ['域名与网络', 'help'], ['绑定自定义域名']],
+        changelog: [['更新日志']],
+        search: [['搜索']],
+      };
+      let scene = null;
+
+      function go(name) {
+        if (!CRUMBS[name]) name = 'help';
+        scene = name;
+        for (const v of $$('[data-scene]')) v.hidden = v.dataset.scene !== name;
+        for (const b of $$('.bd-rail [data-go]')) {
+          if (b.dataset.go === name) b.setAttribute('aria-current', 'page');
+          else b.removeAttribute('aria-current');
+        }
+        const trail = CRUMBS[name].map(([label, target], i, all) =>
+          i === all.length - 1
+            ? `<span aria-current="page">${label}</span>`
+            : `<a href="#${target}" data-go="${target}">${label}</a>`,
+        );
+        $('#crumbs').innerHTML = [`<a href="#help" data-go="help">Blora 文档</a>`, ...trail].join(
+          '',
+        );
+        history.replaceState(null, '', '#' + name);
+        window.scrollTo({ top: 0 });
+        if (name === 'article') requestAnimationFrame(readProgress);
+      }
+      window.go = go;
+      document.addEventListener('click', (e) => {
+        const t = e.target.closest('[data-go]');
+        if (t) {
+          e.preventDefault();
+          go(t.dataset.go);
+        }
+        const msg = e.target.closest('[data-toast]');
+        if (msg) {
+          if (msg.tagName === 'A') e.preventDefault();
+          toast(msg.dataset.toast);
+        }
+        const q = e.target.closest('[data-q]');
+        if (q) {
+          setQuery(q.dataset.q, true);
+          go('search');
+        }
+        const all = e.target.closest('[data-search]');
+        if (all) {
+          setQuery(all.dataset.search);
+          go('search');
+        }
+      });
+      $('.bd-rail').setAttribute('data-bd-controlled', '');
+
+      /* ---------------- 帮助中心：服务状态（每格一天） ---------------- */
+      const STATUS_ROWS = [
+        ['API', '99.99%', { 12: 'blush' }],
+        ['构建', '99.95%', { 8: 'rose', 9: 'blush' }],
+        ['控制台', '100%', {}],
+        ['边缘网络', '99.98%', { 21: 'blush' }],
+      ];
+      $('#statusList').innerHTML = STATUS_ROWS.map(
+        ([name, pct, marks]) =>
+          `<li><p><span>${name}</span><data>${pct}</data></p><div aria-label="${name} 过去 30 天可用性 ${pct}">${Array.from({ length: 30 }, (_, i) => `<i${marks[i] ? ` data-tone="${marks[i]}"` : ''}></i>`).join('')}</div></li>`,
+      ).join('');
+      $('#helpForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        setQuery($('#helpSearch').value.trim(), true);
+        go('search');
+      });
+
+      /* ---------------- 文章：阅读进度 + 反馈 ---------------- */
+      const ARTICLE_MIN = 6;
+      function readProgress() {
+        if (scene !== 'article') return;
+        const art = $('#article');
+        const top = art.getBoundingClientRect().top + scrollY;
+        const end = top + art.offsetHeight - innerHeight;
+        const pct =
+          end <= top ? 1 : Math.min(1, Math.max(0, (scrollY - top + 80) / (end - top + 80)));
+        $('#readRing').setAttribute('aria-valuenow', String(Math.round(pct * 100)));
+        $('#readLeft').textContent =
+          pct >= 0.99 ? '已读完' : `还剩约 ${Math.max(1, Math.ceil(ARTICLE_MIN * (1 - pct)))} 分钟`;
+      }
+      addEventListener('scroll', readProgress, { passive: true });
+
+      const fb = $('#feedback');
+      fb.addEventListener('click', (e) => {
+        const b = e.target.closest('[data-fb]');
+        if (!b) return;
+        for (const x of $$('[data-fb]', fb)) x.setAttribute('aria-pressed', String(x === b));
+        const up = b.dataset.fb === 'up';
+        $('#fbTitle').textContent = up ? '谢谢，很高兴帮到你' : '抱歉没能帮上忙';
+        $('#fbSub').textContent = up
+          ? '已有 1,284 人觉得这篇文章有帮助'
+          : '告诉我们缺了什么，文档团队会在一周内更新';
+        animateHeight(fb, () => ($('#fbForm').hidden = up));
+        if (!up) setTimeout(() => $('#fbText').focus({ preventScroll: true }), 320);
+      });
+      $('#fbForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        $('#fbTitle').textContent = '反馈已发送';
+        $('#fbSub').textContent = '文档团队处理后会通过邮件告诉你';
+        $('#fbText').value = '';
+        animateHeight(fb, () => ($('#fbForm').hidden = true));
+        toast('谢谢，反馈已发送给文档团队');
+      });
+
+      /* ---------------- 更新日志：按类型筛选，列表高度连续变化 ---------------- */
+      const clItems = $$('#clList [data-tag]');
+      for (const t of ['all', 'feat', 'impr', 'fix'])
+        $(`[data-clc="${t}"]`).textContent =
+          t === 'all' ? clItems.length : clItems.filter((i) => i.dataset.tag === t).length;
+      function filterChangelog(tag) {
+        animateHeight($('#clList'), () => {
+          for (const en of $$('#clList > .bd-tile')) {
+            const items = $$('[data-tag]', en);
+            let n = 0;
+            for (const it of items) {
+              const show = tag === 'all' || it.dataset.tag === tag;
+              it.hidden = !show;
+              if (show) n++;
+            }
+            en.hidden = n === 0;
+            for (const x of $$('[data-extra]', en)) x.hidden = tag !== 'all';
+            $('[data-count]', en).textContent =
+              tag === 'all' ? `${items.length} 项变更` : `${n} / ${items.length} 项`;
+          }
+        });
+      }
+      $('#clSeg').addEventListener('bd-change', (e) => filterChangelog(e.detail.value));
+      filterChangelog('all');
+      $('#subForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const v = $('#subEmail').value.trim();
+        if (!/^\S+@\S+\.\S+$/.test(v)) {
+          toast('请输入有效的邮箱地址', { tone: 'rose' });
+          $('#subEmail').focus();
+          return;
+        }
+        $('#subEmail').value = '';
+        toast(`已订阅，下一封摘要会发送到 ${v}`);
+      });
+
+      /* ---------------- 搜索：实时过滤、高亮、类型 / 产品筛选、空状态 ---------------- */
+      const TYPES = {
+        article: ['文章', 'file-text', 'blush'],
+        api: ['API', 'terminal', 'sand'],
+        changelog: ['更新日志', 'history', 'rose'],
+        community: ['社区', 'message-square', null],
+      };
+      const PRODUCTS = ['部署', '网络', '账单', 'API', '安全'];
+      const DOCS = [
+        {
+          type: 'article',
+          product: '网络',
+          title: '绑定自定义域名',
+          path: '文档 › 域名与网络',
+          snippet:
+            '把 app.example.com 这样的自有域名指向实例，HTTPS 证书自动签发并在到期前 30 天续期。子域名使用 CNAME 记录指向 edge.blora.app。',
+          date: '2026-11-22',
+          go: 'article',
+        },
+        {
+          type: 'article',
+          product: '网络',
+          title: '为根域名配置 www 跳转',
+          path: '文档 › 域名与网络 › 根域名',
+          snippet:
+            '大多数 DNS 服务商不允许在根域名上使用 CNAME，可以改用 A 记录或 ALIAS 记录，再把 www 设为 301 跳转到主域名。',
+          date: '2026-11-10',
+        },
+        {
+          type: 'article',
+          product: '网络',
+          title: '证书签发失败的排查清单',
+          path: '文档 › 域名与网络 › HTTPS',
+          snippet:
+            '证书一直停留在“签发中”？依次检查 CAA 记录是否包含 letsencrypt.org、域名是否仍被旧平台代理，以及 DNS 是否已经全球生效。',
+          date: '2026-10-28',
+        },
+        {
+          type: 'api',
+          product: 'API',
+          title: 'POST /v2/domains',
+          path: 'API 参考 › 域名',
+          snippet:
+            '为实例添加自定义域名。请求体需要包含 instance_id 与 hostname，返回值里的 verification 字段给出需要添加的 DNS 记录。',
+          date: '2026-11-18',
+        },
+        {
+          type: 'api',
+          product: 'API',
+          title: 'blora domains verify',
+          path: 'CLI 参考 › domains',
+          snippet:
+            '在命令行中触发一次域名校验：blora domains verify app.example.com --instance web-edge-03，校验通过后自动开始签发证书。',
+          date: '2026-11-02',
+        },
+        {
+          type: 'changelog',
+          product: '网络',
+          title: 'v4.0.0 · 全新边缘网络',
+          path: '更新日志 › 2026-10-21',
+          snippet:
+            '所有自定义域名迁移到新的 Anycast 边缘网络，亚太区域首字节时间平均降低 38%；旧的 A 记录地址将在 2027 年 1 月停止服务。',
+          date: '2026-10-21',
+          go: 'changelog',
+        },
+        {
+          type: 'community',
+          product: '网络',
+          title: 'Cloudflare 代理开启后域名一直验证失败',
+          path: '社区 › 网络 · 23 条回复 · 已解决',
+          snippet:
+            '把 SSL 模式改成 Full (strict)，并在首次签发证书时暂时关闭橙色云朵，签发成功后再打开就好了。',
+          date: '2026-11-20',
+        },
+        {
+          type: 'article',
+          product: '部署',
+          title: '回滚到上一个成功的部署',
+          path: '文档 › 部署与构建',
+          snippet:
+            '在部署历史中选择任意一次成功的部署，点击“提升为生产”即可在 10 秒内完成回滚，环境变量会同时恢复到当时的版本。',
+          date: '2026-11-16',
+        },
+        {
+          type: 'article',
+          product: '安全',
+          title: '轮换 BLORA_DEPLOY_HOOK_SECRET 而不中断部署',
+          path: '文档 › 环境变量与密钥',
+          snippet:
+            '生成新的密钥后，旧值会在 24 小时内继续有效。请在这段时间内更新 CI 中的 BLORA_DEPLOY_HOOK_SECRET，然后手动吊销旧值。',
+          date: '2026-11-08',
+        },
+        {
+          type: 'article',
+          product: '部署',
+          title: '配置环境变量',
+          path: '文档 › 环境变量与密钥',
+          snippet:
+            '环境变量可以按生产、预览和开发三个环境分别设置；v4.2 起预览环境还可以按分支覆盖，敏感值在日志中会自动打码。',
+          date: '2026-11-24',
+        },
+        {
+          type: 'changelog',
+          product: '部署',
+          title: 'v4.2.0 · 分支级环境变量',
+          path: '更新日志 › 2026-11-24',
+          snippet:
+            '预览环境可以按分支独立配置环境变量；闲置 30 分钟的预览会自动休眠，构建日志支持全文搜索。',
+          date: '2026-11-24',
+          go: 'changelog',
+        },
+        {
+          type: 'article',
+          product: '账单',
+          title: '开具增值税专用发票',
+          path: '文档 › 账单与用量',
+          snippet:
+            '在账单页面填写发票抬头、税号与开户行信息，每月 5 日前开具上月发票，电子发票会发送到账单联系人的邮箱。',
+          date: '2026-11-03',
+        },
+        {
+          type: 'article',
+          product: '账单',
+          title: '设置用量告警',
+          path: '文档 › 账单与用量',
+          snippet:
+            '当本月用量达到套餐额度的 80% 或 100% 时，向指定成员发送邮件与站内通知，也可以通过 Webhook 推送到你自己的系统。',
+          date: '2026-10-30',
+        },
+        {
+          type: 'api',
+          product: 'API',
+          title: 'Webhook 事件：deployment.succeeded',
+          path: 'API 参考 › Webhook',
+          snippet:
+            '部署成功后发送。请求头 X-Blora-Signature 使用 BLORA_DEPLOY_HOOK_SECRET 计算 HMAC-SHA256 签名，请在服务端校验后再处理。',
+          date: '2026-11-12',
+        },
+        {
+          type: 'community',
+          product: '部署',
+          title: 'monorepo 里只想在某个子目录变更时触发构建',
+          path: '社区 › 部署 · 41 条回复',
+          snippet:
+            '在 blora.toml 里设置 build.watch_paths = ["apps/web/**"]，其他目录的改动就不会触发这个实例的构建了。',
+          date: '2026-11-15',
+        },
+        {
+          type: 'community',
+          product: '安全',
+          title: '团队成员离职后如何批量吊销访问令牌？',
+          path: '社区 › 安全 · 9 条回复',
+          snippet:
+            '在设置 › 成员中移除成员时勾选“同时吊销该成员创建的令牌”，或者调用 DELETE /v2/tokens?owner= 批量吊销。',
+          date: '2026-11-06',
+        },
+      ];
+      const sq = { q: '域名', type: 'all', sort: 'rel', products: new Set() };
+      let recent = [
+        ['证书 签发中', '1 小时前'],
+        ['BLORA_DEPLOY_HOOK_SECRET', '昨天'],
+        ['回滚', '3 天前'],
+        ['webhook 签名', '上周'],
+        ['发票抬头', '上周'],
+      ];
+
+      const tokens = (q) => q.toLowerCase().split(/\s+/).filter(Boolean);
+      const hay = (d) => (d.title + ' ' + d.snippet + ' ' + d.path).toLowerCase();
+      function highlight(s, toks) {
+        if (!toks.length) return esc(s);
+        const re = new RegExp(
+          toks.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'),
+          'gi',
+        );
+        let out = '';
+        let last = 0;
+        s.replace(re, (m, off) => {
+          out += esc(s.slice(last, off)) + '<mark>' + esc(m) + '</mark>';
+          last = off + m.length;
+          return m;
+        });
+        return out + esc(s.slice(last));
+      }
+      const score = (d, toks) =>
+        toks.reduce(
+          (n, t) =>
+            n +
+            (d.title.toLowerCase().includes(t) ? 3 : 0) +
+            (d.snippet.toLowerCase().includes(t) ? 1 : 0),
+          0,
+        );
+      function setQuery(q, remember) {
+        sq.q = q;
+        $('#docSearch').value = q;
+        if (remember && q) pushRecent(q);
+        renderSearch();
+      }
+      function renderSearch() {
+        const toks = tokens(sq.q);
+        const byQuery = DOCS.filter((d) => toks.every((t) => hay(d).includes(t)));
+        const base = byQuery.filter((d) => !sq.products.size || sq.products.has(d.product));
+        for (const el of $$('[data-tc]')) {
+          const t = el.dataset.tc;
+          el.textContent = t === 'all' ? base.length : base.filter((d) => d.type === t).length;
+        }
+        const list = base
+          .filter((d) => sq.type === 'all' || d.type === sq.type)
+          .sort((a, b) =>
+            sq.sort === 'new' || !toks.length
+              ? b.date.localeCompare(a.date)
+              : score(b, toks) - score(a, toks) || b.date.localeCompare(a.date),
+          );
+
+        $('#srSub').textContent = sq.q
+          ? `找到 ${list.length} 条与「${sq.q}」相关的结果`
+          : `共 ${list.length} 篇内容，输入关键词缩小范围`;
+        $('#railSearchCount').textContent = list.length;
+
+        const filtered = sq.products.size > 0 || sq.type !== 'all';
+        const html = list.length
+          ? `<div class="bd-tray">${list
+              .map((d) => {
+                const [label, ico, tone] = TYPES[d.type];
+                return `<a class="bd-item" data-align="start" href="#${d.go || 'search'}" ${d.go ? `data-go="${d.go}"` : `data-toast="打开：${esc(d.title)}"`}>
+                  <span data-part="icon" data-size="lg"${tone ? ` data-tone="${tone}"` : ''}>${icon(ico, 17)}</span>
+                  <div><strong>${highlight(d.title, toks)}</strong><small><code>${esc(d.path)}</code></small><p>${highlight(d.snippet, toks)}</p></div>
+                  <span data-part="end"><span class="bd-pill">${label}</span><time>${d.date.slice(5).replace('-', '/')}</time></span>
+                </a>`;
+              })
+              .join('')}</div>`
+          : `<div class="bd-tray"><div class="bd-empty">
+              <span data-part="icon">${icon('search-x', 17)}</span>
+              <b>没有找到与「${esc(sq.q)}」相关的内容</b>
+              <p>${filtered ? '当前的类型或产品筛选可能太窄了，可以先清除筛选再试一次。' : '检查一下拼写，或者换一个更短的关键词。搜索环境变量时请输入完整名称，例如 BLORA_DEPLOY_HOOK_SECRET。'}</p>
+              ${filtered ? '<button type="button" class="bd-button" data-size="sm" id="resetSearch">清除筛选条件</button>' : `<div data-part="actions">${['域名', '环境变量', '回滚', '发票', 'Webhook'].map((q) => `<button type="button" class="bd-tag" data-shape="square" data-size="lg" data-q="${q}">${q}</button>`).join('')}</div>`}
+            </div></div>`;
+        animateHeight($('#srWrap'), () => ($('#srWrap').innerHTML = html));
+
+        $('#productChips').innerHTML = PRODUCTS.map((p) => {
+          const n = byQuery.filter((d) => d.product === p).length;
+          const on = sq.products.has(p);
+          return `<label class="bd-item"><input type="checkbox" class="bd-checkbox" data-p="${p}"${on ? ' checked' : ''} /><div><p>${p}</p></div><span data-part="end">${n}</span></label>`;
+        }).join('');
+      }
+      function renderRecent() {
+        animateHeight($('#recentList'), () => {
+          $('#recentList').innerHTML = recent
+            .map(
+              ([q, t]) =>
+                `<button type="button" class="bd-item" data-rq="${esc(q)}">${icon('clock')}<div><p>${esc(q)}</p></div><span data-part="end">${t}</span></button>`,
+            )
+            .join('');
+        });
+      }
+      function pushRecent(q) {
+        recent = [[q, '刚刚']].concat(recent.filter(([x]) => x !== q)).slice(0, 6);
+        renderRecent();
+      }
+      function resetFilters() {
+        sq.products.clear();
+        sq.type = 'all';
+        for (const b of $$('#typeSeg [role="radio"]'))
+          b.setAttribute('aria-checked', String(b.dataset.value === 'all'));
+        renderSearch();
+      }
+      $('#docSearch').addEventListener('input', (e) => {
+        sq.q = e.target.value.trim();
+        renderSearch();
+      });
+      $('#docSearch').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && sq.q) pushRecent(sq.q);
+      });
+      $('#productChips').addEventListener('change', (e) => {
+        const p = e.target.dataset.p;
+        if (!p) return;
+        if (e.target.checked) sq.products.add(p);
+        else sq.products.delete(p);
+        renderSearch();
+      });
+      $('#clearProducts').addEventListener('click', () => {
+        sq.products.clear();
+        renderSearch();
+      });
+      $('#recentList').addEventListener('click', (e) => {
+        const b = e.target.closest('[data-rq]');
+        if (b) setQuery(b.dataset.rq, true);
+      });
+      $('#srWrap').addEventListener('click', (e) => {
+        if (e.target.closest('#resetSearch')) resetFilters();
+      });
+      $('#typeSeg').addEventListener('bd-change', (e) => {
+        sq.type = e.detail.value;
+        queueMicrotask(renderSearch);
+      });
+      $('#sortSeg').addEventListener('bd-change', (e) => {
+        sq.sort = e.detail.value;
+        queueMicrotask(renderSearch);
+      });
+      $('#globalSearch').addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter') return;
+        setQuery(e.target.value.trim(), true);
+        go('search');
+      });
+
+      /* ---------------- 深色模式 ---------------- */
+      $('#themeBtn').addEventListener('click', () => {
+        const html = document.documentElement;
+        html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+      });
+
+      /* ---------------- 启动 ---------------- */
+      $('#docSearch').value = sq.q;
+      renderSearch();
+      renderRecent();
+      go((location.hash || '#help').slice(1));
+      addEventListener('hashchange', () => go(location.hash.slice(1)));
+    </script>
+  </body>
+</html>

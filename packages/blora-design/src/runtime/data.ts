@@ -86,6 +86,9 @@ function table(el: HTMLElement): () => void {
     flip(rows(), () => body.append(...sorted));
     emit(tbl, { sort: { column: col, direction: dir } });
   };
+  // 业务重画了表体（翻页、筛选）时，重新同步选中状态和批量操作栏
+  const mo = new MutationObserver(sync);
+  mo.observe(body, { childList: true });
   tbl.addEventListener('change', onChange);
   body.addEventListener('click', onClick);
   tbl.tHead?.addEventListener('click', onSort);
@@ -101,6 +104,7 @@ function table(el: HTMLElement): () => void {
   };
   bulk?.addEventListener('click', onBulk);
   return () => {
+    mo.disconnect();
     tbl.removeEventListener('change', onChange);
     body.removeEventListener('click', onClick);
     tbl.tHead?.removeEventListener('click', onSort);
@@ -148,6 +152,8 @@ function ring(el: HTMLElement): () => void {
     const len = Math.min(1, Math.max(0, pct / 100)) * C;
     const to = `${len.toFixed(1)} ${C.toFixed(1)}`;
     if (arc) {
+      // 0% 时圆头线帽会画出一个小点，换成平头就什么都不画
+      arc.setAttribute('stroke-linecap', len > 0 ? 'round' : 'butt');
       // 首屏不播放；之后数值变化时圆弧连续过渡
       if (shown >= 0 && !reducedMotion()) {
         arc.animate(

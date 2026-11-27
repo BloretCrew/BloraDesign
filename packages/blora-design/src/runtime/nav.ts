@@ -17,21 +17,28 @@ function spy(host: HTMLElement): () => void {
   const update = (): void => {
     cancelAnimationFrame(raf);
     raf = requestAnimationFrame(() => {
+      // 目标还没显示（在隐藏的视图里）时不判断，等它显示出来再算
+      const shown = targets.filter((t) => t.el.getClientRects().length > 0);
+      if (!shown.length) return;
       const line = innerHeight * 0.3;
-      let active = targets[0];
-      for (const t of targets) if (t.el.getBoundingClientRect().top <= line) active = t;
-      // 滚到底时最后一节算当前
-      if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2)
-        active = targets[targets.length - 1];
+      let active = shown[0];
+      for (const t of shown) if (t.el.getBoundingClientRect().top <= line) active = t;
+      // 滚到底时最后一节算当前（页面根本不需要滚动时除外，那时第一节就是当前）
+      if (scrollY > 0 && innerHeight + scrollY >= document.documentElement.scrollHeight - 2)
+        active = shown[shown.length - 1];
       if (!active || active.a.matches(CURRENT)) return;
       for (const t of targets) t.a.removeAttribute('aria-current');
       active.a.setAttribute('aria-current', 'location');
     });
   };
   addEventListener('scroll', update, { passive: true });
+  // 所在视图从隐藏切到显示时重新判断
+  const ro = new ResizeObserver(update);
+  for (const t of targets) ro.observe(t.el);
   update();
   return () => {
     cancelAnimationFrame(raf);
+    ro.disconnect();
     removeEventListener('scroll', update);
   };
 }

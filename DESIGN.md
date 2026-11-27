@@ -598,18 +598,18 @@ Blora Design 的界面由一块块白色「格子」拼成，格子之间只留 
 
 **组件名表**（参考页 `reference/` 早于 3.0，仍是旧类名，对照如下）：
 
-| 分类       | 3.0 组件                                                                                                                                                                                  | 参考页里的写法                                                                                                                                                              |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 构图       | `bd-app`、`bd-rail`、`bd-topbar`、`bd-page`                                                                                                                                               | 页面外壳、`.side-rail`、`.top-header`                                                                                                                                       |
-|            | `bd-mosaic`、`bd-tile`、`bd-head`、`bd-stack`                                                                                                                                             | `.mosaic-*` / `.blora-row`、`.tile`、`.tile-head`、`.col-stack` / `.blora-stack`                                                                                            |
-|            | `bd-tray`、`bd-corner`、`bd-scroll`                                                                                                                                                       | `.tray`、`.plan-corner`、（新增）                                                                                                                                           |
-| 基础       | `bd-button`、`bd-group`、`<svg data-icon>`、`bd-kbd`、`bd-pill`、`bd-tag`、`bd-avatar`                                                                                                    | `.btn`、`.coupled-pair`、`svg.i`、`.kbd`、`.status-pill`、`.tag-chip`、`.av-orb`                                                                                            |
-| 导航       | `bd-segmented`、`bd-tabs`、`bd-pager`、`bd-nav`、`bd-breadcrumb`、`bd-tree`、`bd-steps`                                                                                                   | `.seg-bar` / `.seg` / `#viewPair`、`.tabs-bar`、`.pager`、`.jump-strip` / `.settings-nav` / `.doc-toc` / `.mobile-nav`、`.crumbs`、`.tree-list`、`.c-step`                  |
-| 输入       | `bd-form`、`bd-field`、`bd-input`、`bd-input-group`、`bd-textarea`、`bd-select`、`bd-date`、`bd-stepper`、`bd-slider`、`bd-switch`、`bd-checkbox`、`bd-radio`、`bd-dropzone`              | `.set-grid`、`.f`、`.field-box` / `.field`、`.addon-row`、`.picker-shell`、日历、`.num-stepper`、`.slider-block`、`.sw-pill`、`.orb-box`、`.orb-radio`、`.dropzone`         |
-| 数据展示   | `bd-table`、`bd-bulk`、`bd-list`、`bd-spec`、`bd-ring`、`bd-tile data-variant="metric"`、`bd-progress`、`bd-code`、`bd-prose`、`bd-accordion`、`bd-empty`、`bd-skeleton`、`bd-corner`     | 表格 / `.bulk-bar`、`.seamless-list`、`.plan-specs`、`.kpi-ring`、`.kpi`、`.meter`、`.code-block`、`.prose`、`.acc-card`、`.empty-card`、`.skel-bar`、`.plan-corner`        |
-| 反馈与浮层 | `toast()`、`confirm()`、`bd-alert`、`bd-tile data-variant="alert"`、`data-tip`、`bd-popover`、`bd-popconfirm`、`bd-menu`、`bd-split`、`bd-context`、`bd-modal`、`bd-drawer`、`bd-command` | `.toast-stack`、`.alert-strip`、`.alert-tile`、`.tip-card`、`.float-panel`、确认气泡、`.menu-opt`、`.split-group`、`.ctx-menu`、`.modal-card`、`.drawer-panel`、`.cmd-card` |
+| 分类       | 3.0 组件                                                                                                                                                                                                                              | 参考页里的写法                                                                                                                                                              |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 构图       | `bd-app`、`bd-rail`、`bd-topbar`、`bd-page`、`bd-layout`、`bd-toolbar`、`data-part="view"`                                                                                                                                            | 页面外壳、`.side-rail`、`.top-header`                                                                                                                                       |
+|            | `bd-mosaic`、`bd-tile`、`bd-head`、`bd-stack`                                                                                                                                                                                         | `.mosaic-*` / `.blora-row`、`.tile`、`.tile-head`、`.col-stack` / `.blora-stack`                                                                                            |
+|            | `bd-tray`、`bd-corner`、`bd-scroll`                                                                                                                                                                                                   | `.tray`、`.plan-corner`、（新增）                                                                                                                                           |
+| 基础       | `bd-button`、`bd-group`、`<svg data-icon>`、`bd-kbd`、`bd-pill`、`bd-tag`、`bd-avatar`                                                                                                                                                | `.btn`、`.coupled-pair`、`svg.i`、`.kbd`、`.status-pill`、`.tag-chip`、`.av-orb`                                                                                            |
+| 导航       | `bd-segmented`、`bd-tabs`、`bd-pager`、`bd-nav`、`bd-breadcrumb`、`bd-tree`、`bd-steps`                                                                                                                                               | `.seg-bar` / `.seg` / `#viewPair`、`.tabs-bar`、`.pager`、`.jump-strip` / `.settings-nav` / `.doc-toc` / `.mobile-nav`、`.crumbs`、`.tree-list`、`.c-step`                  |
+| 输入       | `bd-form`、`bd-field`、`bd-input`、`bd-input-group`、`bd-textarea`、`bd-select`、`bd-date`、`bd-stepper`、`bd-slider`、`bd-switch`、`bd-checkbox`、`bd-radio`、`bd-dropzone`                                                          | `.set-grid`、`.f`、`.field-box` / `.field`、`.addon-row`、`.picker-shell`、日历、`.num-stepper`、`.slider-block`、`.sw-pill`、`.orb-box`、`.orb-radio`、`.dropzone`         |
+| 数据展示   | `bd-table`、`bd-bulk`、`bd-list`、`bd-item`、`bd-spec`、`bd-stats`、`bd-chart`、`bd-legend`、`bd-ring`、`bd-tile data-variant="metric"`、`bd-progress`、`bd-code`、`bd-prose`、`bd-accordion`、`bd-empty`、`bd-skeleton`、`bd-corner` | 表格 / `.bulk-bar`、`.seamless-list`、`.plan-specs`、`.kpi-ring`、`.kpi`、`.meter`、`.code-block`、`.prose`、`.acc-card`、`.empty-card`、`.skel-bar`、`.plan-corner`        |
+| 反馈与浮层 | `toast()`、`confirm()`、`bd-savebar`、`bd-alert`、`bd-tile data-variant="alert"`、`data-tip`、`bd-popover`、`bd-popconfirm`、`bd-menu`、`bd-split`、`bd-context`、`bd-modal`、`bd-drawer`、`bd-command`                               | `.toast-stack`、`.alert-strip`、`.alert-tile`、`.tip-card`、`.float-panel`、确认气泡、`.menu-opt`、`.split-group`、`.ctx-menu`、`.modal-card`、`.drawer-panel`、`.cmd-card` |
 
-看板、收件箱、日程、设置页、套餐卡、文档阅读页是**模式**：由上面的组件拼成，仓库 `recipes/` 里有示例，不做成组件。新组件必须先设计、经确认写进本文，再实现。
+看板、收件箱、日程、设置页、套餐卡、文档阅读页是**模式**：由上面的组件拼成，不做成组件。只有组件拼不出来的那一小部分（日程的周视图网格、看板卡片、阅读区、卡面预览、套餐价格排版……）放进可选的 `patterns.css`：在 `blora.css` 之后引入，用 `data-pattern="…"` 挂样式，只用 `--bd-*` 变量，位于 `bd.patterns` 层（组件之上、动效之下）。`recipes/pages/` 里的 5 个整页就是这些模式的示例，整页像素比对保证复用时外观一致。模式的写法可以随版本调整，不像组件那样承诺稳定。新组件必须先设计、经确认写进本文，再实现。
 
 **设计变量的名字**（全部由本文 YAML 生成）：
 
@@ -661,10 +661,16 @@ Blora Design 的界面由一块块白色「格子」拼成，格子之间只留 
 </div>
 ```
 
-- **侧栏**：导航项是 `bd-rail` 里没有 `data-part` 的 `<a>` / `<button>`，当前项写 `aria-current="page"`。链接的 `aria-current` 由页面或路由设置；按钮型导航项由运行时在点击时切换（加 `data-bd-controlled` 则只发 `bd-change` 事件）。收起状态写在收起按钮的 `aria-expanded` 上，运行时会记住用户的选择；≤1280 自动收起、不能手动展开；≤900 同一份标记变成横向导航条，不需要另写移动端导航。
-- **拼图**：`data-cols` 1–6 决定列数，`--bd-columns` 只在桌面列数下生效，用来设定列宽比例。`data-grow` 让这一行撑满剩余高度（只用于弹性内容），`data-align="start"` 让格子顶部对齐、底边参差（看板），`data-index="none"` 让这一行不编号（同类卡片）。上下叠放的格子用 `bd-stack` 包起来放进拼图，最后一个格子吃掉剩余高度。
-- **格子**：`data-grow` 的子元素跟随格子长高；`data-part="foot"` 的子元素固定在底部；`data-density="compact"` 用紧凑内边距（可写在格子或任意祖先上）。
-- **托盘**：`bd-tray` 的每个直接子元素是一个小格；`data-cols="2"` 排成两列（≤640 变回一列）；`data-density="compact"` 用紧凑小格。
+- **侧栏**：底部用量 `data-part="note"` 里是 `<span>` 标签、`<data>` 数值和一条 `bd-progress`。导航项是 `bd-rail` 里没有 `data-part` 的 `<a>` / `<button>`，当前项写 `aria-current="page"`。链接的 `aria-current` 由页面或路由设置；按钮型导航项由运行时在点击时切换（加 `data-bd-controlled` 则只发 `bd-change` 事件）。收起状态写在收起按钮的 `aria-expanded` 上，运行时会记住用户的选择；≤1280 自动收起、不能手动展开；≤900 同一份标记变成横向导航条，不需要另写移动端导航。
+- **拼图**：`data-cols` 1–6 决定列数，`--bd-columns` 只在桌面列数下生效，用来设定列宽比例。`data-grow` 让这一行撑满剩余高度（只用于弹性内容），`data-align="start"` 让格子顶部对齐、底边参差（看板），`data-index="none"` 让这一行不编号（同类卡片），`data-grow="fit"` 让这一行正好填满窗口剩余高度、不被内容撑高（主从视图：收件箱，两栏各自滚动）。上下叠放的格子用 `bd-stack` 包起来放进拼图，最后一个格子吃掉剩余高度。
+- **格子**：`data-grow` 的子元素跟随格子长高；`data-density="compact"` 用紧凑内边距（可写在格子或任意祖先上）。收束行 `<footer data-part="foot">` 固定在底部，两端对齐：左边一行说明 `<p>`（可带 13px 图标）或一组按钮 `data-part="actions"`，右边等宽标签 `data-part="tag"`、分页或文字链接 `<a data-part="link">`（雾粉墨色，悬停时箭头往外挪）。`data-variant="tint"` 是一条浅底说明条，`data-align="start"` 左对齐排开（一组复选框）；收束元素本身是一个组件（上传区、步骤条）时直接在组件上写 `data-part="foot"`。格子里的说明段落直接写 `<p>`（13 / ink-description），导语写 `<p data-part="lead">`，一组按钮写 `data-part="actions"`；整个格子可点时用 `<a class="bd-tile">`（悬停浅底）。
+- **步骤卡**：`<article class="bd-tile" data-variant="step">`，`<span data-part="index">2</span>`（24px 圆，`data-state="current"` 雾粉、`"done"` 暖杏并放对勾图标）+ `<header>`（标题 + 状态标签）+ 一段说明 + 收束行。同排步骤卡写 `bd-mosaic data-index="none"`。
+- **视图**：单页应用的场景、页签面板写 `<div data-part="view" hidden>`。它本身不占盒子，里面的行照常参与页面的纵向排列，用 `hidden` 切换。
+- **带侧栏的布局 `bd-layout`**：设置页、文章页这类「左边分区导航 + 中间一列格子 + 右边概览」的页面。里面是 `bd-nav data-orientation="vertical"`、`<div data-part="main">`、`<aside data-part="aside">`，导航和右栏随页面滚动吸顶；列宽默认 196 / 弹性 / 300，可用 `--bd-columns` 改。编号从这里重新开始：主栏每个格子是一节（01、02…），右栏延续第一行（1B、1C…）；主栏没有带标题的格子（长文正文）时，右栏从 01 开始。圆角像一行拼图：整体四个外角和最左、最右两侧是 20，其余是 6。≤1280 去掉右栏，≤900 导航放到上面。
+- **工具条 `bd-toolbar`**：搜索框（240 宽）、筛选分段、下拉（150 宽）排成一行，`<span data-part="spacer">` 把后面的东西推到右边；≤640 搜索框独占一行。
+- **页头格**：标题里可以放返回按钮和状态标签（横排、间距 10）；详情页的页签直接放在页头格最后一行（`bd-tabs`，不画托盘底，选中底是雾粉浅底）。
+- **托盘**：`bd-tray` 的每个直接子元素是一个小格；`data-cols="2|3|4"` 排成多列（≤640 变回一列），`data-cols="auto"` 在格子宽于 660 时自动两列；`data-flow="wrap"` 是只装短小块的横排托盘（热门搜索词，28 高、自动换行）；`data-density="compact"` 用紧凑小格。可选中的小格（`role="option" aria-selected`，或包着勾选框的 `<label>`）选中时整格雾粉浅底；托盘小格里也可以放 `bd-empty`。小格里的一行内容用 `bd-item`（见托盘一节）。
+- **内容组**：格子里「一个分组名 + 一个托盘」写成 `<section data-part="group"><header>分组名 <button…></header><ul class="bd-tray">…</ul></section>`，组与组之间 14（格内 10 + 4）。
 - **滚动区域**：固定高度、需要滚动的区域写 `bd-scroll`，运行时画滚动滑块；整个页面的滚动滑块自动出现。
 
 ### 不出现原生控件
@@ -737,6 +743,20 @@ Blora Design 的界面由一块块白色「格子」拼成，格子之间只留 
 - 小格里放文字、开关、按钮等混合内容时，圆角仍是 7：同心规则看的是「托盘 → 小格」这一层，与小格里装什么无关。
 - 长文正文里的列表、有序列表不进托盘。
 
+**条目 `bd-item`**：托盘小格里的一行（资源、动态、成员、开关、排行、时间线都用它），从左到右：
+
+| 位置 | 写法                                                                                     | 说明                                                                               |
+| ---- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| 左   | `<span data-part="icon" data-tone>`                                                      | 32px 图标底；也可以放 1–2 个等宽字母（模板 `Go`、`Py`）                            |
+| 左   | `bd-avatar` / `<span data-part="dot" data-tone>` / `<span data-part="index">01</span>`   | 头像（托盘里 7 圆角）、时间线圆点、排行序号                                        |
+| 中   | `<div><strong>名称</strong><small>说明</small></div>`                                    | 第一行也可以是 `<p>`（普通字重，用 `<b>` 强调，用于动态）或 `<span>`（设置项标题） |
+| 右   | `<span data-part="end">`、`<time>`、`bd-pill`、`bd-progress`（96 宽）、按钮、`bd-switch` | 等宽数值、时间、状态、读数或操作                                                   |
+| 右   | `<svg data-icon data-part="go">`                                                         | 进入箭头                                                                           |
+
+整行可点时用 `<a class="bd-item">` / `<button class="bd-item">`（托盘写成 `<div>`）：悬停时名称变成雾粉墨色、箭头右移 2px，不换底色。多行条目（时间线、搜索结果）写 `data-align="start"`，允许换行的那一行写 `data-wrap`；文字里的配置项、提交号写 `<code>`（行内等宽小块）；大图标底写 `data-size="lg"`（36px）；行首也可以是一个不带底色的小图标。
+
+**实心色点** `<span data-part="swatch" data-tone>`：8px，用在图例、日程条目、熟练度等任何地方（时间线用带底色的 `data-part="dot"`）。
+
 ### 星轨环读数（Ring metric）
 
 指标是比例（预算使用率、配额、进度、CPU / 内存占用）时，在指标格右上角放 44px 环形读数 `bd-ring`：环宽 4，环心是等宽整数。写法是 `<div class="bd-ring" aria-valuenow="72" aria-valuemax="100" aria-label="预算使用率"></div>`，圆环和环心数字由运行时画（`role="meter"` 自动补上）；环心要显示别的文字（如 `1/3`）时写 `data-text`；32px 的行内变体写 `data-size="sm"`。
@@ -752,11 +772,18 @@ Blora Design 的界面由一块块白色「格子」拼成，格子之间只留 
 - **数据表 `bd-table`**：真正的 `<table>`（保留表格语义），无横线。悬停整行凹槽底；第一列放 `.bd-checkbox` 即为勾选列，点整行也能勾选，选中的行自动标 `aria-selected="true"`、雾粉浅底，相邻的选中行连成一块；表头的复选框是全选（部分选中时显示半选）。数值列写 `data-align="end"`；可排序的表头写 `aria-sort="none"` 并在里面放 `<button>`，点击后按这一列排序（数字按数值），行连续移动到新位置。
 - **批量操作栏 `bd-bulk`**：写 `data-for="表格 id"`，有选中行时展开、没有时收起（高度过渡），`<span data-part="count">` 显示选中数，`data-part="clear"` 的按钮清空选择。
 - **连贯列表 `bd-list`**：`role="listbox"` + `role="option" aria-selected`，相邻的选中项连成一块；右侧的等宽元信息写 `<span data-part="meta">`。
-- 界面里的对比表、DNS 记录这类「托盘表格」在页面重写阶段加入（表头在托盘外，每行一个白色小格）。
+- **单元格**：主列写 `<strong>名称</strong><small>ID</small>`（两行，等宽 ID；有这种行时上下内边距收紧，行高 50）；其余列是次级墨色 13px；规格写 `<code>`，时间写 `<time>`；用量写 `<span data-part="meter"><span class="bd-progress">…</span>12%</span>`；行尾进入详情的箭头写 `<a data-part="go">`。列宽用 `<colgroup>` 的 `<col style="width: …">`。
+- **托盘表格**：对比表、DNS 记录写 `<table class="bd-table" data-variant="tray" style="--bd-table-columns: 1.25fr repeat(4, 1fr)">`：表头是托盘外的一行标签，每个 `<tbody>` 是一个托盘、每一行是一个白色小格；分组名写成 `<tbody data-part="group"><tr><th colspan="5">计算与部署</th></tr></tbody>`，是托盘上方的小标签；`data-align="center"` 让第一列以外的列居中（对比表）。
 
 ### 指标格（Metric）
 
-`<article class="bd-tile" data-variant="metric">`：`<p data-part="label">`（12 / 600 / ink-tertiary）、`<p data-part="value">`（metric 角色 28 / 620，单位写 `<small>`）、`<p data-part="foot">`（说明，可放 `<span data-part="delta">+2</span>`，坏的变化加 `data-tone="rose"`）。右上角放一个 `bd-ring`（比例）或 `<span data-part="icon">`（其他，可加 `data-tone`）。进度条 `bd-progress`：`aria-valuenow`（运行时同步宽度），`data-tone="rose"` 表示超限，`data-size="lg"` 是 7px 高。
+`<article class="bd-tile" data-variant="metric">`：`<p data-part="label">`（12 / 600 / ink-tertiary）、`<p data-part="value">`（metric 角色 28 / 620，单位写 `<small>`）、`<p data-part="foot">`（说明，可放 `<span data-part="delta">+2</span>`，坏的变化加 `data-tone="rose"`）。右上角放一个 `bd-ring`（比例）或 `<span data-part="icon">`（其他，可加 `data-tone`）。进度条 `bd-progress`：`aria-valuenow`（运行时同步宽度），`data-tone="sand"` 表示接近上限、`"rose"` 表示超限，`data-size="lg"` 是 7px 高、`"xs"` 是 4 × 26 的迷你条（清单完成度）。指标格右上角的图标底可用 blush / sand / rose 三种色调；脚注里带一颗按钮时说明在左、按钮在右。脚注里放进度条时上下排列（进度条在上、说明在下）。放进别的格子里的指标（侧栏概览）写 `data-inline`：不再自成一个格子，左边标签和数值、右边环形读数。
+
+**规格行 `bd-spec`**（`<dl>` + `<div><dt><dd>`）：默认是托盘语法，小格 9 / 12 内边距，标签 12 / 600 / ink-tertiary，值等宽 12 / 560；文字值写 `<dd data-font="sans">`；值后面可以放复制按钮 `data-part="copy"`；`data-cols="2"` 两列。套餐卡里的规格用 `data-density="compact"`（7 / 10，值 11.5）。
+
+**读数组 `bd-stats`**：格子底部并排的几格对比读数（实例总数 / 平均延迟 / 最慢区域），`<dl>` + `<div><dt>标签</dt><dd>等宽值</dd></div>`，托盘底色小格、等宽；单位写 `<dd>12<small>台</small></dd>`，坏的数值写 `<dd data-tone="rose">`。
+
+**折线图 `bd-chart`**：`<figure class="bd-chart" data-unit="k" data-labels="周一,周二,…">`，每条线一个 `<data data-tone data-label value="1,2,3">`，第一条是主线（实线 3.2），其余是对比线（虚线）。图由运行时画（平滑曲线经过每个数据点；纵轴最大 / 一半 / 0；悬停显示参考线、圆点和读数），数据或标签变了会重画并从左向右展开。写 `data-grow` 时随格子长高（至少 200），否则 200 高。图例 `<ul class="bd-legend"><li data-tone="blush">本期</li>…</ul>` 放在格子标题右侧槽位。
 
 ### 规格行（Spec rows）
 
@@ -764,8 +791,8 @@ Blora Design 的界面由一块块白色「格子」拼成，格子之间只留 
 
 ### 代码块、手风琴、骨架屏
 
-- **代码块 `bd-code`**：`<figure class="bd-code"><figcaption>语言 + 复制按钮（data-part="copy"）</figcaption><pre>…</pre></figure>`；注释写 `<span data-tone="comment">`，命令提示符写 `<span data-part="prompt">$ </span>`（不会被选中，也不会被复制）。
-- **手风琴 `bd-accordion`**：里面是一组 `<details>`，`<summary>` 末尾放箭头图标；展开时雾粉浅底、箭头转 180°，展开和收起都有高度过渡。
+- **代码块 `bd-code`**：`<figure class="bd-code"><figcaption>语言 + 复制按钮（data-part="copy"）</figcaption><pre>…</pre></figure>`；注释写 `<span data-tone="comment">`，命令提示符写 `<span data-part="prompt">$ </span>`（不会被选中，也不会被复制）。`data-variant="terminal"`（命令行示例）和 `"log"`（日志查看器，行距 1.85）没有标题栏，文字是次级墨色；`<span data-tone="sand|rose">` 标出成功、警告。
+- **手风琴 `bd-accordion`**：里面是一组 `<details>`，`<summary>` 末尾放箭头图标；展开时雾粉浅底、箭头转 180°，展开和收起都有高度过渡。三条以上的同类问题（常见问题）用 `data-variant="tray"`：托盘底 + 白色小格。
 - **骨架屏 `bd-skeleton`**：12 高的胶囊条，用 `style="width: 72%"` 控制长度，柔和地明暗呼吸（减少动效时静止）。
 - **角落几何线 `bd-corner`**：在格子里放一个空的 `<span class="bd-corner"></span>`，运行时画出三道细弧和一颗小点，位于格子右上角、文字之下。
 
@@ -774,7 +801,7 @@ Blora Design 的界面由一块块白色「格子」拼成，格子之间只留 
 - 每个字段是一个 `bd-field`：`<label data-part="label">` 在上（label 角色，12 / 600 / ink-tertiary，与控件间距 6）、控件在中、`<p data-part="hint">` 或 `<p data-part="error">` 在下。
 - 字段网格 `bd-form`：按格子内容宽度自动换列，≥ 820px 三列，≥ 480px 两列，更窄一列。长字段（公司名、地址）用 `data-span="2"` 或 `data-span="full"`。
 - 只读字段：`<div class="bd-input" data-readonly><code>…</code><button data-part="copy"></button></div>`，凹槽底 + ink-secondary 文字；不要做成禁用的灰色。
-- 输入框单个宽度上限约 360px（搜索框除外）。
+- 输入框单个宽度上限约 360px（搜索框除外）。帮助中心这类主搜索用 `bd-input data-size="lg"`（46 高，右侧可嵌一颗按钮）。字段多、格子又够宽时可以用 `bd-form data-cols="3"` 固定三列。
 
 **输入框 `bd-input`**：38 高、12 圆角、凹槽底；聚焦时变白并有雾粉光晕。可以直接写在 `<input>` 上，也可以是包着图标、`<input>` 和小按钮的外壳。小按钮：`data-part="clear"`（有内容才出现，点击清空）、`"reveal"`（显示 / 隐藏密码，放「睁眼」「闭眼」两个图标）、`"copy"`（复制，发出 `bd-copy`）。前后缀拼接用 `bd-input-group`，两端是 `<span data-part="addon">`，中间的输入框圆角收成 4。多行文本用 `<textarea class="bd-textarea">`。
 
@@ -801,14 +828,15 @@ Blora Design 的界面由一块块白色「格子」拼成，格子之间只留 
 - 段落之间 10，块（列表、代码、提示、表格）之前后 14，章节之间 28。28 是唯一大于 14 的间距，只用在长文里，不算违反空白预算。
 - 屏幕更宽时，多出的宽度给右侧栏（文章信息、相关链接），不在正文两侧留白。
 - 提示 / 注意框：凹槽底 + 开头一个状态标签（提示、注意），不用整块彩色底。
-- 代码块 `bd-code`：12 圆角、凹槽底、右上角复制按钮。正文里的表格按托盘语法。
+- 代码块 `bd-code`：12 圆角、凹槽底、右上角复制按钮。正文里的表格按托盘语法（托盘表格）。
+- 搜索结果里命中的词用 `<mark>`：雾粉 fill 底、4 圆角。
 
 ### 按钮
 
 `bd-button`：胶囊形，高 35；小号 29（`data-size="sm"`），大号 40（`data-size="lg"`）。变体 `data-variant`：`primary` 雾粉实心；`blush` 次主（雾粉 fill）；`sand` 暖杏辅助；`surface` 中性（凹槽底，默认，可不写）；`elevated` 浮起（白底 + 浅投影，用在凹槽里）；`ghost` 轻量（透明）；`rose` 危险。只有图标时加 `data-shape="icon"` 并写 `aria-label`。一个格子里最多一个实心主按钮。
 
 - 忙碌：`aria-busy="true"`，图标换成转圈的 `<svg data-icon data-spin>`；禁用：`disabled`。
-- 计数：按钮里放 `<span data-part="count">3</span>`；快捷键：放一个 `bd-kbd`。
+- 计数：按钮里放 `<span data-part="count">3</span>`；快捷键：放一个 `bd-kbd`；未读提醒：按钮上写 `data-dot`，右上角一个雾粉小点。
 - 耦合工具组 `bd-group`：一块凹槽里放几个小号按钮（如「重连 / 刷新」），里面的按钮自动变成 29 高。
 - 「一组里选一个」不是按钮组，用分段控件。
 
@@ -819,6 +847,7 @@ Blora Design 的界面由一块块白色「格子」拼成，格子之间只留 
 - 默认：选中底白色浮起，项高 30，未选中文字 ink-tertiary（时间范围、筛选）。
 - `data-shape="pill"`：胶囊形、项高 29，只有图标的项是 31 宽的正圆（视图切换）。
 - `data-tone="sand"`：暖杏选中底，占满一行、各档等宽（规格档位）。
+- `data-block`：占满一行、各段等宽；`data-size="sm"`：项高 26（格子标题右侧）；段里可以放计数 `data-part="count"` 和小标签 `data-part="delta"`（年付「省 17%」）。
 - 段数不超过 5；放在格子标题右侧槽位时不超过 3。
 
 ### 页签、分页、导航、目录树、步骤条
@@ -833,17 +862,19 @@ Blora Design 的界面由一块块白色「格子」拼成，格子之间只留 
 ### 小块
 
 - `bd-kbd`：快捷键，19 高，白底浮起，可放图标和字母。
-- `bd-tag`：雾粉浅底标签，可在里面放一个移除按钮（写 `aria-label`）。
-- `bd-avatar`：34px 圆形头像，`data-tone` 选底色；相邻的头像自动叠放 7px，并有一圈格子色描边分隔（这是唯一允许的「描边」，用投影画）。
+- `bd-tag`：雾粉浅底标签，可在里面放一个移除按钮（写 `aria-label`）。`data-shape="square"` 是方角标签块（21 高、6 圆角，默认中性，`data-tone="blush|sand"`，`data-size="lg"` 28 高），用在看板卡片、技能、分类上。
+- `bd-avatar`：34px 圆形头像，`data-tone` 选底色；`data-size="sm"` 是 24px（卡片、规格行里的参与人）。相邻的头像自动叠放（7px，小号 6px），叠放时有一圈格子色描边分隔（这是唯一允许的「描边」，用投影画；单独的头像不画）；末尾的 `<span data-part="more">+3</span>` 表示还有几位。托盘小格里的头像是 7 圆角。
 
 ### 状态标签（Pill）
 
 `bd-pill`：胶囊形，11.5 / 560，soft 底 + ink 字，颜色用 `data-tone="blush|sand|rose"`，不写是中性（凹槽底 + ink-tertiary）。列表里表示运行状态时加 `data-dot`，前面多一个 6px 圆点。状态用词固定，按颜色分组：
 
-- 雾粉：进行中、评审中、推荐、最新；
-- 暖杏：已完成、已支付、当前、接近上限、测试中；
+- 雾粉：进行中、评审中、推荐、最新、大版本；
+- 暖杏：已完成、已支付、当前、接近上限、测试中、全部正常；
 - 蔷薇：逾期、失败、超限、已废弃；
-- 中性（凹槽底）：待开始、已暂停、已退款、草稿。
+- 中性（凹槽底）：待开始、计划中、已暂停、已退款、草稿。
+
+分类（不是状态）用方角标签块 `bd-tag data-shape="square"`，比如更新类型：新功能（雾粉）、改进（暖杏）、修复（中性）。修复不用蔷薇色，免得读成「失败」。
 
 新增状态词要求 2–4 个字，描述状态而不是形容；先找现有词，找不到再加进本表。
 
@@ -867,6 +898,7 @@ Blora Design 的界面由一块块白色「格子」拼成，格子之间只留 
 - **命令面板 `bd-command`**：`<dialog class="bd-command" data-shortcut="mod+k">`，里面是一个 `bd-input` 和 `role="listbox"` 的命令；输入过滤、上下键选择、回车执行（发出 `bd-select`）。`openCommand()` 可以从代码打开。
 - **提示条 `toast(文字, { tone })`**：右下角的浅色胶囊，前面一个状态圆点，自动消失，屏幕阅读器会朗读。
 - **确认 `confirm({ title, description, confirmText, tone })`**：Blora 样式的确认弹窗，返回 `Promise<boolean>`，代替浏览器的 `confirm()`。
+- **保存条 `bd-savebar`**：设置有改动时从主区底部正中浮出的胶囊，`<span data-part="text">有 2 项未保存的更改</span>` + `data-part="actions"`（放弃 / 保存）。放在 `bd-page` 里，用 `hidden` 切换。
 
 ### 空状态
 

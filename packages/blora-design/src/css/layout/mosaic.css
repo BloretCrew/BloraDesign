@@ -3,6 +3,12 @@
  * 各列数在各断点下的列模板和圆角分配由 generated/mosaic.css 生成（DESIGN.md · Layout · 网格与细缝）。
  * 格子 bd-tile 按自己在拼图里的位置读 --bd-corner-*：两侧都没有相邻格子的角是外角 20，否则是缝角 6。
  */
+/* 列宽比例只作用于写它的那一行，不往里面嵌套的拼图继承 */
+@property --bd-columns {
+  syntax: '*';
+  inherits: false;
+}
+
 @layer bd.layout {
   .bd-mosaic {
     display: grid;
@@ -13,6 +19,17 @@
   /* 只有图表、时间网格、滚动列表这类「弹性内容」所在的行可以铺满高度（DESIGN.md · Layout · 铺满高度） */
   .bd-mosaic[data-grow] {
     flex: 1 1 auto;
+  }
+
+  /* 主从视图（收件箱）：这一行正好填满窗口剩余高度，不被内容撑高，两栏各自滚动 */
+  .bd-mosaic[data-grow='fit'] {
+    flex: 1 1 0;
+    grid-template-rows: minmax(0, 1fr);
+    min-height: 580px;
+  }
+
+  .bd-mosaic[data-grow='fit'] > * {
+    min-height: 0;
   }
 
   /* 数据决定长度的内容（看板）：顶部对齐、底边参差 */
@@ -72,9 +89,180 @@
     min-height: 0;
   }
 
-  /* 收束元素：固定在格子底部（DESIGN.md · Layout · 内容等量原则 4） */
+  /* 收束元素：固定在格子底部（DESIGN.md · Layout · 内容等量原则 4）。
+     左边是说明或操作，右边是等宽标签 / 分页；<p> 是一行说明（可带图标），data-part="actions" 是一组按钮 */
   .bd-tile > [data-part='foot'] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
     margin-top: auto;
+    padding-top: 4px;
+
+    /* 文字样式只给脚注里的文字，不传给里面的控件 */
+    > :is(p, span:not([class], [data-part])) {
+      font-size: 12.5px;
+      line-height: 1.5;
+      font-variant-numeric: tabular-nums;
+      color: var(--bd-ink-tertiary);
+    }
+
+    > p {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+      color: var(--bd-ink-description);
+    }
+
+    > [data-part='actions'] {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+  }
+
+  /* 收束行变体：data-variant="tint" 是一条浅底说明条；data-align="start" 左对齐排开（一组复选框）；
+     收束元素本身是一个组件（上传区、步骤条）时只负责贴底 */
+  .bd-tile > [data-part='foot'][data-variant='tint'] {
+    padding: 9px 12px;
+    border-radius: var(--bd-radius-control);
+    background: var(--bd-tile-tint);
+
+    > p {
+      font-size: 12.5px;
+      color: var(--bd-ink-secondary);
+    }
+
+    &:has(> :is(.bd-button, [data-part='actions'])) {
+      padding: 9px 9px 9px 14px;
+    }
+  }
+
+  .bd-tile > [data-part='foot'][data-align='start'] {
+    justify-content: flex-start;
+    gap: 6px 14px;
+  }
+
+  .bd-tile > [data-part='foot'][class] {
+    padding-top: 0;
+  }
+
+  /* 收束行里的文字链接：雾粉墨色，悬停时箭头往外挪 */
+  [data-part='foot'] > a[data-part='link'] {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 18px;
+    color: var(--bd-blush-ink);
+    transition: gap 0.18s var(--bd-ease-out);
+  }
+
+  [data-part='foot'] > a[data-part='link']:hover {
+    gap: 7px;
+  }
+
+  .bd-tile > [data-part='foot']:has(> a[data-part='link']) {
+    padding-top: 0;
+  }
+
+  /* 格子正文里的说明段落 */
+  .bd-tile > p:not([data-part]) {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--bd-ink-description);
+  }
+
+  /* 导语：稍大、行宽有上限 */
+  .bd-tile > p[data-part='lead'] {
+    max-width: var(--bd-space-prose-measure);
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--bd-ink-description);
+  }
+
+  /* 格子里直接放的一组按钮 */
+  .bd-tile > [data-part='actions'] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  /* 整个格子可点（分类卡、上一篇 / 下一篇）：悬停时浅底 */
+  a.bd-tile {
+    transition: background-color 0.15s ease;
+  }
+
+  a.bd-tile:hover {
+    background: var(--bd-tile-tint);
+  }
+
+  /* ---- 步骤卡：自带序号（1 / 2 / 3），不叠加格子编号 ---- */
+  .bd-tile[data-variant='step'] {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr);
+    gap: 6px 10px;
+
+    > [data-part='index'] {
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--bd-well);
+      font-family: var(--bd-font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--bd-ink-tertiary);
+    }
+
+    &[data-state='current'] > [data-part='index'] {
+      background: var(--bd-blush-soft);
+      color: var(--bd-blush-ink);
+    }
+
+    &[data-state='done'] > [data-part='index'] {
+      background: var(--bd-sand-soft);
+      color: var(--bd-sand-ink);
+    }
+
+    > header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    > header > :is(h2, h3, h4) {
+      font-size: 14.5px;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    > :not([data-part='index'], header) {
+      grid-column: 1 / -1;
+    }
+
+    > p {
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--bd-ink-description);
+    }
+
+    > [data-part='foot'] {
+      padding-top: 8px;
+    }
+
+    > [data-part='foot'] > span:not([class], [data-part]) {
+      font-size: 12px;
+      color: var(--bd-ink-quaternary);
+    }
   }
 
   .bd-tile[data-density='compact'],
@@ -115,6 +303,9 @@
     }
 
     > :is(h1, h2) {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       font-size: var(--bd-text-page-title-size);
       font-weight: var(--bd-text-page-title-weight);
       line-height: var(--bd-text-page-title-leading);
@@ -131,7 +322,12 @@
 
   @media (max-width: 640px) {
     .bd-tile {
+      gap: 12px;
       padding: 16px;
+    }
+
+    .bd-tile[data-variant='step'] {
+      gap: 12px;
     }
 
     .bd-tile[data-variant='page'] {
@@ -141,7 +337,7 @@
       > [data-part='end'] {
         grid-column: 1;
         grid-row: auto;
-        margin-top: 12px;
+        margin-top: 16px;
       }
 
       > :is(h1, h2) {

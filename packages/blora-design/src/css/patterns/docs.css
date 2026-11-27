@@ -1,0 +1,494 @@
+/* docs 页面模式：由对应 demo 页整理 */
+@layer bd.patterns {
+  /* ---- 帮助中心搜索格 help-search ----
+     <article class="bd-tile" data-pattern="help-search">：标题行、大号搜索框（bd-input data-size="lg"）、
+     热门搜索内容组（data-part="group" + bd-tray data-flow="wrap"）、读数组 bd-stats */
+  [data-pattern='help-search'] {
+    > .bd-input {
+      margin-top: 4px;
+    }
+
+    /* 分组名右侧没有操作，不用给按钮留 22 的行高 */
+    > [data-part='group'] > header {
+      min-height: 0;
+    }
+
+    [data-flow='wrap'] code {
+      font-size: 11.5px;
+    }
+
+    .bd-stats dt {
+      font-size: 12px;
+    }
+  }
+
+  /* ---- 可用性条 uptime ----
+     <ul class="bd-tray" data-pattern="uptime">，每个 <li> 是一项服务：
+     <p><span>名称</span><data>99.99%</data></p> + <div> 里 30 个 <i>（每格一天，data-tone="blush" 降级、"rose" 故障） */
+  [data-pattern='uptime'] > li {
+    > p {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--bd-ink-secondary);
+    }
+
+    > p > data {
+      color: var(--bd-ink);
+    }
+
+    > div {
+      display: grid;
+      grid-template-columns: repeat(30, minmax(0, 1fr));
+      gap: 2px;
+      height: 14px;
+      margin-top: 6px;
+    }
+
+    > div > i {
+      border-radius: 2px;
+      background: var(--bd-sand-fill);
+    }
+
+    > div > [data-tone='blush'] {
+      background: var(--bd-blush-fill);
+    }
+
+    > div > [data-tone='rose'] {
+      background: color-mix(in srgb, var(--bd-rose-solid) 55%, transparent);
+    }
+  }
+
+  /* ---- 分类卡 category-card ----
+     <section class="bd-mosaic" data-pattern="category-card">，每张卡是 <a class="bd-tile">：
+     bd-item（36 图标底 + 标题 + data-part="end" 篇数）、一行说明 <p>、收束行（更新时间 + data-part="go" 浏览） */
+  [data-pattern='category-card'] > .bd-tile {
+    > .bd-item > div > strong {
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    > .bd-item > [data-part='end'] {
+      font-size: 11.5px;
+      font-weight: 400;
+      color: var(--bd-ink-quaternary);
+    }
+
+    > p {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    > [data-part='foot'] {
+      padding-top: 0;
+    }
+
+    > [data-part='foot'] > span {
+      font-size: 12px;
+    }
+
+    [data-part='go'] {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-weight: 540;
+      color: var(--bd-ink-secondary);
+    }
+
+    [data-part='go'] > svg {
+      transition: transform 0.18s var(--bd-ease-out);
+    }
+
+    &:hover [data-part='go'] {
+      color: var(--bd-blush-ink);
+    }
+
+    &:hover [data-part='go'] > svg {
+      transform: translateX(2px);
+    }
+  }
+
+  /* ---- 热门文章排行 popular ----
+     <div class="bd-tray" data-cols="2" data-pattern="popular">，每条是 <a class="bd-item">：
+     data-part="index" 序号（前三名 data-tone="blush"）+ 标题 / 分类 + 阅读时长。按列排：01–03 左列、04–06 右列 */
+  [data-pattern='popular'] {
+    grid-template-rows: repeat(3, auto);
+    grid-auto-flow: column;
+
+    > .bd-item > [data-part='index'][data-tone='blush'] {
+      color: var(--bd-blush-ink);
+    }
+
+    > .bd-item > div > strong {
+      font-weight: 540;
+      line-height: 1.4;
+    }
+  }
+
+  /* ---- 联系支持 support-options ----
+     <div class="bd-tray" data-pattern="support-options">，每条是 <button class="bd-item">：
+     36 图标底（data-size="lg"）+ 标题 / 说明 + data-part="go" 箭头；标题行高 1.4 */
+  [data-pattern='support-options'] > .bd-item > div > strong {
+    line-height: 1.4;
+  }
+
+  /* ---- 目录里的阅读进度 toc-progress ----
+     <div class="bd-tile" data-variant="metric" data-inline data-pattern="toc-progress">：
+     data-part="label" 读数名、data-part="foot" 剩余时间，右上角一个 bd-ring */
+  [data-pattern='toc-progress'] {
+    position: relative;
+    align-content: center;
+    row-gap: 0;
+    min-height: 54px;
+    margin-top: 8px;
+    padding: 8px 4px 2px 12px;
+
+    > .bd-ring {
+      position: absolute;
+      top: 8px;
+      right: 4px;
+    }
+
+    > [data-part='foot'] {
+      margin-top: 2px;
+      font-size: 12px;
+    }
+  }
+
+  /* ---- DNS 记录表 dns-records ----
+     长文里的托盘表格 <table class="bd-table" data-variant="tray" data-pattern="dns-records">：
+     记录值是 <td><code>…</code></td>，按表格里的等宽值显示，不套长文的行内代码底 */
+  [data-pattern='dns-records'] td > code {
+    padding: 0;
+    background: none;
+  }
+
+  /* ---- 常见问题 faq ----
+     长文里的托盘手风琴 <div class="bd-accordion" data-variant="tray" data-pattern="faq">，
+     每条 <details><summary><span>问题</span><svg …></summary><div><p>回答</p></div></details>；
+     问题按 1.5 行高排（不继承长文的 1.75），回答段落不带长文的段后距 */
+  [data-pattern='faq'] {
+    summary {
+      padding-block: 10px;
+      line-height: 1.5;
+    }
+
+    details > div > p {
+      margin: 0;
+    }
+  }
+
+  /* ---- 文末反馈条 article-feedback ----
+     <section data-pattern="article-feedback">：bd-item（问题 + 说明 + 两颗 aria-pressed 的浮起按钮），
+     选「没帮助」后展开 <form>（bd-textarea + 提交按钮） */
+  [data-pattern='article-feedback'] {
+    max-width: var(--bd-space-prose-measure);
+    margin-top: 18px;
+    overflow: hidden;
+    border-radius: var(--bd-radius-control);
+    background: var(--bd-tile-tint);
+
+    > .bd-item {
+      gap: 6px;
+      padding: 12px 14px;
+    }
+
+    > .bd-item > div > strong {
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    > .bd-item > div > small {
+      margin-top: 2px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    [aria-pressed='true'] {
+      --bd-button-bg: var(--bd-blush-soft);
+      --bd-button-ink: var(--bd-blush-ink);
+      --bd-button-shadow: none;
+    }
+
+    > form {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      padding: 4px 14px 14px;
+    }
+
+    > form > .bd-textarea {
+      min-height: 76px;
+      background: var(--bd-control);
+    }
+  }
+
+  /* ---- 长文末尾的元信息行 article-meta ----
+     <footer data-part="foot" data-pattern="article-meta"><span>最后更新 … · 编辑 · 第 N 版</span>：等宽小字 */
+  [data-pattern='article-meta'] {
+    margin-top: 0;
+    padding-top: 0;
+
+    > span {
+      font-family: var(--bd-font-mono);
+      font-size: 11.5px;
+      color: var(--bd-ink-quaternary);
+    }
+  }
+
+  /* ---- 上一篇 / 下一篇 prev-next ----
+     <nav class="bd-mosaic" data-pattern="prev-next">，两张 <a class="bd-tile">：<span> 小标签（带箭头）+ <strong> 标题；
+     rel="next" 的一张右对齐 */
+  [data-pattern='prev-next'] > .bd-tile {
+    gap: 2px;
+
+    &[rel='next'] {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    > span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--bd-ink-tertiary);
+    }
+
+    > strong {
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+
+  /* ---- 文章信息 article-info ----
+     <dl class="bd-spec" data-pattern="article-info">：值可以是一组小头像（bd-avatar data-size="sm"，叠放），
+     或一组方角标签（bd-tag data-shape="square"，放不下时换行） */
+  [data-pattern='article-info'] {
+    dd:has(> .bd-avatar) {
+      gap: 0;
+      overflow: visible;
+    }
+
+    dd:has(> .bd-tag) {
+      flex-wrap: wrap;
+      gap: 4px;
+      white-space: normal;
+    }
+
+    /* 参考页的规格值标签是 22 高、7 圆角（与小格同心），比 bd-tag 方角标签高 1 */
+    dd > .bd-tag {
+      height: 22px;
+      border-radius: var(--bd-radius-cell);
+    }
+  }
+
+  /* ---- 链接列表 link-list ----
+     <div class="bd-tray" data-pattern="link-list">，每条是 <button class="bd-item">：
+     行首小图标（文件 / 时钟）+ <div><p>标题</p></div> + data-part="end" 等宽元信息 */
+  [data-pattern='link-list'] > .bd-item {
+    gap: 10px;
+
+    > div > p {
+      font-size: 13px;
+    }
+
+    > [data-part='end'] {
+      font-size: 11.5px;
+      font-weight: 400;
+      color: var(--bd-ink-quaternary);
+    }
+  }
+
+  /* ---- 版本条目 release ----
+     <article class="bd-tile" data-pattern="release">：标题行（<code>版本号</code> + 名称 + 状态标签）、
+     导语 <p data-part="lead">、亮点托盘（bd-tray data-cols="3"，每格 <strong>图标 + 标题</strong><small>说明</small>）、
+     变更列表（data-pattern="change-list"）、一组按钮 data-part="actions"。标题行之后的托盘和按钮组按内容组的节奏多空 4 */
+  [data-pattern='release'] {
+    > :not(.bd-head) + :is(.bd-tray, [data-part='actions']) {
+      margin-top: 4px;
+    }
+
+    > .bd-tray[data-cols='3'] {
+      strong {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      strong > svg {
+        color: var(--bd-blush-solid);
+      }
+
+      small {
+        margin-top: 4px;
+        font-size: 13px;
+        line-height: 1.55;
+      }
+    }
+  }
+
+  /* ---- 变更列表 change-list ----
+     <ul class="bd-tray" data-pattern="change-list">，每条 <li class="bd-item">：类型标签（bd-tag data-shape="square"，固定 58 一列）
+     + <div><p>正文（可换行）</p></div> + data-part="end" 影响范围，按基线对齐 */
+  [data-pattern='change-list'] > .bd-item {
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr) auto;
+    align-items: baseline;
+
+    &[hidden] {
+      display: none;
+    }
+
+    > .bd-tag {
+      justify-self: start;
+    }
+
+    > div > p {
+      white-space: normal;
+      line-height: 1.6;
+      color: var(--bd-ink);
+    }
+
+    > [data-part='end'] {
+      font-family: var(--bd-font-sans);
+      font-weight: 600;
+    }
+  }
+
+  /* ---- 订阅表单 subscribe ----
+     <form class="bd-toolbar" data-pattern="subscribe">：一个 bd-input（占满剩余宽度）+ 一颗主按钮，不换行 */
+  [data-pattern='subscribe'] {
+    flex-wrap: nowrap;
+    gap: 6px;
+
+    > .bd-input {
+      flex: 1;
+      width: auto;
+    }
+  }
+
+  /* ---- 发布节奏读数 release-cadence ----
+     <dl class="bd-tray" data-cols="2" data-pattern="release-cadence">，每格 <div><dt>标签</dt><dd>数值<small>单位</small></dd></div> */
+  [data-pattern='release-cadence'] {
+    dt {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--bd-ink-tertiary);
+    }
+
+    dd {
+      margin-top: 2px;
+      font-size: 20px;
+      font-weight: 620;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      font-variant-numeric: tabular-nums;
+      color: var(--bd-ink);
+    }
+
+    dd > small {
+      margin-left: 2px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--bd-ink-quaternary);
+    }
+  }
+
+  /* ---- 搜索结果格 search-results ----
+     <article class="bd-tile" data-pattern="search-results">：标题行、bd-toolbar（搜索框 360 宽 + 类型筛选 bd-segmented，
+     放不下时换到下一行）、<div data-part="results"> 结果、浅底收束条（说明 + 两颗按钮）。
+     结果是一个 bd-tray，每条 <a class="bd-item" data-align="start">：36 图标底 +
+     <div><strong>标题</strong><small><code>路径</code></small><p>两行摘要</p></div> + data-part="end"（类型标签 + 日期竖排）；
+     没有结果时托盘里放 bd-empty，推荐词放在它的 data-part="actions" 里 */
+  [data-pattern='search-results'] {
+    > .bd-toolbar {
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    > .bd-toolbar > .bd-input {
+      flex: 0 1 360px;
+      min-width: 220px;
+    }
+
+    > [data-part='results'] {
+      margin-block: 4px;
+    }
+
+    .bd-item > div > strong {
+      overflow-wrap: anywhere;
+      white-space: normal;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .bd-item > div > small {
+      margin-top: 2px;
+      font-size: 11px;
+      color: var(--bd-ink-quaternary);
+    }
+
+    .bd-item > div > p {
+      display: -webkit-box;
+      margin-top: 4px;
+      overflow-wrap: anywhere;
+      white-space: normal;
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--bd-ink-description);
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .bd-item > [data-part='end'] {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .bd-item > [data-part='end'] > time {
+      font-size: 11.5px;
+      font-weight: 400;
+      color: var(--bd-ink-quaternary);
+    }
+
+    /* 空状态的说明里可能有长的环境变量名，行宽放到 440 */
+    .bd-empty > p {
+      max-width: 440px;
+      overflow-wrap: anywhere;
+    }
+
+    .bd-empty > [data-part='actions'] {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    > [data-part='foot'] > p {
+      font-size: 13px;
+    }
+  }
+
+  /* ---- 产品筛选 product-filter ----
+     <div class="bd-tray" data-pattern="product-filter">，每条 <label class="bd-item">：bd-checkbox + <div><p>产品</p></div> + 计数；
+     勾选的小格（核心样式给雾粉浅底）里的文字和计数也换成雾粉墨色 */
+  [data-pattern='product-filter'] > label.bd-item {
+    > div > p {
+      font-size: 13px;
+    }
+
+    &:has(> :checked) > * {
+      color: var(--bd-blush-ink);
+    }
+  }
+}

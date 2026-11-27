@@ -4,7 +4,7 @@
 
 ## 这是什么
 
-Blora Design 3.0：Bloret 的设计系统。业务页面写普通 HTML + `bd-` 类名，引入一份 `blora.css` 和一个自动接管的 `blora.js`。3.0 是从零开始的重写，与 2.0 没有任何关系，不要参考、引用或兼容 2.0。
+Blora Design 3.0：Bloret 的设计系统。业务页面写普通 HTML + `bd-` 类名，引入一份 `blora.css` 和一个自动接管的 `blora.js`；看板、日程、套餐卡这类页面模式另有可选的 `patterns.css`（`data-pattern` 挂样式）。3.0 是从零开始的重写，与 2.0 没有任何关系，不要参考、引用或兼容 2.0。
 
 ## 先读
 
@@ -19,18 +19,19 @@ Blora Design 3.0：Bloret 的设计系统。业务页面写普通 HTML + `bd-` �
 - **不写死颜色**：只用 `--bd-*` 变量；不直接用 `--cortado-*`；半透明用 `color-mix()`。
 - **不出现任何原生控件外观**：不用 `<select>`、`<progress>`、`title` 属性、`alert()`，原生滚动条和日期面板也不行。完整清单见 DESIGN.md · Components · 不出现原生控件。
 - **一套写法**：一个元素最多一个 `bd-` 类；变体用 `data-*`；状态只用 ARIA / 原生状态，不加 `.active`；事件名 `bd-<动作>`。
-- **新组件先设计**：没写进 DESIGN.md、没经过确认的组件不要实现。
+- **新组件先设计**：没写进 DESIGN.md、没经过确认的组件不要实现。只在一张页面上出现的画面放进 `src/css/patterns/`，不做成组件。
+- **页面里不写样式**：`recipes/pages/` 的页面不能有 `<style>`，`style=""` 只用于 `--bd-columns`、`--bd-value` 这类布局或数据参数。
 
 ## 目录
 
-| 路径                        | 内容                                                                |
-| --------------------------- | ------------------------------------------------------------------- |
-| `DESIGN.md`                 | 规范 + 设计变量来源                                                 |
-| `packages/blora-design`     | 主包 `@bloret-crew/blora-design`：`dist/blora.css`、`dist/blora.js` |
-| `packages/stylelint-config` | `@bloret-crew/stylelint-config-blora`：本仓库自己的 CSS 也用它检查  |
-| `recipes/`                  | 每个组件的 HTML 示例（文档、测试、截图基准共用）                    |
-| `reference/`                | 视觉真值页面                                                        |
-| `docs/`                     | 方案与计划                                                          |
+| 路径                        | 内容                                                                                     |
+| --------------------------- | ---------------------------------------------------------------------------------------- |
+| `DESIGN.md`                 | 规范 + 设计变量来源                                                                      |
+| `packages/blora-design`     | 主包 `@bloret-crew/blora-design`：`dist/blora.css`、`dist/blora.js`、`dist/patterns.css` |
+| `packages/stylelint-config` | `@bloret-crew/stylelint-config-blora`：本仓库自己的 CSS 也用它检查                       |
+| `recipes/`                  | 每个组件的 HTML 示例；`recipes/pages/` 是只用框架重写的整页（和参考页逐像素比对）        |
+| `reference/`                | 视觉真值页面                                                                             |
+| `docs/`                     | 方案与计划                                                                               |
 
 ## 命令
 

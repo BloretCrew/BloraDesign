@@ -13,6 +13,14 @@
     text-rendering: optimizeLegibility;
   }
 
+  /* 搜索高亮 */
+  mark {
+    padding: 0 1px;
+    border-radius: 4px;
+    background: var(--bd-blush-fill);
+    color: var(--bd-ink);
+  }
+
   ::selection {
     background: var(--bd-blush-fill);
     color: var(--bd-blush-ink);

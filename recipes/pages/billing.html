@@ -1,0 +1,1911 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blora Cloud · 账单与套餐</title>
+    <!-- 第 ② 阶段验收页：只用框架重写 reference/demo-billing.html（套餐、用量、发票、支付方式） -->
+    <link rel="stylesheet" href="../../packages/blora-design/dist/blora.css" />
+    <link rel="stylesheet" href="../../packages/blora-design/dist/patterns.css" />
+    <script type="module" src="../../packages/blora-design/dist/blora.js"></script>
+  </head>
+  <body>
+    <!-- Lucide 图标（ISC License · lucide.dev） -->
+    <svg hidden>
+      <symbol id="i-bell" viewBox="0 0 24 24">
+        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+      </symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol>
+      <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
+      <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" /></symbol>
+      <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" /></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <polyline points="12 6 12 12 16 14" />
+      </symbol>
+      <symbol id="i-download" viewBox="0 0 24 24">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+        <polyline points="7 10 12 15 17 10" />
+        <line x1="12" x2="12" y1="15" y2="3" />
+      </symbol>
+      <symbol id="i-ellipsis" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="1" />
+        <circle cx="19" cy="12" r="1" />
+        <circle cx="5" cy="12" r="1" />
+      </symbol>
+      <symbol id="i-inbox" viewBox="0 0 24 24">
+        <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
+        <path
+          d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"
+        />
+      </symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24">
+        <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+      </symbol>
+      <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14" /></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24">
+        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+      </symbol>
+      <symbol id="i-panel-left-close" viewBox="0 0 24 24">
+        <rect width="18" height="18" x="3" y="3" rx="2" />
+        <path d="M9 3v18" />
+        <path d="m16 15-3-3 3-3" />
+      </symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24">
+        <path d="M5 12h14" />
+        <path d="M12 5v14" />
+      </symbol>
+      <symbol id="i-rocket" viewBox="0 0 24 24">
+        <path
+          d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"
+        />
+        <path
+          d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"
+        />
+        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+      </symbol>
+      <symbol id="i-search" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </symbol>
+      <symbol id="i-server" viewBox="0 0 24 24">
+        <rect width="20" height="8" x="2" y="2" rx="2" ry="2" />
+        <rect width="20" height="8" x="2" y="14" rx="2" ry="2" />
+        <line x1="6" x2="6.01" y1="6" y2="6" />
+        <line x1="6" x2="6.01" y1="18" y2="18" />
+      </symbol>
+      <symbol id="i-triangle-alert" viewBox="0 0 24 24">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+        <path d="M12 9v4" />
+        <path d="M12 17h.01" />
+      </symbol>
+      <symbol id="i-users" viewBox="0 0 24 24">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </symbol>
+      <symbol id="i-x" viewBox="0 0 24 24">
+        <path d="M18 6 6 18" />
+        <path d="m6 6 12 12" />
+      </symbol>
+      <symbol id="i-building-2" viewBox="0 0 24 24">
+        <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" />
+        <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" />
+        <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" />
+        <path d="M10 6h4" />
+        <path d="M10 10h4" />
+        <path d="M10 14h4" />
+        <path d="M10 18h4" />
+      </symbol>
+      <symbol id="i-cpu" viewBox="0 0 24 24">
+        <rect width="16" height="16" x="4" y="4" rx="2" />
+        <rect width="6" height="6" x="9" y="9" rx="1" />
+        <path d="M15 2v2" />
+        <path d="M15 20v2" />
+        <path d="M2 15h2" />
+        <path d="M2 9h2" />
+        <path d="M20 15h2" />
+        <path d="M20 9h2" />
+        <path d="M9 2v2" />
+        <path d="M9 20v2" />
+      </symbol>
+      <symbol id="i-credit-card" viewBox="0 0 24 24">
+        <rect width="20" height="14" x="2" y="5" rx="2" />
+        <line x1="2" x2="22" y1="10" y2="10" />
+      </symbol>
+      <symbol id="i-database" viewBox="0 0 24 24">
+        <ellipse cx="12" cy="5" rx="9" ry="3" />
+        <path d="M3 5V19A9 3 0 0 0 21 19V5" />
+        <path d="M3 12A9 3 0 0 0 21 12" />
+      </symbol>
+      <symbol id="i-gauge" viewBox="0 0 24 24">
+        <path d="m12 14 4-4" />
+        <path d="M3.34 19a10 10 0 1 1 17.32 0" />
+      </symbol>
+      <symbol id="i-globe" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+        <path d="M2 12h20" />
+      </symbol>
+      <symbol id="i-hard-drive" viewBox="0 0 24 24">
+        <line x1="22" x2="2" y1="12" y2="12" />
+        <path
+          d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"
+        />
+        <line x1="6" x2="6.01" y1="16" y2="16" />
+        <line x1="10" x2="10.01" y1="16" y2="16" />
+      </symbol>
+      <symbol id="i-mail" viewBox="0 0 24 24">
+        <rect width="20" height="16" x="2" y="4" rx="2" />
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+      </symbol>
+      <symbol id="i-network" viewBox="0 0 24 24">
+        <rect x="16" y="16" width="6" height="6" rx="1" />
+        <rect x="2" y="16" width="6" height="6" rx="1" />
+        <rect x="9" y="2" width="6" height="6" rx="1" />
+        <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" />
+        <path d="M12 12V8" />
+      </symbol>
+      <symbol id="i-package" viewBox="0 0 24 24">
+        <path
+          d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"
+        />
+        <path d="M12 22V12" />
+        <path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7" />
+        <path d="m7.5 4.27 9 5.15" />
+      </symbol>
+      <symbol id="i-receipt" viewBox="0 0 24 24">
+        <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z" />
+        <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" />
+        <path d="M12 17.5v-11" />
+      </symbol>
+      <symbol id="i-shield-check" viewBox="0 0 24 24">
+        <path
+          d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+        />
+        <path d="m9 12 2 2 4-4" />
+      </symbol>
+      <symbol id="i-sparkles" viewBox="0 0 24 24">
+        <path
+          d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"
+        />
+        <path d="M20 3v4" />
+        <path d="M22 5h-4" />
+        <path d="M4 17v2" />
+        <path d="M5 18H3" />
+      </symbol>
+      <symbol id="i-star" viewBox="0 0 24 24">
+        <path
+          d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
+        />
+      </symbol>
+      <symbol id="i-wallet" viewBox="0 0 24 24">
+        <path
+          d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"
+        />
+        <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
+      </symbol>
+      <symbol id="i-command" viewBox="0 0 24 24">
+        <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
+      </symbol>
+    </svg>
+
+    <div class="bd-app">
+      <nav class="bd-rail" aria-label="主导航">
+        <a data-part="brand" href="#plans">
+          <span data-part="logo">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <circle
+                cx="10"
+                cy="10"
+                r="7"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-dasharray="34.98 9"
+                stroke-linecap="round"
+                transform="rotate(-4 10 10)"
+              />
+              <circle cx="10" cy="10" r="2.6" fill="currentColor" />
+              <circle cx="15.5" cy="5.2" r="1.8" fill="currentColor" />
+            </svg>
+          </span>
+          <span>Blora Cloud</span>
+        </a>
+        <p data-part="section">账单</p>
+        <button type="button" data-go="plans">
+          <svg data-icon aria-hidden="true"><use href="#i-package" /></svg><span>套餐</span>
+        </button>
+        <button type="button" data-go="usage">
+          <svg data-icon aria-hidden="true"><use href="#i-gauge" /></svg><span>用量</span
+          ><span data-part="count">64%</span>
+        </button>
+        <button type="button" data-go="invoices">
+          <svg data-icon aria-hidden="true"><use href="#i-receipt" /></svg><span>发票</span
+          ><span data-part="count" id="railInvCount">2</span>
+        </button>
+        <button type="button" data-go="payment">
+          <svg data-icon aria-hidden="true"><use href="#i-credit-card" /></svg><span>支付方式</span>
+        </button>
+        <div data-part="foot">
+          <div data-part="note">
+            <span>专业版 · 本期预算</span><data value="64">64%</data>
+            <div class="bd-progress" aria-label="本期预算" aria-valuenow="64"></div>
+          </div>
+          <button type="button" data-part="collapse" aria-expanded="true" aria-label="收起侧栏">
+            <svg data-icon aria-hidden="true"><use href="#i-panel-left-close" /></svg
+            ><span>收起侧栏</span>
+          </button>
+        </div>
+      </nav>
+
+      <main class="bd-page">
+        <header class="bd-topbar">
+          <nav class="bd-breadcrumb" id="crumbs" aria-label="位置"></nav>
+          <div data-part="end">
+            <label class="bd-input" data-part="search">
+              <svg data-icon width="14" height="14" aria-hidden="true">
+                <use href="#i-search" />
+              </svg>
+              <input placeholder="搜索发票号或金额…" id="globalSearch" aria-label="搜索" />
+              <kbd class="bd-kbd"
+                ><svg data-icon width="10" height="10" aria-hidden="true">
+                  <use href="#i-command" /></svg
+                >K</kbd
+              >
+            </label>
+            <button
+              type="button"
+              class="bd-button"
+              data-shape="icon"
+              aria-label="切换深色模式"
+              id="themeBtn"
+            >
+              <svg data-icon width="15" height="15" aria-hidden="true"><use href="#i-moon" /></svg>
+            </button>
+            <button
+              type="button"
+              class="bd-button"
+              data-shape="icon"
+              data-dot
+              aria-label="通知"
+              data-toast="你有 1 张发票待支付"
+            >
+              <svg data-icon width="15" height="15" aria-hidden="true"><use href="#i-bell" /></svg>
+            </button>
+            <span class="bd-avatar" data-tone="sand">RH</span>
+          </div>
+        </header>
+
+        <!-- ============ 场景 1：套餐 ============ -->
+        <div data-part="view" data-scene="plans" hidden>
+          <header class="bd-tile" data-variant="page">
+            <p data-part="eyebrow">Plans</p>
+            <h1>套餐与价格</h1>
+            <p>当前为专业版，下次续费在 12 月 14 日。按年付费相当于少付两个月。</p>
+            <div data-part="end">
+              <div class="bd-segmented" role="radiogroup" aria-label="付费周期" id="cycleSeg">
+                <button type="button" role="radio" data-value="m" aria-checked="true">
+                  按月付
+                </button>
+                <button type="button" role="radio" data-value="y">
+                  按年付<span data-part="delta">省 17%</span>
+                </button>
+              </div>
+              <button
+                type="button"
+                class="bd-button"
+                data-toast="已通知销售顾问，1 个工作日内联系你"
+              >
+                <svg data-icon width="14" height="14" aria-hidden="true"><use href="#i-mail" /></svg
+                >联系销售
+              </button>
+            </div>
+          </header>
+
+          <section class="bd-mosaic" data-cols="4" data-index="none">
+            <article class="bd-tile" data-pattern="plan-card">
+              <header class="bd-item">
+                <span data-part="icon"
+                  ><svg data-icon width="15" height="15" aria-hidden="true">
+                    <use href="#i-package" /></svg
+                ></span>
+                <div><strong>免费版</strong></div>
+              </header>
+              <p>个人项目与功能试用，无需绑卡。</p>
+              <div data-part="price">
+                <p><small>¥</small><b data-m="0" data-y="0">0</b><span>/ 月</span></p>
+                <p data-m="永久免费" data-y="永久免费">永久免费</p>
+              </div>
+              <dl class="bd-spec" data-density="compact">
+                <div>
+                  <dt>实例</dt>
+                  <dd>1 · 共享 CPU</dd>
+                </div>
+                <div>
+                  <dt>构建</dt>
+                  <dd>100 分钟 / 月</dd>
+                </div>
+                <div>
+                  <dt>日志保留</dt>
+                  <dd>1 天</dd>
+                </div>
+                <div>
+                  <dt>支持</dt>
+                  <dd>社区论坛</dd>
+                </div>
+              </dl>
+              <p data-part="hint">适合试用与个人项目</p>
+              <button
+                type="button"
+                class="bd-button"
+                data-part="foot"
+                data-toast="降级会在本期结束后生效"
+              >
+                降级到免费版
+              </button>
+            </article>
+
+            <article class="bd-tile" data-pattern="plan-card">
+              <header class="bd-item">
+                <span data-part="icon" data-tone="sand"
+                  ><svg data-icon width="15" height="15" aria-hidden="true">
+                    <use href="#i-rocket" /></svg
+                ></span>
+                <div><strong>专业版</strong></div>
+                <span class="bd-pill" data-tone="sand">当前套餐</span>
+              </header>
+              <p>独立开发者和小团队，超出部分按量计费。</p>
+              <div data-part="price">
+                <p><small>¥</small><b data-m="99" data-y="82">99</b><span>/ 月</span></p>
+                <p data-m="按月付费，随时可以取消" data-y="按年付 ¥984，省 ¥204">
+                  按月付费，随时可以取消
+                </p>
+              </div>
+              <dl class="bd-spec" data-density="compact">
+                <div>
+                  <dt>实例</dt>
+                  <dd>5 · 2 vCPU</dd>
+                </div>
+                <div>
+                  <dt>构建</dt>
+                  <dd>2,000 分钟 / 月</dd>
+                </div>
+                <div>
+                  <dt>日志保留</dt>
+                  <dd>7 天</dd>
+                </div>
+                <div>
+                  <dt>支持</dt>
+                  <dd>邮件 · 1 工作日</dd>
+                </div>
+              </dl>
+              <p data-part="hint">含自定义域名与自动 HTTPS</p>
+              <button type="button" class="bd-button" data-part="foot" disabled>当前套餐</button>
+            </article>
+
+            <article class="bd-tile" data-pattern="plan-card">
+              <span class="bd-corner"></span>
+              <header class="bd-item">
+                <span data-part="icon" data-tone="blush"
+                  ><svg data-icon width="15" height="15" aria-hidden="true">
+                    <use href="#i-users" /></svg
+                ></span>
+                <div><strong>团队版</strong></div>
+                <span class="bd-pill" data-tone="blush"
+                  ><svg data-icon width="11" height="11" aria-hidden="true">
+                    <use href="#i-sparkles" /></svg
+                  >推荐</span
+                >
+              </header>
+              <p>多人协作、预览环境和更高的可用性保障。</p>
+              <div data-part="price">
+                <p><small>¥</small><b data-m="299" data-y="249">299</b><span>/ 月</span></p>
+                <p data-m="按月付费，随时可以取消" data-y="按年付 ¥2,988，省 ¥600">
+                  按月付费，随时可以取消
+                </p>
+              </div>
+              <dl class="bd-spec" data-density="compact">
+                <div>
+                  <dt>实例</dt>
+                  <dd>20 · 8 vCPU</dd>
+                </div>
+                <div>
+                  <dt>构建</dt>
+                  <dd>10,000 分钟 / 月</dd>
+                </div>
+                <div>
+                  <dt>日志保留</dt>
+                  <dd>30 天 · 告警</dd>
+                </div>
+                <div>
+                  <dt>支持</dt>
+                  <dd>工单 · 2 小时</dd>
+                </div>
+              </dl>
+              <p data-part="hint">另含预览环境、99.95% SLA</p>
+              <button
+                type="button"
+                class="bd-button"
+                data-variant="primary"
+                data-part="foot"
+                data-toast="升级立即生效，差价计入下一张发票"
+              >
+                升级到团队版
+              </button>
+            </article>
+
+            <article class="bd-tile" data-pattern="plan-card">
+              <header class="bd-item">
+                <span data-part="icon"
+                  ><svg data-icon width="15" height="15" aria-hidden="true">
+                    <use href="#i-building-2" /></svg
+                ></span>
+                <div><strong>企业版</strong></div>
+              </header>
+              <p>私有网络、合规审计与专属支持，按规模定价。</p>
+              <div data-part="price">
+                <p><b>按需定价</b></p>
+                <p>按年签约，支持对公转账</p>
+              </div>
+              <dl class="bd-spec" data-density="compact">
+                <div>
+                  <dt>实例</dt>
+                  <dd>不限</dd>
+                </div>
+                <div>
+                  <dt>构建</dt>
+                  <dd>不限 · 专属构建机</dd>
+                </div>
+                <div>
+                  <dt>日志保留</dt>
+                  <dd>365 天 · 审计</dd>
+                </div>
+                <div>
+                  <dt>支持</dt>
+                  <dd>专属客户经理</dd>
+                </div>
+              </dl>
+              <p data-part="hint">另含 SSO、私有网络</p>
+              <button
+                type="button"
+                class="bd-button"
+                data-variant="blush"
+                data-part="foot"
+                data-toast="已打开预约演示表单"
+              >
+                预约演示
+              </button>
+            </article>
+          </section>
+
+          <section
+            class="bd-mosaic"
+            data-cols="2"
+            style="--bd-columns: minmax(0, 1.75fr) minmax(0, 1fr)"
+          >
+            <article class="bd-tile">
+              <header class="bd-head">
+                <h2>功能对比</h2>
+                <p>所有套餐都包含自动 HTTPS、全球 CDN 与每日备份</p>
+                <div data-part="end">
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="ghost"
+                    data-size="sm"
+                    data-toast="已下载完整对比表 PDF"
+                  >
+                    <svg data-icon width="13" height="13" aria-hidden="true">
+                      <use href="#i-download" /></svg
+                    >下载 PDF
+                  </button>
+                </div>
+              </header>
+              <table
+                class="bd-table"
+                data-variant="tray"
+                data-align="center"
+                data-pattern="plan-compare"
+                id="cmp"
+                aria-label="套餐功能对比"
+                style="--bd-table-columns: minmax(150px, 1.25fr) repeat(4, minmax(0, 1fr))"
+              ></table>
+            </article>
+            <div class="bd-stack">
+              <article class="bd-tile">
+                <header class="bd-head">
+                  <h2>常见问题</h2>
+                  <div data-part="end"><span data-part="tag">FAQ · 4</span></div>
+                </header>
+                <div class="bd-accordion" data-variant="tray">
+                  <details open>
+                    <summary>
+                      升级或降级后如何计费？<svg
+                        data-icon
+                        width="14"
+                        height="14"
+                        aria-hidden="true"
+                      >
+                        <use href="#i-chevron-down" />
+                      </svg>
+                    </summary>
+                    <p>
+                      升级立即生效，本期剩余天数按新旧套餐的差价折算，计入下一张发票；降级在当前计费周期结束后生效，在此之前仍可使用原套餐的全部功能。
+                    </p>
+                  </details>
+                  <details>
+                    <summary>
+                      超出套餐额度会怎样？<svg data-icon width="14" height="14" aria-hidden="true">
+                        <use href="#i-chevron-down" />
+                      </svg>
+                    </summary>
+                    <p>
+                      服务不会中断。超出部分按量计费：出网流量 ¥0.50/GB，构建
+                      ¥0.02/分钟，月末合并到发票里。你也可以在「用量」页设置预算上限，到达后自动暂停预览环境。
+                    </p>
+                  </details>
+                  <details>
+                    <summary>
+                      可以开具增值税专用发票吗？<svg
+                        data-icon
+                        width="14"
+                        height="14"
+                        aria-hidden="true"
+                      >
+                        <use href="#i-chevron-down" />
+                      </svg>
+                    </summary>
+                    <p>可以。在「支付方式」里填写开票信息，专票会在付款后 3 个工作日内寄出。</p>
+                  </details>
+                  <details>
+                    <summary>
+                      如何取消订阅？<svg data-icon width="14" height="14" aria-hidden="true">
+                        <use href="#i-chevron-down" />
+                      </svg>
+                    </summary>
+                    <p>随时降级到免费版即可，数据保留 30 天。</p>
+                  </details>
+                </div>
+              </article>
+              <article class="bd-tile">
+                <header class="bd-head">
+                  <h2>需要更大的规模？</h2>
+                  <div data-part="end"><span class="bd-pill" data-tone="blush">企业版</span></div>
+                </header>
+                <p>私有部署、合规审计和专属支持，按团队规模定制价格。</p>
+                <ul class="bd-tray">
+                  <li class="bd-item">
+                    <span data-part="icon" data-tone="blush"
+                      ><svg data-icon width="15" height="15" aria-hidden="true">
+                        <use href="#i-shield-check" /></svg
+                    ></span>
+                    <div><strong>等保三级与 SOC 2</strong><small>审计日志保留 365 天</small></div>
+                  </li>
+                  <li class="bd-item">
+                    <span data-part="icon" data-tone="sand"
+                      ><svg data-icon width="15" height="15" aria-hidden="true">
+                        <use href="#i-globe" /></svg
+                    ></span>
+                    <div><strong>多区域容灾</strong><small>RPO 小于 5 分钟</small></div>
+                  </li>
+                  <li class="bd-item">
+                    <span data-part="icon" data-tone="rose"
+                      ><svg data-icon width="15" height="15" aria-hidden="true">
+                        <use href="#i-star" /></svg
+                    ></span>
+                    <div><strong>专属客户经理</strong><small>7×24 小时电话支持</small></div>
+                  </li>
+                </ul>
+                <footer data-part="foot">
+                  <p>平均 1 个工作日内回复</p>
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="primary"
+                    data-toast="已打开预约演示表单"
+                  >
+                    预约演示
+                  </button>
+                </footer>
+              </article>
+            </div>
+          </section>
+        </div>
+
+        <!-- ============ 场景 2：用量 ============ -->
+        <div data-part="view" data-scene="usage" hidden>
+          <header class="bd-tile" data-variant="page">
+            <p data-part="eyebrow">Usage</p>
+            <h1>用量与费用</h1>
+            <p>本期 11 月 14 日 – 12 月 13 日，还剩 17 天</p>
+            <div data-part="end">
+              <button type="button" class="bd-button" data-toast="已导出本期用量 CSV">
+                <svg data-icon width="13" height="13" aria-hidden="true">
+                  <use href="#i-download" /></svg
+                >导出 CSV
+              </button>
+              <button type="button" class="bd-button" data-variant="primary" data-go="plans">
+                <svg data-icon width="13" height="13" aria-hidden="true">
+                  <use href="#i-sparkles" /></svg
+                >升级套餐
+              </button>
+            </div>
+          </header>
+
+          <section class="bd-mosaic" data-cols="4">
+            <article class="bd-tile" data-variant="metric">
+              <p data-part="label">本期费用</p>
+              <div
+                class="bd-ring"
+                aria-label="预算使用率"
+                aria-valuenow="64"
+                aria-valuemax="100"
+              ></div>
+              <p data-part="value">¥1,286<small>.40</small></p>
+              <div data-part="foot">
+                <div class="bd-progress" aria-label="预算使用率" aria-valuenow="64"></div>
+                <span>预算 ¥2,000 · 已用 64%</span>
+              </div>
+            </article>
+            <article class="bd-tile" data-variant="metric">
+              <p data-part="label">预计本期</p>
+              <div
+                class="bd-ring"
+                aria-label="预计占预算"
+                aria-valuenow="107"
+                aria-valuemax="100"
+              ></div>
+              <p data-part="value">¥2,140</p>
+              <p data-part="foot">
+                <span data-part="delta" data-tone="rose">超预算 7%</span>按近 7 天的速度估算
+              </p>
+            </article>
+            <article class="bd-tile" data-variant="metric">
+              <p data-part="label">账户余额</p>
+              <span data-part="icon" data-tone="sand"
+                ><svg data-icon width="15" height="15" aria-hidden="true">
+                  <use href="#i-wallet" /></svg
+              ></span>
+              <p data-part="value">¥3,560<small>.00</small></p>
+              <p data-part="foot">默认卡扣款失败时自动使用</p>
+            </article>
+            <article class="bd-tile" data-variant="metric">
+              <p data-part="label">超额费用</p>
+              <span data-part="icon" data-tone="rose"
+                ><svg data-icon width="15" height="15" aria-hidden="true">
+                  <use href="#i-triangle-alert" /></svg
+              ></span>
+              <p data-part="value">¥186<small>.40</small></p>
+              <p data-part="foot">
+                <span data-part="delta" data-tone="rose">+¥62</span>主要来自出网流量
+              </p>
+            </article>
+          </section>
+
+          <section
+            class="bd-mosaic"
+            data-cols="2"
+            style="--bd-columns: minmax(0, 1.75fr) minmax(0, 1fr)"
+          >
+            <article class="bd-tile">
+              <header class="bd-head">
+                <h2>每日费用</h2>
+                <p id="costSub">本期前 13 天，与上期同期对比</p>
+                <div data-part="end">
+                  <ul class="bd-legend">
+                    <li data-tone="blush">本期</li>
+                    <li data-tone="sand">上期</li>
+                  </ul>
+                  <div
+                    class="bd-segmented"
+                    role="radiogroup"
+                    aria-label="统计方式"
+                    id="costSeg"
+                    data-size="sm"
+                  >
+                    <button type="button" role="radio" data-value="daily" aria-checked="true">
+                      按日
+                    </button>
+                    <button type="button" role="radio" data-value="cum">累计</button>
+                  </div>
+                </div>
+              </header>
+              <figure
+                class="bd-chart"
+                data-grow
+                id="costChart"
+                aria-label="每日费用折线图"
+                data-labels="11/14,11/16,11/18,11/20,11/22,11/24,11/26"
+              >
+                <data
+                  data-tone="blush"
+                  data-label="本期"
+                  value="82,86,79,91,95,88,102,110,104,98,112,121,118"
+                ></data>
+                <data
+                  data-tone="sand"
+                  data-label="上期"
+                  value="76,80,78,82,85,83,88,92,90,87,94,96,95"
+                ></data>
+              </figure>
+            </article>
+            <article class="bd-tile">
+              <header class="bd-head">
+                <h2>套餐额度</h2>
+                <p>专业版 · 每个计费周期重置</p>
+                <div data-part="end">
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="ghost"
+                    data-size="sm"
+                    data-toast="已打开预算设置"
+                  >
+                    设置预算
+                  </button>
+                </div>
+              </header>
+              <ul class="bd-tray" data-pattern="quota">
+                <li class="bd-item">
+                  <span data-part="icon"
+                    ><svg data-icon width="15" height="15" aria-hidden="true">
+                      <use href="#i-cpu" /></svg
+                  ></span>
+                  <div><strong>计算时长</strong></div>
+                  <span data-part="end"><b>3,420</b> / 5,000 vCPU·时</span>
+                  <div class="bd-progress" aria-label="计算时长" aria-valuenow="68"></div>
+                </li>
+                <li class="bd-item">
+                  <span data-part="icon"
+                    ><svg data-icon width="15" height="15" aria-hidden="true">
+                      <use href="#i-rocket" /></svg
+                  ></span>
+                  <div>
+                    <strong>构建分钟<span class="bd-pill" data-tone="sand">接近上限</span></strong>
+                  </div>
+                  <span data-part="end"><b>1,840</b> / 2,000 分钟</span>
+                  <div
+                    class="bd-progress"
+                    aria-label="构建分钟"
+                    aria-valuenow="92"
+                    data-tone="sand"
+                  ></div>
+                </li>
+                <li class="bd-item">
+                  <span data-part="icon"
+                    ><svg data-icon width="15" height="15" aria-hidden="true">
+                      <use href="#i-network" /></svg
+                  ></span>
+                  <div>
+                    <strong>出网流量<span class="bd-pill" data-tone="rose">超出 18%</span></strong>
+                  </div>
+                  <span data-part="end"><b>1.18</b> / 1 TB</span>
+                  <div
+                    class="bd-progress"
+                    aria-label="出网流量"
+                    aria-valuenow="100"
+                    data-tone="rose"
+                  ></div>
+                </li>
+                <li class="bd-item">
+                  <span data-part="icon"
+                    ><svg data-icon width="15" height="15" aria-hidden="true">
+                      <use href="#i-hard-drive" /></svg
+                  ></span>
+                  <div><strong>存储与备份</strong></div>
+                  <span data-part="end"><b>42</b> / 100 GB</span>
+                  <div class="bd-progress" aria-label="存储与备份" aria-valuenow="42"></div>
+                </li>
+                <li class="bd-item">
+                  <span data-part="icon"
+                    ><svg data-icon width="15" height="15" aria-hidden="true">
+                      <use href="#i-users" /></svg
+                  ></span>
+                  <div>
+                    <strong>团队成员<span class="bd-pill">已满</span></strong>
+                  </div>
+                  <span data-part="end"><b>3</b> / 3 位</span>
+                  <div class="bd-progress" aria-label="团队成员" aria-valuenow="100"></div>
+                </li>
+              </ul>
+            </article>
+          </section>
+
+          <section class="bd-mosaic" data-cols="2">
+            <article class="bd-tile">
+              <header class="bd-head">
+                <h2>费用最高的资源</h2>
+                <p>本期累计，含按量计费部分</p>
+                <div data-part="end">
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="ghost"
+                    data-size="sm"
+                    data-toast="已打开资源费用明细"
+                  >
+                    全部资源
+                  </button>
+                </div>
+              </header>
+              <ul class="bd-tray" data-pattern="cost-rank">
+                <li class="bd-item">
+                  <span data-part="icon" data-tone="blush"
+                    ><svg data-icon width="15" height="15" aria-hidden="true">
+                      <use href="#i-cpu" /></svg
+                  ></span>
+                  <div>
+                    <strong
+                      data-tip="media-transcoder-batch-worker-ap-southeast-production-replica-02"
+                      >media-transcoder-batch-worker-ap-southeast-production-replica-02</strong
+                    ><small>计算 · 8 vCPU · 亚太 · 新加坡</small>
+                  </div>
+                  <div class="bd-progress" aria-label="费用占比" aria-valuenow="100"></div>
+                  <span data-part="end">¥318.60</span>
+                </li>
+                <li class="bd-item">
+                  <span data-part="icon" data-tone="rose"
+                    ><svg data-icon width="15" height="15" aria-hidden="true">
+                      <use href="#i-globe" /></svg
+                  ></span>
+                  <div><strong>cdn-origin-02</strong><small>出网流量 · 742 GB</small></div>
+                  <div
+                    class="bd-progress"
+                    aria-label="费用占比"
+                    aria-valuenow="77"
+                    data-tone="rose"
+                  ></div>
+                  <span data-part="end">¥246.20</span>
+                </li>
+                <li class="bd-item">
+                  <span data-part="icon"
+                    ><svg data-icon width="15" height="15" aria-hidden="true">
+                      <use href="#i-server" /></svg
+                  ></span>
+                  <div><strong>api-gateway-01</strong><small>计算 · 4 vCPU</small></div>
+                  <div class="bd-progress" aria-label="费用占比" aria-valuenow="45"></div>
+                  <span data-part="end">¥142.80</span>
+                </li>
+                <li class="bd-item">
+                  <span data-part="icon" data-tone="sand"
+                    ><svg data-icon width="15" height="15" aria-hidden="true">
+                      <use href="#i-database" /></svg
+                  ></span>
+                  <div>
+                    <strong>orders-db-primary</strong><small>数据库存储 · 120 GB · 每日备份</small>
+                  </div>
+                  <div class="bd-progress" aria-label="费用占比" aria-valuenow="30"></div>
+                  <span data-part="end">¥96.40</span>
+                </li>
+                <li class="bd-item">
+                  <span data-part="icon"
+                    ><svg data-icon width="15" height="15" aria-hidden="true">
+                      <use href="#i-rocket" /></svg
+                  ></span>
+                  <div><strong>checkout-web 预览环境 × 6</strong><small>构建与预览</small></div>
+                  <div class="bd-progress" aria-label="费用占比" aria-valuenow="20"></div>
+                  <span data-part="end">¥64.10</span>
+                </li>
+              </ul>
+            </article>
+            <article class="bd-tile" data-pattern="cost-breakdown">
+              <header class="bd-head">
+                <h2>费用构成</h2>
+                <div data-part="end"><span data-part="tag">MTD · 5 items</span></div>
+              </header>
+              <div data-part="total">
+                <b>¥1,286<small>.40</small></b
+                ><span>其中按量计费 ¥1,187.40</span>
+              </div>
+              <div data-part="stack" role="img" aria-label="费用构成">
+                <i data-tone="blush" style="--bd-value: 41.8%"></i>
+                <i data-tone="rose" style="--bd-value: 27%"></i>
+                <i data-tone="sand" style="--bd-value: 12.8%"></i>
+                <i data-tone="track" style="--bd-value: 10.7%"></i>
+                <i style="--bd-value: 7.7%"></i>
+              </div>
+              <ul class="bd-tray" data-part="legend">
+                <li class="bd-item">
+                  <span data-part="dot" data-tone="blush"></span>
+                  <div><span>计算</span></div>
+                  <span data-part="end">41.8%</span><b>¥538.20</b>
+                </li>
+                <li class="bd-item">
+                  <span data-part="dot" data-tone="rose"></span>
+                  <div><span>出网流量</span></div>
+                  <span data-part="end">27.0%</span><b>¥346.80</b>
+                </li>
+                <li class="bd-item">
+                  <span data-part="dot" data-tone="sand"></span>
+                  <div><span>构建</span></div>
+                  <span data-part="end">12.8%</span><b>¥164.60</b>
+                </li>
+                <li class="bd-item">
+                  <span data-part="dot" data-tone="track"></span>
+                  <div><span>存储与备份</span></div>
+                  <span data-part="end">10.7%</span><b>¥137.80</b>
+                </li>
+                <li class="bd-item">
+                  <span data-part="dot"></span>
+                  <div><span>专业版月费</span></div>
+                  <span data-part="end">7.7%</span><b>¥99.00</b>
+                </li>
+              </ul>
+              <dl class="bd-stats" data-part="foot">
+                <div>
+                  <dt>较上期同期</dt>
+                  <dd data-tone="rose">+12.4%</dd>
+                </div>
+                <div>
+                  <dt>预测本期</dt>
+                  <dd>¥2,140</dd>
+                </div>
+                <div>
+                  <dt>日均</dt>
+                  <dd>¥98.9</dd>
+                </div>
+              </dl>
+            </article>
+          </section>
+        </div>
+
+        <!-- ============ 场景 3：发票 ============ -->
+        <div data-part="view" data-scene="invoices" hidden>
+          <header class="bd-tile" data-variant="page">
+            <p data-part="eyebrow">Invoices</p>
+            <h1>发票</h1>
+            <p id="invSub">共 18 张发票</p>
+            <div data-part="end">
+              <button type="button" class="bd-button" data-go="payment" data-focus="addrTile">
+                <svg data-icon width="13" height="13" aria-hidden="true">
+                  <use href="#i-building-2" /></svg
+                >开票信息
+              </button>
+              <button
+                type="button"
+                class="bd-button"
+                data-variant="primary"
+                data-toast="正在打包下载 2026 年全部发票"
+              >
+                <svg data-icon width="13" height="13" aria-hidden="true">
+                  <use href="#i-download" /></svg
+                >下载全部
+              </button>
+            </div>
+          </header>
+
+          <section class="bd-mosaic" data-cols="3" data-pattern="invoice-summary">
+            <article class="bd-tile" data-variant="metric">
+              <p data-part="label">2026 年已支付</p>
+              <span data-part="icon" data-tone="sand"
+                ><svg data-icon width="15" height="15" aria-hidden="true">
+                  <use href="#i-receipt" /></svg
+              ></span>
+              <p data-part="value" id="kpiPaid"></p>
+              <p data-part="foot" id="kpiPaidFoot"></p>
+            </article>
+            <article class="bd-tile" data-variant="metric">
+              <p data-part="label">待支付</p>
+              <span data-part="icon" data-tone="blush"
+                ><svg data-icon width="15" height="15" aria-hidden="true">
+                  <use href="#i-clock" /></svg
+              ></span>
+              <p data-part="value" id="kpiDue"></p>
+              <p data-part="foot">11 月 28 日自动从 Visa •••• 4242 扣款</p>
+            </article>
+            <article class="bd-tile" data-variant="metric">
+              <p data-part="label">逾期</p>
+              <span data-part="icon" data-tone="rose"
+                ><svg data-icon width="15" height="15" aria-hidden="true">
+                  <use href="#i-triangle-alert" /></svg
+              ></span>
+              <p data-part="value" id="kpiOver"></p>
+              <div data-part="foot">
+                <p>尾号 8210 的卡扣款失败</p>
+                <button
+                  type="button"
+                  class="bd-button"
+                  data-variant="rose"
+                  data-size="sm"
+                  data-go="payment"
+                >
+                  去处理
+                </button>
+              </div>
+            </article>
+          </section>
+
+          <section class="bd-mosaic" data-cols="1" data-grow>
+            <article class="bd-tile">
+              <div class="bd-toolbar">
+                <label class="bd-input" data-part="search">
+                  <svg data-icon width="14" height="14" aria-hidden="true">
+                    <use href="#i-search" />
+                  </svg>
+                  <input id="invSearch" placeholder="发票号或金额" aria-label="搜索发票" />
+                </label>
+                <div class="bd-segmented" role="radiogroup" aria-label="状态" id="invSeg">
+                  <button type="button" role="radio" data-value="all" aria-checked="true">
+                    全部<span data-part="count" data-count="all"></span>
+                  </button>
+                  <button type="button" role="radio" data-value="paid">
+                    已支付<span data-part="count" data-count="paid"></span>
+                  </button>
+                  <button type="button" role="radio" data-value="due">
+                    待支付<span data-part="count" data-count="due"></span>
+                  </button>
+                  <button type="button" role="radio" data-value="over">
+                    逾期<span data-part="count" data-count="over"></span>
+                  </button>
+                  <button type="button" role="radio" data-value="refund">
+                    已退款<span data-part="count" data-count="refund"></span>
+                  </button>
+                </div>
+                <span data-part="spacer"></span>
+                <div class="bd-select" id="yearSelect">
+                  <button type="button" data-part="trigger">
+                    <span data-part="value">2026 年</span
+                    ><svg data-icon width="14" height="14" aria-hidden="true">
+                      <use href="#i-chevron-down" />
+                    </svg>
+                  </button>
+                  <div data-part="panel" popover data-align="end">
+                    <div role="listbox" aria-label="年份">
+                      <div role="option" data-value="2026" aria-selected="true">2026 年</div>
+                      <div role="option" data-value="2025">2025 年</div>
+                      <div role="option" data-value="all">全部年份</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <table class="bd-table" id="invoices" data-pattern="invoice-table">
+                <colgroup>
+                  <col />
+                  <col style="width: 15.7%" />
+                  <col style="width: 15.71%" />
+                  <col style="width: 15.68%" />
+                  <col style="width: 21.2%" />
+                  <col style="width: 56px" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>发票号</th>
+                    <th>开票日期</th>
+                    <th data-align="end">金额</th>
+                    <th>状态</th>
+                    <th>支付方式</th>
+                    <th><span hidden>下载</span></th>
+                  </tr>
+                </thead>
+                <tbody id="invBody"></tbody>
+              </table>
+
+              <footer data-part="foot">
+                <span id="invPageInfo"></span>
+                <nav class="bd-pager" id="invPager" aria-label="分页"></nav>
+              </footer>
+            </article>
+          </section>
+        </div>
+
+        <!-- ============ 场景 4：支付方式 ============ -->
+        <div data-part="view" data-scene="payment" hidden>
+          <header class="bd-tile" data-variant="page">
+            <p data-part="eyebrow">Payment methods</p>
+            <h1>支付方式</h1>
+            <p>扣款顺序：默认卡 → 账户余额 → 其他卡片</p>
+            <div data-part="end">
+              <button
+                type="button"
+                class="bd-button"
+                data-variant="primary"
+                data-focus="addCardTile"
+              >
+                <svg data-icon width="13" height="13" aria-hidden="true"><use href="#i-plus" /></svg
+                >添加卡片
+              </button>
+            </div>
+          </header>
+
+          <section class="bd-mosaic" data-cols="1" id="expiryAlert">
+            <article class="bd-tile" data-variant="alert">
+              <span data-part="icon"
+                ><svg data-icon width="16" height="16" aria-hidden="true">
+                  <use href="#i-triangle-alert" /></svg
+              ></span>
+              <div data-part="body">
+                <b
+                  ><span class="bd-pill" data-tone="sand">即将到期</span>尾号 8210 的万事达卡将于 12
+                  月到期</b
+                >
+                <p>到期后会改用账户余额扣款。建议现在更新有效期，避免 12 月 14 日的续费失败。</p>
+              </div>
+              <div data-part="actions">
+                <button
+                  type="button"
+                  class="bd-button"
+                  data-variant="elevated"
+                  data-size="sm"
+                  data-focus="addCardTile"
+                >
+                  更新卡片
+                </button>
+                <button
+                  type="button"
+                  class="bd-button"
+                  data-variant="ghost"
+                  data-shape="icon"
+                  data-size="sm"
+                  data-part="close"
+                  aria-label="关闭提醒"
+                >
+                  <svg data-icon width="13" height="13" aria-hidden="true"><use href="#i-x" /></svg>
+                </button>
+              </div>
+            </article>
+          </section>
+
+          <section
+            class="bd-mosaic"
+            data-cols="2"
+            style="--bd-columns: minmax(0, 1fr) minmax(0, 1.35fr)"
+          >
+            <article class="bd-tile">
+              <header class="bd-head">
+                <h2>已保存的支付方式</h2>
+                <p id="cardCount">3 张卡片 · 1 个账户余额</p>
+              </header>
+              <ul class="bd-tray" id="cardList" data-pattern="card-list"></ul>
+              <div class="bd-item" data-part="foot" data-pattern="balance">
+                <span data-part="icon"
+                  ><svg data-icon width="15" height="15" aria-hidden="true">
+                    <use href="#i-wallet" /></svg
+                ></span>
+                <div>
+                  <strong>账户余额 ¥3,560.00</strong><small>默认卡扣款失败时自动使用</small>
+                </div>
+                <button type="button" class="bd-button" data-size="sm" data-toast="已打开充值页面">
+                  充值
+                </button>
+              </div>
+            </article>
+
+            <article class="bd-tile" id="addCardTile" data-pattern="add-card">
+              <header class="bd-head">
+                <h2>添加新卡</h2>
+                <p>支持 Visa、万事达与银联，卡号加密存储</p>
+                <div data-part="end">
+                  <span class="bd-pill" data-tone="sand"
+                    ><svg data-icon width="11" height="11" aria-hidden="true">
+                      <use href="#i-shield-check" /></svg
+                    >PCI DSS</span
+                  >
+                </div>
+              </header>
+              <div data-part="body">
+                <div
+                  data-pattern="card-preview"
+                  id="cardPreview"
+                  data-brand="card"
+                  aria-hidden="true"
+                >
+                  <svg viewBox="0 0 96 72">
+                    <circle cx="108" cy="-14" r="40" />
+                    <circle cx="108" cy="-14" r="58" />
+                    <circle cx="108" cy="-14" r="76" />
+                  </svg>
+                  <div><i></i><b id="cpBrand">CARD</b></div>
+                  <div data-part="number" id="cpNum">•••• •••• •••• ••••</div>
+                  <div>
+                    <span>持卡人<b id="cpName">持卡人姓名</b></span
+                    ><span>有效期<b id="cpExp">MM/YY</b></span>
+                  </div>
+                </div>
+                <form class="bd-form" id="cardForm">
+                  <div class="bd-field" data-span="full">
+                    <label data-part="label" for="ccNo">卡号</label>
+                    <label class="bd-input"
+                      ><svg data-icon width="14" height="14" aria-hidden="true">
+                        <use href="#i-credit-card" /></svg
+                      ><input
+                        id="ccNo"
+                        inputmode="numeric"
+                        autocomplete="cc-number"
+                        placeholder="1234 5678 9012 3456"
+                    /></label>
+                    <p data-part="error" hidden>请输入完整的 16 位卡号</p>
+                  </div>
+                  <div class="bd-field">
+                    <label data-part="label" for="ccExp">有效期</label>
+                    <input
+                      class="bd-input"
+                      id="ccExp"
+                      inputmode="numeric"
+                      autocomplete="cc-exp"
+                      placeholder="MM/YY"
+                    />
+                    <p data-part="error" hidden>格式为 MM/YY，且未过期</p>
+                  </div>
+                  <div class="bd-field">
+                    <label data-part="label" for="ccCvc">安全码</label>
+                    <input
+                      class="bd-input"
+                      id="ccCvc"
+                      inputmode="numeric"
+                      autocomplete="cc-csc"
+                      placeholder="CVC"
+                    />
+                    <p data-part="error" hidden>卡背面的 3 位数字</p>
+                  </div>
+                  <div class="bd-field" data-span="full">
+                    <label data-part="label" for="ccName">持卡人姓名</label>
+                    <input
+                      class="bd-input"
+                      id="ccName"
+                      autocomplete="cc-name"
+                      placeholder="与卡面一致"
+                    />
+                    <p data-part="error" hidden>请填写持卡人姓名</p>
+                  </div>
+                  <div class="bd-item" data-span="full">
+                    <div><span>设为默认支付方式</span><small>下次续费从这张卡扣款</small></div>
+                    <button
+                      type="button"
+                      class="bd-switch"
+                      role="switch"
+                      aria-checked="false"
+                      aria-label="设为默认支付方式"
+                      id="ccDefault"
+                    ></button>
+                  </div>
+                </form>
+              </div>
+              <footer data-part="foot">
+                <p>
+                  <svg data-icon width="13" height="13" aria-hidden="true">
+                    <use href="#i-lock" /></svg
+                  >保存后只显示卡号后 4 位
+                </p>
+                <div data-part="actions">
+                  <button type="button" class="bd-button" data-variant="ghost" id="ccReset">
+                    清空
+                  </button>
+                  <button type="button" class="bd-button" data-variant="primary" id="ccSave">
+                    保存卡片
+                  </button>
+                </div>
+              </footer>
+            </article>
+          </section>
+
+          <section
+            class="bd-mosaic"
+            data-cols="2"
+            style="--bd-columns: minmax(0, 1.75fr) minmax(0, 1fr)"
+          >
+            <article class="bd-tile" id="addrTile">
+              <header class="bd-head">
+                <h2>账单地址与开票信息</h2>
+                <p>显示在每一张发票上</p>
+              </header>
+              <form class="bd-form" id="addrForm" data-cols="3">
+                <div class="bd-field" data-span="2">
+                  <label data-part="label" for="aCompany">公司名称</label>
+                  <input
+                    class="bd-input"
+                    id="aCompany"
+                    name="company"
+                    value="上海晶格云计算科技有限公司（华东研发与运营中心）"
+                  />
+                </div>
+                <div class="bd-field">
+                  <label data-part="label" for="aTax">纳税人识别号</label>
+                  <input class="bd-input" id="aTax" name="tax" value="91310115MA1K4QXR2T" />
+                </div>
+                <div class="bd-field">
+                  <label data-part="label" for="aMail">账单邮箱</label>
+                  <label class="bd-input"
+                    ><svg data-icon width="14" height="14" aria-hidden="true">
+                      <use href="#i-mail" /></svg
+                    ><input id="aMail" name="mail" value="finance@blora-labs.com"
+                  /></label>
+                </div>
+                <div class="bd-field">
+                  <span data-part="label">国家 / 地区</span>
+                  <div class="bd-select" id="countrySelect">
+                    <button type="button" data-part="trigger">
+                      <span data-part="value">中国大陆</span
+                      ><svg data-icon width="14" height="14" aria-hidden="true">
+                        <use href="#i-chevron-down" />
+                      </svg>
+                    </button>
+                    <div data-part="panel" popover>
+                      <div role="listbox" aria-label="国家 / 地区">
+                        <div role="option" data-value="cn" aria-selected="true">中国大陆</div>
+                        <div role="option" data-value="hk">中国香港</div>
+                        <div role="option" data-value="sg">新加坡</div>
+                        <div role="option" data-value="us">美国</div>
+                      </div>
+                    </div>
+                    <input type="hidden" name="country" value="cn" />
+                  </div>
+                </div>
+                <div class="bd-field">
+                  <label data-part="label" for="aZip">邮政编码</label>
+                  <input class="bd-input" id="aZip" name="zip" value="201203" />
+                </div>
+                <div class="bd-field" data-span="full">
+                  <label data-part="label" for="aAddr">详细地址</label>
+                  <label class="bd-input"
+                    ><svg data-icon width="14" height="14" aria-hidden="true">
+                      <use href="#i-building-2" /></svg
+                    ><input
+                      id="aAddr"
+                      name="addr"
+                      value="上海市浦东新区张江高科技园区碧波路 690 号 3 号楼 12 层"
+                  /></label>
+                </div>
+              </form>
+              <footer data-part="foot">
+                <p id="addrHint">修改会从下一张发票开始生效</p>
+                <div data-part="actions">
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="ghost"
+                    id="addrReset"
+                    disabled
+                  >
+                    撤销
+                  </button>
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="primary"
+                    id="addrSave"
+                    disabled
+                  >
+                    保存
+                  </button>
+                </div>
+              </footer>
+            </article>
+
+            <article class="bd-tile">
+              <header class="bd-head">
+                <h2>发票寄送</h2>
+                <p>付款成功后自动开具</p>
+              </header>
+              <ul class="bd-tray" id="deliver">
+                <li class="bd-item">
+                  <div>
+                    <span>电子发票自动发送</span
+                    ><small>发送到账单邮箱，附 PDF 与 OFD 两种格式</small>
+                  </div>
+                  <button
+                    type="button"
+                    class="bd-switch"
+                    role="switch"
+                    aria-checked="true"
+                    aria-label="电子发票自动发送"
+                  ></button>
+                </li>
+                <li class="bd-item">
+                  <div><span>抄送财务</span><small>accounting@blora-labs.com</small></div>
+                  <button
+                    type="button"
+                    class="bd-switch"
+                    role="switch"
+                    aria-checked="true"
+                    aria-label="抄送财务"
+                  ></button>
+                </li>
+                <li class="bd-item">
+                  <div>
+                    <span>纸质发票</span><small>每季度合并邮寄一次，比电子发票晚 3 个工作日</small>
+                  </div>
+                  <button
+                    type="button"
+                    class="bd-switch"
+                    role="switch"
+                    aria-checked="false"
+                    aria-label="纸质发票"
+                  ></button>
+                </li>
+                <li class="bd-item">
+                  <div><span>发票抬头使用英文</span><small>用于境外报销</small></div>
+                  <button
+                    type="button"
+                    class="bd-switch"
+                    role="switch"
+                    aria-checked="false"
+                    aria-label="发票抬头使用英文"
+                  ></button>
+                </li>
+              </ul>
+            </article>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script type="module">
+      // 业务逻辑：场景切换、价格周期、对比表、发票筛选分页、卡片与开票信息。组件行为全部由 blora.js 提供。
+      import { toast } from '../../packages/blora-design/dist/blora.js';
+
+      const $ = (s, el = document) => el.querySelector(s);
+      const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+      const icon = (id, size = 14) =>
+        `<svg data-icon width="${size}" height="${size}" aria-hidden="true"><use href="#i-${id}" /></svg>`;
+      const money = (v) =>
+        v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const yuan = (v) => '¥' + money(v);
+      const yuanParts = (v) => {
+        const [i, d] = money(v).split('.');
+        return `¥${i}<small>.${d}</small>`;
+      };
+
+      /* ---------------- 场景 ---------------- */
+      const PAGES = { plans: '套餐', usage: '用量', invoices: '发票', payment: '支付方式' };
+      let scene = null;
+      function go(name) {
+        if (!PAGES[name]) name = 'plans';
+        scene = name;
+        for (const v of $$('[data-scene]')) v.hidden = v.dataset.scene !== name;
+        for (const b of $$('.bd-rail [data-go]')) {
+          if (b.dataset.go === name) b.setAttribute('aria-current', 'page');
+          else b.removeAttribute('aria-current');
+        }
+        $('#crumbs').innerHTML =
+          `<a href="#plans" data-go="plans">Blora Labs</a><a href="#plans" data-go="plans">账单</a><span aria-current="page">${PAGES[name]}</span>`;
+        history.replaceState(null, '', '#' + name);
+        window.scrollTo({ top: 0 });
+      }
+      window.go = go;
+      const focusTile = (id) =>
+        setTimeout(() => {
+          document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'center' });
+          if (id === 'addCardTile')
+            setTimeout(() => $('#ccNo').focus({ preventScroll: true }), 380);
+        }, 120);
+      document.addEventListener('click', (e) => {
+        const t = e.target.closest('[data-go]');
+        if (t) {
+          e.preventDefault();
+          go(t.dataset.go);
+        }
+        const f = e.target.closest('[data-focus]');
+        if (f) focusTile(f.dataset.focus);
+        const msg = e.target.closest('[data-toast]');
+        if (msg) toast(msg.dataset.toast);
+      });
+      $('.bd-rail').setAttribute('data-bd-controlled', '');
+
+      /* ---------------- 套餐：按月 / 按年 ---------------- */
+      function tween(el, to) {
+        const from = Number(el.textContent.replace(/\D/g, '')) || 0;
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches || from === to) {
+          el.textContent = to.toLocaleString('en-US');
+          return;
+        }
+        const t0 = performance.now();
+        const step = (now) => {
+          const k = Math.min(1, (now - t0) / 460);
+          el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3))).toLocaleString(
+            'en-US',
+          );
+          if (k < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }
+      $('#cycleSeg').addEventListener('bd-change', (e) => {
+        const v = e.detail.value;
+        for (const el of $$('[data-part="price"] b[data-m]')) tween(el, Number(el.dataset[v]));
+        for (const el of $$('[data-part="price"] p[data-m], #cmp [data-m]'))
+          el.textContent = el.dataset[v];
+      });
+
+      /* 功能对比：表头在托盘外，价格一个托盘，每个分组一个托盘（组名是托盘上方的小标签） */
+      const CMP_HEAD = [
+        ['免费版', '', '¥0', '¥0'],
+        ['专业版', '<span class="bd-pill" data-tone="sand">当前</span>', '¥99 / 月', '¥82 / 月'],
+        ['团队版', '<span class="bd-pill" data-tone="blush">推荐</span>', '¥299 / 月', '¥249 / 月'],
+        ['企业版', '', '按需', '按需'],
+      ];
+      const CMP = [
+        { g: '计算与部署' },
+        ['实例数量', '1', '5', '20', '不限'],
+        ['单实例规格上限', '共享 CPU', '2 vCPU / 4 GB', '8 vCPU / 16 GB', '定制'],
+        ['构建分钟 / 月', '100', '2,000', '10,000', '不限'],
+        ['自定义域名', false, true, true, true],
+        ['预览环境', false, false, true, true],
+        { g: '协作' },
+        ['团队成员', '1', '3', '10', '不限'],
+        ['角色与权限', false, false, true, true],
+        ['SSO 单点登录', false, false, false, true],
+        { g: '支持与合规' },
+        ['日志保留', '1 天', '7 天', '30 天', '365 天'],
+        ['可用性 SLA', false, '99.9%', '99.95%', '99.99%'],
+        ['技术支持', '社区', '邮件 · 1 个工作日', '工单 · 2 小时', '专属客户经理'],
+      ];
+      function renderCmp() {
+        const HL = 2;
+        const cell = (v, i) => {
+          const hl = i === HL ? ' data-tone="blush"' : '';
+          if (v === true) return `<td${hl} data-part="yes" aria-label="包含">${icon('check')}</td>`;
+          if (v === false) return `<td data-part="no" aria-label="不包含">${icon('minus')}</td>`;
+          return `<td${hl}>${v}</td>`;
+        };
+        let html = `<thead><tr><th scope="col">功能</th>${CMP_HEAD.map(([n, tag]) => `<th scope="col">${n}${tag}</th>`).join('')}</tr></thead>`;
+        html += `<tbody><tr><th scope="row">价格</th>${CMP_HEAD.map(([, , m, y], i) => `<td${i === HL ? ' data-tone="blush"' : ''} data-m="${m}" data-y="${y}">${m}</td>`).join('')}</tr></tbody>`;
+        for (const r of CMP) {
+          if (r.g)
+            html += `<tbody data-part="group"><tr><th colspan="5" scope="colgroup">${r.g}</th></tr></tbody><tbody>`;
+          else html += `<tr><th scope="row">${r[0]}</th>${r.slice(1).map(cell).join('')}</tr>`;
+        }
+        $('#cmp').innerHTML = html.replace(/<tbody>(?=<tbody|$)/g, '');
+      }
+      renderCmp();
+
+      /* ---------------- 用量：按日 / 累计 ---------------- */
+      const COST = {
+        a: [82, 86, 79, 91, 95, 88, 102, 110, 104, 98, 112, 121, 118],
+        b: [76, 80, 78, 82, 85, 83, 88, 92, 90, 87, 94, 96, 95],
+      };
+      const cumulate = (arr) => arr.map((_, i) => arr.slice(0, i + 1).reduce((s, v) => s + v, 0));
+      $('#costSeg').addEventListener('bd-change', (e) => {
+        const cum = e.detail.value === 'cum';
+        $('#costSub').textContent = cum
+          ? '本期累计费用，与上期同期对比'
+          : '本期前 13 天，与上期同期对比';
+        const [a, b] = $$('#costChart > data');
+        a.value = (cum ? cumulate(COST.a) : COST.a).join(',');
+        b.value = (cum ? cumulate(COST.b) : COST.b).join(',');
+      });
+
+      /* ---------------- 发票 ---------------- */
+      const AMOUNTS = [
+        286.4, 241.1, 99.0, 213.75, 198.3, 176.2, 99.0, 154.9, 132.4, 99.0, 121.6, 99.0, 147.3,
+        108.8, 99.0, 99.0, 112.45, 99.0,
+      ];
+      const INVOICES = AMOUNTS.map((amount, i) => {
+        const d = new Date(2026, 10 - i, 14);
+        const y = d.getFullYear();
+        const m = d.getMonth() + 1;
+        const m2 = m === 12 ? 1 : m + 1;
+        const status = i === 0 ? 'due' : i === 1 ? 'over' : i === 2 || i === 6 ? 'refund' : 'paid';
+        const pay = i === 1 ? 'mc' : i % 3 === 0 && i > 0 ? 'bal' : 'visa';
+        return {
+          no: `INV-${y}${String(m).padStart(2, '0')}-${1840 - i * 37}`,
+          year: String(y),
+          date: `${y}-${String(m).padStart(2, '0')}-14`,
+          period: `${m} 月 14 日 – ${m2} 月 13 日${status === 'refund' ? ' · 重复扣款已退回' : ''}`,
+          amount,
+          status,
+          pay,
+        };
+      });
+      const INV_STATUS = {
+        paid: ['sand', '已支付'],
+        due: ['blush', '待支付'],
+        over: ['rose', '逾期'],
+        refund: [null, '已退款'],
+      };
+      const PAY = { visa: ['Visa', '4242'], mc: ['万事达', '8210'] };
+      const YEARS = { 2026: '2026 年', 2025: '2025 年', all: '全部年份' };
+      const INV_PAGE = 8;
+      const inv = { q: '', status: 'all', year: '2026', page: 1 };
+
+      const payCell = (p) =>
+        p === 'bal'
+          ? `<span data-pattern="pay-method"><span data-pattern="card-brand" data-size="sm">${icon('wallet', 11)}</span>账户余额</span>`
+          : `<span data-pattern="pay-method"><span data-pattern="card-brand" data-size="sm" data-brand="${p}"></span>${PAY[p][0]} <code>•••• ${PAY[p][1]}</code></span>`;
+      const invBase = () => {
+        const q = inv.q.trim().toLowerCase();
+        return INVOICES.filter(
+          (it) =>
+            (inv.year === 'all' || it.year === inv.year) &&
+            (!q ||
+              it.no.toLowerCase().includes(q) ||
+              money(it.amount).includes(q) ||
+              String(it.amount).includes(q)),
+        );
+      };
+      function renderInvoices() {
+        const base = invBase();
+        const rows = base.filter((it) => inv.status === 'all' || it.status === inv.status);
+        const pages = Math.max(1, Math.ceil(rows.length / INV_PAGE));
+        inv.page = Math.min(inv.page, pages);
+        const start = (inv.page - 1) * INV_PAGE;
+        const view = rows.slice(start, start + INV_PAGE);
+        $('#invBody').innerHTML = view.length
+          ? view
+              .map((it) => {
+                const [tone, label] = INV_STATUS[it.status];
+                return `<tr data-no="${it.no}">
+                  <td><strong><code>${it.no}</code></strong><small>${it.period}</small></td>
+                  <td><time>${it.date}</time></td>
+                  <td data-align="end">${it.status === 'refund' ? `<s data-part="muted">${yuan(it.amount)}</s>` : `<strong>${yuan(it.amount)}</strong>`}</td>
+                  <td><span class="bd-pill" data-dot${tone ? ` data-tone="${tone}"` : ''}>${label}</span></td>
+                  <td>${payCell(it.pay)}</td>
+                  <td><button type="button" class="bd-button" data-variant="ghost" data-shape="icon" data-size="sm" data-dl aria-label="下载 PDF">${icon('download')}</button></td>
+                </tr>`;
+              })
+              .join('')
+          : `<tr><td colspan="6"><div class="bd-empty"><span data-part="icon">${icon('inbox', 18)}</span><p>${inv.q ? `没有找到包含「${inv.q.trim()}」的发票，检查一下发票号或金额。` : '没有符合条件的发票，换个筛选条件试试。'}</p><button type="button" class="bd-button" data-size="sm" id="resetInv">清除筛选</button></div></td></tr>`;
+        $('#invPageInfo').textContent = rows.length
+          ? `显示 ${start + 1}–${start + view.length}，共 ${rows.length} 张`
+          : '共 0 张';
+        $('#invPager').innerHTML =
+          `<button type="button" data-part="prev" aria-label="上一页" data-p="${inv.page - 1}"${inv.page === 1 ? ' disabled' : ''}>${icon('chevron-left', 13)}</button>` +
+          Array.from(
+            { length: pages },
+            (_, i) =>
+              `<button type="button" data-p="${i + 1}"${i + 1 === inv.page ? ' aria-current="page"' : ''}>${i + 1}</button>`,
+          ).join('') +
+          `<button type="button" data-part="next" aria-label="下一页" data-p="${inv.page + 1}"${inv.page === pages ? ' disabled' : ''}>${icon('chevron-right', 13)}</button>`;
+        const counts = { all: base.length, paid: 0, due: 0, over: 0, refund: 0 };
+        for (const it of base) counts[it.status]++;
+        for (const n of $$('#invSeg [data-count]')) n.textContent = counts[n.dataset.count];
+      }
+      function renderInvKpis() {
+        const y26 = INVOICES.filter((it) => it.year === '2026');
+        const sum = (arr) => arr.reduce((s, it) => s + it.amount, 0);
+        const paid = y26.filter((it) => it.status === 'paid');
+        const refund = y26.filter((it) => it.status === 'refund');
+        const due = INVOICES.filter((it) => it.status === 'due');
+        const over = INVOICES.filter((it) => it.status === 'over');
+        $('#kpiPaid').innerHTML = yuanParts(sum(paid));
+        $('#kpiPaidFoot').textContent =
+          `共 ${paid.length} 张，另有 ${refund.length} 张已退款 ${yuan(sum(refund))}`;
+        $('#kpiDue').innerHTML = yuanParts(sum(due));
+        $('#kpiOver').innerHTML = yuanParts(sum(over));
+        $('#invSub').textContent =
+          `共 ${INVOICES.length} 张发票 · 待支付 ${yuan(sum(due) + sum(over))}`;
+        $('#railInvCount').textContent = due.length + over.length;
+      }
+      function resetInv() {
+        Object.assign(inv, { q: '', status: 'all', page: 1 });
+        $('#invSearch').value = '';
+        for (const b of $$('#invSeg [role="radio"]'))
+          b.setAttribute('aria-checked', String(b.dataset.value === 'all'));
+        renderInvoices();
+      }
+      $('#invSeg').addEventListener('bd-change', (e) => {
+        Object.assign(inv, { status: e.detail.value, page: 1 });
+        queueMicrotask(renderInvoices);
+      });
+      $('#yearSelect').addEventListener('bd-change', (e) => {
+        Object.assign(inv, { year: e.detail.value, page: 1 });
+        queueMicrotask(renderInvoices);
+      });
+      $('#invSearch').addEventListener('input', (e) => {
+        Object.assign(inv, { q: e.target.value, page: 1 });
+        renderInvoices();
+      });
+      $('#invPager').addEventListener('click', (e) => {
+        const b = e.target.closest('[data-p]');
+        if (!b || b.disabled) return;
+        inv.page = Number(b.dataset.p);
+        renderInvoices();
+      });
+      $('#invoices').addEventListener('click', (e) => {
+        if (e.target.closest('#resetInv')) return resetInv();
+        const row = e.target.closest('tr[data-no]');
+        if (!row) return;
+        toast(
+          e.target.closest('[data-dl]')
+            ? `正在下载 ${row.dataset.no}.pdf`
+            : `已打开发票 ${row.dataset.no}`,
+        );
+      });
+      $('#globalSearch').addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter') return;
+        Object.assign(inv, { q: e.target.value, page: 1, year: 'all' });
+        $('#invSearch').value = e.target.value;
+        for (const o of $$('#yearSelect [role="option"]'))
+          o.setAttribute('aria-selected', String(o.dataset.value === 'all'));
+        $('#yearSelect [data-part="value"]').textContent = YEARS.all;
+        renderInvoices();
+        go('invoices');
+      });
+
+      /* ---------------- 支付方式 ---------------- */
+      const BRAND = { visa: 'Visa', mc: '万事达', up: '银联', card: '银行卡' };
+      const BRAND_TAG = { visa: 'VISA', mc: 'MC', up: 'UP', card: 'CARD' };
+      const BRAND_FULL = { visa: 'VISA', mc: 'MASTERCARD', up: 'UNIONPAY', card: 'CARD' };
+      const cards = [
+        { id: 'c1', brand: 'visa', last4: '4242', exp: '08/28', holder: 'RHEDAR CHEN', def: true },
+        {
+          id: 'c2',
+          brand: 'mc',
+          last4: '8210',
+          exp: '12/26',
+          holder: 'RHEDAR CHEN',
+          expiring: true,
+        },
+        {
+          id: 'c3',
+          brand: 'up',
+          last4: '0067',
+          exp: '03/29',
+          holder: '上海晶格云计算科技有限公司华东研发与运营中心对公结算账户',
+        },
+      ];
+      const cardRow = (c) => `<li class="bd-item" data-id="${c.id}">
+          <span data-pattern="card-brand" data-brand="${c.brand === 'card' ? 'up' : c.brand}">${BRAND_TAG[c.brand]}</span>
+          <div><strong>${BRAND[c.brand]} <code>•••• ${c.last4}</code></strong><small data-tip="${c.holder}">有效期 ${c.exp} · ${c.holder}</small></div>
+          ${c.def ? '<span class="bd-pill" data-tone="blush">默认</span>' : ''}${c.expiring ? '<span class="bd-pill" data-tone="rose">即将到期</span>' : ''}
+          <div class="bd-menu">
+            <button type="button" class="bd-button" data-variant="ghost" data-shape="icon" data-size="sm" data-part="trigger" aria-label="更多操作">${icon('ellipsis')}</button>
+            <div data-part="panel" popover role="menu" data-align="end">
+              <button type="button" role="menuitem" data-act="default"${c.def ? ' disabled' : ''}>设为默认</button>
+              <button type="button" role="menuitem" data-act="edit">编辑有效期</button>
+              <div data-part="separator" role="separator"></div>
+              <button type="button" role="menuitem" data-tone="rose" data-act="delete">删除</button>
+            </div>
+          </div>
+        </li>`;
+      function renderCards() {
+        $('#cardList').innerHTML = cards.map(cardRow).join('');
+        $('#cardCount').textContent = `${cards.length} 张卡片 · 1 个账户余额`;
+      }
+      $('#cardList').addEventListener('bd-select', (e) => {
+        const act = e.target.closest('[data-act]')?.dataset.act ?? e.detail?.item?.dataset?.act;
+        const c = cards.find((x) => x.id === e.target.closest('[data-id]').dataset.id);
+        if (act === 'default') {
+          for (const x of cards) x.def = x === c;
+          renderCards();
+          toast(`${BRAND[c.brand]} •••• ${c.last4} 已设为默认`);
+        } else if (act === 'edit') {
+          focusTile('addCardTile');
+          toast('在右侧重新填写这张卡的信息即可');
+        } else if (c.def) {
+          toast('默认卡不能删除，请先把其他卡设为默认', { tone: 'rose' });
+        } else {
+          cards.splice(cards.indexOf(c), 1);
+          renderCards();
+          toast(`已删除 ${BRAND[c.brand]} •••• ${c.last4}`);
+        }
+      });
+      renderCards();
+
+      /* 添加新卡：输入即格式化，卡面实时预览，保存时逐项校验 */
+      const ccNo = $('#ccNo');
+      const ccExp = $('#ccExp');
+      const ccCvc = $('#ccCvc');
+      const ccName = $('#ccName');
+      const digits = (v) => v.replace(/\D/g, '');
+      const detectBrand = (d) =>
+        /^4/.test(d) ? 'visa' : /^(5[1-5]|2[2-7])/.test(d) ? 'mc' : /^62/.test(d) ? 'up' : 'card';
+      function updatePreview() {
+        const d = digits(ccNo.value);
+        const brand = d ? detectBrand(d) : 'card';
+        $('#cardPreview').dataset.brand = brand;
+        $('#cpBrand').textContent = BRAND_FULL[brand];
+        $('#cpNum').textContent = (d + '•'.repeat(16)).slice(0, 16).replace(/(.{4})(?=.)/g, '$1 ');
+        $('#cpName').textContent = ccName.value.trim() || '持卡人姓名';
+        $('#cpExp').textContent = ccExp.value || 'MM/YY';
+      }
+      const expOk = (v) => {
+        const m = /^(0[1-9]|1[0-2])\/(\d{2})$/.exec(v);
+        return !!m && (Number(m[2]) > 26 || (Number(m[2]) === 26 && Number(m[1]) >= 11));
+      };
+      const setInvalid = (input, bad) => {
+        const field = input.closest('.bd-field');
+        field.querySelector('[data-part="error"]').hidden = !bad;
+        input.setAttribute('aria-invalid', String(bad));
+      };
+      ccNo.addEventListener('input', () => {
+        const d = digits(ccNo.value).slice(0, 16);
+        ccNo.value = d.replace(/(\d{4})(?=\d)/g, '$1 ');
+        if (d.length === 16) setInvalid(ccNo, false);
+        updatePreview();
+      });
+      ccExp.addEventListener('input', () => {
+        const d = digits(ccExp.value).slice(0, 4);
+        ccExp.value = d.length > 2 ? d.slice(0, 2) + '/' + d.slice(2) : d;
+        if (expOk(ccExp.value)) setInvalid(ccExp, false);
+        updatePreview();
+      });
+      ccCvc.addEventListener('input', () => {
+        ccCvc.value = digits(ccCvc.value).slice(0, 4);
+        if (ccCvc.value.length >= 3) setInvalid(ccCvc, false);
+      });
+      ccName.addEventListener('input', () => {
+        if (ccName.value.trim()) setInvalid(ccName, false);
+        updatePreview();
+      });
+      function resetCardForm() {
+        for (const i of [ccNo, ccExp, ccCvc, ccName]) {
+          i.value = '';
+          setInvalid(i, false);
+        }
+        $('#ccDefault').setAttribute('aria-checked', 'false');
+        updatePreview();
+      }
+      $('#ccReset').addEventListener('click', resetCardForm);
+      $('#ccSave').addEventListener('click', () => {
+        const d = digits(ccNo.value);
+        const checks = [
+          [ccNo, d.length === 16],
+          [ccExp, expOk(ccExp.value)],
+          [ccCvc, ccCvc.value.length >= 3],
+          [ccName, !!ccName.value.trim()],
+        ];
+        for (const [i, ok] of checks) setInvalid(i, !ok);
+        const bad = checks.find(([, ok]) => !ok);
+        if (bad) return bad[0].focus();
+        const def = $('#ccDefault').getAttribute('aria-checked') === 'true';
+        const c = {
+          id: 'c' + Date.now(),
+          brand: detectBrand(d),
+          last4: d.slice(-4),
+          exp: ccExp.value,
+          holder: ccName.value.trim().toUpperCase(),
+          def,
+        };
+        if (def) for (const x of cards) x.def = false;
+        cards.push(c);
+        renderCards();
+        resetCardForm();
+        toast(`已添加 ${BRAND[c.brand]} •••• ${c.last4}`);
+      });
+
+      /* 账单地址：有改动才能保存 / 撤销 */
+      const addrForm = $('#addrForm');
+      const addrSnap = () => JSON.stringify([...new FormData(addrForm)]);
+      let addrSaved = addrSnap();
+      function addrDirty() {
+        const dirty = addrSnap() !== addrSaved;
+        $('#addrSave').disabled = !dirty;
+        $('#addrReset').disabled = !dirty;
+        $('#addrHint').textContent = dirty ? '有未保存的修改' : '修改会从下一张发票开始生效';
+      }
+      addrForm.addEventListener('input', addrDirty);
+      addrForm.addEventListener('bd-change', () => queueMicrotask(addrDirty));
+      $('#addrSave').addEventListener('click', () => {
+        addrSaved = addrSnap();
+        addrDirty();
+        toast('开票信息已保存，下一张发票生效');
+      });
+      $('#addrReset').addEventListener('click', () => {
+        const values = Object.fromEntries(JSON.parse(addrSaved));
+        for (const el of addrForm.elements)
+          if (el.name && el.name in values) el.value = values[el.name];
+        for (const o of $$('#countrySelect [role="option"]'))
+          o.setAttribute('aria-selected', String(o.dataset.value === values.country));
+        $('#countrySelect [data-part="value"]').textContent = $(
+          `#countrySelect [data-value="${values.country}"]`,
+        ).textContent;
+        addrDirty();
+      });
+      $('#deliver').addEventListener('bd-change', (e) => {
+        const s = e.target.closest('.bd-switch');
+        if (s)
+          queueMicrotask(() =>
+            toast(
+              `${s.getAttribute('aria-label')}：已${s.getAttribute('aria-checked') === 'true' ? '开启' : '关闭'}`,
+            ),
+          );
+      });
+
+      /* ---------------- 深色模式 ---------------- */
+      $('#themeBtn').addEventListener('click', () => {
+        const html = document.documentElement;
+        html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+      });
+
+      /* ---------------- 启动 ---------------- */
+      renderInvKpis();
+      renderInvoices();
+      go((location.hash || '#plans').slice(1));
+      window.addEventListener('hashchange', () => go(location.hash.slice(1)));
+    </script>
+  </body>
+</html>

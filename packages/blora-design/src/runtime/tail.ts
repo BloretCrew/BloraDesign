@@ -36,9 +36,10 @@ function bind(el: Element): void {
 }
 
 const SELECTOR = [
-  '.bd-head > p',
-  '.bd-tile[data-variant="page"] > p',
+  '.bd-tile p',
   '.bd-prose p',
+  '.bd-field > [data-part="hint"]',
+  '.bd-tile[data-variant="metric"] > [data-part="foot"]',
   '[data-bd-tail]',
 ].join(', ');
 

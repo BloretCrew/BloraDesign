@@ -1,0 +1,1017 @@
+/* team 页面模式：由对应 demo 页整理 */
+@layer bd.patterns {
+  /* 头像叠放组：<span data-pattern="avatar-stack"> 里放几个 bd-avatar data-size="sm"，末尾可跟 <span data-part="more">+1</span>；整组横排居中、不被压扁 */
+  [data-pattern='avatar-stack'] {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  /* 看板指标行：<section class="bd-mosaic" data-pattern="board-metrics"> 里几个指标格；标签与数值间 6、数值与说明间 2 */
+  [data-pattern='board-metrics'] > .bd-tile {
+    gap: 0;
+
+    > [data-part='value'] {
+      margin-top: 6px;
+    }
+
+    > [data-part='foot'] {
+      margin-top: 2px;
+    }
+  }
+
+  /* 看板：<section class="bd-mosaic" data-pattern="kanban"> 里每列一个 <article class="bd-tile" data-col="…">（bd-head + 装卡片的 bd-tray）。
+     窄列内边距 16 / 12 / 12、标题行右移 6，托盘小格保持常规 9 / 12（收件箱消息列共用） */
+  :is([data-pattern='kanban'] > .bd-tile, [data-pattern='message-list']) {
+    padding: 16px 12px 12px;
+
+    > .bd-head {
+      padding-inline: 6px;
+    }
+  }
+
+  [data-pattern='kanban'] > .bd-tile {
+    gap: 12px;
+  }
+
+  /* 空列 / 清空的消息列表：托盘小格里的空状态。核心 tray.css 的同名规则在 bd.layout 层，会被 bd.components 层的 .bd-empty 压过，这里补上 */
+  :is([data-pattern='kanban'], [data-pattern='message-list']) .bd-tray > .bd-empty {
+    gap: 0;
+    padding: 20px 12px 18px;
+
+    > p {
+      max-width: 230px;
+      margin-top: 8px;
+    }
+
+    > .bd-button {
+      margin-top: 12px;
+    }
+  }
+
+  /* 看板卡片：<article data-pattern="kanban-card">（托盘小格）
+       <header>编号 · [data-part="prio"] 高优 · <button data-part="move"> 推进 · [data-part="done"] 已完成勾</header>
+       <h3>两行标题</h3> · <div data-part="tags">方角 bd-tag</div>
+       <footer>[data-part="meta"] 截止 / 子任务（可带 bd-progress）… · avatar-stack</footer>
+     位于 data-col="done" 的列里时：推进按钮换成完成勾、标题变淡 */
+  [data-pattern='kanban-card'] {
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.15s ease;
+
+    &:hover {
+      box-shadow: 0 2px 8px color-mix(in srgb, var(--bd-ink) 9%, transparent);
+    }
+
+    > header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 24px;
+      font-family: var(--bd-font-mono);
+      font-size: 11px;
+      color: var(--bd-ink-tertiary);
+    }
+
+    [data-part='prio'] {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 1px 6px;
+      border-radius: 6px;
+      background: var(--bd-rose-soft);
+      color: var(--bd-rose-ink);
+      font-family: var(--bd-font-sans);
+      font-size: 11px;
+      font-weight: 560;
+    }
+
+    :is([data-part='move'], [data-part='done']) {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      margin-left: auto;
+      border-radius: var(--bd-radius-cell);
+    }
+
+    [data-part='move'] {
+      background: var(--bd-well);
+      color: var(--bd-ink-tertiary);
+      opacity: 0;
+      transition:
+        opacity 0.15s ease,
+        background-color 0.15s ease,
+        color 0.15s ease;
+    }
+
+    &:hover [data-part='move'],
+    [data-part='move']:focus-visible {
+      opacity: 1;
+    }
+
+    [data-part='move']:hover {
+      background: var(--bd-blush-soft);
+      color: var(--bd-blush-ink);
+    }
+
+    [data-part='done'] {
+      display: none;
+      background: var(--bd-sand-soft);
+      color: var(--bd-sand-ink);
+    }
+
+    > h3 {
+      display: -webkit-box;
+      margin-top: 2px;
+      text-wrap: wrap;
+      overflow: hidden;
+      font-size: 13.5px;
+      font-weight: 560;
+      line-height: 1.45;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      color: var(--bd-ink);
+    }
+
+    > [data-part='tags'] {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 10px;
+    }
+
+    > footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px 10px;
+      min-height: 24px;
+      margin-top: 10px;
+    }
+
+    > [data-part='tags'] + footer {
+      margin-top: 6px;
+    }
+
+    > footer > [data-pattern='avatar-stack'] {
+      margin-left: auto;
+    }
+
+    [data-part='meta'] {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      color: var(--bd-ink-tertiary);
+    }
+
+    [data-part='meta'][data-tone='rose'] {
+      padding: 1px 7px 1px 6px;
+      border-radius: 6px;
+      background: var(--bd-rose-soft);
+      color: var(--bd-rose-ink);
+      font-weight: 560;
+    }
+
+    [data-part='meta'][data-tone='sand'] {
+      color: var(--bd-sand-ink);
+      font-weight: 560;
+    }
+
+    [data-part='meta'][data-state='full'] {
+      color: var(--bd-sand-ink);
+    }
+
+    [data-part='meta'] > .bd-progress {
+      margin-left: 2px;
+    }
+
+    /* 还没分配负责人：凹槽底、最淡的墨色人形图标 */
+    .bd-avatar[data-part='unassigned'] {
+      background: var(--bd-well);
+      color: var(--bd-ink-quaternary);
+    }
+  }
+
+  [data-col='done'] [data-pattern='kanban-card'] {
+    [data-part='move'] {
+      display: none;
+    }
+
+    [data-part='done'] {
+      display: grid;
+    }
+
+    > h3 {
+      color: var(--bd-ink-secondary);
+    }
+  }
+
+  /* 消息条目：<button class="bd-item" role="option" data-pattern="message" data-align="start"> 放在 listbox 托盘里；
+     左边头像或 data-part="icon"，右边 <div>：首行 <span>（发件人 <span> + 类型图标 + <time> + 未读点 <i>）、<strong> 标题、<small> 摘要；
+     data-unread 时标题加粗、未读点弹出 */
+  [data-pattern='message'] {
+    gap: 10px;
+
+    > div > * {
+      line-height: 17px;
+    }
+
+    > div > strong {
+      margin-top: 1px;
+      font-weight: 450;
+      line-height: 19px;
+    }
+
+    &[data-unread] > div > strong {
+      font-weight: 600;
+    }
+
+    > div > small {
+      margin-top: 1px;
+      font-size: 12.5px;
+    }
+
+    > .bd-avatar {
+      border-radius: 50%;
+    }
+
+    > [data-part='icon'] {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--bd-radius-icon);
+    }
+
+    &[aria-selected='true'] > [data-part='icon'] {
+      background: var(--bd-tile);
+    }
+
+    > div > span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      font-weight: 400;
+      line-height: normal;
+      color: var(--bd-ink-secondary);
+    }
+
+    > div > span > span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    > div > span > svg {
+      color: var(--bd-ink-quaternary);
+    }
+
+    time {
+      margin-left: auto;
+      padding-left: 6px;
+      font-family: var(--bd-font-mono);
+      font-size: 11px;
+      color: var(--bd-ink-tertiary);
+    }
+
+    i {
+      flex-shrink: 0;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--bd-blush-solid);
+      transform: scale(0);
+      transition: transform 0.24s var(--bd-ease-pop);
+    }
+
+    &[data-unread] i {
+      transform: none;
+    }
+  }
+
+  /* 阅读区：<article class="bd-tile" data-pattern="reader">
+       bd-head（类型 + 图标按钮）· <h2 data-part="subject"> · <div class="bd-item" data-part="from">（头像、发件人 <p><b>、<time>）
+       · <div class="bd-scroll" data-grow data-part="body">（正文 <p>、bd-code、<button data-part="attachment">、内容组）
+       · <div data-part="reply">（无底色 bd-textarea + bd-toolbar，整体是一块凹槽） */
+  [data-pattern='reader'] {
+    gap: 0;
+    min-height: 0;
+    padding-bottom: 12px;
+    overflow: hidden;
+
+    > .bd-head {
+      margin-bottom: 14px;
+    }
+
+    > .bd-head > [data-part='end'] {
+      gap: 2px;
+    }
+
+    > [data-part='subject'] {
+      font-size: 18px;
+      font-weight: 620;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      text-wrap: balance;
+    }
+
+    > [data-part='from'] {
+      gap: 10px;
+      margin-top: 8px;
+      font-size: 12.5px;
+    }
+
+    > [data-part='from'] > :is(.bd-avatar, [data-part='icon']) {
+      width: 30px;
+      height: 30px;
+      font-size: 11px;
+    }
+
+    > [data-part='from'] > div > p {
+      color: var(--bd-ink-description);
+      font-size: 12.5px;
+    }
+
+    > [data-part='from'] > div > p > b {
+      font-size: 13.5px;
+      color: var(--bd-ink);
+    }
+
+    > [data-part='body'] {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 12px -18px 0;
+      padding: 4px 18px 18px;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    > [data-part='body'] > * {
+      flex-shrink: 0;
+      max-width: 66ch;
+    }
+
+    > [data-part='body'] > p {
+      line-height: inherit;
+    }
+
+    > [data-part='body'] > .bd-code {
+      font-size: 12.5px;
+    }
+
+    > [data-part='body'] > .bd-code > pre {
+      line-height: 1.7;
+    }
+
+    > [data-part='body'] [data-part='group'] dt {
+      line-height: inherit;
+    }
+
+    [data-part='attachment'] {
+      display: inline-flex;
+      align-self: flex-start;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 14px 7px 7px;
+      border-radius: var(--bd-radius-control);
+      background: var(--bd-well);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    [data-part='attachment'] > span {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      background: var(--bd-tile);
+      color: var(--bd-sand-ink);
+    }
+
+    [data-part='attachment'] > b {
+      font-weight: 600;
+    }
+
+    [data-part='attachment'] > small {
+      font-family: var(--bd-font-mono);
+      font-size: 11.5px;
+      color: var(--bd-ink-tertiary);
+    }
+
+    > [data-part='reply'] {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-inline: -6px;
+      padding: 10px 10px 10px 14px;
+      border-radius: var(--bd-radius-control);
+      background: var(--bd-well);
+      transition:
+        background-color 0.15s ease,
+        box-shadow 0.15s ease;
+    }
+
+    > [data-part='reply']:focus-within {
+      background: var(--bd-control);
+      box-shadow: var(--bd-shadow-focus);
+    }
+
+    > [data-part='reply'] > .bd-textarea {
+      min-height: 0;
+      padding: 0;
+      background: none;
+      box-shadow: none;
+      resize: none;
+      font-size: 13.5px;
+    }
+
+    > [data-part='reply'] > .bd-toolbar {
+      gap: 2px;
+    }
+
+    > [data-part='reply'] [data-part='hint'] {
+      margin-right: 8px;
+      font-size: 11.5px;
+      color: var(--bd-ink-quaternary);
+    }
+  }
+
+  /* 周切换：页头 <div data-part="end" data-pattern="week-nav"> 里「上一周 · <span>日期范围</span> · 下一周 · 主按钮」 */
+  [data-pattern='week-nav'] {
+    gap: 6px;
+
+    > span {
+      margin: 0 6px;
+      white-space: nowrap;
+      font-size: 13.5px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  /* 周视图时间网格：<article class="bd-tile" data-pattern="week-grid">
+       bd-head · <div data-part="days">（空格 + 7 个 <div>周几<b>日</b></div>，今天 aria-current、周末 data-weekend）
+       · <div data-part="allday">（<span>全天</span> + 横跨几天的条 <div data-tone style="--col; --span; --row">）
+       · <div data-part="hours">（时间轴 <div><span style="--h"></div> + 每天一列 <div>：隔行底 <i style="--h">、
+         日程块 <button data-tone data-short data-lane="l|r" style="--s; --d">、当前时间线 <hr style="--t">）
+       · <ul class="bd-tray" data-cols="4" data-part="legend">（swatch 图例） */
+  [data-pattern='week-grid'] {
+    gap: 8px;
+    padding-inline: 16px;
+
+    > .bd-head {
+      margin-bottom: 2px;
+      padding-inline: 2px;
+    }
+
+    > :is([data-part='days'], [data-part='allday'], [data-part='hours']) {
+      display: grid;
+      grid-template-columns: 44px repeat(7, minmax(0, 1fr));
+      column-gap: 4px;
+    }
+
+    > [data-part='days'] > div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      height: 34px;
+      font-size: 12.5px;
+      color: var(--bd-ink-tertiary);
+    }
+
+    > [data-part='days'] b {
+      display: grid;
+      place-items: center;
+      min-width: 28px;
+      height: 28px;
+      padding: 0 6px;
+      border-radius: var(--bd-radius-pill);
+      font-size: 14.5px;
+      font-weight: 620;
+      font-variant-numeric: tabular-nums;
+      color: var(--bd-ink);
+    }
+
+    > [data-part='days'] > [aria-current] {
+      font-weight: 560;
+      color: var(--bd-blush-ink);
+    }
+
+    > [data-part='days'] > [aria-current] b {
+      background: var(--bd-blush-soft);
+      color: var(--bd-blush-ink);
+    }
+
+    > [data-part='days'] > [data-weekend] {
+      color: var(--bd-ink-quaternary);
+    }
+
+    > [data-part='allday'] {
+      row-gap: 3px;
+    }
+
+    > [data-part='allday'] > span {
+      grid-row: 1 / span 2;
+      align-self: center;
+      font-size: 11px;
+      color: var(--bd-ink-quaternary);
+    }
+
+    > [data-part='allday'] > div {
+      display: flex;
+      grid-row: var(--row);
+      grid-column: var(--col) / span var(--span);
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+      height: 24px;
+      padding: 0 10px;
+      overflow: hidden;
+      border-radius: var(--bd-radius-cell);
+      white-space: nowrap;
+      font-size: 12px;
+      font-weight: 560;
+    }
+
+    > [data-part='allday'] > div > span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    > [data-part='allday'] > [data-tone='blush'] {
+      background: var(--bd-blush-soft);
+      color: var(--bd-blush-ink);
+    }
+
+    > [data-part='allday'] > [data-tone='sand'] {
+      background: var(--bd-sand-soft);
+      color: var(--bd-sand-ink);
+    }
+
+    > [data-part='hours'] {
+      position: relative;
+      flex: 1 0 auto;
+      min-height: 440px;
+    }
+
+    > [data-part='hours'] > div {
+      position: relative;
+    }
+
+    /* 时间轴：10 个小时各占 10% */
+    > [data-part='hours'] > :first-child > span {
+      position: absolute;
+      top: calc(var(--h) * 10%);
+      right: 6px;
+      transform: translateY(-50%);
+      font-family: var(--bd-font-mono);
+      font-size: 10.5px;
+      font-variant-numeric: tabular-nums;
+      color: var(--bd-ink-quaternary);
+    }
+
+    > [data-part='hours'] > :first-child > span:first-child {
+      transform: none;
+    }
+
+    > [data-part='hours'] > :not(:first-child) {
+      border-radius: var(--bd-radius-control);
+      background: var(--bd-tile-tint);
+    }
+
+    > [data-part='hours'] > [data-weekend] {
+      background: color-mix(in srgb, var(--bd-tile-tint) 55%, var(--bd-tile));
+    }
+
+    > [data-part='hours'] i {
+      position: absolute;
+      top: calc(var(--h) * 10%);
+      right: 0;
+      left: 0;
+      height: 10%;
+      background: color-mix(in srgb, var(--bd-ink-tertiary) 4.5%, transparent);
+      pointer-events: none;
+    }
+
+    > [data-part='hours'] i:last-of-type {
+      border-radius: 0 0 var(--bd-radius-control) var(--bd-radius-control);
+    }
+
+    > [data-part='hours'] button {
+      position: absolute;
+      top: calc(var(--s) * 10% + 1px);
+      right: 3px;
+      left: 3px;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      height: calc(var(--d) * 10% - 3px);
+      padding: 5px 8px;
+      overflow: hidden;
+      border-radius: var(--bd-radius-icon);
+      background: var(--bd-slot);
+      text-align: left;
+      font-size: 12px;
+      line-height: 1.35;
+      color: var(--bd-ink);
+      transition:
+        transform 0.18s var(--bd-ease-out),
+        box-shadow 0.18s ease;
+    }
+
+    > [data-part='hours'] button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px color-mix(in srgb, var(--bd-ink) 8%, transparent);
+    }
+
+    > [data-part='hours'] button[aria-pressed='true'] {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px color-mix(in srgb, var(--bd-ink) 14%, transparent);
+      filter: saturate(1.25);
+    }
+
+    > [data-part='hours'] button > * {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    > [data-part='hours'] button > b {
+      font-weight: 600;
+    }
+
+    > [data-part='hours'] button > span {
+      font-size: 11px;
+      font-variant-numeric: tabular-nums;
+      opacity: 0.82;
+    }
+
+    > [data-part='hours'] button[data-short] {
+      justify-content: center;
+      padding: 1px 8px;
+      border-radius: var(--bd-radius-cell);
+      font-size: 11.5px;
+      line-height: 1.25;
+    }
+
+    > [data-part='hours'] button[data-short] > span {
+      display: none;
+    }
+
+    > [data-part='hours'] button[data-lane='l'] {
+      right: calc(50% + 1px);
+    }
+
+    > [data-part='hours'] button[data-lane='r'] {
+      left: calc(50% + 1px);
+    }
+
+    > [data-part='hours'] button[data-tone='blush'] {
+      background: var(--bd-blush-fill);
+      color: var(--bd-blush-ink);
+    }
+
+    > [data-part='hours'] button[data-tone='sand'] {
+      background: var(--bd-sand-fill);
+      color: var(--bd-sand-ink);
+    }
+
+    > [data-part='hours'] button[data-tone='rose'] {
+      background: var(--bd-rose-fill);
+      color: var(--bd-rose-ink);
+    }
+
+    > [data-part='hours'] hr {
+      position: absolute;
+      top: var(--t);
+      right: 0;
+      left: -2px;
+      z-index: 2;
+      height: 2px;
+      margin: 0;
+      border-radius: 2px;
+      background: var(--bd-blush-solid);
+      pointer-events: none;
+    }
+
+    > [data-part='hours'] hr::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--bd-blush-solid);
+    }
+
+    > [data-part='legend'] {
+      margin-top: 6px;
+    }
+
+    > [data-part='legend'] > .bd-item {
+      gap: 8px;
+      font-size: 12.5px;
+    }
+
+    > [data-part='legend'] > .bd-item > div > span {
+      font-size: 12.5px;
+      font-weight: 400;
+      color: var(--bd-ink-secondary);
+    }
+
+    > [data-part='legend'] [data-part='end'] {
+      color: var(--bd-ink);
+    }
+  }
+
+  /* 今日日程：<article class="bd-tile" data-pattern="agenda">
+       bd-head · next-event 卡 · listbox 托盘里的 <button class="bd-item" role="option" data-align="start">
+       （<time> 时间列 + swatch + <div><span>标题</span><small>时段 · 地点</small></div>，已过去的 data-past 变淡）
+       · 底部 <dl class="bd-stats" data-part="foot"> */
+  [data-pattern='agenda'] {
+    gap: 14px;
+
+    > .bd-tray > .bd-item {
+      gap: 10px;
+    }
+
+    > .bd-tray > .bd-item > time {
+      width: 42px;
+      padding-top: 2px;
+      line-height: normal;
+    }
+
+    > .bd-tray > .bd-item > [data-part='swatch'] {
+      margin-top: 6px;
+    }
+
+    > .bd-tray > .bd-item > div > * {
+      white-space: nowrap;
+      line-height: normal;
+    }
+
+    > .bd-tray > .bd-item > div > small {
+      margin-top: 0;
+    }
+
+    > .bd-tray > .bd-item[data-past] > *,
+    > .bd-tray > .bd-item[data-past] > div > * {
+      color: var(--bd-ink-quaternary);
+    }
+
+    > .bd-stats {
+      padding-top: 0;
+    }
+
+    > .bd-stats dt {
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
+
+  /* 「下一个」日程卡：<div data-pattern="next-event">
+       <header>bd-pill 状态 + <time></header> · <h3>标题</h3> · <p>地点图标 + 文字</p>
+       · <footer>avatar-stack 或 <span>仅自己</span> + 靠右的主按钮</footer> */
+  [data-pattern='next-event'] {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+
+    > header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    time {
+      font-family: var(--bd-font-mono);
+      font-size: 11.5px;
+      color: var(--bd-ink-secondary);
+    }
+
+    > h3 {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    > p {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--bd-ink-description);
+    }
+
+    > p > svg {
+      color: var(--bd-ink-tertiary);
+    }
+
+    > footer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    > footer > .bd-button {
+      margin-left: auto;
+    }
+
+    > footer > span:not([data-pattern]) {
+      font-size: 12.5px;
+      color: var(--bd-ink-tertiary);
+    }
+  }
+
+  /* 资料页头：<header class="bd-tile" data-variant="page" data-pattern="profile-head">
+       左侧 60px bd-avatar（跨三行）+ eyebrow / h1（带 bd-pill）/ 说明，中间横排的 bd-spec 读数，右侧 data-part="end" 操作 */
+  [data-pattern='profile-head'] {
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    column-gap: 16px;
+
+    > .bd-avatar {
+      grid-column: 1;
+      grid-row: 1 / span 3;
+      width: 60px;
+      height: 60px;
+      font-size: 20px;
+      font-weight: 620;
+    }
+
+    > :is([data-part='eyebrow'], h1, p) {
+      grid-column: 2;
+    }
+
+    > h1 > .bd-pill {
+      font-size: 12px;
+    }
+
+    > [data-part='end'] {
+      grid-column: 4;
+    }
+
+    > .bd-spec {
+      flex-direction: row;
+      grid-row: 1 / span 3;
+      grid-column: 3;
+      justify-self: center;
+    }
+
+    > .bd-spec > div {
+      align-items: baseline;
+      gap: 16px;
+      min-width: 132px;
+      min-height: 0;
+    }
+
+    > .bd-spec dd {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+  }
+
+  /* 技能标签云：<article class="bd-tile" data-pattern="skill-cloud">
+       <div data-part="tags"><div>28 高方角 bd-tag（按熟练度 data-tone）… <button class="bd-tag" data-part="more">+14 项</button></div></div>
+       · 贴底的熟练度图例 <ul class="bd-tray" data-part="levels">（swatch + <p>名称<span data-part="muted">说明</span></p> + 计数） */
+  [data-pattern='skill-cloud'] {
+    > [data-part='tags'] {
+      overflow: hidden;
+    }
+
+    > [data-part='tags'] > div {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    > [data-part='tags'] .bd-tag {
+      padding-inline: 11px;
+    }
+
+    > [data-part='tags'] [data-part='more'] {
+      background: var(--bd-tile);
+      color: var(--bd-blush-ink);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    > [data-part='tags'] [data-part='more']:hover {
+      background: var(--bd-blush-soft);
+    }
+
+    > [data-part='levels'] {
+      margin-top: auto;
+    }
+
+    > [data-part='levels'] > .bd-item {
+      gap: 10px;
+    }
+
+    > [data-part='levels'] p {
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+
+    > [data-part='levels'] p > [data-part='muted'] {
+      margin-left: 10px;
+      font-size: 12px;
+      color: var(--bd-ink-description);
+    }
+
+    > [data-part='levels'] [data-part='end'] {
+      color: var(--bd-ink);
+    }
+  }
+
+  /* 工单清单：<div class="bd-tray" data-pattern="ticket-list"> 里的 <a class="bd-item">
+       <code> 64px 等宽编号列 + <div><p>标题</p></div> + bd-pill 状态 + <time> 72px 右对齐日期（data-tone="rose" 表示逾期） */
+  [data-pattern='ticket-list'] > .bd-item {
+    > code {
+      width: 64px;
+      font-family: var(--bd-font-mono);
+      font-size: 11.5px;
+      color: var(--bd-ink-tertiary);
+    }
+
+    > div > p {
+      font-weight: 500;
+      color: var(--bd-ink);
+    }
+
+    > time {
+      min-width: 72px;
+      text-align: right;
+    }
+
+    > time[data-tone='rose'] {
+      font-weight: 600;
+      color: var(--bd-rose-ink);
+    }
+  }
+
+  /* 动态流：<ul class="bd-tray" data-pattern="activity-feed"> 里的 <li class="bd-item" data-align="start">
+       data-part="dot" + <div><p>正文（可带行内 code）</p><small>说明</small> 或 <small data-wrap>引用</small></div> + <time> */
+  [data-pattern='activity-feed'] > .bd-item {
+    gap: 10px;
+
+    p {
+      line-height: 1.5;
+    }
+
+    small {
+      margin-top: 2px;
+    }
+
+    small[data-wrap] {
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    > time {
+      font-size: 11px;
+    }
+  }
+
+  /* 权限：<article class="bd-tile" data-pattern="permissions">
+       托盘里的开关行（<small> 说明可以以锁图标开头；开关 disabled 时说明变淡）+ 底部一行带盾牌图标的审计说明 */
+  [data-pattern='permissions'] {
+    .bd-item small {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 1px;
+      line-height: 1.45;
+    }
+
+    .bd-item:has(.bd-switch:disabled) small {
+      color: var(--bd-ink-tertiary);
+    }
+
+    > [data-part='foot'] > p {
+      gap: 8px;
+      padding-left: 2px;
+    }
+
+    > [data-part='foot'] > p > svg {
+      color: var(--bd-sand-ink);
+    }
+  }
+}

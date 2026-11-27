@@ -1,0 +1,580 @@
+/* billing 页面模式：由对应 demo 页整理 */
+@layer bd.patterns {
+  /* 套餐卡：<article class="bd-tile" data-pattern="plan-card">
+       <header class="bd-item">30 图标底 · 14.5 套餐名 · 可选 bd-pill</header> · <p>一句说明（紧跟标题 6）</p>
+       <div data-part="price"><p><small>¥</small><b>99</b><span>/ 月</span></p><p>价格备注</p></div>（只有 <b> 时是「按需定价」文字价）
+       <dl class="bd-spec"> 规格 · <p data-part="hint">规格后的一行备注</p> · <button class="bd-button" data-part="foot">（落在卡底）
+     卡内组距 14 */
+  [data-pattern='plan-card'] {
+    gap: var(--bd-space-group);
+
+    > header {
+      gap: 10px;
+    }
+
+    > header > [data-part='icon'] {
+      width: 30px;
+      height: 30px;
+    }
+
+    > header strong {
+      font-size: 14.5px;
+    }
+
+    > header + p {
+      margin-top: -8px;
+    }
+
+    > [data-part='hint'] {
+      margin-top: -6px;
+      padding-left: 2px;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--bd-ink-tertiary);
+    }
+  }
+
+  /* 价格读数：¥ + 30 数字 + 单位，下方备注紧贴 2 */
+  [data-pattern='plan-card'] > [data-part='price'] {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    > p:first-child {
+      display: flex;
+      align-items: baseline;
+      line-height: 1.5;
+    }
+
+    small {
+      margin-right: 2px;
+      font-size: 16px;
+      font-weight: 560;
+      color: var(--bd-ink-secondary);
+    }
+
+    b {
+      font-size: 30px;
+      font-weight: 620;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    b:only-child {
+      font-size: 22px;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+    }
+
+    span {
+      margin-left: 5px;
+      font-size: 12.5px;
+      color: var(--bd-ink-tertiary);
+    }
+
+    > p:last-child {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--bd-ink-tertiary);
+    }
+  }
+
+  /* 套餐功能对比：<table class="bd-table" data-variant="tray" data-align="center" data-pattern="plan-compare">（托盘表格）。
+     比默认托盘表格更密：表头 36、行 32、单元格左右 10，表头是 13 号套餐名（可跟 bd-pill），行首 13 号次级墨色；
+     推荐列的单元格写 data-tone="blush"（雾粉墨色加粗）；包含 / 不包含写 <td data-part="yes|no"> 放一个勾 / 横线图标 */
+  [data-pattern='plan-compare'] {
+    > thead {
+      padding: 0;
+    }
+
+    > tbody[data-part='group'] {
+      margin-top: 0;
+    }
+
+    tr {
+      min-height: 32px;
+    }
+
+    > thead > tr {
+      min-height: 36px;
+    }
+
+    :is(th, td) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 0 10px;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--bd-ink-secondary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    tr > :first-child {
+      justify-content: flex-start;
+    }
+
+    > thead th {
+      font-weight: 600;
+      color: var(--bd-ink);
+    }
+
+    > thead th:first-child {
+      padding-left: 12px;
+      font-weight: 500;
+      color: var(--bd-ink-tertiary);
+    }
+
+    > tbody[data-part='group'] th {
+      padding: 10px 0 5px 12px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--bd-ink-tertiary);
+    }
+
+    tbody td[data-tone='blush'] {
+      font-weight: 600;
+      color: var(--bd-blush-ink);
+    }
+
+    td[data-part='yes'] {
+      color: var(--bd-sand-solid);
+    }
+
+    td[data-part='yes'][data-tone='blush'] {
+      color: var(--bd-blush-solid);
+    }
+
+    td[data-part='no'] {
+      color: var(--bd-ink-quaternary);
+    }
+  }
+
+  /* 套餐额度：<ul class="bd-tray" data-pattern="quota"> 里每行一个 bd-item：
+       34 图标底（跨两行）· <div><strong>名称 + 可选 bd-pill</strong></div> · <span data-part="end"><b>已用</b> / 上限</span>
+       · 占满下一行的 bd-progress（可带 data-tone） */
+  [data-pattern='quota'] > .bd-item {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    row-gap: 6px;
+
+    > [data-part='icon'] {
+      grid-row: span 2;
+      width: 34px;
+      height: 34px;
+    }
+
+    strong {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    > [data-part='end'] b {
+      color: var(--bd-ink);
+      font-weight: 600;
+    }
+
+    > .bd-progress {
+      grid-column: 2 / -1;
+      width: auto;
+      height: 6px;
+    }
+  }
+
+  /* 费用排行：<ul class="bd-tray" data-pattern="cost-rank"> 里每行一个 bd-item：
+       34 图标底 · 名称与说明 · bd-progress（占比，110 宽）· <span data-part="end">金额</span>（右对齐 80 宽），几行的进度条和金额对齐 */
+  [data-pattern='cost-rank'] > .bd-item {
+    > [data-part='icon'] {
+      width: 34px;
+      height: 34px;
+    }
+
+    > .bd-progress {
+      width: 110px;
+      height: 6px;
+    }
+
+    > [data-part='end'] {
+      justify-content: flex-end;
+      min-width: 80px;
+      color: var(--bd-ink);
+      font-weight: 600;
+    }
+  }
+
+  /* 费用构成：<article class="bd-tile" data-pattern="cost-breakdown">
+       <div data-part="total"><b>¥1,286<small>.40</small></b><span>右侧说明</span></div>（26 号大金额与说明基线对齐）
+       <div data-part="stack" role="img"> 堆叠条：每段一个 <i data-tone="…" style="--bd-value: 41.8%">，12 高、段间 3、两端圆头
+       <ul class="bd-tray" data-part="legend"> 图例：每行 bd-item = <span data-part="dot" data-tone="…"> 方形色块 · 名称 · 占比 [data-part="end"] · 金额 <b>
+       <dl class="bd-stats" data-part="foot"> 底部三格对比读数（贴底，不加上内边距，标签常规字重）
+     色调：blush / rose / sand / track（雾粉轨道色）/ 不写（中性灰），平涂 */
+  [data-pattern='cost-breakdown'] {
+    > [data-part='total'] {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    > [data-part='total'] > b {
+      font-size: 26px;
+      font-weight: 620;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    > [data-part='total'] > b small {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--bd-ink-tertiary);
+    }
+
+    > [data-part='total'] > span {
+      font-size: 12.5px;
+      color: var(--bd-ink-description);
+    }
+
+    > [data-part='stack'] {
+      display: flex;
+      gap: 3px;
+      height: 12px;
+    }
+
+    > [data-part='stack'] > i {
+      flex: 0 1 var(--bd-value);
+      min-width: 0;
+      border-radius: 3px;
+    }
+
+    > [data-part='stack'] > i:first-child {
+      border-radius: 6px 3px 3px 6px;
+    }
+
+    > [data-part='stack'] > i:last-child {
+      border-radius: 3px 6px 6px 3px;
+    }
+
+    :is([data-part='stack'] > i, [data-part='legend'] > .bd-item > [data-part='dot']) {
+      background: var(--bd-ink-quaternary);
+
+      &[data-tone='blush'] {
+        background: var(--bd-blush-solid);
+      }
+
+      &[data-tone='rose'] {
+        background: var(--bd-rose-solid);
+      }
+
+      &[data-tone='sand'] {
+        background: var(--bd-sand-solid);
+      }
+
+      &[data-tone='track'] {
+        background: var(--bd-blush-track);
+      }
+    }
+
+    > [data-part='legend'] > .bd-item {
+      gap: 10px;
+      font-size: 13px;
+
+      > [data-part='dot'] {
+        width: 10px;
+        height: 10px;
+        border-radius: 3px;
+      }
+
+      > [data-part='dot']::after {
+        content: none;
+      }
+
+      > div > span {
+        font-size: 13px;
+        font-weight: 400;
+      }
+
+      > [data-part='end'] {
+        justify-content: flex-end;
+        min-width: 52px;
+      }
+
+      > b {
+        min-width: 88px;
+        text-align: right;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+      }
+    }
+
+    > .bd-stats[data-part='foot'] {
+      padding-top: 0;
+    }
+
+    > .bd-stats[data-part='foot'] dt {
+      font-weight: 400;
+    }
+  }
+
+  /* 发票概览：<section class="bd-mosaic" data-pattern="invoice-summary"> 里一排指标格，其中一格的脚注带操作按钮；
+     同排几格的脚注都按 29 高垂直居中，文字对齐 */
+  [data-pattern='invoice-summary'] > .bd-tile > [data-part='foot'] {
+    min-height: 29px;
+  }
+
+  /* 发票表：<table class="bd-table" data-pattern="invoice-table">，主列是「等宽发票号 + 账期说明」：
+       <td><strong><code>INV-…</code></strong><small>账期</small></td> · <td><time>开票日期</time></td>
+       · <td data-align="end">金额</td>（贴着下一列的左边，列间只留 12）· 状态 bd-pill · 支付方式 pay-method · 下载按钮
+     表头 34 高、12 号，行高 50；发票号 13 / 560，账期用正文字体，日期次级墨色 */
+  [data-pattern='invoice-table'] {
+    th {
+      padding: 8px 12px;
+      font-size: 12px;
+    }
+
+    tbody tr {
+      height: 50px;
+    }
+
+    td > strong:has(> code) {
+      font-size: 13px;
+      font-weight: 560;
+    }
+
+    td > strong + small {
+      font-family: var(--bd-font-sans);
+    }
+
+    td > time {
+      color: var(--bd-ink-secondary);
+    }
+
+    :is(th, td)[data-align='end'] {
+      padding-right: 0;
+    }
+  }
+
+  /* 卡品牌徽标：<span data-pattern="card-brand" data-brand="visa|mc|up">VISA</span>，52×34，品牌色平涂、左上一块芯片、右下等宽品牌字；
+     data-size="sm" 是表格里 26×18 的迷你版（不写 data-brand 时是凹槽底，里面放一个图标，如账户余额） */
+  [data-pattern='card-brand'] {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    align-items: flex-end;
+    justify-content: flex-end;
+    width: 52px;
+    height: 34px;
+    padding: 0 6px 5px;
+    border-radius: var(--bd-radius-cell);
+    background: color-mix(in srgb, var(--bd-ink-tertiary) 83%, var(--bd-ink-quaternary));
+    color: var(--bd-on-primary);
+    font-family: var(--bd-font-mono);
+    font-size: 8.5px;
+    font-weight: 650;
+    letter-spacing: 0.06em;
+    line-height: 1.5;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 7px;
+      left: 7px;
+      width: 10px;
+      height: 7px;
+      border-radius: 2px;
+      background: color-mix(in srgb, var(--bd-on-primary) 60%, transparent);
+    }
+
+    &[data-size='sm'] {
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 18px;
+      padding: 0;
+      border-radius: 5px;
+      font-size: 0;
+    }
+
+    &[data-size='sm']::before {
+      top: 4px;
+      left: 4px;
+      width: 6px;
+      height: 4px;
+      border-radius: 1.5px;
+    }
+
+    &[data-size='sm']:not([data-brand]) {
+      background: var(--bd-well);
+      color: var(--bd-ink-tertiary);
+    }
+
+    &[data-size='sm']:not([data-brand])::before {
+      content: none;
+    }
+  }
+
+  :is([data-pattern='card-brand'], [data-pattern='card-preview'])[data-brand='visa'] {
+    background: var(--bd-blush-solid);
+  }
+
+  :is([data-pattern='card-brand'], [data-pattern='card-preview'])[data-brand='mc'] {
+    background: var(--bd-sand-solid);
+  }
+
+  [data-pattern='card-preview'][data-brand='up'] {
+    background: color-mix(in srgb, var(--bd-ink-tertiary) 83%, var(--bd-ink-quaternary));
+  }
+
+  /* 表格里的支付方式：<span data-pattern="pay-method"><span data-pattern="card-brand" data-size="sm"></span>Visa <code>•••• 4242</code></span> */
+  [data-pattern='pay-method'] {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    font-size: 12.5px;
+
+    > code {
+      font-size: 12px;
+    }
+  }
+
+  /* 已保存的卡片：<ul class="bd-tray" data-pattern="card-list"> 里每行一个 bd-item：
+       card-brand 徽标 · <div><strong>Visa <code>•••• 4242</code></strong><small>有效期 · 持卡人</small></div> · bd-pill · bd-menu
+     卡号尾号是名称里的等宽文字（12.5 / 500），不是行内代码标签 */
+  [data-pattern='card-list'] > .bd-item > div > strong {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    > code {
+      display: inline;
+      height: auto;
+      margin: 0;
+      padding: 0;
+      background: none;
+      font-size: 12.5px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: inherit;
+    }
+  }
+
+  /* 账户余额条：<div class="bd-item" data-part="foot" data-pattern="balance">，
+       34 白色图标底 · <div><strong>账户余额 ¥3,560.00</strong><small>说明</small></div> · 小号按钮；凹槽底、12 圆角，贴在格子底部 */
+  [data-pattern='balance'] {
+    padding: 12px 14px;
+    border-radius: var(--bd-radius-control);
+    background: var(--bd-well);
+
+    > [data-part='icon'] {
+      width: 34px;
+      height: 34px;
+      background: var(--bd-tile);
+    }
+  }
+
+  /* 添加新卡：<article class="bd-tile" data-pattern="add-card">
+       bd-head · <div data-part="body"> 左边卡面预览（card-preview）、右边 bd-form，两栏垂直居中 · 收束行（说明 + 清空 / 保存）
+     收束行贴着表单，不加上内边距 */
+  [data-pattern='add-card'] {
+    > [data-part='body'] {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+      align-items: center;
+      gap: 18px;
+    }
+
+    > [data-part='foot'] {
+      padding-top: 0;
+    }
+  }
+
+  /* 卡面预览：<div data-pattern="card-preview" data-brand="visa|mc|up|card">
+       <svg>右上三道白色细弧</svg>
+       <div><i>芯片</i><b>品牌</b></div> · <div data-part="number">卡号</div>
+       <div><span>持卡人<b>姓名</b></span><span>有效期<b>MM/YY</b></span></div>
+     银行卡比例 1.586，品牌色平涂，换品牌时底色过渡 */
+  [data-pattern='card-preview'] {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    aspect-ratio: 1.586;
+    padding: 16px 18px;
+    overflow: hidden;
+    border-radius: var(--bd-radius-control);
+    background: color-mix(in srgb, var(--bd-ink-tertiary) 26%, var(--bd-ink-quaternary));
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--bd-rose-solid) 18%, transparent);
+    color: var(--bd-on-primary);
+    font-family: var(--bd-font-mono);
+    transition: background-color 0.4s ease;
+
+    > svg {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: -1;
+      width: 96px;
+      height: 72px;
+      fill: none;
+      stroke: color-mix(in srgb, var(--bd-on-primary) 32%, transparent);
+      stroke-width: 1;
+    }
+
+    > div {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      line-height: 1.5;
+    }
+
+    i {
+      width: 30px;
+      height: 22px;
+      border-radius: 5px;
+      background: color-mix(in srgb, var(--bd-on-primary) 55%, transparent);
+    }
+
+    > div:first-of-type b {
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: 0.1em;
+    }
+
+    > [data-part='number'] {
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+    }
+
+    > div:last-child > span {
+      min-width: 0;
+      font-size: 9.5px;
+      letter-spacing: 0.08em;
+      color: color-mix(in srgb, var(--bd-on-primary) 75%, transparent);
+    }
+
+    > div:last-child > span:last-child {
+      text-align: right;
+    }
+
+    > div:last-child b {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: var(--bd-font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0;
+      color: var(--bd-on-primary);
+    }
+  }
+}

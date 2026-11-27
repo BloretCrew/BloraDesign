@@ -21,6 +21,7 @@ describe('dist/blora.css', () => {
       'bd.base',
       'bd.layout',
       'bd.components',
+      'bd.patterns',
       'bd.motion',
       'bd.utilities',
     ]);
@@ -32,6 +33,15 @@ describe('dist/blora.css', () => {
 
   it('banner 带当前版本号', () => {
     expect(css.startsWith(`/*! Blora Design ${pkg.version} `)).toBe(true);
+  });
+});
+
+describe('dist/patterns.css', () => {
+  const patterns = readFileSync(new URL('../dist/patterns.css', import.meta.url), 'utf8');
+
+  it('页面模式都在 bd.patterns 层里，只用 --bd-* 变量', () => {
+    expect(patterns).toMatch(/@layer bd\.patterns/);
+    expect(patterns).not.toMatch(/--cortado-/);
   });
 });
 

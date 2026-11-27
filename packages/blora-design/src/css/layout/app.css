@@ -51,6 +51,13 @@
     margin-left: auto;
   }
 
+  /* 顶栏里的全局搜索 240 宽；头像与按钮同高 */
+  .bd-topbar .bd-avatar {
+    width: 35px;
+    height: 35px;
+    font-size: 12.5px;
+  }
+
   /* ≤1280：侧栏自动收起 */
   @media (max-width: 1280px) {
     .bd-app {

@@ -1,0 +1,178 @@
+/* components 页面模式：由组件全集页（reference/components.html）整理 */
+@layer bd.patterns {
+  /* 规格行：左侧一列短标签，右侧一行控件（bd-toolbar）；几行在格子里上下均分剩余高度 */
+  [data-pattern='control-rows'] {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 12px;
+
+    > div {
+      display: grid;
+      grid-template-columns: 76px minmax(0, 1fr);
+      align-items: center;
+      gap: 12px;
+    }
+
+    > div > span {
+      white-space: nowrap;
+      font-size: 12.5px;
+      color: var(--bd-ink-description);
+    }
+
+    /* 一行里控件多，间距比工具条默认的收紧一档 */
+    > div > .bd-toolbar {
+      gap: 6px;
+    }
+  }
+
+  /* 实时读数：格子标题右侧随控件变化的等宽数值 */
+  [data-pattern='readout'] {
+    white-space: nowrap;
+    font-family: var(--bd-font-mono);
+    font-size: 12.5px;
+    font-weight: 620;
+    color: var(--bd-blush-ink);
+  }
+
+  /* 凹槽面板：格子里一段凹槽底的说明文字（页签面板） */
+  [data-pattern='well-panel'] {
+    padding: 13px 15px;
+    border-radius: 13px;
+    background: var(--bd-well);
+    font-size: 13.5px;
+    color: var(--bd-ink-description);
+  }
+
+  /* 右键区域：凹槽底的一行提示（图标 + 文字 ……… 标签），悬停变雾粉 */
+  [data-pattern='context-zone'] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 15px;
+    border-radius: 13px;
+    background: var(--bd-well);
+    font-size: 13.5px;
+    color: var(--bd-ink-secondary);
+    transition:
+      background-color var(--bd-duration-hover) ease,
+      color var(--bd-duration-hover) ease;
+
+    &:hover {
+      background: var(--bd-blush-soft);
+      color: var(--bd-blush-ink);
+    }
+
+    > span:first-child {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+  }
+
+  /* 状态预览：凹槽底里「名称 + 说明」和右侧状态标签；加载时（aria-busy）换成两条骨架 */
+  [data-pattern='status-preview'] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px;
+    border-radius: 16px;
+    background: var(--bd-well);
+
+    b {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    small {
+      display: block;
+      font-size: 12px;
+      color: var(--bd-ink-secondary);
+    }
+
+    &[aria-busy='true'] > span {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    &[aria-busy='true'] .bd-skeleton {
+      width: 58%;
+    }
+
+    &[aria-busy='true'] .bd-skeleton + .bd-skeleton {
+      width: 84%;
+    }
+  }
+
+  /* 文件信息：凹槽底的一行三栏「标签 / 值」（<dl>） */
+  [data-pattern='file-meta'] {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    padding: 10px 13px;
+    border-radius: 12px;
+    background: var(--bd-well);
+
+    dt {
+      font-size: 11.5px;
+      color: var(--bd-ink-description);
+    }
+
+    dd {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 13px;
+      font-weight: 580;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  /* 终端片段：凹槽底的一行等宽指令，右侧复制按钮 */
+  [data-pattern='command-snippet'] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 11px 13px;
+    border-radius: 12px;
+    background: var(--bd-well);
+    font-family: var(--bd-font-mono);
+    font-size: 12.5px;
+    color: var(--bd-ink-secondary);
+
+    > code {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  /* 对勾多选列表：元信息紧跟名称，只有选中项右侧显示对勾 */
+  .bd-list[data-pattern='check-list'] {
+    > li > span {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    > [aria-selected='false'] > svg {
+      display: none;
+    }
+  }
+
+  /* 提示条组：几条提示上下排，间距比格子默认的小 */
+  [data-pattern='alert-stack'] {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+}

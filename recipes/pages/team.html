@@ -1,0 +1,1901 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blora Cloud · 协作与工单</title>
+    <!-- 第 ② 阶段验收页：只用框架重写 reference/demo-team.html（看板、收件箱、日程、成员资料） -->
+    <link rel="stylesheet" href="../../packages/blora-design/dist/blora.css" />
+    <link rel="stylesheet" href="../../packages/blora-design/dist/patterns.css" />
+    <script type="module" src="../../packages/blora-design/dist/blora.js"></script>
+  </head>
+  <body>
+    <!-- Lucide 图标（ISC License · lucide.dev） -->
+    <svg hidden>
+      <symbol id="i-archive" viewBox="0 0 24 24">
+        <rect width="20" height="5" x="2" y="3" rx="1" />
+        <path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8" />
+        <path d="M10 12h4" />
+      </symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24">
+        <path d="M5 12h14" />
+        <path d="m12 5 7 7-7 7" />
+      </symbol>
+      <symbol id="i-at-sign" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="4" />
+        <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8" />
+      </symbol>
+      <symbol id="i-bell" viewBox="0 0 24 24">
+        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+      </symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24">
+        <path d="M8 2v4" />
+        <path d="M16 2v4" />
+        <rect width="18" height="18" x="3" y="4" rx="2" />
+        <path d="M3 10h18" />
+      </symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol>
+      <symbol id="i-check-check" viewBox="0 0 24 24">
+        <path d="M18 6 7 17l-5-5" />
+        <path d="m22 10-7.5 7.5L13 16" />
+      </symbol>
+      <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" /></symbol>
+      <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" /></symbol>
+      <symbol id="i-circle-dashed" viewBox="0 0 24 24">
+        <path d="M10.1 2.182a10 10 0 0 1 3.8 0" />
+        <path d="M13.9 21.818a10 10 0 0 1-3.8 0" />
+        <path d="M17.609 3.721a10 10 0 0 1 2.69 2.7" />
+        <path d="M2.182 13.9a10 10 0 0 1 0-3.8" />
+        <path d="M20.279 17.609a10 10 0 0 1-2.7 2.69" />
+        <path d="M21.818 10.1a10 10 0 0 1 0 3.8" />
+        <path d="M3.721 6.391a10 10 0 0 1 2.7-2.69" />
+        <path d="M6.391 20.279a10 10 0 0 1-2.69-2.7" />
+      </symbol>
+      <symbol id="i-ellipsis" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="1" />
+        <circle cx="19" cy="12" r="1" />
+        <circle cx="5" cy="12" r="1" />
+      </symbol>
+      <symbol id="i-file-text" viewBox="0 0 24 24">
+        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+        <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+        <path d="M10 9H8" />
+        <path d="M16 13H8" />
+        <path d="M16 17H8" />
+      </symbol>
+      <symbol id="i-flag" viewBox="0 0 24 24">
+        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+        <line x1="4" x2="4" y1="22" y2="15" />
+      </symbol>
+      <symbol id="i-git-pull-request" viewBox="0 0 24 24">
+        <circle cx="18" cy="18" r="3" />
+        <circle cx="6" cy="6" r="3" />
+        <path d="M13 6h3a2 2 0 0 1 2 2v7" />
+        <line x1="6" x2="6" y1="9" y2="21" />
+      </symbol>
+      <symbol id="i-inbox" viewBox="0 0 24 24">
+        <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
+        <path
+          d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"
+        />
+      </symbol>
+      <symbol id="i-list-checks" viewBox="0 0 24 24">
+        <path d="m3 17 2 2 4-4" />
+        <path d="m3 7 2 2 4-4" />
+        <path d="M13 6h8" />
+        <path d="M13 12h8" />
+        <path d="M13 18h8" />
+      </symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24">
+        <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+      </symbol>
+      <symbol id="i-mail" viewBox="0 0 24 24">
+        <rect width="20" height="16" x="2" y="4" rx="2" />
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+      </symbol>
+      <symbol id="i-map-pin" viewBox="0 0 24 24">
+        <path
+          d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
+        />
+        <circle cx="12" cy="10" r="3" />
+      </symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24">
+        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+      </symbol>
+      <symbol id="i-paperclip" viewBox="0 0 24 24">
+        <path
+          d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"
+        />
+      </symbol>
+      <symbol id="i-panel-left-close" viewBox="0 0 24 24">
+        <rect width="18" height="18" x="3" y="3" rx="2" />
+        <path d="M9 3v18" />
+        <path d="m16 15-3-3 3-3" />
+      </symbol>
+      <symbol id="i-pencil" viewBox="0 0 24 24">
+        <path
+          d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"
+        />
+        <path d="m15 5 4 4" />
+      </symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24">
+        <path d="M5 12h14" />
+        <path d="M12 5v14" />
+      </symbol>
+      <symbol id="i-reply" viewBox="0 0 24 24">
+        <polyline points="9 17 4 12 9 7" />
+        <path d="M20 18v-2a4 4 0 0 0-4-4H4" />
+      </symbol>
+      <symbol id="i-rocket" viewBox="0 0 24 24">
+        <path
+          d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"
+        />
+        <path
+          d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"
+        />
+        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+      </symbol>
+      <symbol id="i-search" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </symbol>
+      <symbol id="i-send-horizontal" viewBox="0 0 24 24">
+        <path
+          d="M3.714 3.048a.498.498 0 0 0-.683.627l2.843 7.627a2 2 0 0 1 0 1.396l-2.842 7.627a.498.498 0 0 0 .682.627l18-8.5a.5.5 0 0 0 0-.904z"
+        />
+        <path d="M6 12h16" />
+      </symbol>
+      <symbol id="i-server" viewBox="0 0 24 24">
+        <rect width="20" height="8" x="2" y="2" rx="2" ry="2" />
+        <rect width="20" height="8" x="2" y="14" rx="2" ry="2" />
+        <line x1="6" x2="6.01" y1="6" y2="6" />
+        <line x1="6" x2="6.01" y1="18" y2="18" />
+      </symbol>
+      <symbol id="i-settings" viewBox="0 0 24 24">
+        <path
+          d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+        />
+        <circle cx="12" cy="12" r="3" />
+      </symbol>
+      <symbol id="i-shield-check" viewBox="0 0 24 24">
+        <path
+          d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+        />
+        <path d="m9 12 2 2 4-4" />
+      </symbol>
+      <symbol id="i-sliders-horizontal" viewBox="0 0 24 24">
+        <line x1="21" x2="14" y1="4" y2="4" />
+        <line x1="10" x2="3" y1="4" y2="4" />
+        <line x1="21" x2="12" y1="12" y2="12" />
+        <line x1="8" x2="3" y1="12" y2="12" />
+        <line x1="21" x2="16" y1="20" y2="20" />
+        <line x1="12" x2="3" y1="20" y2="20" />
+        <line x1="14" x2="14" y1="2" y2="6" />
+        <line x1="8" x2="8" y1="10" y2="14" />
+        <line x1="16" x2="16" y1="18" y2="22" />
+      </symbol>
+      <symbol id="i-square-kanban" viewBox="0 0 24 24">
+        <rect width="18" height="18" x="3" y="3" rx="2" />
+        <path d="M8 7v7" />
+        <path d="M12 7v4" />
+        <path d="M16 7v9" />
+      </symbol>
+      <symbol id="i-triangle-alert" viewBox="0 0 24 24">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+        <path d="M12 9v4" />
+        <path d="M12 17h.01" />
+      </symbol>
+      <symbol id="i-user" viewBox="0 0 24 24">
+        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </symbol>
+      <symbol id="i-users" viewBox="0 0 24 24">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </symbol>
+      <symbol id="i-video" viewBox="0 0 24 24">
+        <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5" />
+        <rect x="2" y="6" width="14" height="12" rx="2" />
+      </symbol>
+      <symbol id="i-command" viewBox="0 0 24 24">
+        <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
+      </symbol>
+    </svg>
+
+    <div class="bd-app">
+      <nav class="bd-rail" aria-label="主导航">
+        <a data-part="brand" href="#board">
+          <span data-part="logo">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <circle
+                cx="10"
+                cy="10"
+                r="7"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-dasharray="34.98 9"
+                stroke-linecap="round"
+                transform="rotate(-4 10 10)"
+              />
+              <circle cx="10" cy="10" r="2.6" fill="currentColor" />
+              <circle cx="15.5" cy="5.2" r="1.8" fill="currentColor" />
+            </svg>
+          </span>
+          <span>Blora Cloud</span>
+        </a>
+        <p data-part="section">协作</p>
+        <button type="button" data-go="board">
+          <svg data-icon aria-hidden="true"><use href="#i-square-kanban" /></svg><span>看板</span
+          ><span data-part="count" id="railBoard">9</span>
+        </button>
+        <button type="button" data-go="inbox">
+          <svg data-icon aria-hidden="true"><use href="#i-inbox" /></svg><span>收件箱</span
+          ><span data-part="count" id="railInbox">4</span>
+        </button>
+        <button type="button" data-go="schedule">
+          <svg data-icon aria-hidden="true"><use href="#i-calendar" /></svg><span>日程</span>
+        </button>
+        <button type="button" data-go="profile">
+          <svg data-icon aria-hidden="true"><use href="#i-user" /></svg><span>成员资料</span>
+        </button>
+        <div data-part="foot">
+          <div data-part="note">
+            <span>迭代 24 · 进度</span><data value="0" id="railSprintPct">0%</data>
+            <div
+              class="bd-progress"
+              aria-label="迭代进度"
+              aria-valuenow="0"
+              id="railSprintBar"
+            ></div>
+          </div>
+          <button type="button" data-part="collapse" aria-expanded="true" aria-label="收起侧栏">
+            <svg data-icon aria-hidden="true"><use href="#i-panel-left-close" /></svg
+            ><span>收起侧栏</span>
+          </button>
+        </div>
+      </nav>
+
+      <main class="bd-page">
+        <header class="bd-topbar">
+          <nav class="bd-breadcrumb" id="crumbs" aria-label="位置"></nav>
+          <div data-part="end">
+            <label class="bd-input" data-part="search">
+              <svg data-icon width="14" height="14" aria-hidden="true">
+                <use href="#i-search" />
+              </svg>
+              <input placeholder="搜索工单、成员、消息…" id="globalSearch" aria-label="搜索" />
+              <kbd class="bd-kbd"
+                ><svg data-icon width="10" height="10" aria-hidden="true">
+                  <use href="#i-command" /></svg
+                >K</kbd
+              >
+            </label>
+            <button
+              type="button"
+              class="bd-button"
+              data-shape="icon"
+              aria-label="切换深色模式"
+              id="themeBtn"
+            >
+              <svg data-icon width="15" height="15" aria-hidden="true"><use href="#i-moon" /></svg>
+            </button>
+            <button
+              type="button"
+              class="bd-button"
+              data-shape="icon"
+              data-dot
+              aria-label="通知"
+              id="bellBtn"
+              data-go="inbox"
+            >
+              <svg data-icon width="15" height="15" aria-hidden="true"><use href="#i-bell" /></svg>
+            </button>
+            <span class="bd-avatar" data-tone="sand">RH</span>
+          </div>
+        </header>
+
+        <!-- ============ 场景 1：看板 ============ -->
+        <div data-part="view" data-scene="board" hidden>
+          <header class="bd-tile" data-variant="page">
+            <p data-part="eyebrow">Board</p>
+            <h1>迭代 24 · 控制台改版</h1>
+            <p>11 月 18 日 – 12 月 1 日，还剩 5 天；悬停卡片点 → 推进到下一列。</p>
+            <div data-part="end">
+              <span data-pattern="avatar-stack">
+                <span class="bd-avatar" data-size="sm" data-tone="sand" data-tip="Rhedar">RH</span
+                ><span class="bd-avatar" data-size="sm" data-tone="blush" data-tip="林舟">LZ</span
+                ><span class="bd-avatar" data-size="sm" data-tone="rose" data-tip="宋晴">SQ</span
+                ><span class="bd-avatar" data-size="sm" data-tip="陈雨">CY</span
+                ><span data-part="more">+1</span>
+              </span>
+              <button type="button" class="bd-button" data-toast="筛选：按负责人、标签、截止日期">
+                <svg data-icon width="14" height="14" aria-hidden="true">
+                  <use href="#i-sliders-horizontal" /></svg
+                >筛选
+              </button>
+              <button type="button" class="bd-button" data-variant="primary" data-toast="新建工单">
+                <svg data-icon width="13" height="13" aria-hidden="true"><use href="#i-plus" /></svg
+                >新建工单
+              </button>
+            </div>
+          </header>
+
+          <section class="bd-mosaic" data-cols="4" data-pattern="board-metrics" id="kpis">
+            <article class="bd-tile" data-variant="metric">
+              <p data-part="label">冲刺进度</p>
+              <div
+                class="bd-ring"
+                id="ringProg"
+                aria-label="冲刺进度"
+                aria-valuenow="0"
+                aria-valuemax="100"
+              ></div>
+              <p data-part="value">
+                <span id="kpiDone">0</span><small>/ <span id="kpiTotal">9</span> 张</small>
+              </p>
+              <p data-part="foot">时间已过 64% · 还剩 5 天</p>
+            </article>
+            <article class="bd-tile" data-variant="metric">
+              <p data-part="label">进行中</p>
+              <div
+                class="bd-ring"
+                id="ringWip"
+                aria-label="WIP 占用"
+                aria-valuenow="0"
+                aria-valuemax="100"
+              ></div>
+              <p data-part="value"><span id="kpiDoing">3</span><small>张</small></p>
+              <p data-part="foot" id="kpiDoingFoot">WIP 上限 4</p>
+            </article>
+            <article class="bd-tile" data-variant="metric">
+              <p data-part="label">待评审</p>
+              <span data-part="icon"
+                ><svg data-icon width="15" height="15" aria-hidden="true">
+                  <use href="#i-git-pull-request" /></svg
+              ></span>
+              <p data-part="value"><span id="kpiReview">1</span><small>张</small></p>
+              <p data-part="foot">平均等待 6 小时 · 需 1 人批准</p>
+            </article>
+            <article class="bd-tile" data-variant="metric">
+              <p data-part="label">逾期</p>
+              <span data-part="icon" data-tone="rose"
+                ><svg data-icon width="15" height="15" aria-hidden="true">
+                  <use href="#i-triangle-alert" /></svg
+              ></span>
+              <p data-part="value">1<small>张</small></p>
+              <p data-part="foot">
+                <span data-part="delta" data-tone="rose">2 天</span>LAT-155 账单导出 CSV
+              </p>
+            </article>
+          </section>
+
+          <!-- 看板列的长度就是队列深度：顶部对齐、底边参差；卡片进托盘 -->
+          <section
+            class="bd-mosaic"
+            data-cols="4"
+            data-align="start"
+            data-pattern="kanban"
+            id="board"
+          >
+            <article class="bd-tile" data-col="todo">
+              <header class="bd-head">
+                <h2>待开始</h2>
+                <p><span id="cnt-todo">0</span> 张 · 按优先级排序</p>
+                <div data-part="end">
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="ghost"
+                    data-size="sm"
+                    data-shape="icon"
+                    aria-label="添加工单"
+                    data-toast="在「待开始」新建工单"
+                  >
+                    <svg data-icon width="14" height="14" aria-hidden="true">
+                      <use href="#i-plus" />
+                    </svg>
+                  </button>
+                </div>
+              </header>
+              <div class="bd-tray">
+                <div class="bd-empty" hidden>
+                  <span data-part="icon"
+                    ><svg data-icon width="17" height="17" aria-hidden="true">
+                      <use href="#i-inbox" /></svg
+                  ></span>
+                  <p>待开始已清空，新建的工单会先排在这里。</p>
+                  <button type="button" class="bd-button" data-size="sm" data-toast="新建工单">
+                    新建工单
+                  </button>
+                </div>
+              </div>
+            </article>
+            <article class="bd-tile" data-col="doing">
+              <header class="bd-head">
+                <h2>进行中</h2>
+                <p><span id="cnt-doing">0</span> 张 · WIP 上限 4</p>
+                <div data-part="end">
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="ghost"
+                    data-size="sm"
+                    data-shape="icon"
+                    aria-label="添加工单"
+                    data-toast="在「进行中」新建工单"
+                  >
+                    <svg data-icon width="14" height="14" aria-hidden="true">
+                      <use href="#i-plus" />
+                    </svg>
+                  </button>
+                </div>
+              </header>
+              <div class="bd-tray">
+                <div class="bd-empty" hidden>
+                  <span data-part="icon"
+                    ><svg data-icon width="17" height="17" aria-hidden="true">
+                      <use href="#i-circle-dashed" /></svg
+                  ></span>
+                  <p>从「待开始」推进一张卡片，就会出现在这里。</p>
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-size="sm"
+                    data-toast="从待开始认领工单"
+                  >
+                    认领工单
+                  </button>
+                </div>
+              </div>
+            </article>
+            <article class="bd-tile" data-col="review">
+              <header class="bd-head">
+                <h2>评审中</h2>
+                <p><span id="cnt-review">0</span> 张 · 合并前需 1 人批准</p>
+                <div data-part="end">
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="ghost"
+                    data-size="sm"
+                    data-shape="icon"
+                    aria-label="添加工单"
+                    data-toast="在「评审中」新建工单"
+                  >
+                    <svg data-icon width="14" height="14" aria-hidden="true">
+                      <use href="#i-plus" />
+                    </svg>
+                  </button>
+                </div>
+              </header>
+              <div class="bd-tray">
+                <div class="bd-empty" hidden>
+                  <span data-part="icon"
+                    ><svg data-icon width="17" height="17" aria-hidden="true">
+                      <use href="#i-git-pull-request" /></svg
+                  ></span>
+                  <p>提交 PR 后，工单会自动移到这里。</p>
+                  <button type="button" class="bd-button" data-size="sm" data-toast="打开 PR 列表">
+                    查看 PR 列表
+                  </button>
+                </div>
+              </div>
+            </article>
+            <article class="bd-tile" data-col="done">
+              <header class="bd-head">
+                <h2>已完成</h2>
+                <p><span id="cnt-done">0</span> 张 · 本迭代</p>
+                <div data-part="end">
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="ghost"
+                    data-size="sm"
+                    data-shape="icon"
+                    aria-label="归档已完成"
+                    data-toast="归档已完成的工单"
+                  >
+                    <svg data-icon width="14" height="14" aria-hidden="true">
+                      <use href="#i-archive" />
+                    </svg>
+                  </button>
+                </div>
+              </header>
+              <div class="bd-tray">
+                <div class="bd-empty" hidden>
+                  <span data-part="icon"
+                    ><svg data-icon width="17" height="17" aria-hidden="true">
+                      <use href="#i-check-check" /></svg
+                  ></span>
+                  <p>评审通过后点 → 推进，工单会排在这里。</p>
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-size="sm"
+                    data-toast="迭代 23 共完成 14 张工单"
+                  >
+                    查看上个迭代
+                  </button>
+                </div>
+              </div>
+            </article>
+          </section>
+        </div>
+
+        <!-- ============ 场景 2：收件箱 ============ -->
+        <div data-part="view" data-scene="inbox" hidden>
+          <header class="bd-tile" data-variant="page">
+            <p data-part="eyebrow">Inbox</p>
+            <h1>收件箱</h1>
+            <p>@提及、评审请求和系统通知都汇总在这里。</p>
+            <div data-part="end">
+              <button type="button" class="bd-button" data-variant="ghost" id="markAllBtn">
+                <svg data-icon width="14" height="14" aria-hidden="true">
+                  <use href="#i-check-check" /></svg
+                >全部标为已读
+              </button>
+              <button
+                type="button"
+                class="bd-button"
+                data-shape="icon"
+                aria-label="通知设置"
+                data-toast="通知设置"
+              >
+                <svg data-icon width="15" height="15" aria-hidden="true">
+                  <use href="#i-settings" />
+                </svg>
+              </button>
+            </div>
+          </header>
+
+          <section
+            class="bd-mosaic"
+            data-cols="2"
+            data-grow="fit"
+            id="inboxRow"
+            style="--bd-columns: minmax(300px, 0.85fr) minmax(0, 1.65fr)"
+          >
+            <article class="bd-tile" data-pattern="message-list">
+              <header class="bd-head">
+                <h2>消息</h2>
+                <div data-part="end"><span data-part="tag">近 7 天</span></div>
+              </header>
+              <div
+                class="bd-segmented"
+                role="radiogroup"
+                aria-label="消息筛选"
+                data-block
+                id="inboxSeg"
+              >
+                <button type="button" role="radio" data-value="all" aria-checked="true">
+                  全部<span data-part="count" id="nAll">0</span>
+                </button>
+                <button type="button" role="radio" data-value="unread">
+                  未读<span data-part="count" id="nUnread">0</span>
+                </button>
+                <button type="button" role="radio" data-value="mine">
+                  @我<span data-part="count" id="nMine">0</span>
+                </button>
+              </div>
+              <div class="bd-scroll" data-grow id="msgScroll">
+                <div
+                  class="bd-tray"
+                  role="listbox"
+                  aria-label="消息"
+                  data-bd-controlled
+                  id="msgList"
+                ></div>
+              </div>
+            </article>
+            <article class="bd-tile" data-pattern="reader" id="reader"></article>
+          </section>
+        </div>
+
+        <!-- ============ 场景 3：日程 ============ -->
+        <div data-part="view" data-scene="schedule" hidden>
+          <header class="bd-tile" data-variant="page">
+            <p data-part="eyebrow">Schedule</p>
+            <h1>日程</h1>
+            <p>第 48 周 · 冲刺 24 的最后一周，周五下午做迭代演示。</p>
+            <div data-part="end" data-pattern="week-nav">
+              <button
+                type="button"
+                class="bd-button"
+                data-shape="icon"
+                aria-label="上一周"
+                data-toast="演示只包含本周"
+              >
+                <svg data-icon width="15" height="15" aria-hidden="true">
+                  <use href="#i-chevron-left" />
+                </svg>
+              </button>
+              <span>11 月 23 日 – 29 日</span>
+              <button
+                type="button"
+                class="bd-button"
+                data-shape="icon"
+                aria-label="下一周"
+                data-toast="演示只包含本周"
+              >
+                <svg data-icon width="15" height="15" aria-hidden="true">
+                  <use href="#i-chevron-right" />
+                </svg>
+              </button>
+              <button type="button" class="bd-button" data-variant="primary" data-toast="新建日程">
+                <svg data-icon width="13" height="13" aria-hidden="true"><use href="#i-plus" /></svg
+                >新建日程
+              </button>
+            </div>
+          </header>
+
+          <section class="bd-mosaic" data-cols="2" style="--bd-columns: minmax(0, 1fr) 330px">
+            <article class="bd-tile" data-pattern="week-grid">
+              <header class="bd-head">
+                <h2>本周日程</h2>
+                <p id="weekSub">19 个日程，周四下午有两场时间重叠</p>
+                <div data-part="end"><span data-part="tag">UTC+8 · 09–19 时</span></div>
+              </header>
+              <div data-part="days" id="calHead"></div>
+              <div data-part="allday" id="calAllday"></div>
+              <div data-part="hours" id="calBody"></div>
+              <ul class="bd-tray" data-cols="4" data-part="legend" id="calLegend"></ul>
+            </article>
+            <article class="bd-tile" data-pattern="agenda">
+              <span class="bd-corner"></span>
+              <header class="bd-head">
+                <h2>今天</h2>
+                <p>11 月 26 日 · 周四</p>
+                <div data-part="end"><span data-part="tag" id="todayCount">6 项</span></div>
+              </header>
+              <div data-pattern="next-event" id="nextCard"></div>
+              <div
+                class="bd-tray"
+                role="listbox"
+                aria-label="今天的日程"
+                data-bd-controlled
+                id="todayAgenda"
+              ></div>
+              <dl class="bd-stats" data-part="foot" id="todayFoot"></dl>
+            </article>
+          </section>
+        </div>
+
+        <!-- ============ 场景 4：成员资料 ============ -->
+        <div data-part="view" data-scene="profile" hidden>
+          <header class="bd-tile" data-variant="page" data-pattern="profile-head">
+            <span class="bd-avatar" data-tone="blush">LZ</span>
+            <p data-part="eyebrow">Member</p>
+            <h1>林舟 <span class="bd-pill" data-tone="blush">管理员</span></h1>
+            <p>前端负责人 · 上海 · 加入 2 年 3 个月 · lin.zhou@blora.dev</p>
+            <dl class="bd-spec">
+              <div>
+                <dt>完成工单</dt>
+                <dd>128</dd>
+              </div>
+              <div>
+                <dt>代码评审</dt>
+                <dd>342</dd>
+              </div>
+              <div>
+                <dt>本周完成</dt>
+                <dd>6</dd>
+              </div>
+            </dl>
+            <div data-part="end">
+              <button type="button" class="bd-button" data-go="inbox">
+                <svg data-icon width="14" height="14" aria-hidden="true"><use href="#i-mail" /></svg
+                >发消息
+              </button>
+              <button
+                type="button"
+                class="bd-button"
+                data-variant="ghost"
+                data-shape="icon"
+                aria-label="更多"
+                data-toast="移出工作区 / 转移所有权"
+              >
+                <svg data-icon width="15" height="15" aria-hidden="true">
+                  <use href="#i-ellipsis" />
+                </svg>
+              </button>
+            </div>
+          </header>
+
+          <section
+            class="bd-mosaic"
+            data-cols="2"
+            style="--bd-columns: minmax(0, 1fr) minmax(0, 1.35fr)"
+          >
+            <article class="bd-tile" data-pattern="skill-cloud">
+              <header class="bd-head">
+                <h2>技能标签</h2>
+                <p>由本人维护，评审分配时会参考</p>
+                <div data-part="end">
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="ghost"
+                    data-size="sm"
+                    data-toast="编辑技能标签"
+                  >
+                    <svg data-icon width="13" height="13" aria-hidden="true">
+                      <use href="#i-pencil" /></svg
+                    >编辑
+                  </button>
+                </div>
+              </header>
+              <div data-part="tags" id="tagsWrap"><div id="tags"></div></div>
+              <ul class="bd-tray" data-part="levels">
+                <li class="bd-item">
+                  <span data-part="swatch" data-tone="blush"></span>
+                  <div>
+                    <p>精通<span data-part="muted">可独立负责，也能评审他人</span></p>
+                  </div>
+                  <span data-part="end" id="lv3n">0</span>
+                </li>
+                <li class="bd-item">
+                  <span data-part="swatch" data-tone="sand"></span>
+                  <div>
+                    <p>熟练<span data-part="muted">可独立完成，偶尔需要支持</span></p>
+                  </div>
+                  <span data-part="end" id="lv2n">0</span>
+                </li>
+                <li class="bd-item">
+                  <span data-part="swatch"></span>
+                  <div>
+                    <p>了解<span data-part="muted">读得懂代码，能做小改动</span></p>
+                  </div>
+                  <span data-part="end" id="lv1n">0</span>
+                </li>
+              </ul>
+            </article>
+            <article class="bd-tile">
+              <header class="bd-head">
+                <h2>负责的工单</h2>
+                <p>本迭代 5 张，其中 1 张逾期</p>
+                <div data-part="end">
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="ghost"
+                    data-size="sm"
+                    data-go="board"
+                  >
+                    打开看板
+                  </button>
+                </div>
+              </header>
+              <div class="bd-tray" data-pattern="ticket-list">
+                <a class="bd-item" href="#board" data-go="board"
+                  ><code>LAT-142</code>
+                  <div><p>实例详情页加入实时日志流</p></div>
+                  <span class="bd-pill" data-dot data-tone="blush">进行中</span
+                  ><time>11 月 29 日</time></a
+                >
+                <a class="bd-item" href="#board" data-go="board"
+                  ><code>LAT-133</code>
+                  <div><p>统一错误提示的文案与语气</p></div>
+                  <span class="bd-pill" data-dot data-tone="blush">评审中</span
+                  ><time>11 月 27 日</time></a
+                >
+                <a class="bd-item" href="#board" data-go="board"
+                  ><code>LAT-148</code>
+                  <div><p>修复登录页验证码闪烁</p></div>
+                  <span class="bd-pill" data-dot>待开始</span><time>11 月 28 日</time></a
+                >
+                <a class="bd-item" href="#board" data-go="board"
+                  ><code>LAT-160</code>
+                  <div>
+                    <p
+                      data-tip="把控制台所有表格的空状态、加载态和错误态统一成同一套组件，并补齐无障碍标签"
+                    >
+                      把控制台所有表格的空状态、加载态和错误态统一成同一套组件，并补齐无障碍标签
+                    </p>
+                  </div>
+                  <span class="bd-pill" data-dot>待开始</span><time>12 月 6 日</time></a
+                >
+                <a class="bd-item" href="#board" data-go="board"
+                  ><code>LAT-121</code>
+                  <div><p>深色模式下图表配色对比度不足</p></div>
+                  <span class="bd-pill" data-dot data-tone="rose">逾期</span
+                  ><time data-tone="rose">逾期 4 天</time></a
+                >
+              </div>
+              <footer data-part="foot">
+                <a href="#board" data-part="link" data-toast="查看全部 12 张工单">
+                  查看全部 12 张工单<svg data-icon width="13" height="13" aria-hidden="true">
+                    <use href="#i-chevron-right" />
+                  </svg>
+                </a>
+              </footer>
+            </article>
+          </section>
+
+          <section
+            class="bd-mosaic"
+            data-cols="2"
+            style="--bd-columns: minmax(0, 1.75fr) minmax(0, 1fr)"
+          >
+            <article class="bd-tile">
+              <header class="bd-head">
+                <h2>最近动态</h2>
+                <p>过去 7 天共 23 条，每类显示最近 6 条</p>
+                <div data-part="end">
+                  <div class="bd-segmented" role="radiogroup" aria-label="动态筛选" id="actSeg">
+                    <button type="button" role="radio" data-value="all" aria-checked="true">
+                      全部
+                    </button>
+                    <button type="button" role="radio" data-value="code">代码</button>
+                    <button type="button" role="radio" data-value="talk">讨论</button>
+                  </div>
+                </div>
+              </header>
+              <ul class="bd-tray" data-pattern="activity-feed" id="timeline"></ul>
+            </article>
+            <article class="bd-tile" data-pattern="permissions">
+              <header class="bd-head">
+                <h2>权限</h2>
+                <p>角色：管理员 · 改动立即生效</p>
+                <div data-part="end"><span data-part="tag" id="permTag">已开启 3 / 6</span></div>
+              </header>
+              <ul class="bd-tray" id="perms"></ul>
+              <footer data-part="foot">
+                <p>
+                  <svg data-icon width="14" height="14" aria-hidden="true">
+                    <use href="#i-shield-check" /></svg
+                  >每次权限变更都会写入审计日志，保留 180 天。
+                </p>
+              </footer>
+            </article>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script type="module">
+      // 业务逻辑：场景切换、看板推进、收件箱、日程、成员资料。组件行为全部由 blora.js 提供。
+      import {
+        animateHeight,
+        flip,
+        reducedMotion,
+        toast,
+      } from '../../packages/blora-design/dist/blora.js';
+
+      const $ = (s, el = document) => el.querySelector(s);
+      const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+      const icon = (id, size = 14) =>
+        `<svg data-icon width="${size}" height="${size}" aria-hidden="true"><use href="#i-${id}" /></svg>`;
+      const PEOPLE = {
+        RH: ['Rhedar', 'sand'],
+        LZ: ['林舟', 'blush'],
+        SQ: ['宋晴', 'rose'],
+        CY: ['陈雨', null],
+        WJ: ['王杰', 'sand'],
+      };
+      const av = (k, small = true) =>
+        `<span class="bd-avatar"${small ? ' data-size="sm"' : ''}${PEOPLE[k][1] ? ` data-tone="${PEOPLE[k][1]}"` : ''} data-tip="${PEOPLE[k][0]}">${k}</span>`;
+      const stack = (keys) =>
+        `<span data-pattern="avatar-stack">${keys.map((k) => av(k)).join('')}</span>`;
+
+      /* ---------------- 场景 ---------------- */
+      const CRUMBS = {
+        board: [['看板']],
+        inbox: [['收件箱']],
+        schedule: [['日程']],
+        profile: [['成员', 'profile'], ['林舟']],
+      };
+      let scene = null;
+      function go(name) {
+        if (!CRUMBS[name]) name = 'board';
+        scene = name;
+        for (const v of $$('[data-scene]')) v.hidden = v.dataset.scene !== name;
+        for (const b of $$('.bd-rail [data-go]')) {
+          if (b.dataset.go === name) b.setAttribute('aria-current', 'page');
+          else b.removeAttribute('aria-current');
+        }
+        const trail = CRUMBS[name].map(([label, to], i, all) =>
+          i === all.length - 1
+            ? `<span aria-current="page">${label}</span>`
+            : `<a href="#${to}" data-go="${to}">${label}</a>`,
+        );
+        $('#crumbs').innerHTML = [`<a href="#board" data-go="board">Blora Labs</a>`, ...trail].join(
+          '',
+        );
+        history.replaceState(null, '', '#' + name);
+        window.scrollTo({ top: 0 });
+      }
+      window.go = go;
+      document.addEventListener('click', (e) => {
+        const t = e.target.closest('[data-go]');
+        if (t) {
+          e.preventDefault();
+          go(t.dataset.go);
+        }
+        const msg = e.target.closest('[data-toast]');
+        if (msg) {
+          if (msg.matches('a')) e.preventDefault();
+          toast(msg.dataset.toast);
+        }
+      });
+      $('.bd-rail').setAttribute('data-bd-controlled', '');
+
+      /* ================= 看板 ================= */
+      const ORDER = ['todo', 'doing', 'review', 'done'];
+      const CARDS = [
+        {
+          id: 'LAT-148',
+          col: 'todo',
+          title: '修复登录页验证码闪烁',
+          tags: ['前端'],
+          who: ['LZ'],
+          due: '11 月 28 日',
+        },
+        {
+          id: 'LAT-151',
+          col: 'todo',
+          title: '为实例列表增加按标签筛选，并在 URL 中保留筛选状态',
+          tags: ['前端', '体验'],
+          who: ['SQ', 'RH'],
+          check: [1, 4],
+          due: '12 月 2 日',
+        },
+        {
+          id: 'LAT-139',
+          col: 'todo',
+          title:
+            '调研：多区域部署下把边缘缓存命中率从 72% 提升到 90% 以上的方案，包括预热策略、分层缓存与回源限流对成本的影响评估',
+          tags: ['调研'],
+          who: [],
+        },
+        {
+          id: 'LAT-155',
+          col: 'todo',
+          title: '账单导出 CSV',
+          who: ['CY'],
+          due: '逾期 2 天',
+          overdue: true,
+          prio: true,
+        },
+        {
+          id: 'LAT-157',
+          col: 'todo',
+          title: '升级 Node 运行时到 22 LTS',
+          tags: ['运维', '依赖'],
+          who: ['WJ'],
+          check: [0, 3],
+        },
+        {
+          id: 'LAT-142',
+          col: 'doing',
+          title: '实例详情页加入实时日志流',
+          tags: ['前端', '后端'],
+          who: ['RH', 'LZ', 'SQ'],
+          check: [3, 5],
+          due: '11 月 29 日',
+        },
+        {
+          id: 'LAT-146',
+          col: 'doing',
+          title: 'Webhook 重试策略改为指数退避',
+          tags: ['后端'],
+          who: ['CY'],
+          check: [2, 2],
+          due: '明天',
+          soon: true,
+        },
+        {
+          id: 'LAT-150',
+          col: 'doing',
+          title: '成员邀请支持批量粘贴邮箱，自动识别分隔符并去重',
+          tags: ['前端'],
+          who: ['SQ'],
+          due: '12 月 1 日',
+        },
+        {
+          id: 'LAT-133',
+          col: 'review',
+          title: '统一错误提示的文案与语气',
+          tags: ['文案'],
+          who: ['LZ', 'RH'],
+          check: [6, 6],
+          pr: 'PR #212',
+        },
+      ];
+      function cardHTML(c) {
+        const tags = c.tags?.length
+          ? `<div data-part="tags">${c.tags.map((t) => `<span class="bd-tag" data-shape="square">${t}</span>`).join('')}</div>`
+          : '';
+        const meta = [];
+        if (c.due)
+          meta.push(
+            `<span data-part="meta"${c.overdue ? ' data-tone="rose"' : c.soon ? ' data-tone="sand"' : ''}>${icon(c.overdue ? 'triangle-alert' : 'calendar', 12)}${c.due}</span>`,
+          );
+        if (c.check) {
+          const [a, b] = c.check;
+          meta.push(
+            `<span data-part="meta"${a === b ? ' data-state="full"' : ''}>${icon('list-checks', 12)}${a}/${b}<span class="bd-progress" data-tone="sand" data-size="xs" aria-label="子任务" aria-valuenow="${(a / b) * 100}"></span></span>`,
+          );
+        }
+        if (c.pr) meta.push(`<span data-part="meta">${icon('git-pull-request', 12)}${c.pr}</span>`);
+        const who = c.who.length
+          ? stack(c.who)
+          : `<span data-pattern="avatar-stack"><span class="bd-avatar" data-size="sm" data-part="unassigned" data-tip="未分配">${icon('user', 12)}</span></span>`;
+        return `<article data-pattern="kanban-card" data-id="${c.id}"${c.soon ? ' data-soon' : ''}>
+          <header><span>${c.id}</span>${c.prio ? `<span data-part="prio">${icon('flag', 11)}高优</span>` : ''}<button type="button" data-part="move" aria-label="推进到下一列" data-tip="推进到下一列">${icon('arrow-right', 13)}</button><span data-part="done" data-tip="已完成">${icon('check', 12)}</span></header>
+          <h3 data-tip="${c.title}">${c.title}</h3>
+          ${tags}
+          <footer>${meta.join('')}${who}</footer>
+        </article>`;
+      }
+      const board = $('#board');
+      const tray = (col) => $(`[data-col="${col}"] .bd-tray`, board);
+      for (const c of CARDS) tray(c.col).insertAdjacentHTML('beforeend', cardHTML(c));
+
+      const WIP = 4;
+      function updateBoard() {
+        const n = {};
+        for (const k of ORDER) {
+          n[k] = $$('[data-pattern="kanban-card"]', tray(k)).length;
+          $('#cnt-' + k).textContent = n[k];
+          $('.bd-empty', tray(k)).hidden = n[k] > 0;
+        }
+        const total = ORDER.reduce((s, k) => s + n[k], 0);
+        const pct = Math.round((n.done / total) * 100);
+        $('#kpiDone').textContent = n.done;
+        $('#kpiTotal').textContent = total;
+        $('#ringProg').setAttribute('aria-valuenow', pct);
+        $('#kpiDoing').textContent = n.doing;
+        $('#ringWip').setAttribute('aria-valuenow', (n.doing / WIP) * 100);
+        const soon = $$('[data-pattern="kanban-card"][data-soon]', tray('doing')).length;
+        $('#kpiDoingFoot').innerHTML =
+          n.doing > WIP
+            ? `<span data-part="delta" data-tone="rose">超出 ${n.doing - WIP} 张</span>WIP 上限 ${WIP}`
+            : soon
+              ? `<span data-part="delta">明天到期 ${soon}</span>WIP 上限 ${WIP}`
+              : `WIP 上限 ${WIP} · 没有临期工单`;
+        $('#kpiReview').textContent = n.review;
+        $('#railSprintPct').textContent = pct + '%';
+        $('#railSprintPct').value = pct;
+        $('#railSprintBar').setAttribute('aria-valuenow', pct);
+        $('#railBoard').textContent = total - n.done;
+      }
+
+      /* 推进一列：FLIP。先改 DOM、一次性量完终点，再让卡片和各列高度连续过渡 */
+      function moveCard(card) {
+        const from = card.closest('[data-col]').dataset.col;
+        const to = ORDER[ORDER.indexOf(from) + 1];
+        if (!to) return;
+        const cols = $$('[data-col]', board);
+        const h0 = cols.map((c) => c.getBoundingClientRect().height);
+        flip($$('[data-pattern="kanban-card"]', board), () => {
+          $('.bd-empty', tray(to)).after(card);
+          updateBoard();
+        });
+        if (!reducedMotion())
+          cols.forEach((c, i) => {
+            const h1 = c.getBoundingClientRect().height;
+            if (Math.abs(h1 - h0[i]) > 0.5) {
+              c.style.overflow = 'hidden';
+              c.animate([{ height: h0[i] + 'px' }, { height: h1 + 'px' }], {
+                duration: 340,
+                easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+              }).onfinish = () => (c.style.overflow = '');
+            }
+          });
+        toast(`${card.dataset.id} 已移到「${$(`[data-col="${to}"] h2`, board).textContent}」`);
+      }
+      board.addEventListener('click', (e) => {
+        const b = e.target.closest('[data-part="move"]');
+        if (b) moveCard(b.closest('[data-pattern="kanban-card"]'));
+      });
+
+      /* ================= 收件箱 ================= */
+      const MSGS = [
+        {
+          id: 1,
+          from: 'SQ',
+          type: 'mention',
+          time: '10:42',
+          when: '今天 10:42',
+          to: '你、前端组',
+          unread: true,
+          subj: '在 LAT-142 中提到了你',
+          prev: '日志流在 Safari 上断线后不会自动重连，能帮忙看下 EventSource 的重试逻辑吗？',
+          body: [
+            [
+              'p',
+              'Rhedar，日志流在 Safari 17 上有个问题：网络切换（比如从 Wi-Fi 切到手机热点）之后，EventSource 会触发 error，但之后不会再自动重连，页面就一直停在最后一条日志上。',
+            ],
+            [
+              'p',
+              '我看了下现在的实现，onerror 里直接调用了 close()，等于把浏览器自带的重连关掉了。Chrome 上没复现，是因为它在网络切换时走的是另一条路径。',
+            ],
+            [
+              'code',
+              '<span data-tone="comment">// src/features/logs/stream.ts</span>\nes.onerror = () =&gt; {\n  es.close();            <span data-tone="rose">// ← 这里把自动重连关掉了</span>\n  setStatus(<span data-tone="sand">\'offline\'</span>);\n};',
+            ],
+            [
+              'p',
+              '我的想法是：只在 readyState 为 CLOSED 时才手动重建连接，并加上指数退避，和 LAT-146 的 Webhook 重试共用同一个工具函数。你看这样可以吗？没问题的话我今天下午就提 PR。',
+            ],
+            ['file', 'safari-network-trace.har', '1.8 MB'],
+          ],
+          ctx: [
+            '关联工单',
+            [
+              ['工单', 'LAT-142 实例详情页加入实时日志流'],
+              ['状态', '进行中 · 子任务 3 / 5'],
+              ['负责人', 'Rhedar、林舟、宋晴'],
+              ['截止', '11 月 29 日'],
+            ],
+            ['在看板中打开', 'go:board'],
+          ],
+        },
+        {
+          id: 2,
+          sys: ['rose', 'triangle-alert', '构建通知'],
+          time: '09:15',
+          when: '今天 09:15',
+          unread: true,
+          subj: 'api-gateway-01 部署失败',
+          prev: '构建步骤 npm ci 退出码 1：package-lock.json 与 package.json 不一致',
+          body: [
+            [
+              'p',
+              'api-gateway-01 在 09:14 的部署失败，线上仍在运行上一个版本 v2.18.3，没有影响用户访问。',
+            ],
+            [
+              'code',
+              '<span data-tone="comment">$ npm ci</span>\n<span data-tone="rose">npm ERR! `npm ci` can only install packages when your\nnpm ERR! package.json and package-lock.json are in sync.</span>\n<span data-tone="comment">npm ERR! Missing: zod@3.23.8 from lock file</span>\n\n<span data-tone="sand">退出码 1 · 用时 38 秒 · 提交 a3f9c21</span>',
+            ],
+            [
+              'p',
+              '通常是新增依赖后没有提交 lock 文件。重新运行 npm install 并提交 package-lock.json，推送到 main 后会自动重新部署。',
+            ],
+          ],
+          ctx: [
+            '构建详情',
+            [
+              ['服务', 'api-gateway-01'],
+              ['失败步骤', 'npm ci · 退出码 1'],
+              ['线上版本', 'v2.18.3 · 未受影响'],
+              ['提交', 'a3f9c21 · main'],
+            ],
+            ['查看构建日志', 'toast:打开构建日志'],
+          ],
+        },
+        {
+          id: 3,
+          from: 'LZ',
+          type: 'review',
+          time: '昨天',
+          when: '昨天 17:36',
+          unread: true,
+          subj: '请你评审 PR #214 · Webhook 重试改为指数退避',
+          prev: '改动集中在 retry.ts，新增了抖动参数，默认上限 6 次，单测已补齐。',
+          body: [
+            [
+              'p',
+              '改动集中在 src/webhooks/retry.ts：退避基数 2 秒、上限 6 次，并加了 ±20% 的随机抖动，避免大量请求在同一时刻重试。',
+            ],
+            [
+              'code',
+              '<span data-tone="comment">// 第 n 次重试前的等待时间（毫秒）</span>\nconst wait = Math.min(base * 2 ** n, cap) * (0.8 + Math.random() * 0.4);',
+            ],
+            [
+              'p',
+              '单测补了 9 个用例，覆盖了 410 直接放弃、429 读取 Retry-After 两种情况。有空的话今天帮忙看一下，明天要合进迭代分支。',
+            ],
+          ],
+          ctx: [
+            '拉取请求',
+            [
+              ['分支', 'feat/webhook-backoff → iteration-24'],
+              ['改动', '+186 −42 · 4 个文件'],
+              ['检查', '9 / 9 通过'],
+              ['关联工单', 'LAT-146 · 进行中'],
+            ],
+            ['打开 PR #214', 'toast:打开 PR #214'],
+          ],
+        },
+        {
+          id: 4,
+          from: 'CY',
+          time: '昨天',
+          when: '昨天 15:08',
+          unread: true,
+          subj: '账单导出的字段顺序需要和财务模板保持一致，附上对照表与文件命名建议',
+          prev: '财务那边的对照表放在附件里了，主要是“计费周期”和“实例规格”两列需要调换位置。',
+          body: [
+            [
+              'p',
+              '财务那边的对照表放在附件里了。主要是两处：“计费周期”要放在“实例规格”前面；金额统一保留两位小数、不带千分位，方便他们直接导入。',
+            ],
+            [
+              'p',
+              '另外导出的文件名能不能带上账期，比如 blora-bill-2026-11.csv？这样他们每月归档时不用再手动改名。',
+            ],
+            ['file', '财务字段对照表.xlsx', '24 KB'],
+          ],
+          ctx: [
+            '关联工单',
+            [
+              ['工单', 'LAT-155 账单导出 CSV'],
+              ['状态', '逾期 2 天 · 高优'],
+              ['负责人', '陈雨'],
+              ['截止', '11 月 24 日'],
+            ],
+            ['在看板中打开', 'go:board'],
+          ],
+        },
+        {
+          id: 5,
+          sys: ['sand', 'lock', '安全通知'],
+          time: '周一',
+          when: '11 月 23 日 03:00',
+          subj: '访问密钥已自动轮换',
+          prev: '密钥 ak-****-9f3c 已自动轮换，旧密钥将在 7 天后失效。',
+          body: [
+            [
+              'p',
+              '访问密钥 ak-****-9f3c 已在 11 月 23 日 03:00 按 90 天策略自动轮换，新密钥 ak-****-41d7 已同步到工作区的密钥库。',
+            ],
+            [
+              'p',
+              '旧密钥会在 11 月 30 日 03:00 失效。目前还有 2 条 CI 流水线和 3 台本地设备在使用旧密钥，请在失效前更新。',
+            ],
+          ],
+          ctx: [
+            '密钥',
+            [
+              ['旧密钥', 'ak-****-9f3c'],
+              ['新密钥', 'ak-****-41d7'],
+              ['旧密钥失效', '11 月 30 日 03:00'],
+              ['仍在使用', 'CI 2 条 · 本地 3 台'],
+            ],
+            ['管理访问密钥', 'toast:打开访问密钥设置'],
+          ],
+        },
+        {
+          id: 6,
+          from: 'LZ',
+          type: 'mention',
+          time: '周一',
+          when: '11 月 23 日 16:20',
+          subj: '在 LAT-133 中提到了你',
+          prev: '文案评审通过了，辛苦！剩下两处英文翻译我周三前补上。',
+          body: [
+            [
+              'p',
+              '文案评审通过了，辛苦！错误提示的语气统一得很好，尤其是把“操作失败”都改成了具体原因加下一步建议。',
+            ],
+            [
+              'p',
+              '剩下两处英文翻译（配额超限和支付失败）我周三前补上，补完就可以合并 PR #212 了。',
+            ],
+          ],
+          ctx: [
+            '关联工单',
+            [
+              ['工单', 'LAT-133 统一错误提示的文案与语气'],
+              ['状态', '评审中 · PR #212'],
+              ['负责人', '林舟、Rhedar'],
+              ['剩余', '英文翻译 2 处'],
+            ],
+            ['在看板中打开', 'go:board'],
+          ],
+        },
+        {
+          id: 7,
+          from: 'SQ',
+          time: '11月21日',
+          when: '11 月 21 日 11:05',
+          subj: '周四的设计评审改到下午两点',
+          prev: '会议室换到 B，线上链接不变。',
+          body: [
+            ['p', '周四的设计评审改到下午两点，会议室换到 B，线上链接不变。'],
+            [
+              'p',
+              '这次主要过控制台导航和侧栏收起的交互，原型已经更新到 Figma 的「迭代 24」页面，评审前可以先看一下。',
+            ],
+          ],
+          ctx: [
+            '会议',
+            [
+              ['时间', '11 月 26 日 14:00–15:30'],
+              ['地点', '会议室 B · 线上同步'],
+              ['参会', '宋晴、林舟、陈雨、你'],
+              ['原时间', '11 月 26 日 16:00'],
+            ],
+            ['在日程中查看', 'go:schedule'],
+          ],
+        },
+        {
+          id: 8,
+          sys: ['blush', 'file-text', '账单通知'],
+          time: '11月20日',
+          when: '11 月 20 日 08:00',
+          subj: '11 月账单已生成：¥3,420.00',
+          prev: '本月用量较上月增长 12%，其中边缘流量占比最高。',
+          body: [
+            ['p', '11 月账单已生成，应付 ¥3,420.00，将在 12 月 5 日从默认付款方式扣款。'],
+            [
+              'p',
+              '本月用量较上月增长 12%，其中边缘流量占比最高（41%）。如需调整预算上限，可以在账单设置里修改。',
+            ],
+          ],
+          ctx: [
+            '账单',
+            [
+              ['应付', '¥3,420.00'],
+              ['扣款日', '12 月 5 日'],
+              ['较上月', '+12%'],
+              ['最高项', '边缘流量 · 41%'],
+            ],
+            ['查看账单', 'toast:打开 11 月账单'],
+          ],
+        },
+      ];
+      let inboxTab = 'all';
+      let selId = 1;
+      const isMine = (m) => m.type === 'mention' || m.type === 'review';
+      const matches = (m) =>
+        inboxTab === 'all' ? true : inboxTab === 'unread' ? m.unread : isMine(m);
+      const fromName = (m) => (m.sys ? 'Blora · ' + m.sys[2] : PEOPLE[m.from][0]);
+      const kindName = (m) =>
+        m.sys
+          ? m.sys[2]
+          : m.type === 'mention'
+            ? '@提及'
+            : m.type === 'review'
+              ? '评审请求'
+              : '私信';
+      const msgAvatar = (m) =>
+        m.sys
+          ? `<span data-part="icon" data-tone="${m.sys[0]}">${icon(m.sys[1], 16)}</span>`
+          : av(m.from, false);
+      const EMPTY = {
+        all: ['inbox', '收件箱是空的，新消息会出现在这里。'],
+        unread: ['check-check', '全部读完了，新的 @提及和评审请求会出现在这里。'],
+        mine: ['at-sign', '还没有人 @你，也没有待你评审的 PR。'],
+      };
+      function msgHTML(m) {
+        const kind =
+          m.type === 'mention'
+            ? icon('at-sign', 12)
+            : m.type === 'review'
+              ? icon('git-pull-request', 12)
+              : '';
+        return `<button type="button" class="bd-item" role="option" data-pattern="message" data-align="start" data-id="${m.id}" aria-selected="${m.id === selId}"${m.unread ? ' data-unread' : ''}>
+          ${msgAvatar(m)}
+          <div><span><span>${fromName(m)}</span>${kind}<time>${m.time}</time><i></i></span><strong>${m.subj}</strong><small>${m.prev}</small></div>
+        </button>`;
+      }
+      function renderInbox() {
+        const list = MSGS.filter(matches);
+        const box = $('#msgList');
+        if (list.length) box.innerHTML = list.map(msgHTML).join('');
+        else {
+          const [ic, d] = EMPTY[inboxTab];
+          box.innerHTML = `<div class="bd-empty"><span data-part="icon">${icon(ic, 17)}</span><p>${d}</p>${inboxTab === 'all' ? '' : '<button type="button" class="bd-button" data-size="sm" data-show-all>查看全部消息</button>'}</div>`;
+        }
+        $('#msgScroll').scrollTop = 0;
+      }
+      function updateCounts() {
+        const unread = MSGS.filter((m) => m.unread).length;
+        $('#nAll').textContent = MSGS.length;
+        $('#nUnread').textContent = unread;
+        $('#nMine').textContent = MSGS.filter(isMine).length;
+        $('#railInbox').textContent = unread;
+        $('#railInbox').hidden = !unread;
+        $('#bellBtn').toggleAttribute('data-dot', unread > 0);
+        $('#markAllBtn').disabled = !unread;
+      }
+      function bodyHTML(m) {
+        return m.body
+          .map(([k, v, x]) => {
+            if (k === 'p') return `<p>${v}</p>`;
+            if (k === 'code')
+              return `<figure class="bd-code" data-variant="terminal"><pre>${v}</pre></figure>`;
+            if (k === 'file')
+              return `<button type="button" data-part="attachment" data-toast="下载 ${v}"><span>${icon('paperclip', 15)}</span><b>${v}</b><small>${x}</small></button>`;
+            return '';
+          })
+          .join('');
+      }
+      function ctxHTML(m) {
+        const [label, rows, [actLabel, act]] = m.ctx;
+        const [kind, arg] = act.split(':');
+        const attr = kind === 'go' ? `data-go="${arg}"` : `data-toast="${arg}"`;
+        return `<section data-part="group">
+          <header><span>${label}</span><button type="button" class="bd-button" data-variant="ghost" data-size="sm" ${attr}>${actLabel}${icon('chevron-right', 12)}</button></header>
+          <dl class="bd-spec">${rows.map(([k, v]) => `<div><dt>${k}</dt><dd data-tip="${v}">${v}</dd></div>`).join('')}</dl>
+        </section>`;
+      }
+      function renderReader(m) {
+        $('#reader').innerHTML = `
+          <header class="bd-head">
+            <h2>${kindName(m)}</h2>
+            <div data-part="end">
+              <button type="button" class="bd-button" data-variant="ghost" data-size="sm" data-shape="icon" aria-label="回复" data-reply>${icon('reply', 14)}</button>
+              <button type="button" class="bd-button" data-variant="ghost" data-size="sm" data-shape="icon" aria-label="归档" data-toast="已归档">${icon('archive', 14)}</button>
+              <button type="button" class="bd-button" data-variant="ghost" data-size="sm" data-shape="icon" aria-label="更多" data-toast="标为未读 / 静音此讨论">${icon('ellipsis', 14)}</button>
+            </div>
+          </header>
+          <h2 data-part="subject">${m.subj}</h2>
+          <div class="bd-item" data-part="from">${m.sys ? `<span data-part="icon" data-tone="${m.sys[0]}">${icon(m.sys[1], 16)}</span>` : av(m.from, false)}<div><p><b>${fromName(m)}</b> 发给 ${m.to || '你'}</p></div><time>${m.when}</time></div>
+          <div class="bd-scroll" data-grow data-part="body">${bodyHTML(m)}${ctxHTML(m)}</div>
+          <div data-part="reply">
+            <textarea class="bd-textarea" id="replyBox" rows="2" aria-label="回复" placeholder="${m.sys ? '为这条通知添加备注…' : '回复 ' + fromName(m) + '…'}"></textarea>
+            <div class="bd-toolbar">
+              <button type="button" class="bd-button" data-variant="ghost" data-size="sm" data-shape="icon" aria-label="添加附件" data-toast="添加附件">${icon('paperclip', 14)}</button>
+              <button type="button" class="bd-button" data-variant="ghost" data-size="sm" data-shape="icon" aria-label="提及成员" data-toast="提及成员">${icon('at-sign', 14)}</button>
+              <span data-part="spacer"></span>
+              <span data-part="hint">⌘ Enter 发送</span>
+              <button type="button" class="bd-button" data-variant="primary" data-size="sm" id="sendBtn">${icon('send-horizontal', 13)}发送</button>
+            </div>
+          </div>`;
+      }
+      function sendReply() {
+        const t = $('#replyBox');
+        if (!t.value.trim()) {
+          t.focus();
+          toast('先写点什么再发送');
+          return;
+        }
+        t.value = '';
+        toast('回复已发送');
+      }
+      $('#reader').addEventListener('click', (e) => {
+        if (e.target.closest('#sendBtn')) sendReply();
+        if (e.target.closest('[data-reply]')) $('#replyBox').focus();
+      });
+      $('#reader').addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'Enter' && e.target.id === 'replyBox') {
+          e.preventDefault();
+          sendReply();
+        }
+      });
+      $('#msgList').addEventListener('click', (e) => {
+        if (e.target.closest('[data-show-all]')) {
+          $('#inboxSeg [data-value="all"]').click();
+          return;
+        }
+        const b = e.target.closest('[data-pattern="message"]');
+        if (!b) return;
+        const m = MSGS.find((x) => x.id === +b.dataset.id);
+        if (m.id !== selId) {
+          selId = m.id;
+          for (const x of $$('[data-pattern="message"]', $('#msgList')))
+            x.setAttribute('aria-selected', String(x === b));
+          renderReader(m);
+        }
+        if (m.unread) {
+          m.unread = false;
+          b.removeAttribute('data-unread');
+          updateCounts();
+        }
+      });
+      $('#markAllBtn').addEventListener('click', () => {
+        const had = MSGS.filter((m) => m.unread).length;
+        if (!had) return;
+        for (const m of MSGS) m.unread = false;
+        for (const x of $$('[data-pattern="message"]', $('#msgList')))
+          x.removeAttribute('data-unread');
+        updateCounts();
+        toast(`已将 ${had} 条消息标为已读`);
+        if (inboxTab === 'unread') renderInbox();
+      });
+      $('#inboxSeg').addEventListener('bd-change', (e) => {
+        inboxTab = e.detail.value;
+        renderInbox();
+      });
+
+      /* ================= 日程 ================= */
+      const HS = 9;
+      const NOW = 10 + 40 / 60;
+      const TODAY = 3;
+      const DAYS = [
+        ['周一', 23],
+        ['周二', 24],
+        ['周三', 25],
+        ['周四', 26],
+        ['周五', 27],
+        ['周六', 28],
+        ['周日', 29],
+      ];
+      const EV = [
+        { d: 0, s: 10, e: 10.5, t: '站会', c: 'blush', loc: '线上' },
+        { d: 0, s: 14, e: 16, t: '专注：日志流前端', c: 'sand' },
+        { d: 0, s: 16.5, e: 17.5, t: '1:1 · 林舟', c: 'well', loc: '线上', who: ['LZ'] },
+        { d: 1, s: 10, e: 10.5, t: '站会', c: 'blush', loc: '线上' },
+        {
+          d: 1,
+          s: 11,
+          e: 12.5,
+          t: '迭代中期检查',
+          c: 'blush',
+          loc: '会议室 B',
+          who: ['LZ', 'SQ', 'CY', 'WJ'],
+        },
+        { d: 1, s: 15, e: 18, t: '专注：Webhook 重试', c: 'sand' },
+        { d: 2, s: 10, e: 10.5, t: '站会', c: 'blush', loc: '线上' },
+        {
+          d: 2,
+          s: 13.5,
+          e: 14.5,
+          t: '客户访谈：边缘缓存命中率',
+          c: 'blush',
+          loc: '线上 · 外部参会',
+          who: ['SQ'],
+        },
+        { d: 2, s: 17, e: 17.5, t: '写周报草稿', c: 'well' },
+        { d: 3, s: 10, e: 10.5, t: '站会', c: 'blush', loc: '线上', who: ['LZ', 'SQ', 'CY'] },
+        {
+          d: 3,
+          s: 11,
+          e: 12,
+          t: '接口评审：实例日志 API',
+          c: 'blush',
+          loc: '会议室 A · 线上同步',
+          who: ['LZ', 'SQ'],
+        },
+        {
+          d: 3,
+          s: 14,
+          e: 15.5,
+          t: '设计评审：控制台导航与侧栏收起交互',
+          c: 'blush',
+          loc: '会议室 B',
+          who: ['SQ', 'LZ', 'CY'],
+          lane: 'l',
+        },
+        {
+          d: 3,
+          s: 14.5,
+          e: 15,
+          t: '与财务对齐导出字段',
+          c: 'well',
+          loc: '线上',
+          who: ['CY'],
+          lane: 'r',
+        },
+        { d: 3, s: 16, e: 17, t: '面试：前端工程师', c: 'well', loc: '线上' },
+        { d: 3, s: 17.5, e: 18, t: '发布前检查', c: 'rose', loc: '值班频道' },
+        { d: 4, s: 10, e: 10.5, t: '站会', c: 'blush', loc: '线上' },
+        { d: 4, s: 11, e: 11.5, t: '周报', c: 'well' },
+        {
+          d: 4,
+          s: 15,
+          e: 16.5,
+          t: '迭代演示',
+          c: 'blush',
+          loc: '全员 · 线上',
+          who: ['LZ', 'SQ', 'CY', 'WJ'],
+        },
+        { d: 6, s: 10, e: 12, t: '值班：发布观察', c: 'rose', loc: '值班频道' },
+      ];
+      const ALLDAY = [
+        { t: '冲刺 24 · 控制台改版', c: 'blush', d: 0, n: 7, row: 1, icon: 'flag' },
+        { t: '王杰 年假', c: 'sand', d: 4, n: 3, row: 2, icon: 'calendar' },
+      ];
+      const fmt = (h) => `${String(Math.floor(h)).padStart(2, '0')}:${h % 1 ? '30' : '00'}`;
+      const span = (ev) => `${fmt(ev.s)}–${fmt(ev.e)}`;
+      const NEXT = EV.findIndex((ev) => ev.d === TODAY && ev.s > NOW);
+      const TYPES = [
+        ['blush', '会议'],
+        ['sand', '专注'],
+        ['rose', '值班 / 截止'],
+        ['well', '其他'],
+      ];
+      const tone = (c) => (c === 'well' ? '' : ` data-tone="${c}"`);
+      const fmtH = (h) => (h % 1 ? h.toFixed(1) : String(h)) + ' h';
+      /* 一组时间段的并集时长与重叠处数 */
+      function busy(list) {
+        const iv = list.map((ev) => [ev.s, ev.e]).sort((a, b) => a[0] - b[0]);
+        let total = 0;
+        let overlaps = 0;
+        let cur = null;
+        for (const [s, e] of iv) {
+          if (cur && s < cur[1]) {
+            overlaps++;
+            cur[1] = Math.max(cur[1], e);
+          } else {
+            if (cur) total += cur[1] - cur[0];
+            cur = [s, e];
+          }
+        }
+        if (cur) total += cur[1] - cur[0];
+        return { total, overlaps };
+      }
+      /* 时间轴按百分比排布：10 个小时各占 10% */
+      function renderSchedule() {
+        $('#calHead').innerHTML =
+          '<span></span>' +
+          DAYS.map(
+            ([w, n], i) =>
+              `<div${i === TODAY ? ' aria-current="date"' : ''}${i > 4 ? ' data-weekend' : ''}>${w}<b>${n}</b></div>`,
+          ).join('');
+        $('#calAllday').innerHTML =
+          '<span>全天</span>' +
+          ALLDAY.map(
+            (a) =>
+              `<div data-tone="${a.c}" style="--col: ${a.d + 2}; --span: ${a.n}; --row: ${a.row}" data-tip="${a.t}">${icon(a.icon, 12)}<span>${a.t}</span></div>`,
+          ).join('');
+        const gutter =
+          '<div>' +
+          Array.from(
+            { length: 10 },
+            (_, i) => `<span style="--h: ${i}">${fmt(HS + i)}</span>`,
+          ).join('') +
+          '</div>';
+        const bands = [1, 3, 5, 7, 9].map((i) => `<i style="--h: ${i}"></i>`).join('');
+        const cols = DAYS.map((_, d) => {
+          const evs = EV.map((ev, i) => [ev, i])
+            .filter(([ev]) => ev.d === d)
+            .map(
+              ([ev, i]) =>
+                `<button type="button" data-i="${i}"${tone(ev.c)}${ev.e - ev.s <= 0.5 ? ' data-short' : ''}${ev.lane ? ` data-lane="${ev.lane}"` : ''} style="--s: ${ev.s - HS}; --d: ${ev.e - ev.s}" data-tip="${ev.t} · ${span(ev)}"><b>${ev.t}</b><span>${span(ev)}${ev.loc ? ' · ' + ev.loc : ''}</span></button>`,
+            )
+            .join('');
+          const now = d === TODAY ? `<hr style="--t: ${((NOW - HS) * 10).toFixed(2)}%" />` : '';
+          return `<div${d > 4 ? ' data-weekend' : ''}>${bands}${evs}${now}</div>`;
+        }).join('');
+        $('#calBody').innerHTML = gutter + cols;
+        $('#calLegend').innerHTML = TYPES.map(([c, t]) => {
+          const evs = EV.filter((ev) => ev.c === c);
+          const h = evs.reduce((s, ev) => s + ev.e - ev.s, 0);
+          return `<li class="bd-item"><span data-part="swatch"${tone(c)}></span><div><span>${t}</span></div><span data-part="end">${fmtH(h)} · ${evs.length}</span></li>`;
+        }).join('');
+        const today = EV.map((ev, i) => [ev, i]).filter(([ev]) => ev.d === TODAY);
+        $('#todayAgenda').innerHTML = today
+          .map(
+            ([ev, i]) =>
+              `<button type="button" class="bd-item" role="option" data-align="start" data-i="${i}"${ev.e <= NOW ? ' data-past' : ''}><time>${fmt(ev.s)}</time><span data-part="swatch"${tone(ev.c)}></span><div><span>${ev.t}</span><small>${span(ev)}${ev.loc ? ' · ' + ev.loc : ''}</small></div></button>`,
+          )
+          .join('');
+        const b = busy(today.map(([ev]) => ev));
+        $('#todayCount').textContent = `${today.length} 项 · 重叠 ${b.overlaps}`;
+        $('#todayFoot').innerHTML =
+          `<div><dt>已排</dt><dd>${fmtH(b.total)}</dd></div><div><dt>空闲</dt><dd>${fmtH(10 - b.total)}</dd></div><div><dt>重叠</dt><dd>${b.overlaps} 处</dd></div>`;
+      }
+      function renderNext(i) {
+        const ev = EV[i];
+        const isNext = i === NEXT;
+        const online = (ev.loc || '').includes('线上');
+        const [w, n] = DAYS[ev.d];
+        const tag = isNext
+          ? '下一个 · 20 分钟后'
+          : ev.d === TODAY
+            ? '已选 · 今天'
+            : `已选 · ${w} ${n} 日`;
+        $('#nextCard').innerHTML = `
+          <header><span class="bd-pill"${isNext ? ' data-tone="blush"' : ''}>${tag}</span><time>${span(ev)}</time></header>
+          <h3 data-tip="${ev.t}">${ev.t}</h3>
+          <p>${icon('map-pin', 13)}<span>${ev.loc || '未设置地点'}</span></p>
+          <footer>${ev.who ? stack(ev.who) : '<span>仅自己</span>'}<button type="button" class="bd-button" data-variant="primary" data-size="sm" data-toast="${online ? '正在加入会议…' : '打开日程详情'}">${icon(online ? 'video' : 'calendar', 13)}${online ? '加入会议' : '详情'}</button></footer>`;
+      }
+      function selectEvent(i) {
+        for (const x of $$('[data-scene="schedule"] [data-i]')) {
+          const on = x.dataset.i === String(i);
+          if (x.getAttribute('role') === 'option') x.setAttribute('aria-selected', String(on));
+          else x.setAttribute('aria-pressed', String(on));
+        }
+        renderNext(i);
+      }
+      $('[data-scene="schedule"]').addEventListener('click', (e) => {
+        const b = e.target.closest('[data-i]');
+        if (b) selectEvent(+b.dataset.i);
+      });
+
+      /* ================= 成员资料 ================= */
+      const TAGS = [
+        ['React', 3],
+        ['TypeScript', 3],
+        ['CSS 架构', 3],
+        ['设计系统', 3],
+        ['无障碍', 2],
+        ['性能优化', 3],
+        ['Vite', 2],
+        ['Node.js', 2],
+        ['GraphQL', 1],
+        ['数据可视化', 2],
+        ['动效设计', 2],
+        ['单元测试', 2],
+        ['Playwright', 2],
+        ['国际化', 1],
+        ['Figma', 2],
+        ['技术写作', 3],
+        ['Webpack', 1],
+        ['SSR', 2],
+        ['边缘计算', 1],
+        ['WebSocket', 2],
+        ['EventSource', 2],
+        ['Rust', 1],
+        ['Go', 1],
+        ['PostgreSQL', 1],
+        ['Docker', 2],
+        ['CI/CD', 2],
+        ['可观测性', 1],
+        ['招聘面试', 3],
+        ['新人培养', 3],
+        ['跨团队协作', 2],
+      ];
+      const SHOWN = 16;
+      const EXTRA = TAGS.length - SHOWN;
+      const LEVEL = { 3: ' data-tone="blush"', 2: ' data-tone="sand"', 1: '' };
+      $('#tags').innerHTML =
+        TAGS.map(
+          ([t, lv], i) =>
+            `<span class="bd-tag" data-shape="square" data-size="lg"${LEVEL[lv]}${i >= SHOWN ? ' hidden' : ''}>${t}</span>`,
+        ).join('') +
+        `<button type="button" class="bd-tag" data-shape="square" data-size="lg" data-part="more" id="tagMore" aria-expanded="false">+${EXTRA} 项</button>`;
+      for (const lv of [3, 2, 1])
+        $('#lv' + lv + 'n').textContent = TAGS.filter((x) => x[1] === lv).length;
+      $('#tagMore').addEventListener('click', (e) => {
+        const btn = e.currentTarget;
+        const open = btn.getAttribute('aria-expanded') !== 'true';
+        animateHeight($('#tagsWrap'), () => {
+          $$('#tags .bd-tag').forEach((c, i) => {
+            if (i >= SHOWN && c !== btn) c.hidden = !open;
+          });
+          btn.setAttribute('aria-expanded', String(open));
+          btn.textContent = open ? '收起' : `+${EXTRA} 项`;
+        });
+      });
+
+      const ACTS = [
+        {
+          c: 'code',
+          dot: 'sand',
+          html: '合并了 <code>PR #209</code> <b>表格空状态组件</b>',
+          sub: 'blora-console · main · +412 −96',
+          time: '2 小时前',
+        },
+        {
+          c: 'talk',
+          dot: 'blush',
+          html: '在 <b>LAT-142 实例详情页加入实时日志流</b> 中评论',
+          quote:
+            'Safari 断线不重连的问题我复现了，确实是 onerror 里调用 close() 导致的。按你的方案改就行，记得把退避上限做成可配置。',
+          time: '3 小时前',
+        },
+        {
+          c: 'code',
+          dot: 'sand',
+          html: '推送了 3 个提交到 <code>feat/log-stream</code>',
+          sub: 'a3f9c21 修复重连 · 7be01d4 补测试 · 19c4e8a 调整日志行样式',
+          time: '昨天 18:20',
+        },
+        {
+          c: 'talk',
+          dot: 'well',
+          html: '把 <b>LAT-133</b> 移到了 <b>评审中</b>',
+          sub: '看板 · 迭代 24 · 关联 PR #212',
+          time: '昨天 15:02',
+        },
+        {
+          c: 'code',
+          dot: 'blush',
+          html: '评审了 <code>PR #214</code> 并请求修改',
+          sub: '2 条建议 · 1 条必须修改',
+          time: '周二 16:40',
+        },
+        {
+          c: 'talk',
+          dot: 'blush',
+          html: '在 <b>设计评审：控制台导航</b> 中被提及',
+          quote: '侧栏收起后的提示气泡要和顶栏中心线对齐，展开时不要再出现。',
+          time: '周二 11:15',
+        },
+        {
+          c: 'code',
+          dot: 'well',
+          html: '创建了分支 <code>feat/log-stream</code>',
+          sub: '基于 main · a91f2e0',
+          time: '周二 09:30',
+        },
+        {
+          c: 'talk',
+          dot: 'well',
+          html: '回复了 <b>宋晴</b> 在 <b>LAT-150 成员批量邀请</b> 中的提问',
+          quote: '分隔符先支持逗号、分号和换行，重复邮箱在提交前合并提示。',
+          time: '周一 17:05',
+        },
+        {
+          c: 'code',
+          dot: 'sand',
+          html: '合并了 <code>PR #205</code> <b>深色模式图表配色</b>',
+          sub: 'blora-console · main · +38 −21',
+          time: '周一 14:20',
+        },
+        {
+          c: 'talk',
+          dot: 'well',
+          html: '创建了工单 <b>LAT-160</b>',
+          sub: '表格空状态、加载态与错误态统一 · 待开始',
+          time: '周一 10:02',
+        },
+        {
+          c: 'code',
+          dot: 'blush',
+          html: '发布了 <code>v2.19.0</code> 到预览环境',
+          sub: '构建 2 分 14 秒 · 12 个变更',
+          time: '11 月 21 日',
+        },
+        {
+          c: 'talk',
+          dot: 'well',
+          html: '在 <b>迭代 24 计划会</b> 中认领了 3 张工单',
+          sub: 'LAT-142 · LAT-148 · LAT-160',
+          time: '11 月 18 日',
+        },
+      ];
+      function renderTimeline(filter = 'all') {
+        $('#timeline').innerHTML = ACTS.filter((a) => filter === 'all' || a.c === filter)
+          .slice(0, 6)
+          .map(
+            (a) =>
+              `<li class="bd-item" data-align="start"><span data-part="dot"${tone(a.dot)}></span><div><p>${a.html}</p>${a.quote ? `<small data-wrap>“${a.quote}”</small>` : `<small>${a.sub}</small>`}</div><time>${a.time}</time></li>`,
+          )
+          .join('');
+      }
+      $('#actSeg').addEventListener('bd-change', (e) =>
+        animateHeight($('#timeline'), () => renderTimeline(e.detail.value)),
+      );
+
+      const PERMS = [
+        ['users', '管理成员', '邀请、移除成员，修改他们的角色', true],
+        ['server', '创建与删除实例', '包括修改规格、区域和自动扩缩容策略', true],
+        ['rocket', '直接发布到生产环境', '关闭后，推送到 main 需另一位成员批准', true],
+        ['file-text', '查看账单', '查看并下载发票，不能修改付款方式', false],
+        ['lock', '管理访问密钥', '创建、轮换和吊销 API 访问密钥', false],
+        ['shield-check', '转移工作区所有权', '仅所有者可以修改此项', false, true],
+      ];
+      $('#perms').innerHTML = PERMS.map(
+        ([ic, t, d, on, locked], i) =>
+          `<li class="bd-item"><span data-part="icon">${icon(ic, 16)}</span><div><span>${t}</span><small>${locked ? `${icon('lock', 11)}${d}` : d}</small></div><button type="button" class="bd-switch" role="switch" data-i="${i}" aria-checked="${on}" aria-label="${t}"${locked ? ' disabled' : ''}></button></li>`,
+      ).join('');
+      const updatePermTag = () =>
+        ($('#permTag').textContent =
+          `已开启 ${$$('#perms [aria-checked="true"]').length} / ${PERMS.length}`);
+      updatePermTag();
+      $('#perms').addEventListener('click', (e) => {
+        const s = e.target.closest('.bd-switch');
+        if (!s || s.disabled) return;
+        queueMicrotask(() => {
+          updatePermTag();
+          toast(
+            `已${s.getAttribute('aria-checked') === 'true' ? '开启' : '关闭'}「${PERMS[+s.dataset.i][1]}」`,
+          );
+        });
+      });
+
+      /* ---------------- 顶栏 ---------------- */
+      $('#themeBtn').addEventListener('click', () => {
+        const html = document.documentElement;
+        html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+      });
+      $('#globalSearch').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && e.target.value.trim())
+          toast(`搜索「${e.target.value.trim()}」：演示未接入搜索`);
+      });
+
+      /* ---------------- 启动 ---------------- */
+      updateBoard();
+      renderInbox();
+      updateCounts();
+      renderReader(MSGS[0]);
+      renderSchedule();
+      selectEvent(NEXT);
+      renderTimeline();
+      go((location.hash || '#board').slice(1));
+      window.addEventListener('hashchange', () => go(location.hash.slice(1)));
+    </script>
+  </body>
+</html>

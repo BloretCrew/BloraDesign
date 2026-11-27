@@ -5,3 +5,4 @@ LICENSE
 test-results/
 playwright-report/
 packages/*/src/css/generated/
+.page-diff/

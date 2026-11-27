@@ -2,7 +2,7 @@
  * 数据展示：规格行 bd-spec、指标格（bd-tile data-variant="metric"）、环形读数 bd-ring、进度条 bd-progress
  */
 @layer bd.components {
-  /* ---- 规格行：托盘的紧凑变体，标签 — 等宽值（DESIGN.md · Components · 规格行） ---- */
+  /* ---- 规格行：托盘语法，标签 — 等宽值（DESIGN.md · Components · 规格行、托盘） ---- */
   .bd-spec {
     display: flex;
     flex-direction: column;
@@ -13,15 +13,146 @@
 
     > div {
       display: flex;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      padding: var(--bd-space-cell-dense-padding-y) var(--bd-space-cell-dense-padding-x);
+      gap: 12px;
+      min-width: 0;
+      min-height: 36px;
+      padding: var(--bd-space-cell-padding-y) var(--bd-space-cell-padding-x);
       border-radius: var(--bd-radius-cell);
       background: var(--bd-tile);
       box-shadow: var(--bd-shadow-cell);
+    }
+
+    dt {
+      flex-shrink: 0;
+      white-space: nowrap;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--bd-ink-tertiary);
+    }
+
+    dd {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      min-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      text-align: right;
+      font-family: var(--bd-font-mono);
+      font-size: 12px;
+      font-weight: 560;
+      line-height: 1.5;
+      font-variant-numeric: tabular-nums;
+      color: var(--bd-ink);
+    }
+
+    dd > span:not([class]) {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 文字值（区域、镜像名）用无衬线 */
+    dd[data-font='sans'] {
+      font-family: var(--bd-font-sans);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    dd > [data-part='copy'] {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      margin: -3px 0;
+      border-radius: var(--bd-radius-cell);
+      color: var(--bd-ink-tertiary);
+      transition:
+        background-color 0.12s ease,
+        color 0.12s ease;
+    }
+
+    dd > [data-part='copy']:hover {
+      background: var(--bd-well);
+      color: var(--bd-ink);
+    }
+  }
+
+  .bd-spec[data-cols='2'] {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* 紧凑变体：套餐卡、浮层里的规格 */
+  :is(.bd-spec[data-density='compact'], [data-density='compact'] .bd-spec) {
+    > div {
+      align-items: baseline;
+      gap: 10px;
+      min-height: 0;
+      padding: var(--bd-space-cell-dense-padding-y) var(--bd-space-cell-dense-padding-x);
       font-size: 12px;
       color: var(--bd-ink-tertiary);
+    }
+
+    dt {
+      font-weight: 400;
+      line-height: inherit;
+    }
+
+    dd {
+      display: block;
+      font-size: 11.5px;
+      line-height: inherit;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .bd-spec[data-cols='2'] {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* ---- 读数组：格子底部几格并排的对比读数（标签 + 等宽值） ---- */
+  .bd-stats {
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    gap: var(--bd-space-tray-gap);
+    padding-top: 4px;
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+      padding: 8px 10px;
+      border-radius: var(--bd-radius-cell);
+      background: var(--bd-tray);
+    }
+
+    dt {
+      font-size: 11.5px;
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--bd-ink-tertiary);
+    }
+
+    dd > small {
+      margin-left: 2px;
+      font-family: var(--bd-font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--bd-ink-quaternary);
+    }
+
+    dd[data-tone='rose'] {
+      color: var(--bd-rose-ink);
     }
 
     dd {
@@ -29,10 +160,10 @@
       white-space: nowrap;
       text-overflow: ellipsis;
       font-family: var(--bd-font-mono);
-      font-size: 11.5px;
-      font-weight: 560;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.3;
       font-variant-numeric: tabular-nums;
-      color: var(--bd-ink);
     }
   }
 
@@ -67,8 +198,11 @@
     > [data-part='foot'] {
       display: flex;
       align-items: center;
+      justify-content: flex-start;
       gap: 6px;
       margin-top: 0;
+      padding-top: 0;
+      font-variant-numeric: normal;
       font-size: 12.5px;
       line-height: 1.5;
       color: var(--bd-ink-description);
@@ -100,6 +234,11 @@
       background: var(--bd-sand-soft);
       color: var(--bd-sand-ink);
     }
+
+    > [data-part='icon'][data-tone='rose'] {
+      background: var(--bd-rose-soft);
+      color: var(--bd-rose-ink);
+    }
   }
 
   @media (max-width: 640px) {
@@ -116,6 +255,46 @@
         display: block;
         margin: 2px 0 0;
       }
+    }
+  }
+
+  /* 指标脚注里带一个操作按钮：说明在左、按钮在右，同排几格的脚注同高 */
+  .bd-tile[data-variant='metric'] > [data-part='foot']:has(> .bd-button) {
+    justify-content: space-between;
+    min-height: 29px;
+  }
+
+  /* 指标脚注里放进度条时上下排列（预算 ¥5,000 · 已用 68%） */
+  .bd-tile[data-variant='metric'] > [data-part='foot']:has(> .bd-progress) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+  }
+
+  /* 行内指标：放在别的格子里（侧栏概览），左边标签和数值、右边环形读数，不再自成一个格子 */
+  .bd-tile[data-variant='metric'][data-inline] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 12px;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+
+    > :not(.bd-ring, [data-part='icon']) {
+      grid-column: 1;
+    }
+
+    > [data-part='value'] {
+      margin-top: 4px;
+    }
+
+    > :is(.bd-ring, [data-part='icon']) {
+      position: relative;
+      inset: auto;
+      grid-column: 2;
+      grid-row: 1 / span 3;
     }
   }
 
@@ -203,6 +382,16 @@
     border-radius: inherit;
     background: var(--bd-blush-track);
     transition: width 0.8s var(--bd-ease-out);
+  }
+
+  .bd-progress[data-tone='sand']::before {
+    background: var(--bd-sand-solid);
+  }
+
+  /* 迷你进度条：4 高 26 宽，跟在一行元信息里（清单完成度） */
+  .bd-progress[data-size='xs'] {
+    width: 26px;
+    height: 4px;
   }
 
   .bd-progress[data-tone='rose']::before {

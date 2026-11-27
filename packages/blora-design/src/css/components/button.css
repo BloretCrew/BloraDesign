@@ -151,4 +151,21 @@
       padding: 0;
     }
   }
+
+  /* 未读提醒：按钮右上角一个雾粉小点 */
+  .bd-button[data-dot] {
+    position: relative;
+  }
+
+  .bd-button[data-dot]::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    right: 9px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--bd-blush-solid);
+    box-shadow: 0 0 0 2px var(--bd-well);
+  }
 }

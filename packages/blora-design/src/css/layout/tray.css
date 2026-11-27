@@ -18,6 +18,69 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .bd-tray[data-cols='3'] {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .bd-tray[data-cols='4'] {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  /* 只装短小块的横排托盘（热门搜索词、筛选块）：自动换行，每块 28 高 */
+  .bd-tray[data-flow='wrap'] {
+    flex-flow: row wrap;
+    align-items: center;
+  }
+
+  .bd-tray[data-flow='wrap'] > :not([data-part='scrollbar']) {
+    display: inline-flex;
+    align-items: center;
+    height: 28px;
+    padding: 0 10px;
+    white-space: nowrap;
+    font-size: 12.5px;
+    font-weight: 500;
+  }
+
+  .bd-tray[data-flow='wrap'] > :is(a, button):hover {
+    background: var(--bd-blush-soft);
+    color: var(--bd-blush-ink);
+  }
+
+  /* 内容组：格子里一组「分组名 + 托盘」。组与组之间 14（格内 10 + 4）；分组名左边是小标签、右边可放一个轻量操作 */
+  :not(tbody)[data-part='group'] {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+    margin-top: 4px;
+  }
+
+  :not(tbody)[data-part='group'] > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 22px;
+    margin-bottom: -4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--bd-ink-tertiary);
+  }
+
+  /* 按格子宽度自动分栏：格子够宽（≥ 660）时两列，比如设置页在去掉右栏之后 */
+  .bd-tray[data-cols='auto'] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @container bd-tile (min-width: 660px) {
+    .bd-tray[data-cols='auto'] {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
   .bd-tray > :not([data-part='scrollbar']) {
     min-width: 0;
     padding: var(--bd-space-cell-padding-y) var(--bd-space-cell-padding-x);
@@ -42,5 +105,41 @@
     .bd-tray > :not([data-part='scrollbar']) {
       padding-inline: var(--bd-space-cell-dense-padding-x);
     }
+  }
+}
+
+/* 托盘里的组件（条目、空状态）在组件层，这几条要压过它们自己的样式，所以也放在组件层 */
+@layer bd.components {
+  /* 托盘里可选中的条目（收件箱、筛选）：选中的小格整格雾粉浅底、去掉投影；悬停浮起一点 */
+  .bd-tray > :is([role='option'], label:has(> input)) {
+    cursor: pointer;
+    transition:
+      background-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .bd-tray > [role='option']:hover {
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--bd-ink) 8%, transparent);
+  }
+
+  .bd-tray > :is([role='option'][aria-selected='true'], label:has(> input:checked)) {
+    background: var(--bd-blush-soft);
+    box-shadow: none;
+    color: var(--bd-blush-ink);
+  }
+
+  /* 托盘小格里的空状态（看板空列、清空的收件箱） */
+  .bd-tray > .bd-empty {
+    gap: 0;
+    padding: 20px 12px 18px;
+  }
+
+  .bd-tray > .bd-empty > p {
+    max-width: 230px;
+    margin-top: 8px;
+  }
+
+  .bd-tray > .bd-empty > .bd-button {
+    margin-top: 12px;
   }
 }

@@ -63,6 +63,26 @@
     }
   }
 
+  /* 页头格底部的页签（详情页的 概览 / 监控 / 日志）：不要托盘底，贴着页头左边缘 */
+  .bd-tile[data-variant='page'] > .bd-tabs {
+    --bd-glide-bg: var(--bd-blush-soft);
+
+    grid-column: 1 / -1;
+    gap: 4px;
+    margin: 20px 0 -4px -6px;
+    padding: 0;
+    background: none;
+
+    > [role='tab'] {
+      padding: 0 14px;
+      font-weight: 560;
+    }
+
+    > [aria-selected='true'] {
+      font-weight: 600;
+    }
+  }
+
   @keyframes bd-pop-in {
     from {
       opacity: 0;

@@ -28,6 +28,7 @@
       "default": "./dist/blora.js"
     },
     "./blora.css": "./dist/blora.css",
+    "./patterns.css": "./dist/patterns.css",
     "./package.json": "./package.json",
     "./tokens.json": "./dist/tokens.json"
   },

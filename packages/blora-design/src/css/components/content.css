@@ -43,6 +43,24 @@
       color: var(--bd-blush-solid);
       user-select: none;
     }
+
+    [data-tone='sand'] {
+      color: var(--bd-sand-ink);
+    }
+
+    [data-tone='rose'] {
+      color: var(--bd-rose-ink);
+    }
+  }
+
+  /* 终端（命令行示例）与日志查看器：没有标题栏，次级墨色；日志行距稍大 */
+  .bd-code:is([data-variant='terminal'], [data-variant='log']) > pre {
+    padding: 12px 14px;
+    color: var(--bd-ink-secondary);
+  }
+
+  .bd-code[data-variant='log'] > pre {
+    line-height: 1.85;
   }
 
   /* ---- 长文阅读（DESIGN.md · Components · 长文阅读） ---- */
@@ -64,7 +82,7 @@
       font-size: 17px;
       font-weight: 620;
       letter-spacing: -0.01em;
-      line-height: 1.5;
+      line-height: 1.35;
       color: var(--bd-ink);
     }
 
@@ -73,7 +91,7 @@
       scroll-margin-top: 16px;
       font-size: 15px;
       font-weight: 600;
-      line-height: 1.5;
+      line-height: 1.35;
       color: var(--bd-ink);
     }
 
@@ -126,7 +144,8 @@
       text-underline-offset: 3px;
     }
 
-    :not(pre) > code {
+    /* 行内代码的样式不带进正文里嵌着的托盘表格、托盘 */
+    :not(pre) > code:where(:not(:is(.bd-table, .bd-tray) code)) {
       padding: 1px 5px;
       border-radius: 5px;
       background: var(--bd-well);
@@ -214,5 +233,45 @@
       font-size: 13px;
       color: var(--bd-ink-description);
     }
+  }
+
+  /* 托盘形手风琴（常见问题这类三条以上的同类条目）：托盘底 + 白色小格，展开时雾粉浅底 */
+  .bd-accordion[data-variant='tray'] {
+    gap: var(--bd-space-tray-gap);
+    padding: var(--bd-space-tray-padding);
+    border-radius: var(--bd-radius-tray);
+    background: var(--bd-tray);
+
+    > details {
+      border-radius: var(--bd-radius-cell);
+      background: var(--bd-tile);
+      box-shadow: var(--bd-shadow-cell);
+    }
+
+    > details[open] {
+      background: var(--bd-blush-soft);
+    }
+
+    summary {
+      gap: 12px;
+      min-height: 40px;
+      padding: 0 12px;
+      font-size: 14px;
+    }
+
+    summary > svg {
+      color: var(--bd-ink-tertiary);
+    }
+
+    details > :not(summary) {
+      padding: 0 12px 12px;
+      font-size: 13.5px;
+      line-height: 1.7;
+      color: var(--bd-ink-prose);
+    }
+  }
+
+  .bd-prose > .bd-accordion {
+    margin: 4px 0 14px;
   }
 }

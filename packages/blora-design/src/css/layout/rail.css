@@ -64,6 +64,16 @@
       opacity var(--bd-duration-fade) ease;
   }
 
+  .bd-rail [data-part='note'] > data {
+    font-weight: 700;
+    color: var(--bd-ink);
+  }
+
+  .bd-rail [data-part='note'] > .bd-progress {
+    grid-column: 1 / -1;
+    margin-top: 7px;
+  }
+
   /* ---- 导航项 ---- */
   .bd-rail :is(a, button):not([data-part]),
   .bd-rail [data-part='collapse'] {
@@ -147,7 +157,13 @@
     margin-top: auto;
   }
 
+  /* 底部用量：标签 — 数值一行，可再放一条 bd-progress */
   .bd-rail [data-part='note'] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--bd-ink-secondary);
     max-height: 96px;
     margin-bottom: 6px;
     padding: 11px 12px;

@@ -1,0 +1,310 @@
+/*
+ * 条目 bd-item：托盘小格里的一行（资源、动态、成员、开关、排行、时间线……），也可以单独使用。
+ *   <li class="bd-item">
+ *     <span data-part="icon" data-tone="sand"><svg data-icon …></span>   ← 或 .bd-avatar / data-part="dot" / data-part="index"
+ *     <div><strong>名称</strong><small>说明</small></div>                  ← 第一行也可以是 <p>（普通字重，里面用 <b> 强调）或 <span>（设置项）
+ *     <span data-part="end">1.2k 次</span>                                 ← 或 <time>、.bd-pill、.bd-progress、按钮、开关、data-part="go" 箭头
+ *   </li>
+ * 做成链接时用 <a class="bd-item"> / <button class="bd-item">：悬停时标题变成雾粉墨色、箭头右移 2px（DESIGN.md · Components · 托盘 · 悬停）。
+ */
+@layer bd.components {
+  .bd-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    text-align: left;
+    color: var(--bd-ink);
+  }
+
+  :is(a, button).bd-item {
+    cursor: pointer;
+  }
+
+  /* ---- 左侧 ---- */
+  .bd-item > [data-part='icon'] {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--bd-radius-icon);
+    background: var(--bd-well);
+    font-family: var(--bd-font-mono);
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--bd-ink-secondary);
+  }
+
+  .bd-item > [data-part='icon'][data-tone='blush'] {
+    background: var(--bd-blush-soft);
+    color: var(--bd-blush-ink);
+  }
+
+  .bd-item > [data-part='icon'][data-tone='sand'] {
+    background: var(--bd-sand-soft);
+    color: var(--bd-sand-ink);
+  }
+
+  .bd-item > [data-part='icon'][data-tone='rose'] {
+    background: var(--bd-rose-soft);
+    color: var(--bd-rose-ink);
+  }
+
+  /* 托盘里的图标底、头像跟小格同心：7 圆角 */
+  .bd-tray > .bd-item > :is([data-part='icon'], .bd-avatar) {
+    border-radius: var(--bd-radius-cell);
+  }
+
+  .bd-item:has(> .bd-avatar) {
+    gap: 10px;
+  }
+
+  /* 时间线圆点：先后顺序用时间标签表达，不画连接线 */
+  .bd-item > [data-part='dot'] {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--bd-well);
+    color: var(--bd-ink-tertiary);
+  }
+
+  .bd-item > [data-part='dot']::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .bd-item > [data-part='dot'][data-tone='blush'] {
+    background: var(--bd-blush-soft);
+    color: var(--bd-blush-solid);
+  }
+
+  .bd-item > [data-part='dot'][data-tone='sand'] {
+    background: var(--bd-sand-soft);
+    color: var(--bd-sand-solid);
+  }
+
+  .bd-item > [data-part='dot'][data-tone='rose'] {
+    background: var(--bd-rose-soft);
+    color: var(--bd-rose-solid);
+  }
+
+  /* 排行序号 01、02… */
+  .bd-item > [data-part='index'] {
+    flex-shrink: 0;
+    width: 22px;
+    font-family: var(--bd-font-mono);
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: var(--bd-ink-quaternary);
+  }
+
+  /* ---- 文字 ---- */
+  .bd-item > div:not([class], [data-part]) {
+    flex: 1 1 auto;
+    min-width: 0;
+
+    > * {
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    > strong {
+      font-size: 13.5px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    > p {
+      font-size: 13.5px;
+      line-height: 1.45;
+    }
+
+    > p b {
+      font-weight: 600;
+    }
+
+    /* 设置项标题 */
+    > span {
+      white-space: normal;
+      font-size: 13.5px;
+      font-weight: 560;
+      line-height: 1.5;
+    }
+
+    > small {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--bd-ink-description);
+    }
+
+    > p + small {
+      margin-top: 1px;
+    }
+
+    > span + small {
+      margin-top: 2px;
+      white-space: normal;
+    }
+
+    > small code {
+      font-family: var(--bd-font-mono);
+    }
+  }
+
+  .bd-item [data-part='muted'] {
+    font-weight: 400;
+    color: var(--bd-ink-tertiary);
+  }
+
+  .bd-item strong[data-part='muted'] {
+    font-weight: 600;
+    color: var(--bd-ink-secondary);
+  }
+
+  /* ---- 右侧 ---- */
+  .bd-item > :not(div:not([class], [data-part])) {
+    flex-shrink: 0;
+  }
+
+  .bd-item > [data-part='end'] {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    text-align: right;
+    font-family: var(--bd-font-mono);
+    font-size: 12px;
+    font-weight: 560;
+    line-height: 1.4;
+    font-variant-numeric: tabular-nums;
+    color: var(--bd-ink-tertiary);
+  }
+
+  .bd-item > time {
+    white-space: nowrap;
+    font-family: var(--bd-font-mono);
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: var(--bd-ink-tertiary);
+  }
+
+  .bd-item > .bd-progress {
+    width: 96px;
+  }
+
+  /* 进度条后面的百分比右对齐成一列，各行的进度条对齐 */
+  .bd-item > .bd-progress + [data-part='end'] {
+    justify-content: flex-end;
+    min-width: 40px;
+  }
+
+  /* 空占位：让同一托盘里有操作和没操作的行对齐 */
+  .bd-item > [data-part='slot'] {
+    width: 29px;
+  }
+
+  .bd-item > [data-part='go'] {
+    color: var(--bd-ink-quaternary);
+    transition:
+      transform 0.18s var(--bd-ease-out),
+      color 0.15s ease;
+  }
+
+  :is(a, button).bd-item:hover > [data-part='go'] {
+    color: var(--bd-ink-secondary);
+    transform: translateX(2px);
+  }
+
+  :is(a, button).bd-item > div:not([class], [data-part]) > strong {
+    transition: color 0.15s ease;
+  }
+
+  :is(a, button).bd-item:hover > div:not([class], [data-part]) > strong {
+    color: var(--bd-blush-ink);
+  }
+
+  /* 大图标底 36px（分类卡、联系方式、搜索结果） */
+  .bd-item > [data-part='icon'][data-size='lg'] {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* 行首的小图标（文件、时钟）：不加底色 */
+  .bd-item > svg[data-icon]:first-child {
+    color: var(--bd-ink-quaternary);
+  }
+
+  /* 多行条目（时间线、搜索结果、日程）：顶部对齐；说明可以换行 */
+  .bd-item[data-align='start'] {
+    align-items: flex-start;
+
+    > [data-part='dot'] {
+      margin-top: 1px;
+    }
+
+    > time {
+      padding-top: 3px;
+    }
+  }
+
+  .bd-item > div:not([class], [data-part]) > [data-wrap] {
+    white-space: normal;
+  }
+
+  /* 文字里的行内等宽标签（配置项、提交号） */
+  .bd-item > div:not([class], [data-part]) code {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    margin: 0 2px;
+    padding: 0 7px;
+    border-radius: 6px;
+    background: var(--bd-well);
+    vertical-align: 1px;
+    font-family: var(--bd-font-mono);
+    font-size: 11.5px;
+    color: var(--bd-ink-secondary);
+  }
+
+  .bd-item > div:not([class], [data-part]) > small code {
+    display: inline;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    background: none;
+    vertical-align: baseline;
+    font-size: inherit;
+    color: inherit;
+  }
+
+  /* 实心色点（图例、日程、熟练度）：8px，可以放在任何地方 */
+  [data-part='swatch'] {
+    display: inline-block;
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--bd-ink-quaternary);
+  }
+
+  [data-part='swatch'][data-tone='blush'] {
+    background: var(--bd-blush-solid);
+  }
+
+  [data-part='swatch'][data-tone='sand'] {
+    background: var(--bd-sand-solid);
+  }
+
+  [data-part='swatch'][data-tone='rose'] {
+    background: var(--bd-rose-solid);
+  }
+}

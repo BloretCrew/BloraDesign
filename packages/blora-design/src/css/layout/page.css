@@ -1,0 +1,174 @@
+/*
+ * 页面里的结构件：
+ * - 视图 data-part="view"：单页应用的一个场景 / 页签面板。本身不占盒子，里面的行照常参与 bd-page 的纵向排列；用 hidden 切换。
+ * - 带侧栏的布局 bd-layout：左边分区导航（bd-nav 竖排）、中间 data-part="main"（每个格子是一节）、右边 data-part="aside"（概览）。
+ *   导航和右栏随页面滚动吸顶。编号从这里重新开始：主栏的格子依次 01、02…，右栏延续第一行，依次 1B、1C…
+ * - 工具条 bd-toolbar：搜索框、筛选、下拉排成一行，data-part="spacer" 把后面的东西推到右边。
+ */
+@layer bd.layout {
+  [data-part='view'] {
+    display: contents;
+  }
+
+  [data-part='view'][hidden] {
+    display: none;
+  }
+
+  /* ---- 带侧栏的布局 ---- */
+  .bd-layout {
+    display: grid;
+    grid-template-columns: var(--bd-columns, 196px minmax(0, 1fr) 300px);
+    align-items: start;
+    gap: var(--bd-space-seam);
+    min-width: 0;
+    counter-reset: bd-row bd-aside 1;
+  }
+
+  .bd-layout[data-grow] {
+    flex: 1 1 auto;
+  }
+
+  .bd-layout > .bd-nav {
+    position: sticky;
+    top: 10px;
+  }
+
+  .bd-layout > :is([data-part='main'], [data-part='aside']) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bd-space-seam);
+    min-width: 0;
+  }
+
+  .bd-layout > [data-part='aside'] {
+    position: sticky;
+    top: 12px;
+  }
+
+  /* 圆角：整个布局像一行拼图——最左一列的左侧、最右一列的右侧、整行的四个外角是 20，其余都是 6 */
+  .bd-layout > .bd-nav {
+    --bd-corner-tr: var(--bd-radius-seam);
+    --bd-corner-br: var(--bd-radius-seam);
+  }
+
+  .bd-layout > :is([data-part='main'], [data-part='aside']) > *,
+  .bd-layout > [data-part='main'] > .bd-mosaic > * {
+    --bd-corner-tl: var(--bd-radius-seam);
+    --bd-corner-tr: var(--bd-radius-seam);
+    --bd-corner-br: var(--bd-radius-seam);
+    --bd-corner-bl: var(--bd-radius-seam);
+  }
+
+  .bd-layout > [data-part='main']:first-child > :first-child {
+    --bd-corner-tl: var(--bd-radius-tile);
+  }
+
+  .bd-layout > [data-part='aside'] > :first-child {
+    --bd-corner-tr: var(--bd-radius-tile);
+  }
+
+  .bd-layout > [data-part='aside'] > :last-child {
+    --bd-corner-br: var(--bd-radius-tile);
+  }
+
+  .bd-layout > [data-part='main'] > .bd-tile:has(> .bd-head) {
+    counter-increment: bd-row;
+  }
+
+  /* 主栏没有带标题的格子（长文正文）时，右栏第一个格子编 01 */
+  .bd-layout:not(:has(> [data-part='main'] > .bd-tile > .bd-head))
+    > [data-part='aside']
+    > .bd-tile:has(> .bd-head):first-child {
+    counter-increment: bd-row;
+  }
+
+  .bd-layout > [data-part='aside'] > .bd-tile:has(> .bd-head) {
+    counter-increment: bd-aside;
+  }
+
+  .bd-layout > :is([data-part='main'], [data-part='aside']) > .bd-tile > .bd-head {
+    > :is(h2, h3, h4)::before {
+      content: counter(bd-row, decimal-leading-zero);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--bd-blush-soft);
+      font-family: var(--bd-text-index-mono-family);
+      font-size: var(--bd-text-index-mono-size);
+      font-weight: var(--bd-text-index-mono-weight);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: var(--bd-blush-ink);
+    }
+
+    > p {
+      padding-left: 32px;
+    }
+  }
+
+  .bd-layout > [data-part='aside'] > .bd-tile > .bd-head > :is(h2, h3, h4)::before {
+    content: '1' counter(bd-aside, upper-alpha);
+  }
+
+  .bd-layout:not(:has(> [data-part='main'] > .bd-tile > .bd-head))
+    > [data-part='aside']
+    > .bd-tile:first-child
+    > .bd-head
+    > :is(h2, h3, h4)::before {
+    content: counter(bd-row, decimal-leading-zero);
+  }
+
+  /* 窄屏：先去掉右栏，再把导航放到上面 */
+  @media (max-width: 1280px) {
+    .bd-layout {
+      grid-template-columns: 196px minmax(0, 1fr);
+    }
+
+    .bd-layout > [data-part='aside'] {
+      display: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .bd-layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* 不再吸顶；仍要保持定位，选中滑块以它为参照 */
+    .bd-layout > .bd-nav {
+      position: relative;
+      top: auto;
+    }
+  }
+
+  /* ---- 工具条 ---- */
+  .bd-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+
+    > [data-part='spacer'] {
+      flex: 1 1 0;
+    }
+
+    > .bd-input {
+      width: 240px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .bd-toolbar > :is(.bd-input, .bd-segmented, .bd-select) {
+      flex: 1 1 100%;
+      width: auto;
+    }
+
+    .bd-toolbar > [data-part='spacer'] {
+      display: none;
+    }
+  }
+}

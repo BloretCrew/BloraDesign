@@ -4,7 +4,7 @@
  * 所有样式都在 bd.* 层里，层的先后决定优先级（越靠后越优先）。
  * 业务样式不放进任何层，因此总是压过 Blora，不需要拼选择器优先级。
  */
-@layer bd.reset, bd.tokens, bd.base, bd.layout, bd.components, bd.motion, bd.utilities;
+@layer bd.reset, bd.tokens, bd.base, bd.layout, bd.components, bd.patterns, bd.motion, bd.utilities;
 
 /* 调色板：Cortado。页面和组件只用 --bd-* 语义变量，不直接引用 --cortado-* */
 @import '@bloret-crew/cortado/cortado.css' layer(bd.tokens);
@@ -19,6 +19,7 @@
 @import './layout/head.css';
 @import './layout/tray.css';
 @import './layout/scroll.css';
+@import './layout/page.css';
 @import './components/icon.css';
 @import './components/button.css';
 @import './components/segmented.css';
@@ -37,6 +38,8 @@
 @import './components/date.css';
 @import './components/table.css';
 @import './components/data.css';
+@import './components/item.css';
+@import './components/chart.css';
 @import './components/content.css';
 @import './components/states.css';
 @import './components/menu.css';

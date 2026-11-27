@@ -12,8 +12,10 @@
     border-spacing: 0;
     font-size: 13.5px;
 
+    /* 表头行 34 高 */
     th {
-      padding: 8px 12px 6px;
+      height: 34px;
+      padding: 0 12px;
       white-space: nowrap;
       text-align: left;
       font-size: 12.5px;
@@ -21,7 +23,10 @@
       color: var(--bd-ink-tertiary);
     }
 
+    /* 次要列用次级墨色；主列（strong）仍是正文墨色 */
     td {
+      color: var(--bd-ink-secondary);
+      font-size: 13px;
       padding: 11px 12px;
       transition: background-color 0.12s ease;
     }
@@ -76,6 +81,77 @@
       border-bottom-right-radius: 0;
     }
 
+    /* 单元格内容：主列是「名称 + 等宽 ID」两行；代码、规格用等宽；时间用 <time> */
+    td > strong {
+      display: block;
+      font-size: 13.5px;
+      color: var(--bd-ink);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    td > strong + small {
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-family: var(--bd-font-mono);
+      font-size: 11.5px;
+      line-height: 1.5;
+      color: var(--bd-ink-description);
+    }
+
+    /* 有两行主列的行收紧上下内边距，行高约 50 */
+    tbody tr:has(> td > strong + small) > td {
+      padding-block: 6.25px;
+    }
+
+    td > :is(code, time) {
+      font-family: var(--bd-font-mono);
+      font-size: 12.5px;
+      color: var(--bd-ink-secondary);
+    }
+
+    td > time {
+      color: var(--bd-ink-tertiary);
+    }
+
+    /* 行内用量：短进度条 + 等宽百分比 */
+    td > [data-part='meter'] {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--bd-font-mono);
+      font-size: 12.5px;
+      color: var(--bd-ink-secondary);
+    }
+
+    td > [data-part='meter'] > .bd-progress {
+      width: 56px;
+    }
+
+    td > [data-part='muted'] {
+      color: var(--bd-ink-tertiary);
+    }
+
+    /* 行尾箭头：进入详情 */
+    td > [data-part='go'] {
+      display: grid;
+      place-items: center;
+      color: var(--bd-ink-quaternary);
+      transition:
+        transform 0.18s var(--bd-ease-out),
+        color var(--bd-duration-hover) ease;
+    }
+
+    tbody tr:hover > td > [data-part='go'] {
+      color: var(--bd-ink-secondary);
+      transform: translateX(2px);
+    }
+
     /* 可排序的表头 */
     th[aria-sort] > button {
       display: inline-flex;
@@ -108,6 +184,102 @@
 
     th[aria-sort='ascending'] > button::after {
       transform: rotate(180deg);
+    }
+  }
+
+  /* ---- 托盘表格（对比表、DNS 记录）：表头是托盘外的一行标签，每个 <tbody> 是一个托盘，每一行是一个白色小格。
+     列宽写在表格上：style="--bd-table-columns: 1.25fr repeat(4, 1fr)"；分组名写成 <tbody data-part="group"><tr><th colspan>；
+     data-align="center" 让第一列以外的列居中（对比表） ---- */
+  .bd-table[data-variant='tray'] {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5;
+
+    > :is(thead, tbody) {
+      display: flex;
+      flex-direction: column;
+    }
+
+    > thead {
+      padding: 0 5px;
+    }
+
+    tr {
+      display: grid;
+      grid-template-columns: var(--bd-table-columns, repeat(auto-fit, minmax(0, 1fr)));
+      align-items: center;
+    }
+
+    > tbody:not([data-part]) {
+      gap: var(--bd-space-tray-gap);
+      padding: var(--bd-space-tray-padding);
+      border-radius: var(--bd-radius-tray);
+      background: var(--bd-tray);
+    }
+
+    > tbody:not([data-part]) > tr {
+      border-radius: var(--bd-radius-cell);
+      background: var(--bd-tile);
+      box-shadow: var(--bd-shadow-cell);
+    }
+
+    :is(th, td),
+    tbody tr:hover > :is(th, td) {
+      border-radius: 0;
+      background: none;
+    }
+
+    th {
+      height: auto;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--bd-ink-tertiary);
+    }
+
+    td {
+      padding: 9px 12px;
+    }
+
+    td > code {
+      white-space: nowrap;
+      font-size: 12px;
+      color: var(--bd-ink);
+    }
+
+    > tbody[data-part='group'] th {
+      padding: 10px 0 5px 12px;
+      font-size: 11.5px;
+      letter-spacing: 0.04em;
+    }
+  }
+
+  .bd-table[data-variant='tray'][data-align='center'] :is(th, td):not(:first-child) {
+    text-align: center;
+  }
+
+  /* ---- 窄屏收列：列写 data-hide="md"（≤1100 收起）或 "sm"（≤640 收起），<col> 和这一列的单元格都要写 ---- */
+  @media (max-width: 1100px) {
+    .bd-table :is(col, th, td)[data-hide='md'] {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .bd-table :is(col, th, td):is([data-hide='md'], [data-hide='sm']) {
+      display: none;
+    }
+
+    .bd-table :is(th, td) {
+      padding-inline: 5px;
+    }
+
+    .bd-table :is(th, td):first-child {
+      padding-left: 8px;
+    }
+
+    .bd-table :is(th, td):last-child {
+      padding-right: 8px;
     }
   }
 

@@ -42,6 +42,14 @@
       color: var(--bd-ink);
     }
 
+    /* 段内计数：等宽小字 */
+    [data-part='count'] {
+      margin-left: -2px;
+      font-family: var(--bd-font-mono);
+      font-size: 11px;
+      opacity: 0.7;
+    }
+
     /* 运行时接管之前，选中项自己显示选中底 */
     &:not(:has(> [data-part='glide']))
       > :is([aria-checked='true'], [aria-selected='true'], [aria-pressed='true']) {
@@ -91,5 +99,24 @@
     > :not([aria-checked='true'], [aria-selected='true'], [aria-pressed='true']):hover {
       color: var(--bd-ink);
     }
+  }
+
+  /* 占满一行、各段等宽（收件箱筛选） */
+  .bd-segmented[data-block] {
+    align-self: stretch;
+    width: auto;
+  }
+
+  /* 小号：项高 26，放在格子标题右侧 */
+  .bd-segmented[data-size='sm'] > :is(button, [role='radio'], [role='tab']) {
+    height: 26px;
+    padding: 0 11px;
+    font-size: 12.5px;
+  }
+
+  /* 段里的小标签（年付「省 17%」） */
+  .bd-segmented [data-part='delta'] {
+    padding: 1px 6px;
+    font-size: 10.5px;
   }
 }

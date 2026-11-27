@@ -41,6 +41,13 @@
     }
   }
 
+  /* 标题里的版本号（v2.8.0） */
+  .bd-head > :is(h2, h3, h4) > code {
+    font-family: var(--bd-font-mono);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
   /* 格子右上的等宽标签（如 MTD · 5 ITEMS） */
   [data-part='tag'] {
     font-family: var(--bd-text-eyebrow-mono-family);

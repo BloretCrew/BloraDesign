@@ -231,4 +231,58 @@
     padding: 9px 11px;
     line-height: var(--bd-text-body-leading);
   }
+
+  /* 表单字段里的分段控件占满字段宽度、各段等宽 */
+  .bd-field > .bd-segmented {
+    align-self: stretch;
+    width: auto;
+  }
+
+  /* 顶栏里的全局搜索：240 宽，≤1100 收窄，≤640 换成图标按钮（写在组件层，才能压过 bd-input 自己的 display） */
+  .bd-topbar .bd-input[data-part='search'] {
+    width: 240px;
+  }
+
+  /* 手机上搜索框换成一个图标按钮 */
+  .bd-topbar .bd-button[data-part='search'] {
+    display: none;
+  }
+
+  @media (max-width: 1100px) {
+    .bd-topbar .bd-input[data-part='search'] {
+      width: 190px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .bd-topbar .bd-input[data-part='search'] {
+      display: none;
+    }
+
+    .bd-topbar .bd-button[data-part='search'] {
+      display: inline-flex;
+    }
+  }
+
+  /* 大号输入框（帮助中心主搜索）：46 高，右侧可嵌一颗 36 高的按钮 */
+  .bd-input[data-size='lg'] {
+    height: 46px;
+    padding: 0 5px 0 14px;
+    font-size: 14.5px;
+
+    > .bd-button {
+      height: 36px;
+    }
+  }
+
+  /* 指定列数（地址这类字段多、格子又够宽的表单） */
+  .bd-form[data-cols='3'] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @container bd-tile (max-width: 480px) {
+    .bd-form[data-cols='3'] {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
 }

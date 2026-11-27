@@ -6,3 +6,4 @@ playwright-report/
 *.tsbuildinfo
 .DS_Store
 .env*
+.page-diff/

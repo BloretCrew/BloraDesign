@@ -1,0 +1,178 @@
+/*
+ * 折线图 bd-chart：数据写在标记里，图由运行时画（纯 SVG，跟随格子宽度）。
+ *   <figure class="bd-chart" data-unit="k" data-labels="周一,周二,…" aria-label="请求量">
+ *     <data data-tone="blush" data-label="本期" value="152,168,…"></data>   ← 第一条是主线（实线），其余是对比线（虚线）
+ *     <data data-tone="sand" data-label="上期" value="140,151,…"></data>
+ *   </figure>
+ * 写 data-grow 时随格子长高（至少 200），否则 200 高。线只描不填（DESIGN.md · Shapes · 几何标记）。
+ * 图例 bd-legend：<ul class="bd-legend"><li data-tone="blush">本期</li>…</ul>，放在格子标题右侧槽位。
+ */
+@layer bd.components {
+  .bd-chart {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+
+    > data {
+      display: none;
+    }
+  }
+
+  .bd-chart > [data-part='plot'] {
+    position: relative;
+    height: 200px;
+  }
+
+  .bd-chart[data-grow] > [data-part='plot'] {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 200px;
+  }
+
+  .bd-chart svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .bd-chart [data-part='grid'] line {
+    stroke: var(--bd-well);
+    stroke-width: 1;
+  }
+
+  .bd-chart [data-part='line'] {
+    fill: none;
+    stroke: var(--bd-blush-solid);
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* 对比线：细一点的虚线 */
+  .bd-chart [data-part='line'][data-variant='compare'] {
+    stroke-width: 2.4;
+    stroke-dasharray: 6 5;
+  }
+
+  .bd-chart [data-part='line'][data-tone='sand'] {
+    stroke: var(--bd-sand-solid);
+  }
+
+  .bd-chart [data-part='line'][data-tone='rose'] {
+    stroke: var(--bd-rose-solid);
+  }
+
+  /* 画线动画：从左向右展开 */
+  .bd-chart svg[data-draw] {
+    animation: bd-chart-draw 0.9s var(--bd-ease-out) backwards;
+  }
+
+  @keyframes bd-chart-draw {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+
+    to {
+      clip-path: inset(0);
+    }
+  }
+
+  .bd-chart [data-part='axis-y'] {
+    position: absolute;
+    inset: 0 auto 0 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    pointer-events: none;
+    font-family: var(--bd-font-mono);
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--bd-ink-quaternary);
+  }
+
+  .bd-chart > [data-part='axis-x'] {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    padding-left: var(--bd-chart-inset, 0);
+    font-family: var(--bd-font-mono);
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: var(--bd-ink-quaternary);
+  }
+
+  /* ---- 悬停读数 ---- */
+  .bd-chart :is([data-part='guide'], [data-part='dot'], [data-part='tip']) {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+  }
+
+  .bd-chart [data-part='guide'] {
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--bd-slot);
+  }
+
+  .bd-chart [data-part='dot'] {
+    width: 10px;
+    height: 10px;
+    margin: -5px 0 0 -5px;
+    border-radius: 50%;
+    background: var(--bd-blush-solid);
+    box-shadow: 0 0 0 3px var(--bd-tile);
+  }
+
+  .bd-chart [data-part='tip'] {
+    top: 0;
+    padding: 7px 10px;
+    border-radius: 10px;
+    background: var(--bd-float);
+    box-shadow: var(--bd-shadow-float);
+    white-space: nowrap;
+    font-size: 12.5px;
+    line-height: 1.5;
+    transform: translate(-50%, -4px);
+
+    > span {
+      color: var(--bd-ink-tertiary);
+    }
+  }
+
+  .bd-chart[data-hover] :is([data-part='guide'], [data-part='dot'], [data-part='tip']) {
+    opacity: 1;
+  }
+
+  /* ---- 图例 ---- */
+  .bd-legend {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--bd-ink-tertiary);
+
+    > li::before {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      height: 3px;
+      margin-right: 6px;
+      border-radius: 2px;
+      background: var(--bd-blush-solid);
+    }
+
+    > li[data-tone='sand']::before {
+      background: var(--bd-sand-solid);
+    }
+
+    > li[data-tone='rose']::before {
+      background: var(--bd-rose-solid);
+    }
+  }
+}

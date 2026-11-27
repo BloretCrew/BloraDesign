@@ -162,4 +162,75 @@
       }
     }
   }
+
+  /* ---- 保存条 bd-savebar：设置有改动时从底部浮出（hidden 切换），位于主区正中 ---- */
+  .bd-savebar {
+    position: fixed;
+    bottom: 18px;
+    left: calc(50% + (var(--bd-rail-width, 0px) + var(--bd-space-seam)) / 2);
+    z-index: 70;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 7px 7px 7px 18px;
+    border-radius: var(--bd-radius-pill);
+    background: var(--bd-float);
+    box-shadow: var(--bd-shadow-float);
+    white-space: nowrap;
+    font-size: 13.5px;
+    line-height: 1.5;
+    transform: translate(-50%, 0);
+    transition:
+      opacity 0.2s ease,
+      transform 0.3s var(--bd-ease-out),
+      display 0.3s allow-discrete;
+
+    @starting-style {
+      opacity: 0;
+      transform: translate(-50%, 16px);
+    }
+
+    > [data-part='text'] {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    > [data-part='text']::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--bd-blush-solid);
+    }
+
+    > [data-part='actions'] {
+      display: flex;
+      gap: 4px;
+    }
+  }
+
+  .bd-savebar[hidden] {
+    display: none;
+    opacity: 0;
+    transform: translate(-50%, 16px);
+  }
+
+  .bd-app:has(> .bd-rail [data-part='collapse'][aria-expanded='false']) .bd-savebar {
+    left: calc(50% + (var(--bd-rail-collapsed) + var(--bd-space-seam)) / 2);
+  }
+
+  @media (max-width: 900px) {
+    .bd-savebar {
+      right: 12px;
+      bottom: 12px;
+      left: 12px;
+      justify-content: space-between;
+      transform: none;
+    }
+
+    .bd-savebar[hidden] {
+      transform: translateY(16px);
+    }
+  }
 }

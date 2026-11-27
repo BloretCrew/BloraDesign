@@ -1,0 +1,1425 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>组件全集 · Blora Design</title>
+    <!-- 第 ② 阶段验收页：只用框架重写 reference/components.html（组件全集），与参考页逐像素比对 -->
+    <link rel="stylesheet" href="../../packages/blora-design/dist/blora.css" />
+    <link rel="stylesheet" href="../../packages/blora-design/dist/patterns.css" />
+    <script type="module" src="../../packages/blora-design/dist/blora.js"></script>
+  </head>
+  <body>
+    <div class="bd-app">
+      <nav class="bd-rail" aria-label="组件目录">
+        <a data-part="brand" href="#">
+          <span data-part="logo">
+            <svg width="22" height="22" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <circle
+                cx="10"
+                cy="10"
+                r="7"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-dasharray="34.98 9"
+                stroke-linecap="round"
+                transform="rotate(-4 10 10)"
+              />
+              <circle cx="10" cy="10" r="2.6" fill="currentColor" />
+              <circle cx="15.5" cy="5.2" r="1.8" fill="currentColor" />
+            </svg>
+          </span>
+          <span>Blora Design</span>
+        </a>
+
+        <p data-part="section">组件目录</p>
+        <button type="button" aria-current="page" data-target="sec-1">
+          <svg data-icon viewBox="0 0 24 24" aria-hidden="true">
+            <rect width="20" height="12" x="2" y="6" rx="2" />
+          </svg>
+          <span>按钮与浮层</span><span data-part="count">01</span>
+        </button>
+        <button type="button" data-target="sec-2">
+          <svg data-icon viewBox="0 0 24 24" aria-hidden="true">
+            <rect width="18" height="18" x="3" y="3" rx="2" />
+            <path d="m16 10-4 4-4-4" />
+          </svg>
+          <span>选择器与日历</span><span data-part="count">02</span>
+        </button>
+        <button type="button" data-target="sec-3">
+          <svg data-icon viewBox="0 0 24 24" aria-hidden="true">
+            <line x1="21" x2="14" y1="4" y2="4" />
+            <line x1="10" x2="3" y1="4" y2="4" />
+            <line x1="21" x2="12" y1="12" y2="12" />
+            <line x1="8" x2="3" y1="12" y2="12" />
+            <line x1="21" x2="16" y1="20" y2="20" />
+            <line x1="12" x2="3" y1="20" y2="20" />
+            <line x1="14" x2="14" y1="2" y2="6" />
+            <line x1="8" x2="8" y1="10" y2="14" />
+            <line x1="16" x2="16" y1="18" y2="22" />
+          </svg>
+          <span>输入、滑块与列表</span><span data-part="count">03</span>
+        </button>
+        <button type="button" data-target="sec-4">
+          <svg data-icon viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3v18" />
+            <rect width="18" height="18" x="3" y="3" rx="2" />
+            <path d="M3 9h18" />
+            <path d="M3 15h18" />
+          </svg>
+          <span>数据表与目录树</span><span data-part="count">04</span>
+        </button>
+        <button type="button" data-target="sec-5">
+          <svg data-icon viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <path d="M10 4v4" />
+            <path d="M2 8h20" />
+            <path d="M6 4v4" />
+          </svg>
+          <span>页签、步骤与右键</span><span data-part="count">05</span>
+        </button>
+        <button type="button" data-target="sec-6">
+          <svg data-icon viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"
+            />
+            <line x1="12" x2="12" y1="8" y2="12" />
+            <line x1="12" x2="12.01" y1="16" y2="16" />
+          </svg>
+          <span>状态与空态</span><span data-part="count">06</span>
+        </button>
+
+        <div data-part="foot">
+          <div data-part="note">缝 6 · 外角 20 / 缝角 6<br />侧栏胶囊 32 · 高亮 32 − 10</div>
+          <button type="button" id="nav-mode">
+            <svg data-icon viewBox="0 0 24 24" aria-hidden="true">
+              <rect width="18" height="18" x="3" y="3" rx="2" />
+              <path d="M3 9h18" />
+            </svg>
+            <span>切换为顶栏</span>
+          </button>
+          <button type="button" data-part="collapse" aria-expanded="true" aria-label="收起侧栏">
+            <svg data-icon viewBox="0 0 24 24" aria-hidden="true">
+              <rect width="18" height="18" x="3" y="3" rx="2" />
+              <path d="M9 3v18" />
+              <path d="m16 15-3-3 3-3" />
+            </svg>
+            <span>收起侧栏</span>
+          </button>
+        </div>
+      </nav>
+
+      <main class="bd-page">
+        <header class="bd-topbar">
+          <span class="bd-pill" data-tone="blush">v2 · 行内微缝拼接 · 外圆内收</span>
+          <div data-part="end">
+            <button type="button" class="bd-button" data-bd-open="command">
+              <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <span>星轨检索</span>
+              <kbd class="bd-kbd" aria-label="Command K">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"
+                    stroke="currentColor"
+                    stroke-width="2.4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span>K</span>
+              </kbd>
+            </button>
+            <button type="button" class="bd-button" data-bd-open="drawer">侧滑星轨舱</button>
+            <button type="button" class="bd-button" data-variant="blush" data-bd-open="modal">
+              新建集群节点
+            </button>
+            <button type="button" class="bd-button" id="theme">深色模式</button>
+          </div>
+        </header>
+
+        <!-- 星轨读数 -->
+        <section class="bd-mosaic" data-cols="4">
+          <article class="bd-tile" data-variant="metric">
+            <p data-part="label">边缘算力负载</p>
+            <div
+              class="bd-ring"
+              aria-label="边缘算力负载"
+              aria-valuenow="68"
+              aria-valuemax="100"
+              id="load-ring"
+            ></div>
+            <p data-part="value" id="load-value">68%</p>
+            <p data-part="foot">随下方星轨滑块实时联动</p>
+          </article>
+          <article class="bd-tile" data-variant="metric">
+            <p data-part="label">网关轨道延迟</p>
+            <div
+              class="bd-ring"
+              aria-label="网关健康度"
+              aria-valuenow="82"
+              aria-valuemax="100"
+              data-text="A+"
+            ></div>
+            <p data-part="value">11.8 ms</p>
+            <p data-part="foot">亚太 4 节点同频畅通</p>
+          </article>
+          <article class="bd-tile" data-variant="metric">
+            <p data-part="label">快照冷备环</p>
+            <div class="bd-ring" aria-label="冷备配额" aria-valuenow="82" aria-valuemax="100"></div>
+            <p data-part="value">820 GB</p>
+            <p data-part="foot">总配额 1,000 GB</p>
+          </article>
+          <article class="bd-tile" data-variant="metric">
+            <p data-part="label">活跃鉴权会话</p>
+            <div
+              class="bd-ring"
+              aria-label="会话健康度"
+              aria-valuenow="99"
+              aria-valuemax="100"
+            ></div>
+            <p data-part="value">1,428</p>
+            <p data-part="foot">零异常令牌漂移</p>
+          </article>
+        </section>
+
+        <!-- 01 按钮、分裂按钮、提示与原位确认 -->
+        <section
+          class="bd-mosaic"
+          data-cols="2"
+          id="sec-1"
+          style="--bd-columns: minmax(0, 1.32fr) minmax(0, 1fr)"
+        >
+          <article class="bd-tile">
+            <header class="bd-head">
+              <h2>柔和暖调按钮层级与星轨异步态</h2>
+              <p>零描边 · 零突兀黑块</p>
+            </header>
+            <div data-pattern="control-rows">
+              <div>
+                <span>层级</span>
+                <div class="bd-toolbar">
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="primary"
+                    data-toast="已下发主轨道部署指令"
+                  >
+                    主操作
+                  </button>
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="blush"
+                    data-toast="已触发雾粉次主操作"
+                  >
+                    雾粉次主
+                  </button>
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="sand"
+                    data-toast="暖杏辅助校准已启动"
+                  >
+                    暖杏辅助
+                  </button>
+                  <button type="button" class="bd-button" data-toast="常规柔槽操作已响应">
+                    柔槽中性
+                  </button>
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="ghost"
+                    data-toast="轻量透明操作已触发"
+                  >
+                    轻量透明
+                  </button>
+                  <button type="button" class="bd-button" disabled>禁用态</button>
+                </div>
+              </div>
+              <div>
+                <span>尺寸·异步</span>
+                <div class="bd-toolbar">
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="blush"
+                    data-size="sm"
+                    data-toast="小号按钮 29px"
+                  >
+                    小号
+                  </button>
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="blush"
+                    data-toast="默认按钮 35px"
+                  >
+                    默认
+                  </button>
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-variant="blush"
+                    data-size="lg"
+                    data-toast="大号按钮 40px"
+                  >
+                    大号
+                  </button>
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-shape="icon"
+                    aria-label="新增"
+                    data-toast="图标按钮"
+                  >
+                    <svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M5 12h14" />
+                      <path d="M12 5v14" />
+                    </svg>
+                  </button>
+                  <button type="button" class="bd-button" id="async">
+                    <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                    <span>轨道已同步</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="bd-tile">
+            <header class="bd-head">
+              <h2>邻接分裂钮、耦合工具组、浅色气泡与原位确认</h2>
+              <p>点击直接交互</p>
+            </header>
+            <div data-pattern="control-rows">
+              <div>
+                <span>分裂·确认</span>
+                <div class="bd-toolbar">
+                  <div class="bd-split">
+                    <button
+                      type="button"
+                      class="bd-button"
+                      data-variant="primary"
+                      data-toast="正在按默认编排发布实例"
+                    >
+                      立即发布
+                    </button>
+                    <button
+                      type="button"
+                      class="bd-button"
+                      data-variant="primary"
+                      data-part="trigger"
+                      aria-label="选择发布方式"
+                    >
+                      <svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </button>
+                    <div data-part="panel" popover role="menu">
+                      <button type="button" role="menuitemradio" aria-checked="true">
+                        滚动无感热更新
+                      </button>
+                      <button type="button" role="menuitemradio" aria-checked="false">
+                        蓝绿双轨切流
+                      </button>
+                      <button type="button" role="menuitemradio" aria-checked="false">
+                        仅生成校验快照
+                      </button>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    class="bd-button"
+                    data-shape="icon"
+                    aria-label="轨道说明"
+                    data-tip="浅色柔和悬浮气泡 · 无突兀黑底"
+                  >
+                    <svg data-icon width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 16v-4" />
+                      <path d="M12 8h.01" />
+                    </svg>
+                  </button>
+                  <div class="bd-popconfirm" data-align="end" id="destroy">
+                    <button type="button" class="bd-button" data-variant="rose">销毁节点</button>
+                    <div data-part="panel" popover>
+                      <p data-part="title">确认销毁边缘节点？</p>
+                      <p data-part="desc">关联快照将保留 72 小时，期间可随时回滚恢复。</p>
+                      <div data-part="actions">
+                        <button type="button" class="bd-button" data-size="sm" data-part="cancel">
+                          取消
+                        </button>
+                        <button
+                          type="button"
+                          class="bd-button"
+                          data-variant="rose"
+                          data-size="sm"
+                          data-part="confirm"
+                        >
+                          确认销毁
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <span>耦合工具组</span>
+                <div class="bd-toolbar">
+                  <div class="bd-group">
+                    <button
+                      type="button"
+                      class="bd-button"
+                      data-variant="elevated"
+                      data-toast="边缘探针已重连"
+                    >
+                      重连
+                    </button>
+                    <button
+                      type="button"
+                      class="bd-button"
+                      data-variant="ghost"
+                      data-toast="路由表已刷新"
+                    >
+                      刷新
+                    </button>
+                  </div>
+                  <div class="bd-segmented" data-shape="pill" role="radiogroup" aria-label="视图">
+                    <button type="button" role="radio" aria-checked="true" aria-label="列表视图">
+                      <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 12h.01" />
+                        <path d="M3 18h.01" />
+                        <path d="M3 6h.01" />
+                        <path d="M8 12h13" />
+                        <path d="M8 18h13" />
+                        <path d="M8 6h13" />
+                      </svg>
+                    </button>
+                    <button type="button" role="radio" aria-checked="false" aria-label="网格视图">
+                      <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                        <rect width="7" height="7" x="3" y="3" rx="1" />
+                        <rect width="7" height="7" x="14" y="3" rx="1" />
+                        <rect width="7" height="7" x="14" y="14" rx="1" />
+                        <rect width="7" height="7" x="3" y="14" rx="1" />
+                      </svg>
+                    </button>
+                    <button type="button" role="radio" aria-checked="false" aria-label="拓扑视图">
+                      <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="12" r="3" />
+                        <circle cx="19" cy="5" r="2" />
+                        <circle cx="5" cy="19" r="2" />
+                        <path d="M10.4 21.9a10 10 0 0 0 9.941-15.416" />
+                        <path d="M13.5 2.1a10 10 0 0 0-9.841 15.416" />
+                      </svg>
+                    </button>
+                  </div>
+                  <button type="button" class="bd-button" data-toast="3 条轨道告警待处理">
+                    <span>告警</span><span data-part="count">3</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <!-- 02 单选、可搜索多选、区间日历 -->
+        <section class="bd-mosaic" data-cols="3" id="sec-2">
+          <article class="bd-tile">
+            <header class="bd-head">
+              <h2>全自研单选下拉选择器</h2>
+              <p>零原生 &lt;select&gt;</p>
+            </header>
+            <div class="bd-select">
+              <button type="button" data-part="trigger" aria-label="星轨区域">
+                <span data-part="value"></span>
+                <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
+              <div data-part="panel" popover>
+                <div role="listbox" aria-label="星轨区域">
+                  <div role="option" data-value="ap-hk-01" aria-selected="true">
+                    <span data-part="dot"></span>亚太香港星轨区 (ap-hk-01)
+                  </div>
+                  <div role="option" data-value="ap-sg-02">
+                    <span data-part="dot"></span>新加坡边缘扇区 (ap-sg-02)
+                  </div>
+                  <div role="option" data-value="ap-tyo-02">
+                    <span data-part="dot"></span>东京低延迟扇区 (ap-tyo-02)
+                  </div>
+                  <div role="option" data-value="eu-fra-01">
+                    <span data-part="dot"></span>法兰克福中继环 (eu-fra-01)
+                  </div>
+                </div>
+              </div>
+              <input type="hidden" name="region" />
+            </div>
+          </article>
+          <article class="bd-tile">
+            <header class="bd-head">
+              <h2>可搜索连贯圆角多选标签框</h2>
+              <p>相邻选中自动融为一体</p>
+            </header>
+            <div class="bd-select" data-placeholder="点击选择挂载模块...">
+              <button type="button" data-part="trigger" aria-label="挂载模块">
+                <span data-part="value"></span>
+                <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
+              <div data-part="panel" popover>
+                <input data-part="search" placeholder="搜索挂载模块..." aria-label="搜索挂载模块" />
+                <div role="listbox" aria-multiselectable="true" aria-label="挂载模块">
+                  <div role="option" data-value="panel" aria-selected="true">核心控制台</div>
+                  <div role="option" data-value="hub" aria-selected="true">门户站点</div>
+                  <div role="option" data-value="pass">统一鉴权</div>
+                  <div role="option" data-value="tunnel" aria-selected="true">流量加速</div>
+                  <div role="option" data-value="snap">自动冷备环</div>
+                </div>
+                <p data-part="empty">没有匹配的模块</p>
+              </div>
+              <input type="hidden" name="modules" />
+            </div>
+          </article>
+          <article class="bd-tile">
+            <header class="bd-head">
+              <h2>全自研连贯区间日历选择器</h2>
+              <p>起止日期连成胶囊带</p>
+            </header>
+            <div class="bd-date" data-mode="range" data-value="2026-11-18/2026-11-21">
+              <button type="button" data-part="trigger" aria-label="时间窗口">
+                <span data-part="value">
+                  <svg data-icon width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M8 2v4" />
+                    <path d="M16 2v4" />
+                    <rect width="18" height="18" x="3" y="4" rx="2" />
+                    <path d="M3 10h18" />
+                  </svg>
+                  <span data-part="text"></span>
+                </span>
+                <span class="bd-pill" data-tone="sand" data-part="badge"></span>
+              </button>
+              <div data-part="panel" popover></div>
+              <input type="hidden" name="window" />
+            </div>
+          </article>
+        </section>
+
+        <!-- 03 输入框、连贯列表、滑块与上传 -->
+        <section class="bd-mosaic" data-cols="3" id="sec-3">
+          <article class="bd-tile">
+            <header class="bd-head">
+              <h2>清除框、密码框、邻接域名框与步进器</h2>
+              <p>柔槽分层</p>
+            </header>
+            <div class="bd-input">
+              <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <input
+                value="demo-service-core"
+                placeholder="输入节点标识..."
+                aria-label="节点标识"
+              />
+              <button type="button" data-part="clear" aria-label="清除">
+                <svg data-icon width="10" height="10" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" />
+                </svg>
+              </button>
+            </div>
+            <div class="bd-input">
+              <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              <input
+                type="password"
+                value="blora-orbit-key"
+                placeholder="访问密钥"
+                aria-label="访问密钥"
+              />
+              <button type="button" data-part="reveal" aria-label="显示密钥">
+                <svg data-icon width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                  />
+                  <circle cx="12" cy="12" r="3" /></svg
+                ><svg data-icon width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"
+                  />
+                  <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+                  <path
+                    d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"
+                  />
+                  <path d="m2 2 20 20" />
+                </svg>
+              </button>
+            </div>
+            <div class="bd-input-group">
+              <span data-part="addon">https://</span>
+              <input class="bd-input" value="app-demo" aria-label="子域名" />
+              <span data-part="addon">.example.com</span>
+            </div>
+            <div data-part="foot">
+              <p>轨道副本步进与开关</p>
+              <div data-part="actions">
+                <div class="bd-stepper">
+                  <button type="button" data-part="dec" aria-label="减少">
+                    <svg data-icon width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M5 12h14" />
+                    </svg>
+                  </button>
+                  <span
+                    data-part="value"
+                    aria-label="副本数"
+                    aria-valuenow="6"
+                    aria-valuemin="1"
+                    aria-valuemax="32"
+                    >6</span
+                  >
+                  <button type="button" data-part="inc" aria-label="增加">
+                    <svg data-icon width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M5 12h14" />
+                      <path d="M12 5v14" />
+                    </svg>
+                  </button>
+                  <input type="hidden" name="replicas" value="6" />
+                </div>
+                <button
+                  type="button"
+                  class="bd-switch"
+                  role="switch"
+                  aria-checked="true"
+                  aria-label="自动容灾"
+                ></button>
+              </div>
+            </div>
+          </article>
+
+          <article class="bd-tile">
+            <header class="bd-head">
+              <h2>无横线连贯多选列表与星轨选框</h2>
+              <p>相邻项自动无缝拼接</p>
+            </header>
+            <ul
+              class="bd-list"
+              role="listbox"
+              aria-multiselectable="true"
+              aria-label="挂载服务"
+              data-pattern="check-list"
+            >
+              <li role="option" aria-selected="true">
+                <span>核心调度服务 <span data-part="meta">v2.4</span></span
+                ><svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+              </li>
+              <li role="option" aria-selected="true">
+                <span>边缘路由网关 <span data-part="meta">v1.9</span></span
+                ><svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+              </li>
+              <li role="option" aria-selected="false">
+                <span>身份认证中心 <span data-part="meta">v3.1</span></span
+                ><svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+              </li>
+              <li role="option" aria-selected="true">
+                <span>动态快照归档 <span data-part="meta">v1.6</span></span
+                ><svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+              </li>
+            </ul>
+            <div data-part="foot" data-align="start">
+              <label><input type="checkbox" class="bd-checkbox" checked />热备守护</label>
+              <label><input type="checkbox" class="bd-checkbox" id="indet" />半选同步</label>
+              <label><input type="radio" class="bd-radio" name="line" checked />BGP 优选</label>
+              <label><input type="radio" class="bd-radio" name="line" />直连专线</label>
+            </div>
+          </article>
+
+          <article class="bd-tile">
+            <header class="bd-head">
+              <h2>星轨滑块、分段与虚线上传</h2>
+              <div data-part="end"><span data-pattern="readout" id="slider-readout">68%</span></div>
+            </header>
+            <div
+              class="bd-slider"
+              role="slider"
+              tabindex="0"
+              aria-label="边缘算力上限"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="68"
+              style="--bd-value: 68%"
+              data-ticks="0,25,50,75,100"
+              id="slider"
+            ></div>
+            <div class="bd-segmented" data-tone="sand" role="radiogroup" aria-label="内存规格">
+              <button type="button" role="radio" aria-checked="false">轻量 2G</button>
+              <button type="button" role="radio" aria-checked="true">均衡 4G</button>
+              <button type="button" role="radio" aria-checked="false">星轨 8G</button>
+            </div>
+            <label class="bd-dropzone" data-part="foot" id="drop">
+              <input type="file" hidden accept=".yml,.json" />
+              <span data-part="icon"
+                ><svg data-icon width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" x2="12" y1="3" y2="15" /></svg
+              ></span>
+              <span data-part="text"
+                ><b>拖拽或点击上传星轨编排文件</b
+                ><small>.yml / .json · 柔和 1.5px 虚线槽</small></span
+              >
+              <span class="bd-pill" data-tone="blush">待上传</span>
+            </label>
+          </article>
+        </section>
+
+        <!-- 04 连贯选中数据表与可折叠配置树 -->
+        <section
+          class="bd-mosaic"
+          data-cols="2"
+          id="sec-4"
+          style="--bd-columns: minmax(0, 1.55fr) minmax(0, 1fr)"
+        >
+          <article class="bd-tile">
+            <header class="bd-head">
+              <h2>无分隔线连贯选中数据表（柔和雾粉批量栏）</h2>
+              <div data-part="end">
+                <button
+                  type="button"
+                  class="bd-button"
+                  data-variant="ghost"
+                  data-size="sm"
+                  id="sort"
+                >
+                  <span>按延迟排序</span>
+                  <svg data-icon width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m21 16-4 4-4-4" />
+                    <path d="M17 20V4" />
+                    <path d="m3 8 4-4 4 4" />
+                    <path d="M7 4v16" />
+                  </svg>
+                </button>
+              </div>
+            </header>
+            <div class="bd-bulk" data-for="nodes">
+              <span>已连贯选中 <span data-part="count">2</span> 个星轨节点</span>
+              <span class="bd-toolbar">
+                <button
+                  type="button"
+                  class="bd-button"
+                  data-variant="elevated"
+                  data-toast="批量热迁移已排入轨道"
+                >
+                  批量热迁移
+                </button>
+                <button type="button" class="bd-button" data-variant="ghost" data-part="clear">
+                  清空选择
+                </button>
+              </span>
+            </div>
+            <table class="bd-table" id="nodes">
+              <colgroup>
+                <col style="width: 6.42%" />
+                <col style="width: 34.07%" />
+                <col style="width: 19.71%" />
+                <col style="width: 19.71%" />
+                <col />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" class="bd-checkbox" aria-label="全选" /></th>
+                  <th>实例节点</th>
+                  <th>状态</th>
+                  <th>星轨扇区</th>
+                  <th data-align="end" aria-sort="none"><button type="button">轨道延迟</button></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <input
+                      type="checkbox"
+                      class="bd-checkbox"
+                      aria-label="选择 app-node-alpha"
+                      checked
+                    />
+                  </td>
+                  <td><strong>app-node-alpha</strong></td>
+                  <td><span class="bd-pill" data-tone="sand">畅通</span></td>
+                  <td><code>ap-hk-01</code></td>
+                  <td data-align="end"><code>11 ms</code></td>
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      type="checkbox"
+                      class="bd-checkbox"
+                      aria-label="选择 api-gateway-01"
+                      checked
+                    />
+                  </td>
+                  <td><strong>api-gateway-01</strong></td>
+                  <td><span class="bd-pill" data-tone="sand">畅通</span></td>
+                  <td><code>ap-hk-01</code></td>
+                  <td data-align="end"><code>14 ms</code></td>
+                </tr>
+                <tr>
+                  <td>
+                    <input type="checkbox" class="bd-checkbox" aria-label="选择 auth-service-04" />
+                  </td>
+                  <td><strong>auth-service-04</strong></td>
+                  <td><span class="bd-pill" data-tone="blush">同步中</span></td>
+                  <td><code>ap-tyo-02</code></td>
+                  <td data-align="end"><code>26 ms</code></td>
+                </tr>
+                <tr>
+                  <td>
+                    <input type="checkbox" class="bd-checkbox" aria-label="选择 web-edge-03" />
+                  </td>
+                  <td><strong>web-edge-03</strong></td>
+                  <td><span class="bd-pill" data-tone="rose">待轮换</span></td>
+                  <td><code>ap-sg-02</code></td>
+                  <td data-align="end"><code>34 ms</code></td>
+                </tr>
+              </tbody>
+            </table>
+            <div data-part="foot">
+              <p>相邻多选行自动连成整体色面，无行间横线</p>
+              <nav class="bd-pager" aria-label="分页">
+                <button type="button" aria-current="page">1</button>
+                <button type="button">2</button>
+                <button type="button">3</button>
+              </nav>
+            </div>
+          </article>
+
+          <article class="bd-tile">
+            <header class="bd-head">
+              <h2>可折叠配置树与一键复制终端片段</h2>
+              <p>点击目录展开折叠</p>
+            </header>
+            <ul class="bd-tree" role="tree" aria-label="配置文件" id="tree">
+              <li role="treeitem" aria-expanded="true">
+                <span data-part="node"
+                  ><svg
+                    data-icon
+                    data-part="chevron"
+                    width="11"
+                    height="11"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path d="m6 9 6 6 6-6" /></svg
+                  ><svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"
+                    /></svg
+                  ><span>blora-ui-kit/</span></span
+                >
+                <ul role="group">
+                  <li
+                    role="treeitem"
+                    aria-selected="true"
+                    data-cmd="cli apply -f orbit-mesh.yml --canary"
+                    data-meta="4.2 KB|2 小时前|已签名"
+                  >
+                    <span data-part="node"
+                      ><svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                        <path d="M14 2v4a2 2 0 0 0 2 2h4" /></svg
+                      ><span>orbit-mesh.yml</span></span
+                    >
+                  </li>
+                  <li
+                    role="treeitem"
+                    aria-selected="false"
+                    data-cmd="cli token rotate --cluster ap-hk-01"
+                    data-meta="1.1 KB|昨天 18:20|已加密"
+                  >
+                    <span data-part="node"
+                      ><svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                        <path d="M14 2v4a2 2 0 0 0 2 2h4" /></svg
+                      ><span>config-keys.json</span></span
+                    >
+                  </li>
+                  <li
+                    role="treeitem"
+                    aria-selected="false"
+                    data-cmd="cli snapshot verify --ring cold-820g"
+                    data-meta="860 B|3 天前|已签名"
+                  >
+                    <span data-part="node"
+                      ><svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                        <path d="M14 2v4a2 2 0 0 0 2 2h4" /></svg
+                      ><span>snapshot-policy.toml</span></span
+                    >
+                  </li>
+                </ul>
+              </li>
+              <li role="treeitem" aria-expanded="false">
+                <span data-part="node"
+                  ><svg
+                    data-icon
+                    data-part="chevron"
+                    width="11"
+                    height="11"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path d="m6 9 6 6 6-6" /></svg
+                  ><svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"
+                    /></svg
+                  ><span>policies/</span></span
+                >
+                <ul role="group">
+                  <li
+                    role="treeitem"
+                    aria-selected="false"
+                    data-cmd="cli policy lint ./policies/rate-limit.rego"
+                    data-meta="2.7 KB|5 天前|待审阅"
+                  >
+                    <span data-part="node"
+                      ><svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                        <path d="M14 2v4a2 2 0 0 0 2 2h4" /></svg
+                      ><span>rate-limit.rego</span></span
+                    >
+                  </li>
+                  <li
+                    role="treeitem"
+                    aria-selected="false"
+                    data-cmd="cli policy lint ./policies/geo-fence.rego"
+                    data-meta="1.9 KB|1 周前|已签名"
+                  >
+                    <span data-part="node"
+                      ><svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                        <path d="M14 2v4a2 2 0 0 0 2 2h4" /></svg
+                      ><span>geo-fence.rego</span></span
+                    >
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <dl data-pattern="file-meta">
+              <div>
+                <dt>大小</dt>
+                <dd id="meta-size">4.2 KB</dd>
+              </div>
+              <div>
+                <dt>修改</dt>
+                <dd id="meta-time">2 小时前</dd>
+              </div>
+              <div>
+                <dt>校验</dt>
+                <dd id="meta-sign">已签名</dd>
+              </div>
+            </dl>
+            <div data-pattern="command-snippet">
+              <code id="snippet-text">cli apply -f orbit-mesh.yml --canary</code>
+              <button
+                type="button"
+                class="bd-button"
+                data-variant="elevated"
+                data-size="sm"
+                id="copy-cmd"
+              >
+                复制指令
+              </button>
+            </div>
+          </article>
+        </section>
+
+        <!-- 05 可增删页签、步骤条、右键菜单与手风琴 -->
+        <section class="bd-mosaic" data-cols="2" id="sec-5">
+          <article class="bd-tile">
+            <header class="bd-head">
+              <h2>动态可增删页签与星轨步骤导航</h2>
+              <div data-part="end">
+                <button type="button" class="bd-button" data-size="sm" id="add-tab">
+                  <svg data-icon width="11" height="11" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h14" />
+                    <path d="M12 5v14" />
+                  </svg>
+                  <span>新增页签</span>
+                </button>
+              </div>
+            </header>
+            <div class="bd-tabs" role="tablist" aria-label="分片视图" id="tabs">
+              <button type="button" role="tab" aria-selected="true" aria-controls="tab-1">
+                <span>拓扑总览</span
+                ><span data-part="close" aria-label="关闭 拓扑总览"
+                  ><svg data-icon width="9" height="9" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" /></svg
+                ></span>
+              </button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="tab-2">
+                <span>证书策略</span
+                ><span data-part="close" aria-label="关闭 证书策略"
+                  ><svg data-icon width="9" height="9" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" /></svg
+                ></span>
+              </button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="tab-3">
+                <span>审计流水</span
+                ><span data-part="close" aria-label="关闭 审计流水"
+                  ><svg data-icon width="9" height="9" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" /></svg
+                ></span>
+              </button>
+            </div>
+            <div role="tabpanel" id="tab-1" data-pattern="well-panel">
+              当前共 4 个跨国星轨扇区在线，主干隧道采用圆弧冗余双栈路由，切换耗时低于 15 ms。
+            </div>
+            <div role="tabpanel" id="tab-2" data-pattern="well-panel">
+              所有边缘实例均启用 72 小时短期自动签发令牌，无需手动挂载静态私钥。
+            </div>
+            <div role="tabpanel" id="tab-3" data-pattern="well-panel">
+              今日已完成 12 次无感配置同步，全部校验哈希一致。
+            </div>
+            <div class="bd-steps" data-part="foot">
+              <button type="button">
+                <span data-part="title">镜像校验</span><span data-part="desc">SHA256 已签名</span>
+              </button>
+              <button type="button" aria-current="step">
+                <span data-part="title">星轨编排</span><span data-part="desc">分批注入中</span>
+              </button>
+              <button type="button">
+                <span data-part="title">全网切流</span><span data-part="desc">等待探针就绪</span>
+              </button>
+            </div>
+          </article>
+
+          <article class="bd-tile">
+            <header class="bd-head">
+              <h2>全自研右键上下文菜单与柔和手风琴折叠</h2>
+              <p>零浏览器原生菜单</p>
+            </header>
+            <div class="bd-context" data-trigger="click" data-pattern="context-zone">
+              <span
+                ><svg data-icon width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M14 4.1 12 6" />
+                  <path d="m5.1 8-2.9-.8" />
+                  <path d="m6 12-1.9 2" />
+                  <path d="M7.2 2.2 8 5.1" />
+                  <path
+                    d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z"
+                  />
+                </svg>
+                <span>在此区域点击鼠标右键（或直接轻点）唤起自研菜单</span></span
+              >
+              <span class="bd-pill" data-tone="blush">右键体验</span>
+              <div data-part="panel" popover role="menu">
+                <button type="button" role="menuitem" data-toast="已复制节点星轨地址">
+                  复制星轨地址
+                </button>
+                <button type="button" role="menuitem" data-toast="已生成即时热备快照">
+                  创建即时快照
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  data-tone="rose"
+                  data-toast="节点已切入排空维护态"
+                >
+                  排空并隔离节点
+                </button>
+              </div>
+            </div>
+            <div class="bd-accordion">
+              <details open>
+                <summary>
+                  <span>为什么瓷砖外角 20px，而缝角只有 6px？</span
+                  ><svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </summary>
+                <div>
+                  <p>
+                    布局沿用与分裂按钮、域名拼接框相同的邻接规则：一组的外侧用大圆角包住，相邻处收成小圆角加
+                    6px 窄缝。行与行之间同样是 6px，全页只有一种缝宽，节奏统一，也不需要外层灰框。
+                  </p>
+                </div>
+              </details>
+              <details>
+                <summary>
+                  <span>圆弧星轨几何如何兼顾识别度与柔和感？</span
+                  ><svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </summary>
+                <div>
+                  <p>
+                    全部圆弧均采用圆头笔触（round
+                    linecap）搭配低饱和雾粉与暖杏色阶，不加黑框、不加硬描边，在清亮浅底上呈现安静利落的秩序感。
+                  </p>
+                </div>
+              </details>
+            </div>
+          </article>
+        </section>
+
+        <!-- 06 提示条、头像组、骨架屏与空状态 -->
+        <section class="bd-mosaic" data-cols="2" id="sec-6">
+          <article class="bd-tile">
+            <header class="bd-head">
+              <h2>温和语义提示条与协作星轨头像组</h2>
+              <p>零刺眼荧光红绿</p>
+            </header>
+            <div data-pattern="alert-stack">
+              <div class="bd-alert">
+                <svg data-icon width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+                <span>边缘节点配置已同步至全部 24 个示例服务实例。</span>
+              </div>
+              <div class="bd-alert" data-tone="sand">
+                <svg data-icon width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"
+                  />
+                  <path d="M12 9v4" />
+                  <path d="M12 17h.01" />
+                </svg>
+                <span>东京可用区将于 03:00 执行例行快照整理，预计无感切换。</span>
+              </div>
+              <div class="bd-alert" data-tone="rose">
+                <svg data-icon width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="m15 9-6 6" />
+                  <path d="m9 9 6 6" />
+                </svg>
+                <span>备用隧道 ap-sg-03 证书剩余 5 天到期，建议提前轮换。</span>
+              </div>
+            </div>
+            <div data-part="foot">
+              <p>
+                <span>
+                  <span class="bd-avatar" data-tone="blush">A1</span
+                  ><span class="bd-avatar" data-tone="sand">B2</span
+                  ><span class="bd-avatar" data-tone="rose">C3</span
+                  ><span class="bd-avatar">+4</span>
+                </span>
+                7 位团队协作者在线值守
+              </p>
+              <button
+                type="button"
+                class="bd-button"
+                data-variant="blush"
+                data-size="sm"
+                data-toast="已发送协作邀请链接"
+              >
+                邀请协作
+              </button>
+            </div>
+          </article>
+
+          <article class="bd-tile">
+            <header class="bd-head">
+              <h2>骨架屏加载切换与柔和空状态复位</h2>
+              <div data-part="end">
+                <button type="button" class="bd-button" data-size="sm" id="skel-toggle">
+                  切换骨架态
+                </button>
+              </div>
+            </header>
+            <div data-pattern="status-preview" aria-busy="false" id="preview">
+              <span
+                ><b>边缘路由网关服务 v2.8</b
+                ><small>最近一次心跳检测：1.2 秒前 · 吞吐稳定 840 Mbps</small></span
+              >
+              <span class="bd-pill" data-tone="sand">在线运行</span>
+            </div>
+            <div class="bd-empty" data-variant="inline" data-part="foot">
+              <span data-part="icon"
+                ><svg data-icon width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                  <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
+                  <path
+                    d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"
+                  /></svg
+              ></span>
+              <span data-part="text"
+                ><b>暂无待审批的跨域迁移任务</b><span>所有边缘轨道配额均已自动平衡</span></span
+              >
+              <button
+                type="button"
+                class="bd-button"
+                data-variant="elevated"
+                data-size="sm"
+                data-toast="已发起全网巡检扫描"
+              >
+                立即巡检
+              </button>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="bd-modal" id="modal" aria-labelledby="modal-title">
+      <header>
+        <h2 id="modal-title">新建星轨集群节点</h2>
+        <button type="button" data-part="close" aria-label="关闭">
+          <svg data-icon width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </button>
+      </header>
+      <div class="bd-field">
+        <label data-part="label" for="node-name">节点名称</label>
+        <input class="bd-input" id="node-name" value="demo-edge-node-04" />
+      </div>
+      <div class="bd-field">
+        <span data-part="label">目标星轨扇区（全自研下拉）</span>
+        <div class="bd-select">
+          <button type="button" data-part="trigger" aria-label="目标星轨扇区">
+            <span data-part="value"></span>
+            <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+          <div data-part="panel" popover>
+            <div role="listbox" aria-label="目标星轨扇区">
+              <div role="option" data-value="ap-tyo-02" aria-selected="true">
+                <span data-part="dot"></span>东京低延迟扇区 (ap-tyo-02)
+              </div>
+              <div role="option" data-value="ap-hk-01">
+                <span data-part="dot"></span>亚太香港星轨区 (ap-hk-01)
+              </div>
+              <div role="option" data-value="ap-sg-02">
+                <span data-part="dot"></span>新加坡边缘扇区 (ap-sg-02)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer>
+        <button type="button" class="bd-button" data-part="close">取消</button>
+        <button
+          type="button"
+          class="bd-button"
+          data-variant="primary"
+          data-part="close"
+          data-toast="新星轨节点已创建并入网"
+        >
+          创建并入网
+        </button>
+      </footer>
+    </dialog>
+
+    <dialog class="bd-drawer" id="drawer" aria-labelledby="drawer-title">
+      <header>
+        <h2 id="drawer-title">侧滑星轨遥测舱</h2>
+        <button type="button" data-part="close" aria-label="关闭">
+          <svg data-icon width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </button>
+      </header>
+      <dl class="bd-spec" data-density="compact">
+        <div>
+          <dt>当前活跃主节点</dt>
+          <dd>app-node-alpha</dd>
+        </div>
+        <div>
+          <dt>证书</dt>
+          <dd>TLS 1.3 双向锚定</dd>
+        </div>
+        <div>
+          <dt>零丢包运行</dt>
+          <dd>42 天</dd>
+        </div>
+        <div>
+          <dt>自动快照策略</dt>
+          <dd>每 6 小时增量归档</dd>
+        </div>
+      </dl>
+      <footer>
+        <button
+          type="button"
+          class="bd-button"
+          data-variant="primary"
+          data-part="close"
+          data-toast="遥测舱配置已保存"
+        >
+          保存遥测配置
+        </button>
+      </footer>
+    </dialog>
+
+    <dialog class="bd-command" id="command" data-shortcut="mod+k" aria-label="命令面板">
+      <div class="bd-input">
+        <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.3-4.3" />
+        </svg>
+        <input placeholder="输入星轨指令或跳转模块..." aria-label="搜索命令" />
+      </div>
+      <div role="listbox" aria-label="命令" id="commands">
+        <div role="option" data-action="modal">新建星轨集群节点 <kbd class="bd-kbd">↵</kbd></div>
+        <div role="option" data-action="drawer">打开侧滑星轨遥测舱 <kbd class="bd-kbd">↵</kbd></div>
+        <div role="option" data-action="theme">切换浅色 / 深色模式 <kbd class="bd-kbd">↵</kbd></div>
+        <div role="option" data-action="table">
+          跳转至无分隔线连贯数据表 <kbd class="bd-kbd">↵</kbd>
+        </div>
+      </div>
+      <p data-part="empty">没有匹配的命令</p>
+    </dialog>
+
+    <script type="module">
+      import { toast } from '../../packages/blora-design/dist/blora.js';
+
+      const $ = (sel) => document.querySelector(sel);
+      const SPIN =
+        '<svg data-icon data-spin width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg><span>星轨校准中...</span>';
+
+      // 演示：点击带 data-toast 的按钮弹出提示条
+      document.addEventListener('click', (e) => {
+        const el = e.target instanceof Element ? e.target.closest('[data-toast]') : null;
+        if (el && !el.disabled) toast(el.dataset.toast);
+      });
+
+      $('#indet').indeterminate = true;
+
+      // 深色模式
+      const toggleTheme = () => {
+        const html = document.documentElement;
+        const dark = html.dataset.theme !== 'dark';
+        html.dataset.theme = dark ? 'dark' : 'light';
+        $('#theme').textContent = dark ? '浅色模式' : '深色模式';
+      };
+      $('#theme').addEventListener('click', toggleTheme);
+
+      // 侧栏：导航项跳到对应的行；「切换为顶栏」不是导航项，不切换选中
+      $('.bd-rail').addEventListener('bd-change', (e) => {
+        const item = e.detail.item;
+        if (item.id === 'nav-mode') {
+          e.preventDefault();
+          toast('≤900px 时侧栏会自动变成横向导航条');
+          return;
+        }
+        document.getElementById(item.dataset.target)?.scrollIntoView({ behavior: 'smooth' });
+      });
+
+      // 异步按钮：忙碌 0.95 秒后恢复
+      $('#async').addEventListener('click', (e) => {
+        const btn = e.currentTarget;
+        if (btn.getAttribute('aria-busy') === 'true') return;
+        const idle = btn.innerHTML;
+        btn.setAttribute('aria-busy', 'true');
+        btn.innerHTML = SPIN;
+        setTimeout(() => {
+          btn.removeAttribute('aria-busy');
+          btn.innerHTML = idle;
+          toast('边缘轨道同步校验完成');
+        }, 950);
+      });
+
+      // 滑块联动：标题右侧读数、第一个读数格
+      $('#slider').addEventListener('bd-change', (e) => {
+        const v = e.detail.value;
+        $('#slider-readout').textContent = `${v}%`;
+        $('#load-value').textContent = `${v}%`;
+        $('#load-ring').setAttribute('aria-valuenow', String(v));
+      });
+
+      // 标题右侧的排序按钮：交给表头的排序按钮
+      $('#sort').addEventListener('click', () => $('#nodes th[aria-sort] > button').click());
+
+      // 配置树：选中文件后更新文件信息和终端片段
+      $('#tree').addEventListener('bd-change', (e) => {
+        const { cmd, meta } = e.detail.item.dataset;
+        if (!cmd) return;
+        const [size, time, sign] = meta.split('|');
+        $('#meta-size').textContent = size;
+        $('#meta-time').textContent = time;
+        $('#meta-sign').textContent = sign;
+        $('#snippet-text').textContent = cmd;
+      });
+      $('#copy-cmd').addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText($('#snippet-text').textContent);
+          toast('终端指令已复制');
+        } catch {
+          toast('无法访问剪贴板', { tone: 'rose' });
+        }
+      });
+
+      // 新增页签：加入页签和面板，由运行时负责弹出动画和切换
+      let seq = 4;
+      $('#add-tab').addEventListener('click', () => {
+        const n = seq++;
+        const name = `新分片 ${n}`;
+        const tab = document.createElement('button');
+        tab.type = 'button';
+        tab.setAttribute('role', 'tab');
+        tab.setAttribute('aria-selected', 'false');
+        tab.setAttribute('aria-controls', `tab-${n}`);
+        tab.innerHTML = `<span>${name}</span><span data-part="close" aria-label="关闭 ${name}"><svg data-icon width="9" height="9" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg></span>`;
+        const panel = document.createElement('div');
+        panel.setAttribute('role', 'tabpanel');
+        panel.id = `tab-${n}`;
+        panel.dataset.pattern = 'well-panel';
+        panel.hidden = true;
+        panel.textContent = `${name} 已创建，等待挂载边缘节点。`;
+        $('#tabs').append(tab);
+        [...document.querySelectorAll('#sec-5 [role="tabpanel"]')].at(-1).after(panel);
+        tab.click();
+      });
+
+      // 骨架屏切换
+      const real = $('#preview').innerHTML;
+      $('#skel-toggle').addEventListener('click', () => {
+        const preview = $('#preview');
+        const busy = preview.getAttribute('aria-busy') !== 'true';
+        preview.setAttribute('aria-busy', String(busy));
+        preview.innerHTML = busy
+          ? '<span><span class="bd-skeleton"></span><span class="bd-skeleton"></span></span>'
+          : real;
+      });
+
+      // 上传区：选了文件之后显示「已上传」
+      $('#drop').addEventListener('bd-change', (e) => {
+        const file = e.detail.files?.[0];
+        if (!file) return;
+        $('#drop b').textContent = file.name;
+        $('#drop .bd-pill').textContent = '已上传';
+        toast('编排文件已上传');
+      });
+
+      // 命令面板
+      $('#command').addEventListener('bd-select', (e) => {
+        const act = e.detail.item.dataset.action;
+        if (act === 'modal') $('#modal').showModal();
+        else if (act === 'drawer') $('#drawer').showModal();
+        else if (act === 'theme') toggleTheme();
+        else if (act === 'table') $('#sec-4').scrollIntoView({ behavior: 'smooth' });
+      });
+    </script>
+  </body>
+</html>

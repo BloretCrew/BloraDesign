@@ -184,4 +184,15 @@
       color: var(--bd-ink-tertiary);
     }
   }
+
+  /* 工具条里的筛选下拉固定一个合适的宽度，不随选中项变宽变窄 */
+  .bd-toolbar > .bd-select {
+    width: 150px;
+  }
+
+  @media (max-width: 640px) {
+    .bd-toolbar > .bd-select {
+      width: auto;
+    }
+  }
 }

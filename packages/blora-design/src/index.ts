@@ -6,6 +6,7 @@
  */
 import { start } from './runtime/core';
 import { registerData } from './runtime/data';
+import { registerChart } from './runtime/chart';
 import { registerDate } from './runtime/date';
 import { registerDialogs } from './runtime/dialog';
 import { registerFeedback } from './runtime/feedback';
@@ -44,6 +45,7 @@ if (typeof document !== 'undefined') {
   registerSelect();
   registerDate();
   registerData();
+  registerChart();
   registerMenus();
   registerDialogs();
   registerFeedback();

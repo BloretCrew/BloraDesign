@@ -51,7 +51,15 @@ export function registerSelect(): void {
       if (hidden) hidden.value = sel.map(valueOf).join(',');
       if (!valueBox) return;
       if (!multi) {
-        valueBox.textContent = sel[0] ? labelOf(sel[0]) : placeholder;
+        // 选项里带圆点、图标时原样带到触发按钮里（勾选标记除外）；纯文字选项只写文字
+        const o = sel[0];
+        if (o && o.children.length)
+          valueBox.replaceChildren(
+            ...[...o.childNodes]
+              .filter((n) => !(n instanceof Element && n.matches('[data-part="check"]')))
+              .map((n) => n.cloneNode(true)),
+          );
+        else valueBox.textContent = o ? labelOf(o) : placeholder;
         valueBox.toggleAttribute('data-empty', !sel[0]);
         return;
       }
