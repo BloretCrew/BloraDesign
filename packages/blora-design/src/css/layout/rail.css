@@ -1,0 +1,265 @@
+/*
+ * 侧栏 bd-rail：胶囊形，外圆角 32，里面的 Logo、导航项、选中底都是 32 − 10 = 22（DESIGN.md · Shapes · 侧栏是胶囊形）
+ * 导航项是侧栏里没有 data-part 的 <a> / <button>，当前项写 aria-current="page"
+ */
+@layer bd.layout {
+  .bd-rail {
+    --bd-rail-pad: 10px;
+    --bd-rail-icon: 19px;
+    /* 收起时导航项是 44×44 的正圆，图标居中：(64 − 20 − 19) / 2 */
+    --bd-rail-icon-x: calc(
+      (var(--bd-rail-collapsed, 64px) - var(--bd-rail-pad) * 2 - var(--bd-rail-icon)) / 2
+    );
+    --bd-radius-rail-item: calc(var(--bd-radius-rail) - var(--bd-rail-pad));
+    --bd-glide-bg: var(--bd-blush-soft);
+
+    position: sticky;
+    top: 12px;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: calc(100dvh - 24px);
+    padding: var(--bd-rail-pad);
+    overflow: hidden;
+    border-radius: var(--bd-radius-rail);
+    background: var(--bd-tile);
+    box-shadow: var(--bd-shadow-tile);
+  }
+
+  .bd-rail > [data-part='brand'] {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 18px;
+    white-space: nowrap;
+    font-size: 15.5px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    color: var(--bd-ink);
+  }
+
+  .bd-rail [data-part='logo'] {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--bd-radius-rail-item);
+    background: var(--bd-blush-soft);
+    color: var(--bd-blush-solid);
+  }
+
+  .bd-rail > [data-part='section'] {
+    max-height: 24px;
+    padding: 0 12px 6px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    color: var(--bd-ink-quaternary);
+    transition:
+      max-height var(--bd-duration) var(--bd-ease-out),
+      padding var(--bd-duration) var(--bd-ease-out),
+      opacity var(--bd-duration-fade) ease;
+  }
+
+  /* ---- 导航项 ---- */
+  .bd-rail :is(a, button):not([data-part]),
+  .bd-rail [data-part='collapse'] {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    width: 100%;
+    height: 44px;
+    padding: 0 10px 0 var(--bd-rail-icon-x);
+    overflow: hidden;
+    border-radius: var(--bd-radius-rail-item);
+    white-space: nowrap;
+    text-align: left;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--bd-ink-secondary);
+    transition:
+      color var(--bd-duration-hover) ease,
+      background-color var(--bd-duration-hover) ease;
+  }
+
+  .bd-rail :is(a, button):not([data-part]) + :is(a, button):not([data-part]) {
+    margin-top: 2px;
+  }
+
+  .bd-rail :is(a, button):not([data-part]) > svg,
+  .bd-rail [data-part='collapse'] > svg {
+    width: var(--bd-rail-icon);
+    height: var(--bd-rail-icon);
+  }
+
+  .bd-rail :is(a, button):not([data-part]) > span:not([data-part]),
+  .bd-rail [data-part='collapse'] > span {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    transition: opacity var(--bd-duration-fade) ease 0.08s;
+  }
+
+  .bd-rail :is(a, button):not([data-part]):not([aria-current]:not([aria-current='false'])):hover,
+  .bd-rail [data-part='collapse']:hover {
+    background: var(--bd-well);
+    color: var(--bd-ink);
+  }
+
+  .bd-rail [aria-current]:not([aria-current='false']) {
+    font-weight: 600;
+    color: var(--bd-blush-ink);
+  }
+
+  /* 运行时接管之前（或没有 JS 时），当前项用自己的底色显示选中态 */
+  .bd-rail:not(:has(> [data-part='glide'])) [aria-current]:not([aria-current='false']) {
+    background: var(--bd-blush-soft);
+  }
+
+  .bd-rail [data-part='count'] {
+    flex-shrink: 0;
+    min-width: 20px;
+    padding: 0 6px;
+    border-radius: var(--bd-radius-pill);
+    background: var(--bd-well);
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 18px;
+    color: var(--bd-ink-tertiary);
+    transition: opacity var(--bd-duration-fade) ease 0.08s;
+  }
+
+  .bd-rail [aria-current]:not([aria-current='false']) [data-part='count'] {
+    background: var(--bd-tile);
+    color: var(--bd-blush-ink);
+  }
+
+  /* ---- 底部 ---- */
+  .bd-rail > [data-part='foot'] {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: auto;
+  }
+
+  .bd-rail [data-part='note'] {
+    max-height: 96px;
+    margin-bottom: 6px;
+    padding: 11px 12px;
+    overflow: hidden;
+    white-space: nowrap;
+    border-radius: var(--bd-radius-rail-item);
+    background: var(--bd-well);
+    transition:
+      max-height var(--bd-duration) var(--bd-ease-out),
+      padding var(--bd-duration) var(--bd-ease-out),
+      margin var(--bd-duration) var(--bd-ease-out),
+      opacity var(--bd-duration-fade) ease;
+  }
+
+  .bd-rail [data-part='collapse'] {
+    color: var(--bd-ink-tertiary);
+  }
+
+  .bd-rail [data-part='collapse'] > svg {
+    transition: transform var(--bd-duration) var(--bd-ease-out);
+  }
+
+  /* ---- 收起：用户收起（aria-expanded="false"）或 ≤1280 自动收起 ---- */
+  .bd-rail:has([data-part='collapse'][aria-expanded='false']) {
+    :is(a, button):not([data-part]) > span,
+    [data-part='brand'] > :not([data-part='logo']),
+    [data-part='collapse'] > span {
+      opacity: 0;
+      transition-delay: 0s;
+    }
+
+    > [data-part='section'],
+    [data-part='note'] {
+      max-height: 0;
+      margin-bottom: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      opacity: 0;
+    }
+
+    [data-part='collapse'] > svg {
+      transform: rotate(180deg);
+    }
+  }
+
+  @media (max-width: 1280px) {
+    .bd-rail {
+      :is(a, button):not([data-part]) > span,
+      [data-part='brand'] > :not([data-part='logo']) {
+        opacity: 0;
+        transition-delay: 0s;
+      }
+
+      > [data-part='section'],
+      [data-part='note'] {
+        max-height: 0;
+        margin-bottom: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        opacity: 0;
+      }
+
+      /* 自动收起时不能手动展开 */
+      [data-part='collapse'] {
+        display: none;
+      }
+    }
+  }
+
+  /* ---- ≤900：横向导航条（同一份标记，不需要另写一套移动端导航） ---- */
+  @media (max-width: 900px) {
+    .bd-rail {
+      position: relative;
+      top: auto;
+      flex-direction: row;
+      gap: 4px;
+      height: auto;
+      padding: 6px;
+      overflow: auto hidden;
+      border-radius: var(--bd-radius-tile);
+
+      > [data-part='brand'],
+      > [data-part='section'],
+      > [data-part='foot'] {
+        display: none;
+      }
+
+      :is(a, button):not([data-part]) {
+        width: auto;
+        height: 30px;
+        padding: 0 13px;
+        border-radius: var(--bd-radius-pill);
+        font-size: 12.5px;
+        font-weight: 560;
+      }
+
+      :is(a, button):not([data-part]) + :is(a, button):not([data-part]) {
+        margin-top: 0;
+      }
+
+      :is(a, button):not([data-part]) > :is(svg, [data-part='count']) {
+        display: none;
+      }
+
+      :is(a, button):not([data-part]) > span {
+        opacity: 1;
+        overflow: visible;
+      }
+
+      [aria-current]:not([aria-current='false']) {
+        font-weight: 560;
+      }
+    }
+  }
+}

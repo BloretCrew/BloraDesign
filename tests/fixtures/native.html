@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>原生外观检查</title>
+    <link rel="stylesheet" href="../../packages/blora-design/dist/blora.css" />
+  </head>
+  <body>
+    <!-- 故意写出各种原生元素：Blora 的重置样式必须把它们的原生外观全部去掉 -->
+    <form>
+      <input type="text" placeholder="文本" />
+      <input type="search" value="搜索" />
+      <input type="number" value="3" />
+      <input type="password" value="secret" />
+      <input type="date" />
+      <input type="time" />
+      <input type="color" />
+      <input type="range" />
+      <input type="checkbox" />
+      <input type="radio" />
+      <input type="file" />
+      <select>
+        <option>选项</option>
+      </select>
+      <textarea>多行</textarea>
+      <button>按钮</button>
+      <progress value="3" max="10"></progress>
+      <meter value="0.4"></meter>
+    </form>
+    <details>
+      <summary>摘要</summary>
+      内容
+    </details>
+    <div style="height: 80px; overflow: auto"><div style="height: 400px">滚动</div></div>
+  </body>
+</html>

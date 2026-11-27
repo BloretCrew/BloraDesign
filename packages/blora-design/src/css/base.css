@@ -1,0 +1,59 @@
+/* bd.base：页面底色、正文排版、聚焦光晕、文字选中色（DESIGN.md · Typography / Motion） */
+@layer bd.base {
+  html {
+    background: var(--bd-canvas);
+    color: var(--bd-ink);
+    font-family: var(--bd-font-sans);
+    font-size: var(--bd-text-body-size);
+    font-weight: var(--bd-text-body-weight);
+    /* 界面文字（导航、按钮、标签）行高 1.5；正文段落用 body 的 1.55 */
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--bd-blush-fill);
+    color: var(--bd-blush-ink);
+  }
+
+  /* 聚焦光晕：只在键盘操作时出现；组件可以把光晕画在别的元素上（如输入框的外壳） */
+  :focus-visible {
+    box-shadow: var(--bd-shadow-focus);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    line-height: var(--bd-text-body-leading);
+  }
+
+  /* 数值：等宽、表格数字（DESIGN.md · Typography · value-mono） */
+  data,
+  code,
+  kbd,
+  samp {
+    font-family: var(--bd-font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  data {
+    font-size: var(--bd-text-value-mono-size);
+    font-weight: var(--bd-text-value-mono-weight);
+  }
+
+  /* 图标：Lucide 线性图标，小尺寸加粗笔画保持清晰 */
+  svg[data-icon] {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}

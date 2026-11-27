@@ -11,6 +11,6 @@ export default defineConfig({
     lib: { entry: 'src/index.ts', formats: ['es'], fileName: () => 'blora.js' },
     target: 'es2023',
     sourcemap: true,
-    emptyOutDir: true,
+    emptyOutDir: false,
   },
 });

@@ -1,0 +1,233 @@
+/*
+ * bd.reset：去掉浏览器默认样式，尤其是所有原生控件外观（DESIGN.md · Components · 不出现原生控件）。
+ * 即使业务写了原生元素，看起来也不会是系统样式。
+ */
+@layer bd.reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    tab-size: 4;
+  }
+
+  /* 原生滚动条一律隐藏；滚动指示由 bd-scroll 和运行时画（DESIGN.md · 不出现原生控件 · 滚动条） */
+  * {
+    scrollbar-width: none;
+  }
+
+  *::-webkit-scrollbar {
+    display: none;
+  }
+
+  img,
+  picture,
+  video,
+  canvas,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  ul,
+  ol,
+  menu {
+    list-style: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font: inherit;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  /* ---- 表单与按钮：外观全部交给 Blora ---- */
+  button,
+  input,
+  select,
+  textarea,
+  progress,
+  meter {
+    appearance: none;
+    font: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    outline: none;
+  }
+
+  button,
+  [role='button'],
+  summary {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  button:disabled {
+    cursor: default;
+  }
+
+  textarea {
+    resize: none;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--bd-ink-quaternary);
+    opacity: 1;
+  }
+
+  /* 搜索框清除按钮、数字框上下箭头、日期框的日历图标、Edge 密码眼睛。
+     每个厂商伪元素单独一条：浏览器不认识其中一个时，会丢掉整条选择器列表 */
+  input::-webkit-search-decoration {
+    appearance: none;
+    display: none;
+  }
+
+  input::-webkit-search-cancel-button {
+    appearance: none;
+    display: none;
+  }
+
+  input::-webkit-search-results-button {
+    appearance: none;
+    display: none;
+  }
+
+  input::-webkit-inner-spin-button {
+    appearance: none;
+    display: none;
+  }
+
+  input::-webkit-outer-spin-button {
+    appearance: none;
+    display: none;
+  }
+
+  input::-webkit-calendar-picker-indicator {
+    appearance: none;
+    display: none;
+  }
+
+  input::-webkit-clear-button {
+    appearance: none;
+    display: none;
+  }
+
+  input::-ms-reveal {
+    appearance: none;
+    display: none;
+  }
+
+  input::-ms-clear {
+    appearance: none;
+    display: none;
+  }
+
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
+
+  /* 浏览器自动填充：盖掉黄色 / 蓝色底，保持 Blora 的底色和文字色 */
+  input:autofill {
+    -webkit-text-fill-color: currentColor;
+    caret-color: currentColor;
+    transition: background-color 600000s 0s;
+  }
+
+  textarea:autofill {
+    -webkit-text-fill-color: currentColor;
+    caret-color: currentColor;
+    transition: background-color 600000s 0s;
+  }
+
+  /* 原生 progress / meter 的条：Blora 用 bd-progress / bd-ring 代替 */
+  progress::-webkit-progress-bar {
+    background: none;
+  }
+
+  progress::-webkit-progress-value {
+    background: none;
+  }
+
+  progress::-moz-progress-bar {
+    background: none;
+  }
+
+  meter::-webkit-meter-bar {
+    background: none;
+  }
+
+  meter::-webkit-meter-optimum-value {
+    background: none;
+  }
+
+  /* details 的默认三角 */
+  summary {
+    display: block;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::marker {
+    content: '';
+  }
+
+  /* dialog / popover：只借用顶层显示和焦点管理，默认外观全部清掉 */
+  dialog,
+  [popover] {
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    color: inherit;
+    background: none;
+    border: 0;
+    overflow: visible;
+  }
+
+  dialog::backdrop,
+  [popover]::backdrop {
+    background: transparent;
+  }
+
+  /* 焦点：去掉默认焦点框，统一由 bd.base 画聚焦光晕 */
+  :focus,
+  :focus-visible {
+    outline: none;
+  }
+
+  [hidden]:not([hidden='until-found']) {
+    display: none !important;
+  }
+}

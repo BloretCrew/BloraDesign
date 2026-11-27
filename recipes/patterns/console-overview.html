@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blora Cloud · 总览</title>
+    <!-- 第 ① 阶段验收页：只用框架拼出控制台「总览」的骨架（外壳、侧栏、顶栏、页头、拼图、格子标题、托盘）。
+         格子里的组件（指标、图表、按钮、分段控件…）在第 ② 阶段补上，这里先用文字占位。 -->
+    <link rel="stylesheet" href="../../packages/blora-design/dist/blora.css" />
+    <script type="module" src="../../packages/blora-design/dist/blora.js"></script>
+  </head>
+  <body>
+    <div class="bd-app">
+      <nav class="bd-rail" aria-label="主导航">
+        <a data-part="brand" href="#">
+          <span data-part="logo">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <circle
+                cx="10"
+                cy="10"
+                r="7"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-dasharray="34.98 9"
+                stroke-linecap="round"
+                transform="rotate(-4 10 10)"
+              />
+              <circle cx="10" cy="10" r="2.6" fill="currentColor" />
+              <circle cx="15.5" cy="5.2" r="1.8" fill="currentColor" />
+            </svg>
+          </span>
+          <span>Blora Cloud</span>
+        </a>
+
+        <p data-part="section">工作区</p>
+        <button type="button">
+          <svg data-icon viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"
+            />
+            <path
+              d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"
+            />
+            <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+            <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+          </svg>
+          <span>开始使用</span><span data-part="count">1/3</span>
+        </button>
+        <button type="button" aria-current="page">
+          <svg data-icon viewBox="0 0 24 24" aria-hidden="true">
+            <rect width="7" height="9" x="3" y="3" rx="1" />
+            <rect width="7" height="5" x="14" y="3" rx="1" />
+            <rect width="7" height="9" x="14" y="12" rx="1" />
+            <rect width="7" height="5" x="3" y="16" rx="1" />
+          </svg>
+          <span>总览</span>
+        </button>
+        <button type="button">
+          <svg data-icon viewBox="0 0 24 24" aria-hidden="true">
+            <rect width="20" height="8" x="2" y="2" rx="2" ry="2" />
+            <rect width="20" height="8" x="2" y="14" rx="2" ry="2" />
+            <line x1="6" x2="6.01" y1="6" y2="6" />
+            <line x1="6" x2="6.01" y1="18" y2="18" />
+          </svg>
+          <span>实例</span><span data-part="count">24</span>
+        </button>
+        <button type="button">
+          <svg data-icon viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+            />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          <span>设置</span>
+        </button>
+
+        <div data-part="foot">
+          <div data-part="note">团队版 · 本月用量 <data value="68">68%</data></div>
+          <button type="button" data-part="collapse" aria-expanded="true" aria-label="收起侧栏">
+            <svg data-icon viewBox="0 0 24 24" aria-hidden="true">
+              <rect width="18" height="18" x="3" y="3" rx="2" />
+              <path d="M9 3v18" />
+              <path d="m16 15-3-3 3-3" />
+            </svg>
+            <span>收起侧栏</span>
+          </button>
+        </div>
+      </nav>
+
+      <main class="bd-page">
+        <header class="bd-topbar">
+          <span>Blora Labs / <b>总览</b></span>
+        </header>
+
+        <header class="bd-tile" data-variant="page">
+          <p data-part="eyebrow">Overview</p>
+          <h1>早上好，Rhedar</h1>
+          <p>过去 7 天所有服务运行平稳，有 1 条告警待处理。</p>
+          <div data-part="end"></div>
+        </header>
+
+        <section class="bd-mosaic" data-cols="4">
+          <div class="bd-tile">在线实例 <data>24</data></div>
+          <div class="bd-tile">平均延迟 <data>11.8 ms</data></div>
+          <div class="bd-tile">请求量 <data>1.28 M</data></div>
+          <div class="bd-tile">本月费用 <data>¥3,420</data></div>
+        </section>
+
+        <section
+          class="bd-mosaic"
+          data-cols="2"
+          style="--bd-columns: minmax(0, 1.75fr) minmax(0, 1fr)"
+        >
+          <article class="bd-tile">
+            <header class="bd-head">
+              <h2>请求量</h2>
+              <p>过去 7 天 · 每日汇总</p>
+            </header>
+            <div data-grow></div>
+          </article>
+          <article class="bd-tile">
+            <header class="bd-head">
+              <h2>最近动态</h2>
+              <p>部署、告警与成员变更</p>
+            </header>
+            <ul class="bd-tray">
+              <li><b>web-edge-03</b> CPU 持续高于 90%<br />ap-sg-02 · 自动扩容已排队</li>
+              <li><b>api-gateway-01</b> 部署成功<br />提交 a3f9c21 · 用时 48 秒</li>
+              <li><b>林舟</b> 加入了工作区<br />角色：开发者 · 由宋晴邀请</li>
+              <li>访问密钥已自动轮换<br />下次轮换：12 月 2 日</li>
+            </ul>
+          </article>
+        </section>
+
+        <section class="bd-mosaic" data-cols="2" data-grow>
+          <article class="bd-tile">
+            <header class="bd-head">
+              <h2>负载最高的实例</h2>
+              <p>按当前 CPU 使用率排序</p>
+            </header>
+            <ul class="bd-tray">
+              <li>web-edge-03 <data>94%</data></li>
+              <li>search-indexer <data>81%</data></li>
+              <li>api-gateway-01 <data>76%</data></li>
+              <li>worker-batch-02 <data>63%</data></li>
+              <li>db-replica-02 <data>58%</data></li>
+            </ul>
+          </article>
+          <article class="bd-tile">
+            <header class="bd-head">
+              <h2>区域分布</h2>
+              <p>实例数量与平均延迟</p>
+              <div data-part="end"><span data-part="tag">4 regions</span></div>
+            </header>
+            <ul class="bd-tray">
+              <li>亚太 · 新加坡 <data>12 台</data></li>
+              <li>亚太 · 东京 <data>6 台</data></li>
+              <li>华东 · 上海 <data>4 台</data></li>
+              <li>美西 · 俄勒冈 <data>2 台</data></li>
+            </ul>
+          </article>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

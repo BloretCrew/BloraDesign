@@ -5,3 +5,8 @@ This product is licensed under the Apache License, Version 2.0 (see LICENSE).
 
 Colors come from Cortado (@bloret-crew/cortado, MIT), which is based on the
 Catppuccin palette (MIT, Copyright (c) 2021 Catppuccin).
+
+Bundled fonts (packages/blora-design/dist/fonts), licensed under the
+SIL Open Font License 1.1 (license texts ship next to the font files):
+- Inter, Copyright (c) 2016 The Inter Project Authors
+- JetBrains Mono, Copyright 2020 The JetBrains Mono Project Authors

@@ -1,0 +1,46 @@
+/*
+ * 托盘 bd-tray：三条及以上同类条目放进托盘。托盘 12 圆角、5 内缩，每个直接子元素是一个白色小格（7 圆角），小格之间 4px。
+ * 同心：12 − 5 = 7（DESIGN.md · Components · 托盘）
+ */
+@layer bd.layout {
+  .bd-tray {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bd-space-tray-gap);
+    min-width: 0;
+    padding: var(--bd-space-tray-padding);
+    border-radius: var(--bd-radius-tray);
+    background: var(--bd-tray);
+  }
+
+  .bd-tray[data-cols='2'] {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bd-tray > :not([data-part='thumb']) {
+    min-width: 0;
+    padding: var(--bd-space-cell-padding-y) var(--bd-space-cell-padding-x);
+    border-radius: var(--bd-radius-cell);
+    background: var(--bd-tile);
+    color: var(--bd-ink-secondary);
+    box-shadow: var(--bd-shadow-cell);
+  }
+
+  /* 紧凑变体：规格行、表格行 */
+  :is(.bd-tray[data-density='compact'], [data-density='compact'] .bd-tray)
+    > :not([data-part='thumb']) {
+    min-height: 32px;
+    padding: var(--bd-space-cell-dense-padding-y) var(--bd-space-cell-dense-padding-x);
+  }
+
+  @media (max-width: 640px) {
+    .bd-tray[data-cols='2'] {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .bd-tray > :not([data-part='thumb']) {
+      padding-inline: var(--bd-space-cell-dense-padding-x);
+    }
+  }
+}

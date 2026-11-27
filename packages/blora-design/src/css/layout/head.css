@@ -1,0 +1,104 @@
+/*
+ * 格子标题 bd-head：[编号] 标题 ……………… [右侧槽位]
+ *                        说明（与标题文字左对齐，缩进 32px）
+ * 编号由 CSS 计数器生成：每行第一个有标题的格子 01、02…，同一行其他格子 1B、1C…（DESIGN.md · Components · 格子标题语法）
+ */
+@layer bd.layout {
+  .bd-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 12px;
+    min-height: 26px;
+
+    > :is(h2, h3, h4) {
+      grid-column: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      font-size: var(--bd-text-tile-title-size);
+      font-weight: var(--bd-text-tile-title-weight);
+      line-height: var(--bd-text-tile-title-leading);
+      letter-spacing: var(--bd-text-tile-title-tracking);
+    }
+
+    > p {
+      grid-column: 1;
+      margin-top: 1px;
+      font-size: var(--bd-text-caption-size);
+      line-height: var(--bd-text-caption-leading);
+      color: var(--bd-ink-description);
+    }
+
+    > [data-part='end'] {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+  }
+
+  /* 格子右上的等宽标签（如 MTD · 5 ITEMS） */
+  [data-part='tag'] {
+    font-family: var(--bd-text-eyebrow-mono-family);
+    font-size: var(--bd-text-eyebrow-mono-size);
+    font-weight: var(--bd-text-eyebrow-mono-weight);
+    letter-spacing: var(--bd-text-eyebrow-mono-tracking);
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--bd-ink-quaternary);
+  }
+
+  /* ---- 编号 ---- */
+  .bd-mosaic:not([data-index='none']):has(.bd-head) {
+    counter-increment: bd-row;
+    counter-reset: bd-cell;
+  }
+
+  :is(.bd-mosaic, .bd-mosaic > .bd-stack) > .bd-tile:has(> .bd-head) {
+    counter-increment: bd-cell;
+  }
+
+  :is(
+      .bd-mosaic:not([data-index='none']) > .bd-tile,
+      .bd-mosaic:not([data-index='none']) > .bd-stack > .bd-tile
+    )
+    > .bd-head {
+    > :is(h2, h3, h4)::before {
+      content: counter(bd-row) counter(bd-cell, upper-alpha);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--bd-blush-soft);
+      font-family: var(--bd-text-index-mono-family);
+      font-size: var(--bd-text-index-mono-size);
+      font-weight: var(--bd-text-index-mono-weight);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: var(--bd-blush-ink);
+    }
+
+    > p {
+      padding-left: 32px;
+    }
+  }
+
+  /* 一行里第一个有标题的格子（可能在叠放组里）编 01、02… */
+  .bd-mosaic:not([data-index='none'])
+    > .bd-tile:not(:is(.bd-tile:has(> .bd-head), .bd-stack:has(> .bd-tile > .bd-head)) ~ *)
+    > .bd-head
+    > :is(h2, h3, h4)::before,
+  .bd-mosaic:not([data-index='none'])
+    > .bd-stack:not(:is(.bd-tile:has(> .bd-head), .bd-stack:has(> .bd-tile > .bd-head)) ~ *)
+    > .bd-tile:has(> .bd-head):not(.bd-tile:has(> .bd-head) ~ *)
+    > .bd-head
+    > :is(h2, h3, h4)::before {
+    content: counter(bd-row, decimal-leading-zero);
+  }
+}

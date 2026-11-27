@@ -138,6 +138,7 @@ typography:
     fontSize: 14px
     fontWeight: 650
     lineHeight: 1.35
+    letterSpacing: -0.005em
   body:
     fontFamily: Inter
     fontSize: 14px
@@ -219,6 +220,31 @@ spacing:
   cell-dense-padding-x: 10px
   tile-dense-padding-x: 12px
   prose-measure: 720px
+# 以下三组是 Blora 的扩展（Google DESIGN.md 格式之外），同样由生成器输出为 --bd-* 变量
+fonts:
+  sans: Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif
+  mono: '"JetBrains Mono", "SF Mono", Menlo, Consolas, monospace'
+motion:
+  ease-out: cubic-bezier(0.22, 1, 0.36, 1)
+  ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1)
+  duration: 340ms
+  duration-pop: 260ms
+  duration-fade: 200ms
+  duration-hover: 150ms
+# 投影：{颜色 百分比} 会生成 color-mix(in srgb, <颜色> <百分比>, transparent)；颜色写 Cortado 色名或 colors 里的路径
+elevation:
+  light:
+    tile: 0 1px 2px {slate-780 4%}
+    cell: 0 1px 2px {slate-780 5%}
+    control: 0 1px 2.5px {slate-780 4.5%}
+    float: 0 14px 34px {slate-780 9%}, 0 2px 8px {slate-780 4%}
+    focus: 0 0 0 3px {blush.solid 22%}
+  dark:
+    tile: none
+    cell: none
+    control: 0 1px 3px {slate-815 24%}
+    float: 0 16px 38px {slate-815 46%}, 0 2px 8px {slate-815 26%}
+    focus: 0 0 0 3px {blush.solid 30%}
 components:
   tile:
     backgroundColor: '{colors.tile}'
@@ -379,7 +405,8 @@ Blora Design 的界面由一块块白色「格子」拼成，格子之间只留 
 
 - 标题字重 600–650，大数字 620，按钮 540。**字重上限 650，700 及以上一律不用**，满屏粗体是「粗糙感」的主要来源。
 - 所有会上下对比的数字都开 `tabular-nums`。
-- 中文段落不能以一两个字结尾（孤行）。浏览器自带的 `text-wrap: pretty` 对中文不生效，所以**运行时会把段落最后 5 个字绑在一起**（`bd-prose` 的段落、`bd-head` 的说明、卡片说明）；标题用 `text-wrap: balance`。业务不需要手动处理。
+- 行高：界面文字（导航、按钮、标签、说明）1.5，正文段落（`<p>`）1.55，长文 1.75。
+- 中文段落不能以一两个字结尾（孤行）。浏览器自带的 `text-wrap: pretty` 对中文不生效，所以**运行时会把段落最后 5 个字连在一起**（`bd-head` 的说明、页头说明、`bd-prose` 的段落，以及任何写了 `data-bd-tail` 的元素）：在这几个字之间插入不可见的连接符 U+2060，只改文字内容、不增删节点，不会和 Vue / React 冲突；复制出来的文字会带着这些不可见字符。标题用 `text-wrap: balance`。业务不需要手动处理。
 - 卡片里的说明文字尽量一行，最多两行；同一行的几张卡，说明要么都是一行，要么都是两行。
 - 字体随框架提供（Inter、JetBrains Mono），不依赖用户电脑上装了什么。
 
@@ -458,7 +485,20 @@ Blora Design 的界面由一块块白色「格子」拼成，格子之间只留 
 
 ### 响应式
 
-- ≥1281：完整布局。≤1280：侧栏自动收起，次要侧栏可隐藏。≤1100：双栏表单类行改为上下排列。≤900：顶部导航替代侧栏。≤640：全部单列。
+- ≥1281：完整布局。≤1280：侧栏自动收起，次要侧栏可隐藏。≤1100：双栏表单类行改为上下排列。≤900：侧栏变成顶栏下方的横向导航条。≤640：页面边距 8、格子内边距 16。
+- `bd-mosaic` 的列数随宽度自动减少，圆角随之重新分配：
+
+  | `data-cols` | 桌面 | ≤1100 | ≤900  | ≤640  |
+  | ----------- | ---- | ----- | ----- | ----- |
+  | 1           | 1    | 1     | 1     | 1     |
+  | 2           | 2    | 2     | 1     | 1     |
+  | 3           | 3    | 3     | 1     | 1     |
+  | 4           | 4    | 2 × 2 | 2 × 2 | 2 × 2 |
+  | 5           | 5    | 3     | 2     | 1     |
+  | 6           | 6    | 3     | 2     | 2     |
+
+  指标行（4 列）在手机上保持 2 × 2，其余行在 ≤900 变成单列。
+
 - 改成单列后重新检查空白预算：并排时等量，不代表上下排时就不空。
 - 横向控件（如五段分段控件）放不下时，先去掉计数和内边距，不要换行，也不要让它溢出。
 
@@ -568,6 +608,62 @@ Blora Design 的界面由一块块白色「格子」拼成，格子之间只留 
 | 反馈与浮层 | `bd-toast`、`bd-alert`、`bd-tooltip`、`bd-popover`、`bd-popconfirm`、`bd-menu`、`bd-context`、`bd-modal`、`bd-drawer`、`bd-command`             | `.toast-stack`、`.alert-strip`、`.tip-card`、`.float-panel`、确认气泡、`.menu-opt`、右键菜单、`.modal-card`、`.drawer-panel`、命令面板                                |
 
 看板、收件箱、日程、设置页、套餐卡、文档阅读页是**模式**：由上面的组件拼成，仓库 `recipes/` 里有示例，不做成组件。新组件必须先设计、经确认写进本文，再实现。
+
+**设计变量的名字**（全部由本文 YAML 生成）：
+
+| YAML                    | CSS 变量                                                           | 例子                                              |
+| ----------------------- | ------------------------------------------------------------------ | ------------------------------------------------- |
+| `colors.<路径>`         | `--bd-<路径>`                                                      | `--bd-ink`、`--bd-blush-solid`、`--bd-on-primary` |
+| `rounded.<名>`          | `--bd-radius-<名>`                                                 | `--bd-radius-tile`、`--bd-radius-cell`            |
+| `spacing.<名>`          | `--bd-space-<名>`                                                  | `--bd-space-seam`、`--bd-space-group`             |
+| `typography.<角色>`     | `--bd-text-<角色>-size / -weight / -leading / -tracking / -family` | `--bd-text-caption-size`                          |
+| `fonts.<名>`            | `--bd-font-<名>`                                                   | `--bd-font-sans`、`--bd-font-mono`                |
+| `motion.<名>`           | `--bd-<名>`                                                        | `--bd-ease-out`、`--bd-duration`                  |
+| `elevation.<模式>.<名>` | `--bd-shadow-<名>`                                                 | `--bd-shadow-tile`、`--bd-shadow-focus`           |
+
+### 外壳与构图
+
+```html
+<div class="bd-app">
+  <nav class="bd-rail" aria-label="主导航">
+    <a data-part="brand" href="/"
+      ><span data-part="logo"><svg>…</svg></span><span>Blora Cloud</span></a
+    >
+    <p data-part="section">工作区</p>
+    <a href="/overview" aria-current="page"><svg data-icon>…</svg><span>总览</span></a>
+    <a href="/instances"
+      ><svg data-icon>…</svg><span>实例</span><span data-part="count">24</span></a
+    >
+    <div data-part="foot">
+      <div data-part="note">团队版 · 本月用量 <data>68%</data></div>
+      <button type="button" data-part="collapse" aria-expanded="true" aria-label="收起侧栏">
+        <svg data-icon>…</svg><span>收起侧栏</span>
+      </button>
+    </div>
+  </nav>
+  <main class="bd-page">
+    <header class="bd-topbar">
+      …
+      <div data-part="end">…</div>
+    </header>
+    <header class="bd-tile" data-variant="page">
+      <p data-part="eyebrow">Overview</p>
+      <h1>早上好，Rhedar</h1>
+      <p>过去 7 天所有服务运行平稳。</p>
+      <div data-part="end">…本页操作…</div>
+    </header>
+    <section class="bd-mosaic" data-cols="2" style="--bd-columns: minmax(0, 1.75fr) minmax(0, 1fr)">
+      …
+    </section>
+  </main>
+</div>
+```
+
+- **侧栏**：导航项是 `bd-rail` 里没有 `data-part` 的 `<a>` / `<button>`，当前项写 `aria-current="page"`。链接的 `aria-current` 由页面或路由设置；按钮型导航项由运行时在点击时切换（加 `data-bd-controlled` 则只发 `bd-change` 事件）。收起状态写在收起按钮的 `aria-expanded` 上，运行时会记住用户的选择；≤1280 自动收起、不能手动展开；≤900 同一份标记变成横向导航条，不需要另写移动端导航。
+- **拼图**：`data-cols` 1–6 决定列数，`--bd-columns` 只在桌面列数下生效，用来设定列宽比例。`data-grow` 让这一行撑满剩余高度（只用于弹性内容），`data-align="start"` 让格子顶部对齐、底边参差（看板），`data-index="none"` 让这一行不编号（同类卡片）。上下叠放的格子用 `bd-stack` 包起来放进拼图，最后一个格子吃掉剩余高度。
+- **格子**：`data-grow` 的子元素跟随格子长高；`data-part="foot"` 的子元素固定在底部；`data-density="compact"` 用紧凑内边距（可写在格子或任意祖先上）。
+- **托盘**：`bd-tray` 的每个直接子元素是一个小格；`data-cols="2"` 排成两列（≤640 变回一列）；`data-density="compact"` 用紧凑小格。
+- **滚动区域**：固定高度、需要滚动的区域写 `bd-scroll`，运行时画滚动滑块；整个页面的滚动滑块自动出现。
 
 ### 不出现原生控件
 

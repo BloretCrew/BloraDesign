@@ -2,3 +2,6 @@ pnpm-lock.yaml
 dist/
 reference/
 LICENSE
+test-results/
+playwright-report/
+packages/*/src/css/generated/

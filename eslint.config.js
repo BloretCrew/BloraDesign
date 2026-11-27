@@ -13,4 +13,11 @@ export default tseslint.config(
       'no-alert': 'error',
     },
   },
+  {
+    // 测试代码：DOM 查询的结果由测试断言兜底，允许非空断言
+    files: ['tests/**'],
+    rules: {
+      '@typescript-eslint/no-non-null-assertion': 'off',
+    },
+  },
 );

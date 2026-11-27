@@ -29,5 +29,14 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      # 构建 → 代码检查（JS、CSS、DESIGN.md、格式）→ 类型检查 → 测试
+      - name: 安装 Playwright 的 Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      # 构建 → 代码检查（JS、CSS、DESIGN.md、格式）→ 类型检查 → 单元测试 → 浏览器测试（与参考页比对、运行时行为）
       - run: pnpm verify
+      - name: 失败时上传浏览器测试结果
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: playwright-node-${{ matrix.node }}
+          path: test-results/
+          retention-days: 7

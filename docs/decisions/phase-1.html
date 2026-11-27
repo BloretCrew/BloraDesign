@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>第 ① 阶段待定：主按钮对比度、字体</title>
+    <link rel="stylesheet" href="../../packages/blora-design/dist/blora.css" />
+    <script type="module" src="../../packages/blora-design/dist/blora.js"></script>
+    <style>
+      /* 决策页专用的临时样式：按钮组件第 ② 阶段才有，这里只画出外观用来比较 */
+      .opt {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .opt-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .btn {
+        height: 35px;
+        padding: 0 13px;
+        border-radius: 999px;
+        font-size: 13.5px;
+        font-weight: 540;
+        display: inline-flex;
+        align-items: center;
+      }
+      .cr {
+        font-family: var(--bd-font-mono);
+        font-size: 12px;
+        color: var(--bd-ink-tertiary);
+      }
+      .cr b {
+        color: var(--bd-ink);
+        font-weight: 600;
+      }
+      .system {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+          sans-serif;
+      }
+      .system data,
+      .system [data-part='tag'] {
+        font-family: 'SF Mono', Menlo, Consolas, monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="bd-page" style="max-width: 1200px; margin: 12px auto; padding: 0 12px">
+      <header class="bd-tile" data-variant="page">
+        <p data-part="eyebrow">Phase 1 · decisions</p>
+        <h1>第 ① 阶段待定的两件事</h1>
+        <p>主按钮的文字对比度，以及字体用打包的 Inter 还是系统字体。选定后写进 DESIGN.md。</p>
+      </header>
+
+      <section class="bd-mosaic" data-cols="4">
+        <article class="bd-tile opt">
+          <header class="bd-head">
+            <h2>A · 现状</h2>
+            <p>雾粉实色底 + 白字</p>
+          </header>
+          <div class="opt-row">
+            <span class="btn" style="background: var(--bd-blush-solid); color: var(--bd-on-primary)"
+              >新建实例</span
+            >
+            <span class="cr">对比度 <b>2.64</b> : 1</span>
+          </div>
+          <p class="cr">不达 WCAG AA（4.5）</p>
+        </article>
+        <article class="bd-tile opt">
+          <header class="bd-head">
+            <h2>B · 深墨字</h2>
+            <p>底色不变，字改成墨色</p>
+          </header>
+          <div class="opt-row">
+            <span class="btn" style="background: var(--bd-blush-solid); color: var(--bd-ink)"
+              >新建实例</span
+            >
+            <span class="cr">对比度 <b>5.32</b> : 1</span>
+          </div>
+          <p class="cr">达标；雾粉保持原样</p>
+        </article>
+        <article class="bd-tile opt">
+          <header class="bd-head">
+            <h2>C · 加深底色</h2>
+            <p>底色加深到白字达标</p>
+          </header>
+          <div class="opt-row">
+            <span class="btn" style="background: #a9645a; color: #fff">新建实例</span>
+            <span class="cr">对比度 <b>4.5</b> : 1</span>
+          </div>
+          <p class="cr">达标；需要在 Cortado 新增一档，偏棕</p>
+        </article>
+        <article class="bd-tile opt">
+          <header class="bd-head">
+            <h2>D · 柔和主按钮</h2>
+            <p>雾粉浅底 + 雾粉墨字</p>
+          </header>
+          <div class="opt-row">
+            <span class="btn" style="background: var(--bd-blush-fill); color: var(--bd-blush-ink)"
+              >新建实例</span
+            >
+            <span class="cr">对比度 <b>5.00</b> : 1</span>
+          </div>
+          <p class="cr">达标；和现在的次主按钮一样，需要另定次主</p>
+        </article>
+      </section>
+
+      <section class="bd-mosaic" data-cols="2">
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>打包字体 · Inter + JetBrains Mono</h2>
+            <p>DESIGN.md 现在的写法；所有电脑上看起来一样</p>
+            <div data-part="end"><span data-part="tag">4 regions</span></div>
+          </header>
+          <ul class="bd-tray">
+            <li>web-edge-03 CPU 持续高于 90% <data>94%</data></li>
+            <li>api-gateway-01 部署成功 · 用时 48 秒 <data>¥3,420.00</data></li>
+            <li>Blora Cloud 团队版 · 本月用量 <data>1.28 M</data></li>
+          </ul>
+        </article>
+        <article class="bd-tile system">
+          <header class="bd-head">
+            <h2>系统字体 · 苹方 / SF（Windows 上是微软雅黑 / Segoe）</h2>
+            <p>你之前看到的参考页其实是这一种（本机没装 Inter）</p>
+            <div data-part="end"><span data-part="tag">4 regions</span></div>
+          </header>
+          <ul class="bd-tray">
+            <li>web-edge-03 CPU 持续高于 90% <data>94%</data></li>
+            <li>api-gateway-01 部署成功 · 用时 48 秒 <data>¥3,420.00</data></li>
+            <li>Blora Cloud 团队版 · 本月用量 <data>1.28 M</data></li>
+          </ul>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

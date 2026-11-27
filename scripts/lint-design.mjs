@@ -1,11 +1,15 @@
 // 运行 Google design.md lint，只输出摘要。
-// 允许的已知警告：orphaned-tokens（颜色用于圆点、细缝等，不被 components 引用）和主按钮对比度（DESIGN.md · Colors · 已知问题）。
+// 允许的已知警告：orphaned-tokens（颜色用于圆点、细缝等，不被 components 引用）、主按钮对比度（DESIGN.md · Colors · 已知问题），
+// 以及 Blora 自己的扩展键（cortado、fonts、motion、elevation）被标记为「不认识的键」。
 // 出现错误或其他警告时退出码为 1。
 import { execFileSync } from 'node:child_process';
 
 const ALLOWED = [
   (f) => f.rule === 'orphaned-tokens',
   (f) => f.rule === 'contrast-ratio' && f.path === 'components.button-primary',
+  (f) =>
+    f.rule === 'token-like-ignored' &&
+    ['cortado', 'fonts', 'motion', 'elevation'].includes(f.path?.split('.')[0]),
 ];
 
 let out;

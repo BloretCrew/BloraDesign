@@ -1,3 +1,4 @@
 {
-  "extends": ["@bloret-crew/stylelint-config-blora"]
+  "extends": ["@bloret-crew/stylelint-config-blora"],
+  "ignoreFiles": ["packages/*/src/css/generated/**"]
 }

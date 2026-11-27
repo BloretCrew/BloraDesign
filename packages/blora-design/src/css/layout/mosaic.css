@@ -1,0 +1,152 @@
+/*
+ * 拼图 bd-mosaic：一行格子，6px 细缝。列数 data-cols（1–6），列宽比例 --bd-columns（如 1.75fr 1fr）。
+ * 各列数在各断点下的列模板和圆角分配由 generated/mosaic.css 生成（DESIGN.md · Layout · 网格与细缝）。
+ * 格子 bd-tile 按自己在拼图里的位置读 --bd-corner-*：两侧都没有相邻格子的角是外角 20，否则是缝角 6。
+ */
+@layer bd.layout {
+  .bd-mosaic {
+    display: grid;
+    gap: var(--bd-space-seam);
+    min-width: 0;
+  }
+
+  /* 只有图表、时间网格、滚动列表这类「弹性内容」所在的行可以铺满高度（DESIGN.md · Layout · 铺满高度） */
+  .bd-mosaic[data-grow] {
+    flex: 1 1 auto;
+  }
+
+  /* 数据决定长度的内容（看板）：顶部对齐、底边参差 */
+  .bd-mosaic[data-align='start'] {
+    align-items: start;
+  }
+
+  /* 上下叠放的格子：和一行并排，最后一个吃掉剩余高度，底边与整行对齐 */
+  .bd-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bd-space-seam);
+    min-width: 0;
+  }
+
+  .bd-stack > * {
+    flex: 0 0 auto;
+  }
+
+  .bd-stack > :last-child {
+    flex: 1 1 auto;
+  }
+
+  .bd-stack > :where(:not(:first-child)) {
+    --bd-corner-tl: var(--bd-radius-seam);
+    --bd-corner-tr: var(--bd-radius-seam);
+  }
+
+  .bd-stack > :where(:not(:last-child)) {
+    --bd-corner-bl: var(--bd-radius-seam);
+    --bd-corner-br: var(--bd-radius-seam);
+  }
+
+  /* ---- 格子 ---- */
+  .bd-tile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bd-space-tile-gap);
+    min-width: 0;
+    padding: var(--bd-space-tile-padding-y) var(--bd-space-tile-padding-x);
+    border-radius: var(--bd-corner-tl, var(--bd-radius-tile))
+      var(--bd-corner-tr, var(--bd-radius-tile)) var(--bd-corner-br, var(--bd-radius-tile))
+      var(--bd-corner-bl, var(--bd-radius-tile));
+    background: var(--bd-tile);
+    color: var(--bd-ink);
+    box-shadow: var(--bd-shadow-tile);
+  }
+
+  /* 固定高度的 flex 容器里，子元素不被压扁（DESIGN.md · Layout · 数据决定长度的内容） */
+  .bd-tile > * {
+    flex-shrink: 0;
+  }
+
+  /* 格子里可以跟随格子长高的弹性内容：图表、时间网格、滚动视口 */
+  .bd-tile > [data-grow] {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  /* 收束元素：固定在格子底部（DESIGN.md · Layout · 内容等量原则 4） */
+  .bd-tile > [data-part='foot'] {
+    margin-top: auto;
+  }
+
+  .bd-tile[data-density='compact'],
+  [data-density='compact'] .bd-tile {
+    padding-inline: var(--bd-space-tile-dense-padding-x);
+  }
+
+  /* ---- 页头格 ---- */
+  .bd-tile[data-variant='page'] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0 16px;
+    padding: 16px 20px;
+
+    > :not([data-part='end']) {
+      grid-column: 1;
+    }
+
+    > [data-part='end'] {
+      grid-column: 2;
+      grid-row: 1 / span 3;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    > [data-part='eyebrow'] {
+      margin-bottom: 4px;
+      font-family: var(--bd-text-eyebrow-mono-family);
+      font-size: var(--bd-text-eyebrow-mono-size);
+      font-weight: var(--bd-text-eyebrow-mono-weight);
+      letter-spacing: var(--bd-text-eyebrow-mono-tracking);
+      line-height: 1.5;
+      text-transform: uppercase;
+      color: var(--bd-ink-quaternary);
+    }
+
+    > :is(h1, h2) {
+      font-size: var(--bd-text-page-title-size);
+      font-weight: var(--bd-text-page-title-weight);
+      line-height: var(--bd-text-page-title-leading);
+      letter-spacing: var(--bd-text-page-title-tracking);
+    }
+
+    > :is(h1, h2) + p {
+      margin-top: 2px;
+      font-size: var(--bd-text-description-size);
+      line-height: 1.5;
+      color: var(--bd-ink-description);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .bd-tile {
+      padding: 16px;
+    }
+
+    .bd-tile[data-variant='page'] {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 14px 16px;
+
+      > [data-part='end'] {
+        grid-column: 1;
+        grid-row: auto;
+        margin-top: 12px;
+      }
+
+      > :is(h1, h2) {
+        font-size: 19px;
+      }
+    }
+  }
+}

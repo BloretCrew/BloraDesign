@@ -1,0 +1,102 @@
+/*
+ * 应用外壳：bd-app = 侧栏 bd-rail + 主区 bd-page（顶栏 bd-topbar + 一串行 bd-mosaic）
+ * DESIGN.md · Layout · 网格与细缝、响应式
+ */
+@layer bd.layout {
+  .bd-app {
+    --bd-rail-width: 208px;
+    --bd-rail-collapsed: 64px;
+
+    display: grid;
+    grid-template-columns: var(--bd-rail-width) minmax(0, 1fr);
+    column-gap: var(--bd-space-seam);
+    align-items: start;
+    max-width: 1760px;
+    margin: 12px auto;
+    padding: 0 12px;
+    counter-reset: bd-row;
+    transition: grid-template-columns var(--bd-duration) var(--bd-ease-out);
+  }
+
+  /* 用户收起侧栏：收起按钮 aria-expanded="false" */
+  .bd-app:has(> .bd-rail [data-part='collapse'][aria-expanded='false']) {
+    grid-template-columns: var(--bd-rail-collapsed) minmax(0, 1fr);
+  }
+
+  /* 主区：顶栏、页头和各行纵向排列，至少和侧栏一样高，data-grow 的行撑满剩余高度 */
+  .bd-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bd-space-seam);
+    min-width: 0;
+    min-height: calc(100dvh - 24px);
+    counter-reset: bd-row;
+  }
+
+  .bd-topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 64px;
+    padding: 8px 8px 8px 18px;
+    border-radius: var(--bd-radius-tile);
+    background: var(--bd-tile);
+    box-shadow: var(--bd-shadow-tile);
+  }
+
+  .bd-topbar > [data-part='end'] {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+  }
+
+  /* ≤1280：侧栏自动收起 */
+  @media (max-width: 1280px) {
+    .bd-app {
+      grid-template-columns: var(--bd-rail-collapsed) minmax(0, 1fr);
+    }
+  }
+
+  /* ≤900：侧栏变成顶栏下方的横向导航条；主区拆开，顶栏、导航条、各行按顺序排 */
+  @media (max-width: 900px) {
+    .bd-app {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--bd-space-seam);
+      min-height: calc(100dvh - 20px);
+      margin: 10px auto;
+      padding: 0 10px;
+    }
+
+    .bd-app > .bd-page {
+      display: contents;
+    }
+
+    .bd-app .bd-topbar {
+      order: -2;
+    }
+
+    .bd-app > .bd-rail {
+      order: -1;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .bd-app {
+      min-height: calc(100dvh - 16px);
+      margin: 8px auto;
+      padding: 0 8px;
+    }
+
+    .bd-page {
+      min-height: calc(100dvh - 16px);
+    }
+
+    .bd-topbar {
+      min-height: 50px;
+      padding: 8px 8px 8px 16px;
+    }
+  }
+}

@@ -1,0 +1,55 @@
+/*
+ * bd.motion：选中滑块、首屏不播放过渡、减少动效（DESIGN.md · Motion & Micro-interaction）
+ */
+@layer bd.motion {
+  /* 单选组的选中底：一块独立的滑块，选中项变化时连续滑过去。由运行时插入并定位 */
+  [data-part='glide'] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    opacity: 0;
+    pointer-events: none;
+    background: var(--bd-glide-bg, var(--bd-blush-soft));
+    box-shadow: var(--bd-glide-shadow, none);
+    transition:
+      transform var(--bd-duration) var(--bd-ease-out),
+      width var(--bd-duration) var(--bd-ease-out),
+      height var(--bd-duration) var(--bd-ease-out),
+      border-radius var(--bd-duration) var(--bd-ease-out),
+      opacity var(--bd-duration-fade) ease;
+    will-change: transform;
+  }
+
+  :where(:has(> [data-part='glide'])) {
+    isolation: isolate;
+  }
+
+  :where(:has(> [data-part='glide'])) > :where(:not([data-part='glide'], [data-part='thumb'])) {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* 有滑块时，选中项自己的底色让给滑块 */
+  :where(:has(> [data-part='glide'])) > [data-glide-on] {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  /* 首屏、恢复保存的状态时不播放过渡（运行时在两帧内加上再去掉） */
+  [data-bd-instant],
+  [data-bd-instant] *,
+  [data-bd-instant] *::before,
+  [data-bd-instant] *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  /* 减少动效：位移和缩放全部取消，只保留颜色和透明度变化 */
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --bd-duration: 0.01ms;
+      --bd-duration-pop: 0.01ms;
+    }
+  }
+}

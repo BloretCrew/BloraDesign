@@ -1,0 +1,71 @@
+/*
+ * 滚动 bd-scroll：原生滚动条在 bd.reset 里全部隐藏，滚动指示由运行时画的细滑块代替（DESIGN.md · 不出现原生控件 · 滚动条）。
+ * 滚动本身仍是原生的：触控板惯性、键盘、无障碍都不受影响。整个页面的滚动条由运行时自动接管。
+ */
+@layer bd.layout {
+  .bd-scroll {
+    position: relative;
+    min-height: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  [data-part='thumb'] {
+    position: absolute;
+    top: 0;
+    right: 3px;
+    z-index: 5;
+    width: 4px;
+    min-height: 24px;
+    border-radius: var(--bd-radius-pill);
+    background: color-mix(in srgb, var(--bd-ink-quaternary) 75%, transparent);
+    opacity: 0;
+    transition:
+      opacity var(--bd-duration-fade) ease,
+      width var(--bd-duration-hover) ease,
+      background-color var(--bd-duration-hover) ease;
+    touch-action: none;
+  }
+
+  [data-part='thumb'][data-axis='x'] {
+    top: auto;
+    right: auto;
+    bottom: 3px;
+    left: 0;
+    width: auto;
+    min-width: 24px;
+    height: 4px;
+    min-height: 0;
+    transition:
+      opacity var(--bd-duration-fade) ease,
+      height var(--bd-duration-hover) ease,
+      background-color var(--bd-duration-hover) ease;
+  }
+
+  /* 页面级：固定在视口右侧 */
+  [data-part='thumb'][data-scope='page'] {
+    position: fixed;
+    z-index: 900;
+  }
+
+  [data-part='thumb'][data-state~='visible'] {
+    opacity: 1;
+  }
+
+  [data-part='thumb']:hover,
+  [data-part='thumb'][data-state~='dragging'] {
+    width: 6px;
+    background: var(--bd-ink-tertiary);
+  }
+
+  [data-part='thumb'][data-axis='x']:hover,
+  [data-part='thumb'][data-axis='x'][data-state~='dragging'] {
+    width: auto;
+    height: 6px;
+  }
+
+  /* 内容不需要滚动时不显示 */
+  [data-part='thumb'][data-state~='idle'] {
+    display: none;
+  }
+}
