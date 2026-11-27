@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>数据展示 · Blora Design</title>
+    <link rel="stylesheet" href="../../packages/blora-design/dist/blora.css" />
+    <script type="module" src="../../packages/blora-design/dist/blora.js"></script>
+  </head>
+  <body>
+    <main class="bd-page" style="max-width: 1200px; margin: 12px auto; padding: 0 12px">
+      <section class="bd-mosaic" data-cols="4">
+        <article class="bd-tile" data-variant="metric">
+          <p data-part="label">在线实例</p>
+          <span data-part="icon"
+            ><svg data-icon width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+              <rect width="20" height="8" x="2" y="2" rx="2" />
+              <rect width="20" height="8" x="2" y="14" rx="2" /></svg
+          ></span>
+          <p data-part="value">24</p>
+          <p data-part="foot"><span data-part="delta">+2</span>本周新增</p>
+        </article>
+        <article class="bd-tile" data-variant="metric">
+          <p data-part="label">平均延迟</p>
+          <span data-part="icon" data-tone="sand"
+            ><svg data-icon width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m12 14 4-4" />
+              <path d="M3.34 19a10 10 0 1 1 17.32 0" /></svg
+          ></span>
+          <p data-part="value">11.8<small>ms</small></p>
+          <p data-part="foot"><span data-part="delta">↓ 1.2 ms</span>较上周</p>
+        </article>
+        <article class="bd-tile" data-variant="metric">
+          <p data-part="label">接近上限</p>
+          <div
+            class="bd-ring"
+            aria-label="配额使用率"
+            aria-valuenow="92"
+            aria-valuemax="100"
+            id="ring-near"
+          ></div>
+          <p data-part="value">920<small>GB</small></p>
+          <p data-part="foot">配额 1 TB</p>
+        </article>
+        <article class="bd-tile" data-variant="metric">
+          <p data-part="label">本月费用</p>
+          <div
+            class="bd-ring"
+            aria-label="预算使用率"
+            aria-valuenow="68"
+            aria-valuemax="100"
+            id="ring"
+          ></div>
+          <p data-part="value">¥3,420</p>
+          <div data-part="foot" style="flex-direction: column; align-items: stretch; gap: 5px">
+            <div class="bd-progress" aria-label="预算使用率" aria-valuenow="68" id="progress"></div>
+            <span>预算 ¥5,000 · 已用 68%</span>
+          </div>
+        </article>
+      </section>
+      <section
+        class="bd-mosaic"
+        data-cols="2"
+        style="--bd-columns: minmax(0, 1.6fr) minmax(0, 1fr)"
+      >
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>连贯选中数据表</h2>
+            <p>相邻多选行自动连成整体色面，无行间横线</p>
+          </header>
+          <div class="bd-bulk" data-for="nodes" id="bulk">
+            <span>已连贯选中 <span data-part="count">2</span> 个星轨节点</span>
+            <span style="display: flex; gap: 6px">
+              <button type="button" class="bd-button" data-variant="elevated" data-size="sm">
+                批量热迁移
+              </button>
+              <button
+                type="button"
+                class="bd-button"
+                data-variant="ghost"
+                data-size="sm"
+                data-part="clear"
+              >
+                清空选择
+              </button>
+            </span>
+          </div>
+          <table class="bd-table" id="nodes">
+            <thead>
+              <tr>
+                <th><input type="checkbox" class="bd-checkbox" aria-label="全选" /></th>
+                <th>实例节点</th>
+                <th>状态</th>
+                <th>星轨扇区</th>
+                <th data-align="end" aria-sort="none"><button type="button">轨道延迟</button></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <input
+                    type="checkbox"
+                    class="bd-checkbox"
+                    aria-label="选择 app-node-alpha"
+                    checked
+                  />
+                </td>
+                <td style="font-weight: 580">app-node-alpha</td>
+                <td><span class="bd-pill" data-tone="sand">畅通</span></td>
+                <td>
+                  <code style="font-size: 12px; color: var(--bd-ink-secondary)">ap-hk-01</code>
+                </td>
+                <td data-align="end"><code style="font-size: 12.5px">11 ms</code></td>
+              </tr>
+              <tr>
+                <td>
+                  <input
+                    type="checkbox"
+                    class="bd-checkbox"
+                    aria-label="选择 api-gateway-01"
+                    checked
+                  />
+                </td>
+                <td style="font-weight: 580">api-gateway-01</td>
+                <td><span class="bd-pill" data-tone="sand">畅通</span></td>
+                <td>
+                  <code style="font-size: 12px; color: var(--bd-ink-secondary)">ap-hk-01</code>
+                </td>
+                <td data-align="end"><code style="font-size: 12.5px">14 ms</code></td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="checkbox" class="bd-checkbox" aria-label="选择 auth-service-04" />
+                </td>
+                <td style="font-weight: 580">auth-service-04</td>
+                <td><span class="bd-pill" data-tone="blush">同步中</span></td>
+                <td>
+                  <code style="font-size: 12px; color: var(--bd-ink-secondary)">ap-tyo-02</code>
+                </td>
+                <td data-align="end"><code style="font-size: 12.5px">26 ms</code></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="bd-checkbox" aria-label="选择 web-edge-03" /></td>
+                <td style="font-weight: 580">web-edge-03</td>
+                <td><span class="bd-pill" data-tone="rose">待轮换</span></td>
+                <td>
+                  <code style="font-size: 12px; color: var(--bd-ink-secondary)">ap-sg-02</code>
+                </td>
+                <td data-align="end"><code style="font-size: 12.5px">34 ms</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>连贯多选列表</h2>
+            <p>相邻项自动无缝拼接</p>
+          </header>
+          <ul
+            class="bd-list"
+            role="listbox"
+            aria-multiselectable="true"
+            aria-label="服务"
+            id="list"
+          >
+            <li role="option" aria-selected="true">
+              核心调度服务<span data-part="meta">v2.4</span>
+            </li>
+            <li role="option" aria-selected="true">
+              边缘路由网关<span data-part="meta">v1.9</span>
+            </li>
+            <li role="option" aria-selected="false">
+              身份认证中心<span data-part="meta">v3.1</span>
+            </li>
+            <li role="option" aria-selected="true">
+              动态快照归档<span data-part="meta">v1.6</span>
+            </li>
+          </ul>
+        </article>
+      </section>
+      <section class="bd-mosaic" data-cols="3">
+        <article class="bd-tile">
+          <span class="bd-corner"></span>
+          <header class="bd-head">
+            <h2>团队版</h2>
+            <p>推荐：规格行与角落几何线</p>
+          </header>
+          <dl class="bd-spec" id="spec">
+            <div>
+              <dt>实例</dt>
+              <dd>1 · 共享 CPU</dd>
+            </div>
+            <div>
+              <dt>构建</dt>
+              <dd>100 分钟 / 月</dd>
+            </div>
+            <div>
+              <dt>日志保留</dt>
+              <dd>1 天</dd>
+            </div>
+            <div>
+              <dt>支持</dt>
+              <dd>社区论坛</dd>
+            </div>
+          </dl>
+        </article>
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>常见问题</h2>
+            <p>展开时高度连续过渡</p>
+          </header>
+          <div class="bd-accordion" id="acc">
+            <details open>
+              <summary>
+                <span>为什么瓷砖外角 20px，而缝角只有 6px？</span
+                ><svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </summary>
+              <div><p>一组的外侧用大圆角包住，相邻处收成小圆角加 6px 窄缝。</p></div>
+            </details>
+            <details>
+              <summary>
+                <span>圆弧星轨几何如何兼顾识别度与柔和感？</span
+                ><svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </summary>
+              <div><p>全部圆弧均采用圆头笔触，搭配低饱和雾粉与暖杏色阶。</p></div>
+            </details>
+          </div>
+        </article>
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>空状态与骨架屏</h2>
+            <p>高度与它替代的内容相同</p>
+          </header>
+          <div class="bd-empty" data-variant="inline" id="empty-inline">
+            <span data-part="icon"
+              ><svg
+                data-icon
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                style="color: var(--bd-blush-solid)"
+              >
+                <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
+                <path
+                  d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"
+                /></svg
+            ></span>
+            <span data-part="text"
+              ><b>暂无待审批的跨域迁移任务</b><span>所有边缘轨道配额均已自动平衡</span></span
+            >
+            <button type="button" class="bd-button" data-variant="elevated" data-size="sm">
+              立即巡检
+            </button>
+          </div>
+          <div class="bd-empty" id="empty">
+            <span data-part="icon"
+              ><svg data-icon width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" /></svg
+            ></span>
+            <p>没有找到匹配的实例</p>
+            <button type="button" class="bd-button" data-size="sm">清除筛选</button>
+          </div>
+          <span class="bd-skeleton" style="width: 72%"></span>
+          <span class="bd-skeleton" style="width: 48%"></span>
+        </article>
+      </section>
+      <section class="bd-mosaic" data-cols="1">
+        <article class="bd-tile">
+          <div class="bd-prose" id="prose">
+            <p data-part="lead">把自定义域名指向 Blora Cloud，需要先添加一条 CNAME 记录。</p>
+            <h2>添加 DNS 记录</h2>
+            <p>
+              在域名服务商的控制台里新建一条记录，类型选 <code>CNAME</code>，值填
+              <strong>edge.blora.app</strong>。
+            </p>
+            <ol>
+              <li>登录域名服务商控制台</li>
+              <li>新建 CNAME 记录</li>
+            </ol>
+            <aside>
+              <span class="bd-pill" data-tone="blush">提示</span>
+              <p>记录生效通常需要几分钟，最长 48 小时。</p>
+            </aside>
+            <figure class="bd-code" id="code">
+              <figcaption>
+                <span>bash</span
+                ><button
+                  type="button"
+                  class="bd-button"
+                  data-variant="ghost"
+                  data-size="sm"
+                  data-part="copy"
+                >
+                  <svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></svg
+                  ><span>复制</span>
+                </button>
+              </figcaption>
+              <pre><span data-tone="comment"># 应该返回 edge.blora.app.</span>
+<span data-part="prompt">$ </span>dig +short app.example.com CNAME</pre>
+            </figure>
+          </div>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

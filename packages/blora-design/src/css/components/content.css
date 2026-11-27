@@ -1,0 +1,218 @@
+/*
+ * 内容：代码块 bd-code、长文 bd-prose（含提示框）、手风琴 bd-accordion
+ */
+@layer bd.components {
+  /* ---- 代码块：12 圆角、凹槽底、右上角复制按钮 ---- */
+  .bd-code {
+    overflow: hidden;
+    border-radius: var(--bd-radius-control);
+    background: var(--bd-well);
+
+    > figcaption {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 5px 0 14px;
+      font-family: var(--bd-font-mono);
+      font-size: 11.5px;
+      color: var(--bd-ink-tertiary);
+    }
+
+    > figcaption .bd-button[data-variant='ghost']:hover {
+      background: var(--bd-slot);
+    }
+
+    > pre {
+      padding: 4px 14px 12px;
+      overflow-x: auto;
+      font-family: var(--bd-font-mono);
+      font-size: 12.5px;
+      line-height: 1.75;
+      color: var(--bd-ink);
+    }
+
+    > :first-child:is(pre) {
+      padding-top: 12px;
+    }
+
+    [data-tone='comment'] {
+      color: var(--bd-ink-quaternary);
+    }
+
+    [data-part='prompt'] {
+      color: var(--bd-blush-solid);
+      user-select: none;
+    }
+  }
+
+  /* ---- 长文阅读（DESIGN.md · Components · 长文阅读） ---- */
+  .bd-prose {
+    max-width: var(--bd-space-prose-measure);
+    font-size: var(--bd-text-prose-size);
+    line-height: var(--bd-text-prose-leading);
+    color: var(--bd-ink-prose);
+
+    > [data-part='lead'] {
+      margin-bottom: 14px;
+      font-size: 15px;
+      color: var(--bd-ink-secondary);
+    }
+
+    h2 {
+      margin: 28px 0 6px;
+      scroll-margin-top: 16px;
+      font-size: 17px;
+      font-weight: 620;
+      letter-spacing: -0.01em;
+      line-height: 1.5;
+      color: var(--bd-ink);
+    }
+
+    h3 {
+      margin: 18px 0 6px;
+      scroll-margin-top: 16px;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--bd-ink);
+    }
+
+    > :first-child {
+      margin-top: 0;
+    }
+
+    p {
+      margin: 0 0 10px;
+      line-height: inherit;
+    }
+
+    :is(ul, ol) {
+      margin: 0 0 10px;
+      padding-left: 22px;
+    }
+
+    ul {
+      list-style: disc;
+    }
+
+    ol {
+      list-style: decimal;
+    }
+
+    li {
+      margin: 4px 0;
+      padding-left: 4px;
+    }
+
+    li::marker {
+      color: var(--bd-blush-solid);
+    }
+
+    ol > li::marker {
+      font-family: var(--bd-font-mono);
+      font-size: 12.5px;
+      color: var(--bd-ink-tertiary);
+    }
+
+    strong {
+      font-weight: 600;
+      color: var(--bd-ink);
+    }
+
+    a {
+      color: var(--bd-blush-ink);
+      text-decoration: underline;
+      text-decoration-color: color-mix(in srgb, var(--bd-blush-solid) 40%, transparent);
+      text-underline-offset: 3px;
+    }
+
+    :not(pre) > code {
+      padding: 1px 5px;
+      border-radius: 5px;
+      background: var(--bd-well);
+      font-size: 0.86em;
+    }
+
+    > :is(.bd-code, aside, table) {
+      margin: 4px 0 14px;
+    }
+
+    /* 提示 / 注意框：浅底 + 开头一个状态标签，不用整块彩色底 */
+    aside {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--bd-radius-control);
+      background: var(--bd-tile-tint);
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: var(--bd-ink);
+    }
+
+    aside > .bd-pill {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    aside p {
+      margin: 0;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .bd-prose {
+      font-size: 14px;
+
+      > [data-part='lead'] {
+        font-size: 14.5px;
+      }
+    }
+  }
+
+  /* ---- 手风琴：<details>，展开时雾粉浅底，高度连续过渡（由运行时做） ---- */
+  .bd-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    > details {
+      overflow: hidden;
+      border-radius: var(--bd-radius-control);
+      background: var(--bd-well);
+      transition: background-color 0.22s ease;
+    }
+
+    > details[open] {
+      background: var(--bd-blush-soft);
+    }
+
+    summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 13px;
+      text-align: left;
+      font-size: 13.5px;
+      font-weight: 560;
+    }
+
+    details[open] > summary {
+      color: var(--bd-blush-ink);
+    }
+
+    summary > svg:last-child {
+      transition: transform 0.24s var(--bd-ease-out);
+    }
+
+    details[open] > summary > svg:last-child {
+      transform: rotate(180deg);
+    }
+
+    details > :not(summary) {
+      padding: 0 14px 11px;
+      font-size: 13px;
+      color: var(--bd-ink-description);
+    }
+  }
+}

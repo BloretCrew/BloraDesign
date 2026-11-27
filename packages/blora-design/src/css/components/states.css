@@ -1,0 +1,142 @@
+/*
+ * 状态与装饰：空状态 bd-empty、骨架屏 bd-skeleton、角落几何线 bd-corner
+ */
+@layer bd.components {
+  /* ---- 空状态：居中，36px 图标底 + 一行文字 + 一个操作（DESIGN.md · Components · 空状态） ---- */
+  .bd-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px 16px;
+    text-align: center;
+
+    > [data-part='icon'] {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--bd-radius-icon);
+      background: var(--bd-well);
+      color: var(--bd-ink-tertiary);
+    }
+
+    > p {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--bd-ink-description);
+    }
+
+    > b,
+    > strong {
+      font-size: 13px;
+      font-weight: 590;
+    }
+  }
+
+  /* 横排：凹槽底的卡片，左边图标和文字，右边操作 */
+  .bd-empty[data-variant='inline'] {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 14px;
+    background: var(--bd-well);
+    text-align: left;
+
+    > [data-part='icon'] {
+      width: 32px;
+      height: 32px;
+      background: var(--bd-control);
+    }
+
+    > [data-part='text'] {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    [data-part='text'] > b {
+      font-size: 13px;
+      font-weight: 590;
+    }
+
+    [data-part='text'] > span {
+      font-size: 12px;
+      color: var(--bd-ink-tertiary);
+    }
+  }
+
+  .bd-empty[data-variant='inline'] > [data-part='icon'] + [data-part='text'] {
+    margin-left: -1px;
+  }
+
+  @media (max-width: 640px) {
+    .bd-empty[data-variant='inline'] {
+      flex-wrap: wrap;
+      row-gap: 10px;
+    }
+  }
+
+  /* ---- 骨架屏 ---- */
+  .bd-skeleton {
+    display: block;
+    height: 12px;
+    border-radius: var(--bd-radius-pill);
+    background: var(--bd-slot);
+    animation: bd-pulse 1.4s ease-in-out infinite;
+  }
+
+  @keyframes bd-pulse {
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bd-skeleton {
+      animation: none;
+    }
+  }
+
+  /* ---- 角落几何线：格子右上角三道同心细弧 + 一颗小点（DESIGN.md · Shapes · 几何标记） ---- */
+  .bd-tile:has(> .bd-corner) {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .bd-corner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: -1;
+    width: 80px;
+    height: 56px;
+    pointer-events: none;
+
+    > svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    circle {
+      fill: none;
+      stroke: var(--bd-blush-fill);
+      stroke-width: 1;
+    }
+
+    /* 最里一道：blush-track，70% */
+    circle:first-child {
+      stroke: var(--bd-blush-track);
+      opacity: 0.7;
+    }
+
+    /* 最外一道上的小点 */
+    [data-part='dot'] {
+      fill: var(--bd-blush-solid);
+      stroke: none;
+    }
+  }
+}

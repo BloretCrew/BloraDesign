@@ -1,0 +1,217 @@
+/*
+ * 数据表 bd-table（真正的 <table>，保留表格语义）：无横线；悬停整行凹槽底；选中的行（aria-selected="true"）雾粉浅底，
+ * 相邻的选中行连成一块。第一列放 .bd-checkbox 时是勾选列；数值列写 data-align="end"；
+ * 可排序的表头写 aria-sort，里面放 <button>，点击按这一列排序，行连续移动到新位置。
+ * 批量操作栏 bd-bulk（data-for="表格 id"）：有选中行时展开，显示 <span data-part="count">。
+ * 连贯列表 bd-list：一组可选条目（role="listbox" / "option"），相邻的选中项连成一块；右侧等宽元信息 data-part="meta"。
+ */
+@layer bd.components {
+  .bd-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 13.5px;
+
+    th {
+      padding: 8px 12px 6px;
+      white-space: nowrap;
+      text-align: left;
+      font-size: 12.5px;
+      font-weight: 400;
+      color: var(--bd-ink-tertiary);
+    }
+
+    td {
+      padding: 11px 12px;
+      transition: background-color 0.12s ease;
+    }
+
+    :is(th, td)[data-align='end'] {
+      text-align: right;
+    }
+
+    :is(th, td):has(> .bd-checkbox) {
+      width: 34px;
+      padding-right: 0;
+      line-height: 0;
+    }
+
+    tbody tr > :first-child {
+      border-radius: 11px 0 0 11px;
+    }
+
+    tbody tr > :last-child {
+      border-radius: 0 11px 11px 0;
+    }
+
+    tbody tr:hover > td {
+      background: var(--bd-well);
+    }
+
+    tbody tr:has(.bd-checkbox) {
+      cursor: pointer;
+    }
+
+    tbody tr[aria-selected='true'] > td {
+      background: var(--bd-blush-soft);
+    }
+
+    tbody tr[aria-selected='true']:hover > td {
+      background: var(--bd-blush-soft-hover);
+    }
+
+    tbody tr[aria-selected='true'] + tr[aria-selected='true'] > :first-child {
+      border-top-left-radius: 0;
+    }
+
+    tbody tr[aria-selected='true'] + tr[aria-selected='true'] > :last-child {
+      border-top-right-radius: 0;
+    }
+
+    tbody tr[aria-selected='true']:has(+ tr[aria-selected='true']) > :first-child {
+      border-bottom-left-radius: 0;
+    }
+
+    tbody tr[aria-selected='true']:has(+ tr[aria-selected='true']) > :last-child {
+      border-bottom-right-radius: 0;
+    }
+
+    /* 可排序的表头 */
+    th[aria-sort] > button {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: inherit;
+      transition: color var(--bd-duration-hover) ease;
+    }
+
+    th[aria-sort] > button:hover,
+    th[aria-sort]:is([aria-sort='ascending'], [aria-sort='descending']) > button {
+      color: var(--bd-ink);
+    }
+
+    th[aria-sort] > button::after {
+      content: '';
+      width: 12px;
+      height: 12px;
+      background: currentColor;
+      opacity: 0.6;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m21 16-4 4-4-4'/%3E%3Cpath d='M17 20V4'/%3E%3Cpath d='m3 8 4-4 4 4'/%3E%3Cpath d='M7 4v16'/%3E%3C/svg%3E")
+        center / contain no-repeat;
+    }
+
+    th[aria-sort='ascending'] > button::after,
+    th[aria-sort='descending'] > button::after {
+      opacity: 1;
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 15 6 6 6-6'/%3E%3Cpath d='M12 3v18'/%3E%3C/svg%3E");
+    }
+
+    th[aria-sort='ascending'] > button::after {
+      transform: rotate(180deg);
+    }
+  }
+
+  /* ---- 批量操作栏 ---- */
+  .bd-bulk {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 13px;
+    border-radius: 12px;
+    background: var(--bd-blush-soft);
+    color: var(--bd-blush-ink);
+    font-size: 13px;
+    font-weight: 560;
+  }
+
+  /* 批量栏里的按钮比小号再矮一档，栏高 43 */
+  .bd-bulk .bd-button {
+    height: 27px;
+    padding: 0 11px;
+    font-size: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .bd-bulk {
+      flex-wrap: wrap;
+      row-gap: 6px;
+    }
+  }
+
+  /* ---- 连贯列表 ---- */
+  .bd-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    > [role='option'],
+    > li {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      min-height: 38px;
+      padding: 7px 12px;
+      border-radius: 11px;
+      text-align: left;
+      font-size: 13.5px;
+      color: var(--bd-ink);
+      transition:
+        background-color 0.12s ease,
+        border-radius 0.16s ease;
+    }
+
+    > [role='option'] {
+      cursor: pointer;
+    }
+
+    > [role='option']:hover {
+      background: var(--bd-well);
+    }
+
+    > [aria-selected='true'] {
+      background: var(--bd-blush-soft);
+      font-weight: 600;
+      color: var(--bd-blush-ink);
+    }
+
+    > [aria-selected='true']:hover {
+      background: var(--bd-blush-soft-hover);
+    }
+
+    > [aria-selected='true'] + [aria-selected='true'] {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+
+    /* 填上两项之间 2px 的缝，连成一整块 */
+    > [aria-selected='true'] + [aria-selected='true']::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      right: 0;
+      left: 0;
+      height: 4px;
+      background: inherit;
+    }
+
+    > [aria-selected='true']:has(+ [aria-selected='true']) {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    [data-part='meta'] {
+      font-family: var(--bd-font-mono);
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--bd-ink-description);
+    }
+
+    > [aria-selected='true'] [data-part='meta'] {
+      color: currentColor;
+      opacity: 0.55;
+    }
+  }
+}

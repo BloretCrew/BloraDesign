@@ -1,0 +1,215 @@
+/*
+ * 数据展示：规格行 bd-spec、指标格（bd-tile data-variant="metric"）、环形读数 bd-ring、进度条 bd-progress
+ */
+@layer bd.components {
+  /* ---- 规格行：托盘的紧凑变体，标签 — 等宽值（DESIGN.md · Components · 规格行） ---- */
+  .bd-spec {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bd-space-tray-gap);
+    padding: var(--bd-space-tray-padding);
+    border-radius: var(--bd-radius-tray);
+    background: var(--bd-tray);
+
+    > div {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      padding: var(--bd-space-cell-dense-padding-y) var(--bd-space-cell-dense-padding-x);
+      border-radius: var(--bd-radius-cell);
+      background: var(--bd-tile);
+      box-shadow: var(--bd-shadow-cell);
+      font-size: 12px;
+      color: var(--bd-ink-tertiary);
+    }
+
+    dd {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-family: var(--bd-font-mono);
+      font-size: 11.5px;
+      font-weight: 560;
+      font-variant-numeric: tabular-nums;
+      color: var(--bd-ink);
+    }
+  }
+
+  /* ---- 指标格 ---- */
+  .bd-tile[data-variant='metric'] {
+    position: relative;
+
+    > [data-part='label'] {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      line-height: 1.5;
+      color: var(--bd-ink-tertiary);
+    }
+
+    > [data-part='value'] {
+      font-size: var(--bd-text-metric-size);
+      font-weight: var(--bd-text-metric-weight);
+      line-height: var(--bd-text-metric-leading);
+      letter-spacing: var(--bd-text-metric-tracking);
+      font-variant-numeric: tabular-nums;
+    }
+
+    > [data-part='value'] > small {
+      margin-left: 3px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--bd-ink-tertiary);
+    }
+
+    > [data-part='foot'] {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 0;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--bd-ink-description);
+    }
+
+    /* 右上角：比例用环形读数，其他用图标底 */
+    > :is(.bd-ring, [data-part='icon']) {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+    }
+
+    > [data-part='icon'] {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: var(--bd-radius-icon);
+      background: var(--bd-well);
+      color: var(--bd-ink-tertiary);
+    }
+
+    > [data-part='icon'][data-tone='blush'] {
+      background: var(--bd-blush-soft);
+      color: var(--bd-blush-ink);
+    }
+
+    > [data-part='icon'][data-tone='sand'] {
+      background: var(--bd-sand-soft);
+      color: var(--bd-sand-ink);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .bd-tile[data-variant='metric'] {
+      > [data-part='value'] {
+        font-size: 22px;
+      }
+
+      > [data-part='icon'] {
+        display: none;
+      }
+
+      &:has(> .bd-ring) > [data-part='value'] > small {
+        display: block;
+        margin: 2px 0 0;
+      }
+    }
+  }
+
+  /* 变化量：+2、↓ 1.2 ms */
+  [data-part='delta'] {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 1px 6px;
+    border-radius: 6px;
+    background: var(--bd-sand-soft);
+    color: var(--bd-sand-ink);
+    font-size: 11.5px;
+    font-weight: 600;
+  }
+
+  [data-part='delta'][data-tone='rose'] {
+    background: var(--bd-rose-soft);
+    color: var(--bd-rose-ink);
+  }
+
+  /* ---- 环形读数：44px，环宽 4，环心等宽整数；圆环由运行时画 ---- */
+  .bd-ring {
+    --bd-ring-color: var(--bd-blush-solid);
+
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+
+    > svg {
+      position: absolute;
+      inset: 0;
+    }
+
+    > b {
+      position: relative;
+      font: 600 11px/1 var(--bd-font-mono);
+      letter-spacing: -0.02em;
+      color: var(--bd-ink-secondary);
+    }
+
+    [data-part='track'] {
+      stroke: var(--bd-well);
+    }
+
+    [data-part='arc'] {
+      stroke: var(--bd-ring-color);
+    }
+  }
+
+  .bd-ring[data-size='sm'] {
+    width: 32px;
+    height: 32px;
+  }
+
+  .bd-ring[data-level='near'] {
+    --bd-ring-color: var(--bd-sand-solid);
+  }
+
+  .bd-ring[data-level='over'] {
+    --bd-ring-color: var(--bd-rose-solid);
+
+    > b {
+      color: var(--bd-rose-ink);
+    }
+  }
+
+  /* ---- 进度条 ---- */
+  .bd-progress {
+    display: block;
+    height: 5px;
+    overflow: hidden;
+    border-radius: var(--bd-radius-pill);
+    background: var(--bd-slot);
+  }
+
+  .bd-progress::before {
+    content: '';
+    display: block;
+    width: var(--bd-value, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: var(--bd-blush-track);
+    transition: width 0.8s var(--bd-ease-out);
+  }
+
+  .bd-progress[data-tone='rose']::before {
+    background: var(--bd-rose-solid);
+  }
+
+  .bd-progress[data-size='lg'] {
+    height: 7px;
+  }
+}

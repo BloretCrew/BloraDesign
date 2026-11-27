@@ -35,4 +35,8 @@
 @import './components/overlay.css';
 @import './components/select.css';
 @import './components/date.css';
+@import './components/table.css';
+@import './components/data.css';
+@import './components/content.css';
+@import './components/states.css';
 @import './motion.css';

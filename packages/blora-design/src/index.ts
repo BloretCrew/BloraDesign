@@ -5,6 +5,7 @@
  * 不需要初始化或销毁。
  */
 import { start } from './runtime/core';
+import { registerData } from './runtime/data';
 import { registerDate } from './runtime/date';
 import { registerForm } from './runtime/form';
 import { registerNav } from './runtime/nav';
@@ -36,6 +37,7 @@ if (typeof document !== 'undefined') {
   registerForm();
   registerSelect();
   registerDate();
+  registerData();
   registerTail();
   start();
   startPageScroll();
