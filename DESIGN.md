@@ -602,7 +602,7 @@ Blora Design 的界面由一块块白色「格子」拼成，格子之间只留 
 |            | `bd-mosaic`、`bd-tile`、`bd-head`、`bd-stack`                                                                                                   | `.mosaic-*` / `.blora-row`、`.tile`、`.tile-head`、`.col-stack` / `.blora-stack`                                                                                      |
 |            | `bd-tray`、`bd-corner`、`bd-scroll`                                                                                                             | `.tray`、`.plan-corner`、（新增）                                                                                                                                     |
 | 基础       | `bd-button`、`bd-group`、`<svg data-icon>`、`bd-kbd`、`bd-pill`、`bd-tag`、`bd-avatar`                                                          | `.btn`、`.coupled-pair`、`svg.i`、`.kbd`、`.status-pill`、`.tag-chip`、`.av-orb`                                                                                      |
-| 导航       | `bd-segmented`、`bd-tabs`、`bd-pager`、`bd-nav`、`bd-tree`、`bd-steps`、`bd-breadcrumb`                                                         | `.seg-bar` / 视图切换、`.tabs-bar`、`.pager`、`.jump-strip` / 设置导航 / 文章目录 / 移动端导航、`.tree-list`、`.c-step`                                               |
+| 导航       | `bd-segmented`、`bd-tabs`、`bd-pager`、`bd-nav`、`bd-breadcrumb`、`bd-tree`、`bd-steps`                                                         | `.seg-bar` / `.seg` / `#viewPair`、`.tabs-bar`、`.pager`、`.jump-strip` / `.settings-nav` / `.doc-toc` / `.mobile-nav`、`.crumbs`、`.tree-list`、`.c-step`            |
 | 输入       | `bd-field`、`bd-input`、`bd-textarea`、`bd-select`、`bd-date`、`bd-stepper`、`bd-slider`、`bd-switch`、`bd-checkbox`、`bd-radio`、`bd-dropzone` | `.field-box`、输入框、`.picker-shell`、日历、`.num-stepper`、`.slider-block`、`.sw-pill`、`.chk-item`、`.orb-radio`、`.dropzone`                                      |
 | 数据展示   | `bd-table`、`bd-list`、`bd-spec`、`bd-ring`、`bd-metric`、`bd-progress`、`bd-code`、`bd-prose`、`bd-accordion`、`bd-empty`、`bd-skeleton`       | 表格、`.seamless-list`、`.spec-row` / `.spec-stack`、`.orbit-ring-wrap` / `.kpi-ring`、`.orbit-tile`、进度条、代码块、阅读区、`.acc-card`、`.empty-card`、`.skel-bar` |
 | 反馈与浮层 | `bd-toast`、`bd-alert`、`bd-tooltip`、`bd-popover`、`bd-popconfirm`、`bd-menu`、`bd-context`、`bd-modal`、`bd-drawer`、`bd-command`             | `.toast-stack`、`.alert-strip`、`.tip-card`、`.float-panel`、确认气泡、`.menu-opt`、右键菜单、`.modal-card`、`.drawer-panel`、命令面板                                |
@@ -784,6 +784,15 @@ Blora Design 的界面由一块块白色「格子」拼成，格子之间只留 
 - `data-shape="pill"`：胶囊形、项高 29，只有图标的项是 31 宽的正圆（视图切换）。
 - `data-tone="sand"`：暖杏选中底，占满一行、各档等宽（规格档位）。
 - 段数不超过 5；放在格子标题右侧槽位时不超过 3。
+
+### 页签、分页、导航、目录树、步骤条
+
+- **页签 `bd-tabs`**：托盘形（整行一块凹槽底、页签透明），选中底是连续滑动的雾粉滑块。`role="tablist"` + `role="tab" aria-selected aria-controls`，面板 `role="tabpanel"`，运行时切换面板的 `hidden`。可关闭的页签里放 `<span data-part="close">`：点击发出可取消的 `bd-close`，默认移除页签和面板并选中相邻页签。新加入的页签从 0.85 倍弹出。
+- **分页 `bd-pager`**：托盘形，页码 30 × 30，当前页 `aria-current="page"` 由雾粉滑块垫底；上一页 / 下一页写 `data-part="prev"` / `"next"`，省略号 `<span data-part="gap">`。
+- **导航 `bd-nav`**：当前项 `aria-current`。默认横向胶囊（页内跳转，可加 `<span data-part="dot">`；写 `data-spy` 时按滚动位置自动高亮）；`data-orientation="vertical"` 竖排，本身是一个格子（设置页分区导航、文章目录），条目圆角 20 − 10 = 10，二级条目 `data-level="2"`，目录标题 `<p data-part="label">`，`data-density="compact"` 是文章目录的紧凑样式；≤900 自动变成横向滚动条。
+- **面包屑 `bd-breadcrumb`**：`<nav>` 里放链接，当前页 `aria-current="page"`，分隔符 `/` 由 CSS 画。
+- **目录树 `bd-tree`**：ARIA tree。每项 `role="treeitem"`，行是 `<span data-part="node">`，子项放在 `role="group"` 里；文件夹写 `aria-expanded`，文件写 `aria-selected`。图标尺寸：箭头 11（`data-part="chevron"`）、文件夹 14（暖杏色）、文件 13。展开收起有高度过渡；选中的文件被收起时滑块隐藏；方向键 / Enter 可操作。
+- **步骤条 `bd-steps`**：一排步骤块，当前步骤 `aria-current="step"`，它之前的步骤自动显示为已完成（暖杏、圆点里是对勾），不需要另外标记。每步写 `<span data-part="title">` 和可选的 `<span data-part="desc">`。状态变化时底色渐变、圆点从 0.55 倍弹回。≤640 改成竖排。
 
 ### 小块
 

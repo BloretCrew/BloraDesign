@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>导航 · 目录树 · Blora Design</title>
+    <link rel="stylesheet" href="../../packages/blora-design/dist/blora.css" />
+    <script type="module" src="../../packages/blora-design/dist/blora.js"></script>
+  </head>
+  <body>
+    <main class="bd-page" style="max-width: 1200px; margin: 12px auto; padding: 0 12px">
+      <nav class="bd-nav" aria-label="页内导航" id="jump">
+        <a href="#s1" aria-current="true"><span data-part="dot"></span>01 按钮与浮层</a>
+        <a href="#s2"><span data-part="dot"></span>02 选择器与日历</a>
+        <a href="#s3"><span data-part="dot"></span>03 表单与输入</a>
+      </nav>
+      <section
+        class="bd-mosaic"
+        data-cols="3"
+        style="--bd-columns: minmax(0, 0.8fr) minmax(0, 0.8fr) minmax(0, 1.4fr)"
+      >
+        <nav class="bd-nav" data-orientation="vertical" aria-label="设置分区" id="settings">
+          <button type="button" aria-current="true">
+            <svg data-icon viewBox="0 0 24 24" aria-hidden="true">
+              <line x1="21" x2="14" y1="4" y2="4" />
+              <line x1="10" x2="3" y1="4" y2="4" />
+              <line x1="21" x2="12" y1="12" y2="12" />
+              <line x1="8" x2="3" y1="12" y2="12" />
+              <line x1="21" x2="16" y1="20" y2="20" />
+              <line x1="12" x2="3" y1="20" y2="20" />
+              <line x1="14" x2="14" y1="2" y2="6" />
+              <line x1="8" x2="8" y1="10" y2="14" />
+              <line x1="16" x2="16" y1="18" y2="22" /></svg
+            >常规
+          </button>
+          <button type="button">
+            <svg data-icon viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg
+            >成员
+          </button>
+          <button type="button">
+            <svg data-icon viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg
+            >通知
+          </button>
+          <button type="button">
+            <svg data-icon viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+              <path d="M12 9v4" />
+              <path d="M12 17h.01" /></svg
+            >危险操作
+          </button>
+        </nav>
+        <nav
+          class="bd-nav"
+          data-orientation="vertical"
+          data-density="compact"
+          aria-label="本页目录"
+          id="toc"
+        >
+          <p data-part="label">On this page</p>
+          <button type="button" aria-current="true">概述</button>
+          <button type="button">准备工作</button>
+          <button type="button">添加 DNS 记录</button>
+          <button type="button" data-level="2">子域名（推荐）</button>
+          <button type="button" data-level="2">根域名 apex</button>
+          <button type="button">签发 HTTPS 证书</button>
+        </nav>
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>配置树</h2>
+            <p>点文件夹展开收起，点文件选中</p>
+          </header>
+          <ul class="bd-tree" role="tree" aria-label="配置文件" id="tree">
+            <li role="treeitem" aria-expanded="true">
+              <span data-part="node"
+                ><svg
+                  data-icon
+                  data-part="chevron"
+                  width="11"
+                  height="11"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path d="m6 9 6 6 6-6" /></svg
+                ><svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"
+                  /></svg
+                ><span>blora-ui-kit/</span></span
+              >
+              <ul role="group">
+                <li role="treeitem" aria-selected="true">
+                  <span data-part="node"
+                    ><svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                      <path d="M14 2v4a2 2 0 0 0 2 2h4" /></svg
+                    ><span>orbit-mesh.yml</span></span
+                  >
+                </li>
+                <li role="treeitem" aria-selected="false">
+                  <span data-part="node"
+                    ><svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                      <path d="M14 2v4a2 2 0 0 0 2 2h4" /></svg
+                    ><span>config-keys.json</span></span
+                  >
+                </li>
+                <li role="treeitem" aria-selected="false">
+                  <span data-part="node"
+                    ><svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                      <path d="M14 2v4a2 2 0 0 0 2 2h4" /></svg
+                    ><span>snapshot-policy.toml</span></span
+                  >
+                </li>
+              </ul>
+            </li>
+            <li role="treeitem" aria-expanded="false">
+              <span data-part="node"
+                ><svg
+                  data-icon
+                  data-part="chevron"
+                  width="11"
+                  height="11"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path d="m6 9 6 6 6-6" /></svg
+                ><svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"
+                  /></svg
+                ><span>policies/</span></span
+              >
+              <ul role="group">
+                <li role="treeitem" aria-selected="false">
+                  <span data-part="node"
+                    ><svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                      <path d="M14 2v4a2 2 0 0 0 2 2h4" /></svg
+                    ><span>rate-limit.rego</span></span
+                  >
+                </li>
+                <li role="treeitem" aria-selected="false">
+                  <span data-part="node"
+                    ><svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                      <path d="M14 2v4a2 2 0 0 0 2 2h4" /></svg
+                    ><span>geo-fence.rego</span></span
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

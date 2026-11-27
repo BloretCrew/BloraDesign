@@ -1,0 +1,72 @@
+/*
+ * 页签 bd-tabs：托盘形（整组一块凹槽底、页签透明），选中底是连续滑动的雾粉滑块。
+ * 写法：<div class="bd-tabs" role="tablist"> + <button role="tab" aria-selected aria-controls="面板 id">；
+ * 面板写 role="tabpanel"，运行时切换面板的 hidden。可关闭的页签里放 <span data-part="close">。
+ * 新加入的页签由运行时播放弹出动画（首屏已有的页签不播放）。
+ */
+@layer bd.components {
+  .bd-tabs {
+    --bd-glide-bg: var(--bd-blush-fill);
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    border-radius: calc(var(--bd-radius-pill) + 3px);
+    background: var(--bd-well);
+
+    > [role='tab'] {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      height: 33px;
+      padding: 0 12px;
+      border-radius: var(--bd-radius-pill);
+      white-space: nowrap;
+      font-size: 13.5px;
+      color: var(--bd-ink-secondary);
+      transition:
+        background-color var(--bd-duration-hover) ease,
+        color var(--bd-duration-hover) ease;
+    }
+
+    > [role='tab']:not([aria-selected='true']):hover {
+      background: var(--bd-slot);
+      color: var(--bd-ink);
+    }
+
+    > [aria-selected='true'] {
+      font-weight: 600;
+      color: var(--bd-blush-ink);
+    }
+
+    &:not(:has(> [data-part='glide'])) > [aria-selected='true'] {
+      background: var(--bd-glide-bg);
+    }
+
+    [data-part='close'] {
+      display: grid;
+      place-items: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      opacity: 0.65;
+      transition:
+        background-color var(--bd-duration-hover) ease,
+        opacity var(--bd-duration-hover) ease;
+    }
+
+    [data-part='close']:hover {
+      background: color-mix(in srgb, var(--bd-ink) 7%, transparent);
+      opacity: 1;
+    }
+  }
+
+  @keyframes bd-pop-in {
+    from {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+  }
+}

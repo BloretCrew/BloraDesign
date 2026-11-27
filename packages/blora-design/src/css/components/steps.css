@@ -1,0 +1,104 @@
+/*
+ * 步骤条 bd-steps：一排步骤块，当前步骤写 aria-current="step"，它之前的步骤自动显示为已完成（不需要额外标记）。
+ *   <div class="bd-steps"><button><span data-part="title">镜像校验</span><span data-part="desc">SHA256 已签名</span></button>…</div>
+ * 圆点里是序号（CSS 计数器），已完成显示对勾；状态变化时颜色渐变、圆点从 0.55 倍弹回（DESIGN.md · Motion）
+ */
+@layer bd.components {
+  .bd-steps {
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    gap: 8px;
+    counter-reset: bd-step;
+
+    > * {
+      position: relative;
+      display: grid;
+      grid-template-columns: 26px minmax(0, 1fr);
+      align-items: center;
+      column-gap: 9px;
+      padding: 11px 13px;
+      border-radius: 12px;
+      background: var(--bd-well);
+      color: var(--bd-ink);
+      text-align: left;
+      counter-increment: bd-step;
+      transition:
+        background-color var(--bd-duration-fade) ease,
+        color var(--bd-duration-fade) ease;
+    }
+
+    > ::before {
+      content: counter(bd-step);
+      grid-row: 1 / span 2;
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--bd-control);
+      font-family: var(--bd-font-mono);
+      font-size: 12px;
+      font-weight: 650;
+      transition:
+        background-color var(--bd-duration-fade) ease,
+        color var(--bd-duration-fade) ease;
+    }
+
+    [data-part='title'] {
+      grid-column: 2;
+      font-size: 12.5px;
+      font-weight: 580;
+      line-height: 1.4;
+    }
+
+    [data-part='desc'] {
+      grid-column: 2;
+      font-size: 11px;
+      line-height: 1.4;
+      opacity: 0.75;
+    }
+
+    > [aria-current='step'] {
+      background: var(--bd-blush-soft);
+      color: var(--bd-blush-ink);
+      font-weight: 600;
+    }
+
+    > [aria-current='step']::before {
+      background: var(--bd-blush-solid);
+      color: var(--bd-on-primary);
+    }
+
+    /* 当前步骤之前的都已完成：暖杏，圆点里是对勾 */
+    > :has(~ [aria-current='step']) {
+      background: var(--bd-sand-soft);
+      color: var(--bd-sand-ink);
+    }
+
+    > :has(~ [aria-current='step'])::before {
+      content: '';
+      background: var(--bd-sand-solid);
+    }
+
+    > :has(~ [aria-current='step'])::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 13px;
+      width: 26px;
+      height: 26px;
+      margin-top: -13px;
+      background: var(--bd-on-primary);
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E")
+        center / 13px 13px no-repeat;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .bd-steps {
+      grid-auto-flow: row;
+      gap: 6px;
+    }
+  }
+}

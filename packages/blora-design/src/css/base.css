@@ -47,4 +47,16 @@
     font-size: var(--bd-text-value-mono-size);
     font-weight: var(--bd-text-value-mono-weight);
   }
+
+  /* 选中滑块相对所在的组定位、垫在各项下面。放在最早的 bd.base 层：
+     组或项自己的定位（如侧栏的 sticky）写在后面的层里，总能覆盖这里 */
+  :where(:has(> [data-part='glide'])) {
+    position: relative;
+    isolation: isolate;
+  }
+
+  :where(:has(> [data-part='glide'])) > :where(:not([data-part='glide'], [data-part='thumb'])) {
+    position: relative;
+    z-index: 1;
+  }
 }

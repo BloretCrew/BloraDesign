@@ -21,15 +21,6 @@
     will-change: transform;
   }
 
-  :where(:has(> [data-part='glide'])) {
-    isolation: isolate;
-  }
-
-  :where(:has(> [data-part='glide'])) > :where(:not([data-part='glide'], [data-part='thumb'])) {
-    position: relative;
-    z-index: 1;
-  }
-
   /* 有滑块时，选中项自己的底色让给滑块 */
   :where(:has(> [data-part='glide'])) > [data-glide-on] {
     background: transparent;

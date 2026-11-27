@@ -15,6 +15,8 @@ export interface ChoiceOptions {
   orientation?: 'horizontal' | 'vertical';
   /** 托盘：整组一块凹槽底，托盘圆角 = 选中项圆角 + 内缩 */
   tray?: number;
+  /** 用 aria-current 表示当前项（导航、分页），值为这里给的字符串，如 "page" */
+  current?: string;
 }
 
 function stateAttr(item: Element): 'aria-checked' | 'aria-selected' | 'aria-pressed' {
@@ -25,25 +27,38 @@ function stateAttr(item: Element): 'aria-checked' | 'aria-selected' | 'aria-pres
 }
 
 export const SELECTED = ':is([aria-checked="true"], [aria-selected="true"], [aria-pressed="true"])';
+export const CURRENT = ':is([aria-current]:not([aria-current="false"]))';
 
 export function choice(host: HTMLElement, opt: ChoiceOptions): Cleanup {
   const items = (): HTMLElement[] =>
     [...host.querySelectorAll<HTMLElement>(opt.items)].filter(
       (el) => !el.hasAttribute('disabled') && el.getAttribute('aria-disabled') !== 'true',
     );
-  const current = (): HTMLElement | undefined => items().find((el) => el.matches(SELECTED));
+  const ACTIVE = opt.current ? CURRENT : SELECTED;
+  const current = (): HTMLElement | undefined => items().find((el) => el.matches(ACTIVE));
+  const mark = (el: HTMLElement, on: boolean): void => {
+    if (opt.current) {
+      if (on) el.setAttribute('aria-current', el.getAttribute('aria-current') || opt.current);
+      else el.removeAttribute('aria-current');
+    } else {
+      el.setAttribute(stateAttr(el), String(on));
+    }
+  };
 
   if (opt.orientation && !host.hasAttribute('aria-orientation')) {
     host.setAttribute('aria-orientation', opt.orientation);
   }
 
-  // 每一项都要有明确的状态值（屏幕阅读器读得出「未选中」）
-  for (const el of items()) {
-    const attr = stateAttr(el);
-    if (!el.hasAttribute(attr)) el.setAttribute(attr, 'false');
+  // 每一项都要有明确的状态值（屏幕阅读器读得出「未选中」）；aria-current 不需要
+  if (!opt.current) {
+    for (const el of items()) {
+      const attr = stateAttr(el);
+      if (!el.hasAttribute(attr)) el.setAttribute(attr, 'false');
+    }
   }
 
   const syncTabIndex = (): void => {
+    if (opt.current) return;
     const all = items();
     const active = current() ?? all[0];
     for (const el of all) el.tabIndex = el === active ? 0 : -1;
@@ -51,14 +66,14 @@ export function choice(host: HTMLElement, opt: ChoiceOptions): Cleanup {
 
   const select = (item: HTMLElement, focus: boolean): void => {
     if (focus) item.focus();
-    if (item.matches(SELECTED)) return;
+    if (item.matches(ACTIVE)) return;
     const value =
       item.dataset.value ?? item.getAttribute('value') ?? item.textContent?.trim() ?? '';
     const proceed = host.dispatchEvent(
       new CustomEvent('bd-change', { bubbles: true, cancelable: true, detail: { value, item } }),
     );
     if (!proceed || host.hasAttribute('data-bd-controlled')) return;
-    for (const el of items()) el.setAttribute(stateAttr(el), String(el === item));
+    for (const el of items()) mark(el, el === item);
     syncTabIndex();
   };
 
@@ -94,14 +109,14 @@ export function choice(host: HTMLElement, opt: ChoiceOptions): Cleanup {
     subtree: true,
     childList: true,
     attributes: true,
-    attributeFilter: ['aria-checked', 'aria-selected', 'aria-pressed', 'disabled'],
+    attributeFilter: ['aria-checked', 'aria-selected', 'aria-pressed', 'aria-current', 'disabled'],
   });
   syncTabIndex();
   host.addEventListener('click', onClick);
   host.addEventListener('keydown', onKey);
   const offGlide = glide(host, {
     items: opt.items,
-    active: `${opt.items}${SELECTED}`,
+    active: `${opt.items}${ACTIVE}`,
     ...(opt.tray === undefined ? {} : { tray: opt.tray }),
   });
 

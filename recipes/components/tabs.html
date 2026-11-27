@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>页签 · 分页 · 步骤条 · Blora Design</title>
+    <link rel="stylesheet" href="../../packages/blora-design/dist/blora.css" />
+    <script type="module" src="../../packages/blora-design/dist/blora.js"></script>
+  </head>
+  <body>
+    <main class="bd-page" style="max-width: 1200px; margin: 12px auto; padding: 0 12px">
+      <section class="bd-mosaic" data-cols="2">
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>可关闭的页签</h2>
+            <p>托盘形，选中底连续滑动</p>
+          </header>
+          <div class="bd-tabs" role="tablist" aria-label="分片视图" id="tabs">
+            <button type="button" role="tab" aria-selected="true" aria-controls="p1">
+              <span>拓扑总览</span
+              ><span data-part="close" aria-label="关闭 拓扑总览"
+                ><svg data-icon width="9" height="9" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" /></svg
+              ></span>
+            </button>
+            <button type="button" role="tab" aria-selected="false" aria-controls="p2">
+              <span>证书策略</span
+              ><span data-part="close" aria-label="关闭 证书策略"
+                ><svg data-icon width="9" height="9" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" /></svg
+              ></span>
+            </button>
+            <button type="button" role="tab" aria-selected="false" aria-controls="p3">
+              <span>审计流水</span
+              ><span data-part="close" aria-label="关闭 审计流水"
+                ><svg data-icon width="9" height="9" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" /></svg
+              ></span>
+            </button>
+          </div>
+          <div role="tabpanel" id="p1">当前共 4 个跨国星轨扇区在线。</div>
+          <div role="tabpanel" id="p2">所有边缘实例均启用 72 小时短期自动签发令牌。</div>
+          <div role="tabpanel" id="p3">今日已完成 12 次无感配置同步。</div>
+        </article>
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>分页 · 面包屑</h2>
+            <p>当前页 aria-current="page"</p>
+          </header>
+          <nav class="bd-pager" aria-label="分页" id="pager">
+            <button type="button" aria-current="page">1</button>
+            <button type="button">2</button>
+            <button type="button">3</button>
+          </nav>
+          <nav class="bd-breadcrumb" aria-label="当前位置" id="crumbs">
+            <a href="#">Blora Labs</a>
+            <a href="#">实例</a>
+            <span aria-current="page">web-edge-03</span>
+          </nav>
+        </article>
+      </section>
+      <section class="bd-mosaic" data-cols="1">
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>步骤条</h2>
+            <p>当前步骤之前的自动显示为已完成</p>
+          </header>
+          <div class="bd-steps" id="steps">
+            <button type="button">
+              <span data-part="title">镜像校验</span><span data-part="desc">SHA256 已签名</span>
+            </button>
+            <button type="button" aria-current="step">
+              <span data-part="title">星轨编排</span><span data-part="desc">分批注入中</span>
+            </button>
+            <button type="button">
+              <span data-part="title">全网切流</span><span data-part="desc">等待探针就绪</span>
+            </button>
+          </div>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

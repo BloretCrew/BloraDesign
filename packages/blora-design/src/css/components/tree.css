@@ -1,0 +1,82 @@
+/*
+ * 目录树 bd-tree（ARIA tree）：
+ *   <ul class="bd-tree" role="tree">
+ *     <li role="treeitem" aria-expanded="true"><span data-part="node">…</span><ul role="group">…</ul></li>
+ *     <li role="treeitem" aria-selected="true"><span data-part="node">…</span></li>
+ * 选中底连续滑动；展开 / 收起有高度过渡；文件夹前放 <svg data-part="chevron">，收起时转 −90°
+ */
+@layer bd.components {
+  .bd-tree {
+    --bd-glide-bg: var(--bd-blush-soft);
+
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    [role='treeitem'] {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    [role='group'] {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding-left: 20px;
+    }
+
+    [role='treeitem'][aria-expanded='false'] > [role='group'] {
+      display: none;
+    }
+
+    [data-part='node'] {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-size: 13.5px;
+      color: var(--bd-ink);
+      transition:
+        background-color var(--bd-duration-hover) ease,
+        color var(--bd-duration-hover) ease;
+    }
+
+    /* 文件夹图标是暖杏色；图标尺寸用 width / height 属性写（箭头 11、文件夹 14、文件 13） */
+    [role='treeitem'][aria-expanded] > [data-part='node'] > svg:not([data-part='chevron']) {
+      color: var(--bd-sand-solid);
+    }
+
+    [role='treeitem']:not([aria-selected='true']) > [data-part='node']:hover {
+      background: var(--bd-well);
+    }
+
+    /* 文件夹名略粗 */
+    [role='treeitem'][aria-expanded] > [data-part='node'] {
+      font-weight: 580;
+    }
+
+    [role='treeitem'][aria-selected='true'] > [data-part='node'] {
+      font-weight: 600;
+      color: var(--bd-blush-ink);
+    }
+
+    &:not(:has(> [data-part='glide']))
+      [role='treeitem'][aria-selected='true']
+      > [data-part='node'] {
+      background: var(--bd-glide-bg);
+    }
+
+    [data-part='chevron'] {
+      margin-right: -2px;
+      color: var(--bd-ink-tertiary);
+      transition: transform var(--bd-duration-hover) ease;
+    }
+
+    [role='treeitem'][aria-expanded='false'] > [data-part='node'] > [data-part='chevron'] {
+      transform: rotate(-90deg);
+    }
+  }
+}

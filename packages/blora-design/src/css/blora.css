@@ -23,4 +23,9 @@
 @import './components/button.css';
 @import './components/segmented.css';
 @import './components/badge.css';
+@import './components/tabs.css';
+@import './components/pager.css';
+@import './components/nav.css';
+@import './components/tree.css';
+@import './components/steps.css';
 @import './motion.css';

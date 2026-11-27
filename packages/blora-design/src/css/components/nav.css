@@ -1,0 +1,184 @@
+/*
+ * 导航 bd-nav：页内跳转、分区导航、文章目录。当前项写 aria-current（"page" / "true" / "location"），选中底连续滑动。
+ *   默认横向：一排胶囊（页内跳转条）
+ *   data-orientation="vertical"：竖排，本身是一个格子（设置页分区导航、文章目录），圆角 20 − 10 = 10；
+ *     二级条目写 data-level="2"；≤900 自动变成横向滚动条，二级条目隐藏
+ *   data-spy：页内锚点链接按滚动位置自动高亮
+ * 面包屑 bd-breadcrumb：<nav class="bd-breadcrumb">，当前页 aria-current="page"，分隔符由 CSS 画
+ */
+@layer bd.components {
+  .bd-nav {
+    --bd-glide-bg: var(--bd-blush-fill);
+
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    overflow-x: auto;
+
+    > :is(a, button) {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      height: 30px;
+      padding: 0 13px;
+      border-radius: var(--bd-radius-pill);
+      white-space: nowrap;
+      font-size: 13px;
+      color: var(--bd-ink-secondary);
+      transition:
+        background-color var(--bd-duration-hover) ease,
+        color var(--bd-duration-hover) ease;
+    }
+
+    > :is(a, button):not([aria-current]:not([aria-current='false'])):hover {
+      background: var(--bd-well);
+      color: var(--bd-ink);
+    }
+
+    > [aria-current]:not([aria-current='false']) {
+      font-weight: 600;
+      color: var(--bd-blush-ink);
+    }
+
+    &:not(:has(> [data-part='glide'])) > [aria-current]:not([aria-current='false']) {
+      background: var(--bd-glide-bg);
+    }
+
+    [data-part='dot'] {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.65;
+    }
+  }
+
+  .bd-nav[data-orientation='vertical'] {
+    --bd-glide-bg: var(--bd-blush-soft);
+    --bd-nav-radius: calc(var(--bd-radius-tile) - 10px);
+
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    padding: 10px;
+    overflow: visible;
+    border-radius: var(--bd-corner-tl, var(--bd-radius-tile))
+      var(--bd-corner-tr, var(--bd-radius-tile)) var(--bd-corner-br, var(--bd-radius-tile))
+      var(--bd-corner-bl, var(--bd-radius-tile));
+    background: var(--bd-tile);
+    box-shadow: var(--bd-shadow-tile);
+
+    > :is(a, button) {
+      gap: 10px;
+      height: auto;
+      min-height: 36px;
+      padding: 0 12px;
+      border-radius: var(--bd-nav-radius);
+      text-align: left;
+      white-space: normal;
+      font-size: 13.5px;
+      font-weight: 500;
+    }
+
+    > :is(a, button) > svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    > [aria-current]:not([aria-current='false']) {
+      font-weight: 600;
+    }
+
+    > [data-level='2'] {
+      min-height: 30px;
+      padding-left: 24px;
+      font-size: 12.5px;
+      color: var(--bd-ink-tertiary);
+    }
+
+    /* 目录标题（如 ON THIS PAGE） */
+    > [data-part='label'] {
+      padding: 6px 12px 8px;
+      font-family: var(--bd-text-eyebrow-mono-family);
+      font-size: var(--bd-text-eyebrow-mono-size);
+      font-weight: var(--bd-text-eyebrow-mono-weight);
+      letter-spacing: var(--bd-text-eyebrow-mono-tracking);
+      text-transform: uppercase;
+      color: var(--bd-ink-quaternary);
+    }
+  }
+
+  /* 紧凑：文章目录，条目可以换行 */
+  .bd-nav[data-orientation='vertical'][data-density='compact'] > :is(a, button) {
+    min-height: 34px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.4;
+  }
+
+  .bd-nav[data-orientation='vertical'][data-density='compact'] > [data-level='2'] {
+    min-height: 30px;
+    padding-left: 24px;
+    font-size: 12.5px;
+  }
+
+  .bd-nav[data-orientation='vertical'][data-density='compact']
+    > [aria-current]:not([aria-current='false']) {
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .bd-nav[data-orientation='vertical'] {
+      flex-direction: row;
+      align-items: center;
+      padding: 6px;
+      overflow: auto hidden;
+
+      > :is(a, button) {
+        min-height: 32px;
+        white-space: nowrap;
+      }
+
+      > :is([data-level='2'], [data-part='label']) {
+        display: none;
+      }
+    }
+  }
+
+  /* ---- 面包屑 ---- */
+  .bd-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    white-space: nowrap;
+    font-size: 13.5px;
+    color: var(--bd-ink-tertiary);
+
+    > :is(a, button) {
+      color: var(--bd-ink-tertiary);
+      transition: color var(--bd-duration-hover) ease;
+    }
+
+    > :is(a, button):hover {
+      color: var(--bd-ink);
+    }
+
+    > * + *::before {
+      content: '/';
+      margin-right: 6px;
+      color: var(--bd-ink-quaternary);
+      font-weight: 400;
+    }
+
+    > [aria-current='page'] {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 600;
+      color: var(--bd-ink);
+    }
+  }
+}

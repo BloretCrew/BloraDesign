@@ -5,10 +5,15 @@
  * 不需要初始化或销毁。
  */
 import { start } from './runtime/core';
+import { registerNav } from './runtime/nav';
+import { registerPager } from './runtime/pager';
 import { registerRail } from './runtime/rail';
 import { registerScroll, startPageScroll } from './runtime/scroll';
 import { registerSegmented } from './runtime/segmented';
+import { registerSteps } from './runtime/steps';
+import { registerTabs } from './runtime/tabs';
 import { registerTail } from './runtime/tail';
+import { registerTree } from './runtime/tree';
 
 /** 当前 Blora Design 版本 */
 export const version: string = __BD_VERSION__;
@@ -20,6 +25,11 @@ if (typeof document !== 'undefined') {
   registerRail();
   registerScroll();
   registerSegmented();
+  registerTabs();
+  registerPager();
+  registerNav();
+  registerTree();
+  registerSteps();
   registerTail();
   start();
   startPageScroll();
