@@ -1,0 +1,154 @@
+/*
+ * 按钮 bd-button：胶囊形，高 35；小号 29、大号 40（DESIGN.md · Components · 按钮）
+ *   data-variant  primary 雾粉实心 | blush 次主 | sand 暖杏辅助 | surface 中性（默认）| elevated 浮起 | ghost 轻量 | rose 危险
+ *   data-size     sm | lg
+ *   data-shape    icon：只有图标，必须写 aria-label
+ *   忙碌中写 aria-busy="true"；计数写 <span data-part="count">
+ */
+@layer bd.components {
+  .bd-button {
+    --bd-button-bg: var(--bd-well);
+    --bd-button-bg-hover: var(--bd-slot);
+    --bd-button-ink: var(--bd-ink);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    flex-shrink: 0;
+    height: 35px;
+    padding: 0 13px;
+    border-radius: var(--bd-radius-pill);
+    background: var(--bd-button-bg);
+    box-shadow: var(--bd-button-shadow, none);
+    color: var(--bd-button-ink);
+    white-space: nowrap;
+    font-size: var(--bd-text-button-size);
+    font-weight: var(--bd-text-button-weight);
+    line-height: 1;
+    transition:
+      background-color var(--bd-duration-hover) ease,
+      color var(--bd-duration-hover) ease,
+      transform 0.1s ease;
+  }
+
+  .bd-button:hover:not(:disabled, [aria-disabled='true']) {
+    background: var(--bd-button-bg-hover);
+    color: var(--bd-button-ink-hover, var(--bd-button-ink));
+  }
+
+  .bd-button:active:not(:disabled, [aria-disabled='true']) {
+    transform: scale(0.98);
+  }
+
+  .bd-button[data-variant='primary'] {
+    --bd-button-bg: var(--bd-primary);
+    --bd-button-bg-hover: var(--bd-blush-solid-hover);
+    --bd-button-ink: var(--bd-on-primary);
+  }
+
+  .bd-button[data-variant='blush'] {
+    --bd-button-bg: var(--bd-blush-fill);
+    --bd-button-bg-hover: var(--bd-blush-fill-hover);
+    --bd-button-ink: var(--bd-blush-ink);
+  }
+
+  .bd-button[data-variant='sand'] {
+    --bd-button-bg: var(--bd-sand-fill);
+    --bd-button-bg-hover: var(--bd-sand-fill-hover);
+    --bd-button-ink: var(--bd-sand-ink);
+  }
+
+  .bd-button[data-variant='elevated'] {
+    --bd-button-bg: var(--bd-control);
+    --bd-button-bg-hover: var(--bd-blush-soft);
+    --bd-button-ink-hover: var(--bd-blush-ink);
+    --bd-button-shadow: var(--bd-shadow-control);
+  }
+
+  .bd-button[data-variant='ghost'] {
+    --bd-button-bg: transparent;
+    --bd-button-bg-hover: var(--bd-well);
+    --bd-button-ink: var(--bd-ink-secondary);
+    --bd-button-ink-hover: var(--bd-ink);
+  }
+
+  .bd-button[data-variant='rose'] {
+    --bd-button-bg: var(--bd-rose-soft);
+    --bd-button-bg-hover: var(--bd-rose-fill);
+    --bd-button-ink: var(--bd-rose-ink);
+  }
+
+  .bd-button:is(:disabled, [aria-disabled='true']) {
+    --bd-button-bg: var(--bd-well);
+    --bd-button-ink: var(--bd-ink-quaternary);
+    --bd-button-shadow: none;
+
+    cursor: not-allowed;
+  }
+
+  .bd-button[data-size='sm'] {
+    height: 29px;
+    padding: 0 12px;
+    font-size: 12.5px;
+  }
+
+  .bd-button[data-size='lg'] {
+    height: 40px;
+    padding: 0 18px;
+    font-size: 14px;
+  }
+
+  .bd-button[data-shape='icon'] {
+    width: 35px;
+    padding: 0;
+  }
+
+  .bd-button[data-shape='icon'][data-size='sm'] {
+    width: 29px;
+  }
+
+  .bd-button[data-shape='icon'][data-size='lg'] {
+    width: 40px;
+  }
+
+  .bd-button[aria-busy='true'] {
+    cursor: progress;
+  }
+
+  /* 按钮里的计数 */
+  .bd-button > [data-part='count'] {
+    display: inline-grid;
+    place-items: center;
+    min-width: 19px;
+    height: 19px;
+    padding: 0 5px;
+    border-radius: var(--bd-radius-pill);
+    background: var(--bd-blush-solid);
+    color: var(--bd-on-primary);
+    font-family: var(--bd-font-mono);
+    font-size: 11px;
+    font-weight: 650;
+  }
+
+  /* ---- 耦合工具组 bd-group：一块凹槽里放几个小号按钮 ---- */
+  .bd-group {
+    display: inline-flex;
+    align-self: flex-start;
+    gap: 2px;
+    padding: 3px;
+    border-radius: var(--bd-radius-pill);
+    background: var(--bd-well);
+
+    > .bd-button {
+      height: 29px;
+      padding: 0 12px;
+      font-size: 12.5px;
+    }
+
+    > .bd-button[data-shape='icon'] {
+      width: 31px;
+      padding: 0;
+    }
+  }
+}

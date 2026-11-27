@@ -47,13 +47,4 @@
     font-size: var(--bd-text-value-mono-size);
     font-weight: var(--bd-text-value-mono-weight);
   }
-
-  /* 图标：Lucide 线性图标，小尺寸加粗笔画保持清晰 */
-  svg[data-icon] {
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
 }

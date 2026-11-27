@@ -7,6 +7,7 @@
 import { start } from './runtime/core';
 import { registerRail } from './runtime/rail';
 import { registerScroll, startPageScroll } from './runtime/scroll';
+import { registerSegmented } from './runtime/segmented';
 import { registerTail } from './runtime/tail';
 
 /** 当前 Blora Design 版本 */
@@ -18,6 +19,7 @@ export { animateHeight, flip, reducedMotion } from './runtime/motion';
 if (typeof document !== 'undefined') {
   registerRail();
   registerScroll();
+  registerSegmented();
   registerTail();
   start();
   startPageScroll();

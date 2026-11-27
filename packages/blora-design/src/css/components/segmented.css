@@ -1,0 +1,95 @@
+/*
+ * 分段控件 bd-segmented：一组里选一个（视图切换、时间范围、规格档位）。凹槽底，选中底是连续滑动的滑块。
+ *   写法：role="radiogroup" + role="radio" aria-checked，或 role="tablist" + role="tab" aria-selected
+ *   data-shape  pill：胶囊形、小号，选中项浮起（视图切换）
+ *   data-tone   sand：暖杏选中底（规格档位）
+ * 选中项各自有底色时会被滑块挡住，所以选中项透明、底色由滑块提供（DESIGN.md · Motion · 单选组的选中底）
+ */
+@layer bd.components {
+  .bd-segmented {
+    --bd-glide-bg: var(--bd-control);
+    --bd-glide-shadow: var(--bd-shadow-control);
+    --bd-seg-radius: 8px;
+
+    display: inline-grid;
+    grid-auto-columns: minmax(0, 1fr);
+    align-self: flex-start;
+    width: fit-content;
+    grid-auto-flow: column;
+    position: relative;
+    padding: 3px;
+    border-radius: calc(var(--bd-seg-radius) + 3px);
+    background: var(--bd-well);
+
+    > :is(button, [role='radio'], [role='tab']) {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 30px;
+      padding: 0 13px;
+      border-radius: var(--bd-seg-radius);
+      white-space: nowrap;
+      font-size: 13px;
+      font-weight: 560;
+      color: var(--bd-ink-tertiary);
+      transition:
+        color var(--bd-duration-hover) ease,
+        background-color var(--bd-duration-hover) ease;
+    }
+
+    > :is([aria-checked='true'], [aria-selected='true'], [aria-pressed='true']) {
+      color: var(--bd-ink);
+    }
+
+    /* 运行时接管之前，选中项自己显示选中底 */
+    &:not(:has(> [data-part='glide']))
+      > :is([aria-checked='true'], [aria-selected='true'], [aria-pressed='true']) {
+      background: var(--bd-glide-bg);
+      box-shadow: var(--bd-glide-shadow);
+    }
+  }
+
+  .bd-segmented[data-tone='sand'] {
+    --bd-glide-bg: var(--bd-sand-fill);
+    --bd-glide-shadow: none;
+
+    /* 规格档位通常占满一行，各档等宽 */
+    align-self: stretch;
+    width: auto;
+
+    > :is(button, [role='radio'], [role='tab']) {
+      color: var(--bd-ink-secondary);
+    }
+
+    > :is([aria-checked='true'], [aria-selected='true'], [aria-pressed='true']) {
+      font-weight: 620;
+      color: var(--bd-sand-ink);
+    }
+  }
+
+  .bd-segmented[data-shape='pill'] {
+    --bd-seg-radius: var(--bd-radius-pill);
+
+    grid-auto-columns: auto;
+    gap: 2px;
+    border-radius: var(--bd-radius-pill);
+
+    > :is(button, [role='radio'], [role='tab']) {
+      height: 29px;
+      padding: 0 12px;
+      font-size: 12.5px;
+      font-weight: var(--bd-text-button-weight);
+      color: var(--bd-ink-secondary);
+    }
+
+    > :is(button, [role='radio'], [role='tab']):has(> svg:only-child) {
+      width: 31px;
+      padding: 0;
+    }
+
+    > :not([aria-checked='true'], [aria-selected='true'], [aria-pressed='true']):hover {
+      color: var(--bd-ink);
+    }
+  }
+}

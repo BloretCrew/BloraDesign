@@ -1,0 +1,42 @@
+/*
+ * 图标：Lucide 线性图标，写 <svg data-icon width="14" height="14">。
+ * 小尺寸时加粗笔画保持清晰；没写尺寸时默认 16px。
+ */
+@layer bd.base {
+  svg[data-icon] {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+
+  svg[data-icon]:not([width]) {
+    width: 16px;
+    height: 16px;
+  }
+
+  svg[data-icon]:is([width='9'], [width='10']) {
+    stroke-width: 3;
+  }
+
+  svg[data-icon]:is([width='11'], [width='12']) {
+    stroke-width: 2.6;
+  }
+
+  svg[data-icon]:is([width='13'], [width='14']) {
+    stroke-width: 2.2;
+  }
+
+  /* 加载中：星轨转圈 */
+  svg[data-icon][data-spin] {
+    animation: bd-spin 0.9s linear infinite;
+  }
+
+  @keyframes bd-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>快捷键、状态标签、标签、头像 · Blora Design</title>
+    <link rel="stylesheet" href="../../packages/blora-design/dist/blora.css" />
+    <script type="module" src="../../packages/blora-design/dist/blora.js"></script>
+  </head>
+  <body>
+    <main class="bd-page" style="max-width: 1200px; margin: 12px auto; padding: 0 12px">
+      <section class="bd-mosaic" data-cols="2">
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>状态标签</h2>
+            <p>soft 底 + ink 字</p>
+          </header>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px" id="pills">
+            <span class="bd-pill" data-tone="sand">在线运行</span>
+            <span class="bd-pill" data-tone="blush">右键体验</span>
+            <span class="bd-pill" data-tone="rose">已超限</span>
+            <span class="bd-pill">草稿</span>
+            <span class="bd-pill" data-tone="sand" data-dot>运行中</span>
+          </div>
+        </article>
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>标签 · 头像 · 快捷键</h2>
+            <p>可移除的标签、叠放的头像</p>
+          </header>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px" id="misc">
+            <span class="bd-tag"
+              >边缘网关
+              <button type="button" aria-label="移除 边缘网关">
+                <svg data-icon width="11" height="11" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" />
+                </svg>
+              </button>
+            </span>
+            <span style="display: inline-flex">
+              <span class="bd-avatar" data-tone="blush">A1</span>
+              <span class="bd-avatar" data-tone="sand">B2</span>
+              <span class="bd-avatar" data-tone="rose">C3</span>
+              <span class="bd-avatar">+4</span>
+            </span>
+            <button type="button" class="bd-button" id="search">
+              <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <span>星轨检索</span>
+              <kbd class="bd-kbd" aria-label="Command K">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"
+                    stroke="currentColor"
+                    stroke-width="2.4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span>K</span>
+              </kbd>
+            </button>
+          </div>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

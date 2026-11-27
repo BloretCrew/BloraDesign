@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>按钮 · Blora Design</title>
+    <link rel="stylesheet" href="../../packages/blora-design/dist/blora.css" />
+    <script type="module" src="../../packages/blora-design/dist/blora.js"></script>
+  </head>
+  <body>
+    <main class="bd-page" style="max-width: 1200px; margin: 12px auto; padding: 0 12px">
+      <section class="bd-mosaic" data-cols="2">
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>层级</h2>
+            <p>主操作每个格子最多一个</p>
+          </header>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px" id="levels">
+            <button type="button" class="bd-button" data-variant="primary">主操作</button>
+            <button type="button" class="bd-button" data-variant="blush">雾粉次主</button>
+            <button type="button" class="bd-button" data-variant="sand">暖杏辅助</button>
+            <button type="button" class="bd-button">柔槽中性</button>
+            <button type="button" class="bd-button" data-variant="ghost">轻量透明</button>
+            <button type="button" class="bd-button" disabled>禁用态</button>
+            <button type="button" class="bd-button" data-variant="rose">销毁节点</button>
+          </div>
+        </article>
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>尺寸 · 图标 · 忙碌</h2>
+            <p>小号 29、默认 35、大号 40</p>
+          </header>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px" id="sizes">
+            <button type="button" class="bd-button" data-variant="blush" data-size="sm">
+              小号
+            </button>
+            <button type="button" class="bd-button" data-variant="blush">默认</button>
+            <button type="button" class="bd-button" data-variant="blush" data-size="lg">
+              大号
+            </button>
+            <button type="button" class="bd-button" data-shape="icon" aria-label="新增">
+              <svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14" />
+                <path d="M12 5v14" />
+              </svg>
+            </button>
+            <button type="button" class="bd-button">
+              <svg
+                data-icon
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                style="color: var(--bd-blush-solid)"
+              >
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+              <span>轨道已同步</span>
+            </button>
+            <button type="button" class="bd-button" aria-busy="true">
+              <svg
+                data-icon
+                data-spin
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                style="color: var(--bd-blush-solid)"
+              >
+                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+              </svg>
+              <span>星轨校准中...</span>
+            </button>
+          </div>
+        </article>
+      </section>
+      <section class="bd-mosaic" data-cols="1">
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>耦合工具组 · 计数</h2>
+            <p>一块凹槽里放几个小号按钮</p>
+          </header>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px" id="groups">
+            <div class="bd-group">
+              <button type="button" class="bd-button" data-variant="elevated">重连</button>
+              <button type="button" class="bd-button" data-variant="ghost">刷新</button>
+            </div>
+            <button type="button" class="bd-button">
+              <span>告警</span><span data-part="count">3</span>
+            </button>
+          </div>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

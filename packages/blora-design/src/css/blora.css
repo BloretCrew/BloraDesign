@@ -19,4 +19,8 @@
 @import './layout/head.css';
 @import './layout/tray.css';
 @import './layout/scroll.css';
+@import './components/icon.css';
+@import './components/button.css';
+@import './components/segmented.css';
+@import './components/badge.css';
 @import './motion.css';

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>分段控件 · Blora Design</title>
+    <link rel="stylesheet" href="../../packages/blora-design/dist/blora.css" />
+    <script type="module" src="../../packages/blora-design/dist/blora.js"></script>
+  </head>
+  <body>
+    <main class="bd-page" style="max-width: 1200px; margin: 12px auto; padding: 0 12px">
+      <section class="bd-mosaic" data-cols="3">
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>时间范围</h2>
+            <p>默认：白色浮起的选中底</p>
+          </header>
+          <div class="bd-segmented" role="radiogroup" aria-label="时间范围" id="range">
+            <button type="button" role="radio" aria-checked="false">24 小时</button>
+            <button type="button" role="radio" aria-checked="true">7 天</button>
+            <button type="button" role="radio" aria-checked="false">30 天</button>
+          </div>
+        </article>
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>视图切换</h2>
+            <p>胶囊形，只有图标</p>
+          </header>
+          <div class="bd-segmented" data-shape="pill" role="radiogroup" aria-label="视图" id="view">
+            <button type="button" role="radio" aria-checked="true" aria-label="列表视图">
+              <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 12h.01" />
+                <path d="M3 18h.01" />
+                <path d="M3 6h.01" />
+                <path d="M8 12h13" />
+                <path d="M8 18h13" />
+                <path d="M8 6h13" />
+              </svg>
+            </button>
+            <button type="button" role="radio" aria-checked="false" aria-label="网格视图">
+              <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                <rect width="7" height="7" x="3" y="3" rx="1" />
+                <rect width="7" height="7" x="14" y="3" rx="1" />
+                <rect width="7" height="7" x="14" y="14" rx="1" />
+                <rect width="7" height="7" x="3" y="14" rx="1" />
+              </svg>
+            </button>
+            <button type="button" role="radio" aria-checked="false" aria-label="拓扑视图">
+              <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="3" />
+                <circle cx="19" cy="5" r="2" />
+                <circle cx="5" cy="19" r="2" />
+                <path d="M10.4 21.9a10 10 0 0 0 9.941-15.416" />
+                <path d="M13.5 2.1a10 10 0 0 0-9.841 15.416" />
+              </svg>
+            </button>
+          </div>
+        </article>
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>规格档位</h2>
+            <p>暖杏选中底</p>
+          </header>
+          <div class="bd-segmented" data-tone="sand" role="radiogroup" aria-label="内存" id="tier">
+            <button type="button" role="radio" aria-checked="false">轻量 2G</button>
+            <button type="button" role="radio" aria-checked="true">均衡 4G</button>
+            <button type="button" role="radio" aria-checked="false">星轨 8G</button>
+          </div>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

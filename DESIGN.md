@@ -375,7 +375,7 @@ Blora Design 的界面由一块块白色「格子」拼成，格子之间只留 
 
 深色模式由 `cortado.dark` 决定：默认跟随系统，`<html data-theme="light|dark">` 可以强制指定。深色下格子不加投影。
 
-**已知问题（对比度）**：按 WCAG AA（正文 4.5:1）检查，主按钮白字在雾粉 #DC8A78 上只有 2.64:1；ink-tertiary #85899B 在浅底上约 3.2:1。框架第 ① 阶段要给出解决方案；在此之前：
+**已知问题（对比度）**：按 WCAG AA（正文 4.5:1）检查，主按钮白字在雾粉 #DC8A78 上只有 2.64:1；ink-tertiary #85899B 在浅底上约 3.2:1。2026-11-27 比较过四种方案（加深字色、加深底色、改柔和主按钮），视觉上都不如现状，**暂时保持白字 + 雾粉实色底**，等 3.0 全部完成后再统一调整。在此之前：
 
 - 主按钮文字至少 13.5px、字重 540，且同一格子只放一个主按钮；
 - tertiary 只用于 12px 以上的标签，不用于正文；
@@ -601,7 +601,7 @@ Blora Design 的界面由一块块白色「格子」拼成，格子之间只留 
 | 构图       | `bd-app`、`bd-rail`、`bd-topbar`、`bd-page`                                                                                                     | 页面外壳、`.side-rail`、`.top-header`                                                                                                                                 |
 |            | `bd-mosaic`、`bd-tile`、`bd-head`、`bd-stack`                                                                                                   | `.mosaic-*` / `.blora-row`、`.tile`、`.tile-head`、`.col-stack` / `.blora-stack`                                                                                      |
 |            | `bd-tray`、`bd-corner`、`bd-scroll`                                                                                                             | `.tray`、`.plan-corner`、（新增）                                                                                                                                     |
-| 基础       | `bd-button`、`bd-icon`、`bd-kbd`、`bd-pill`、`bd-tag`、`bd-avatar`                                                                              | `.btn`、Lucide `<i>`、`.kbd`、`.status-pill`、`.tag-chip`、`.av-orb`                                                                                                  |
+| 基础       | `bd-button`、`bd-group`、`<svg data-icon>`、`bd-kbd`、`bd-pill`、`bd-tag`、`bd-avatar`                                                          | `.btn`、`.coupled-pair`、`svg.i`、`.kbd`、`.status-pill`、`.tag-chip`、`.av-orb`                                                                                      |
 | 导航       | `bd-segmented`、`bd-tabs`、`bd-pager`、`bd-nav`、`bd-tree`、`bd-steps`、`bd-breadcrumb`                                                         | `.seg-bar` / 视图切换、`.tabs-bar`、`.pager`、`.jump-strip` / 设置导航 / 文章目录 / 移动端导航、`.tree-list`、`.c-step`                                               |
 | 输入       | `bd-field`、`bd-input`、`bd-textarea`、`bd-select`、`bd-date`、`bd-stepper`、`bd-slider`、`bd-switch`、`bd-checkbox`、`bd-radio`、`bd-dropzone` | `.field-box`、输入框、`.picker-shell`、日历、`.num-stepper`、`.slider-block`、`.sw-pill`、`.chk-item`、`.orb-radio`、`.dropzone`                                      |
 | 数据展示   | `bd-table`、`bd-list`、`bd-spec`、`bd-ring`、`bd-metric`、`bd-progress`、`bd-code`、`bd-prose`、`bd-accordion`、`bd-empty`、`bd-skeleton`       | 表格、`.seamless-list`、`.spec-row` / `.spec-stack`、`.orbit-ring-wrap` / `.kpi-ring`、`.orbit-tile`、进度条、代码块、阅读区、`.acc-card`、`.empty-card`、`.skel-bar` |
@@ -769,11 +769,31 @@ Blora Design 的界面由一块块白色「格子」拼成，格子之间只留 
 
 ### 按钮
 
-`bd-button`：胶囊形，高 35；小号 29（`data-size="sm"`），大号 41（`data-size="lg"`）。变体 `data-variant`：`primary` 雾粉实心；`blush` 次主（雾粉 fill）；`surface` 中性（凹槽底，默认）；`ghost` 轻量（透明）。只有图标时加 `data-shape="icon"` 并写 `aria-label`。一个格子里最多一个实心主按钮。
+`bd-button`：胶囊形，高 35；小号 29（`data-size="sm"`），大号 40（`data-size="lg"`）。变体 `data-variant`：`primary` 雾粉实心；`blush` 次主（雾粉 fill）；`sand` 暖杏辅助；`surface` 中性（凹槽底，默认，可不写）；`elevated` 浮起（白底 + 浅投影，用在凹槽里）；`ghost` 轻量（透明）；`rose` 危险。只有图标时加 `data-shape="icon"` 并写 `aria-label`。一个格子里最多一个实心主按钮。
+
+- 忙碌：`aria-busy="true"`，图标换成转圈的 `<svg data-icon data-spin>`；禁用：`disabled`。
+- 计数：按钮里放 `<span data-part="count">3</span>`；快捷键：放一个 `bd-kbd`。
+- 耦合工具组 `bd-group`：一块凹槽里放几个小号按钮（如「重连 / 刷新」），里面的按钮自动变成 29 高。
+- 「一组里选一个」不是按钮组，用分段控件。
+
+### 分段控件（Segmented）
+
+`bd-segmented`：凹槽底，选中底是连续滑动的滑块。写法 `role="radiogroup"` + 每项 `role="radio" aria-checked`（或 `role="tablist"` + `role="tab" aria-selected`）。运行时负责点击切换、方向键 / Home / End 和发出 `bd-change`。
+
+- 默认：选中底白色浮起，项高 30，未选中文字 ink-tertiary（时间范围、筛选）。
+- `data-shape="pill"`：胶囊形、项高 29，只有图标的项是 31 宽的正圆（视图切换）。
+- `data-tone="sand"`：暖杏选中底，占满一行、各档等宽（规格档位）。
+- 段数不超过 5；放在格子标题右侧槽位时不超过 3。
+
+### 小块
+
+- `bd-kbd`：快捷键，19 高，白底浮起，可放图标和字母。
+- `bd-tag`：雾粉浅底标签，可在里面放一个移除按钮（写 `aria-label`）。
+- `bd-avatar`：34px 圆形头像，`data-tone` 选底色；相邻的头像自动叠放 7px，并有一圈格子色描边分隔（这是唯一允许的「描边」，用投影画）。
 
 ### 状态标签（Pill）
 
-`bd-pill`：胶囊形，11.5 / 560，soft 底 + ink 字，颜色用 `data-tone="blush|sand|rose"`，不写是中性。状态用词固定，按颜色分组：
+`bd-pill`：胶囊形，11.5 / 560，soft 底 + ink 字，颜色用 `data-tone="blush|sand|rose"`，不写是中性（凹槽底 + ink-tertiary）。列表里表示运行状态时加 `data-dot`，前面多一个 6px 圆点。状态用词固定，按颜色分组：
 
 - 雾粉：进行中、评审中、推荐、最新；
 - 暖杏：已完成、已支付、当前、接近上限、测试中；

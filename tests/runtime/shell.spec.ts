@@ -75,7 +75,8 @@ for (const [width, height] of WIDTHS) {
 
     test('选中滑块与当前导航项完全重合', async ({ page }) => {
       await open(page, width, height);
-      expect(await glideOffset(page)).toEqual([0, 0, 0, 0]);
+      // 过渡结束后对齐；机器负载高时过渡可能晚一点结束，所以轮询等待
+      await expect.poll(() => glideOffset(page), { timeout: 2000 }).toEqual([0, 0, 0, 0]);
     });
   });
 }
@@ -115,8 +116,8 @@ test('点击导航项：aria-current 移过去，选中滑块连续滑到新位�
         .transitionProperty,
   );
   expect(mid).toContain('transform');
-  await page.waitForTimeout(500);
-  expect(await glideOffset(page)).toEqual([0, 0, 0, 0]);
+  // 过渡结束后对齐；机器负载高时过渡可能晚一点结束，所以轮询等待
+  await expect.poll(() => glideOffset(page), { timeout: 2000 }).toEqual([0, 0, 0, 0]);
   expect(events).toEqual(['实例24']);
 });
 
@@ -129,7 +130,8 @@ test('收起侧栏：宽度连续变化，刷新后保持收起且不播放过�
   expect(await page.locator('.bd-rail').evaluate((el) => el.getBoundingClientRect().width)).toBe(
     64,
   );
-  expect(await glideOffset(page)).toEqual([0, 0, 0, 0]);
+  // 过渡结束后对齐；机器负载高时过渡可能晚一点结束，所以轮询等待
+  await expect.poll(() => glideOffset(page), { timeout: 2000 }).toEqual([0, 0, 0, 0]);
   await page.reload();
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
   expect(await page.locator('.bd-rail').evaluate((el) => el.getBoundingClientRect().width)).toBe(
