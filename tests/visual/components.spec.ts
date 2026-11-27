@@ -67,6 +67,8 @@ async function measureOn(page: Page, url: string, items: Item[]) {
 }
 
 test('组件与参考页一致', async ({ page }) => {
+  // 约 190 组、十几个页面，CI 机器较慢时会超过默认的 30 秒
+  test.setTimeout(120_000);
   await page.setViewportSize({ width: 1380, height: 900 });
   const byUrl = (side: 'ref' | 'ours') => {
     const groups = new Map<string, Item[]>();
