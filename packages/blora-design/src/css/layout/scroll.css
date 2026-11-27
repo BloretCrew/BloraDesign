@@ -10,7 +10,7 @@
     overscroll-behavior: contain;
   }
 
-  [data-part='thumb'] {
+  [data-part='scrollbar'] {
     position: absolute;
     top: 0;
     right: 3px;
@@ -27,7 +27,7 @@
     touch-action: none;
   }
 
-  [data-part='thumb'][data-axis='x'] {
+  [data-part='scrollbar'][data-axis='x'] {
     top: auto;
     right: auto;
     bottom: 3px;
@@ -43,29 +43,29 @@
   }
 
   /* 页面级：固定在视口右侧 */
-  [data-part='thumb'][data-scope='page'] {
+  [data-part='scrollbar'][data-scope='page'] {
     position: fixed;
     z-index: 900;
   }
 
-  [data-part='thumb'][data-state~='visible'] {
+  [data-part='scrollbar'][data-state~='visible'] {
     opacity: 1;
   }
 
-  [data-part='thumb']:hover,
-  [data-part='thumb'][data-state~='dragging'] {
+  [data-part='scrollbar']:hover,
+  [data-part='scrollbar'][data-state~='dragging'] {
     width: 6px;
     background: var(--bd-ink-tertiary);
   }
 
-  [data-part='thumb'][data-axis='x']:hover,
-  [data-part='thumb'][data-axis='x'][data-state~='dragging'] {
+  [data-part='scrollbar'][data-axis='x']:hover,
+  [data-part='scrollbar'][data-axis='x'][data-state~='dragging'] {
     width: auto;
     height: 6px;
   }
 
   /* 内容不需要滚动时不显示 */
-  [data-part='thumb'][data-state~='idle'] {
+  [data-part='scrollbar'][data-state~='idle'] {
     display: none;
   }
 }

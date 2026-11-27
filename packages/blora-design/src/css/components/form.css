@@ -1,0 +1,234 @@
+/*
+ * 表单（DESIGN.md · Components · 表单）
+ *   bd-form    字段网格：格子内容宽 ≥ 820 三列、≥ 480 两列、更窄一列；长字段 data-span="2" / "full"
+ *   bd-field   一个字段：<label data-part="label"> + 控件 + <p data-part="hint"> / <p data-part="error">
+ *   bd-input   输入框：可以直接写在 <input> 上，也可以是包着图标、<input> 和小按钮的外壳
+ *              小按钮：data-part="clear" 清除、"reveal" 显示密码、"copy" 复制
+ *   bd-input-group  前后缀拼接：<span data-part="addon">https://</span><input class="bd-input"><span data-part="addon">…</span>
+ *   bd-textarea 多行文本
+ * 聚焦时底色变白、外面一圈雾粉光晕；只读字段是凹槽底 + 次要墨色，不做成禁用的灰色
+ */
+@layer bd.components {
+  .bd-tile {
+    container: bd-tile / inline-size;
+  }
+
+  .bd-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--bd-space-group);
+  }
+
+  @container bd-tile (min-width: 820px) {
+    .bd-form {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @container bd-tile (max-width: 480px) {
+    .bd-form {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .bd-form > [data-span='2'] {
+    grid-column: span 2;
+  }
+
+  .bd-form > [data-span='full'] {
+    grid-column: 1 / -1;
+  }
+
+  @container bd-tile (max-width: 480px) {
+    .bd-form > [data-span] {
+      grid-column: auto;
+    }
+  }
+
+  .bd-field {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+
+    > [data-part='label'] {
+      display: block;
+      margin-bottom: 6px;
+      font-size: var(--bd-text-label-size);
+      font-weight: var(--bd-text-label-weight);
+      line-height: 1.5;
+      color: var(--bd-ink-tertiary);
+    }
+
+    > :is([data-part='hint'], [data-part='error']) {
+      margin-top: 4px;
+      font-size: var(--bd-text-caption-size);
+      line-height: 1.45;
+      color: var(--bd-ink-description);
+    }
+
+    > [data-part='error'] {
+      color: var(--bd-rose-ink);
+    }
+  }
+
+  /* ---- 输入框 ---- */
+  .bd-input,
+  .bd-textarea {
+    min-width: 0;
+    border-radius: var(--bd-radius-control);
+    background: var(--bd-well);
+    color: var(--bd-ink);
+    transition:
+      background-color var(--bd-duration-hover) ease,
+      box-shadow var(--bd-duration-hover) ease;
+  }
+
+  .bd-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 38px;
+    padding: 0 11px;
+  }
+
+  :is(.bd-input, .bd-textarea):is(:focus-within, :focus-visible) {
+    background: var(--bd-control);
+    box-shadow: var(--bd-shadow-focus);
+  }
+
+  .bd-input > input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+  }
+
+  .bd-input > input:focus-visible {
+    box-shadow: none;
+  }
+
+  .bd-input > svg {
+    color: var(--bd-ink-tertiary);
+  }
+
+  .bd-input:has(> input[type='password']) > input,
+  .bd-input:has(> [data-part='reveal']) > input {
+    font-family: var(--bd-font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.02em;
+  }
+
+  /* 只读：凹槽底 + 次要墨色，可以复制 */
+  :is(.bd-input:has(> input:read-only), input.bd-input:read-only, .bd-input[data-readonly]) {
+    justify-content: space-between;
+    color: var(--bd-ink-secondary);
+  }
+
+  .bd-input[data-readonly] > :is(data, code, span:not([data-part])) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--bd-font-mono);
+    font-size: 12.5px;
+  }
+
+  .bd-input > [data-part='clear'] {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--bd-slot);
+    color: var(--bd-ink-secondary);
+    transition:
+      background-color var(--bd-duration-hover) ease,
+      color var(--bd-duration-hover) ease;
+  }
+
+  .bd-input > [data-part='clear']:hover {
+    background: var(--bd-blush-fill);
+    color: var(--bd-blush-ink);
+  }
+
+  /* 输入框为空时不显示清除按钮 */
+  .bd-input:has(> input:placeholder-shown) > [data-part='clear'] {
+    display: none;
+  }
+
+  .bd-input > :is([data-part='reveal'], [data-part='copy']) {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin-right: -5px;
+    border-radius: 7px;
+    color: var(--bd-ink-tertiary);
+    transition:
+      background-color var(--bd-duration-hover) ease,
+      color var(--bd-duration-hover) ease;
+  }
+
+  .bd-input > [data-part='reveal']:hover {
+    background: var(--bd-slot);
+    color: var(--bd-ink);
+  }
+
+  .bd-input > [data-part='copy']:hover {
+    background: var(--bd-control);
+    color: var(--bd-ink);
+  }
+
+  /* 显示密码按钮：未按下显示「睁眼」，按下显示「闭眼」 */
+  [data-part='reveal'][aria-pressed='true'] > svg:first-child,
+  [data-part='reveal']:not([aria-pressed='true']) > svg:last-child:not(:first-child) {
+    display: none;
+  }
+
+  /* ---- 前后缀拼接 ---- */
+  .bd-input-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+
+    > .bd-input {
+      flex: 1;
+      border-radius: 4px;
+      font-weight: 550;
+    }
+
+    > [data-part='addon'] {
+      display: inline-flex;
+      align-items: center;
+      height: 38px;
+      padding: 0 11px;
+      background: var(--bd-slot);
+      color: var(--bd-ink-secondary);
+      font-family: var(--bd-font-mono);
+      font-size: 12.5px;
+    }
+
+    > :first-child {
+      border-radius: var(--bd-radius-control) 4px 4px var(--bd-radius-control);
+    }
+
+    > :last-child {
+      border-radius: 4px var(--bd-radius-control) var(--bd-radius-control) 4px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .bd-input-group > [data-part='addon'] {
+      padding: 0 8px;
+      font-size: 11.5px;
+    }
+  }
+
+  .bd-textarea {
+    display: block;
+    width: 100%;
+    min-height: 84px;
+    padding: 9px 11px;
+    line-height: var(--bd-text-body-leading);
+  }
+}

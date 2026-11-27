@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>表单 · Blora Design</title>
+    <link rel="stylesheet" href="../../packages/blora-design/dist/blora.css" />
+    <script type="module" src="../../packages/blora-design/dist/blora.js"></script>
+  </head>
+  <body>
+    <main class="bd-page" style="max-width: 1200px; margin: 12px auto; padding: 0 12px">
+      <section class="bd-mosaic" data-cols="3">
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>输入框</h2>
+            <p>清除、密码、前后缀、步进器与开关</p>
+          </header>
+          <div class="bd-input" id="clear">
+            <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" />
+            </svg>
+            <input value="demo-service-core" placeholder="输入节点标识..." aria-label="节点标识" />
+            <button type="button" data-part="clear" aria-label="清除">
+              <svg data-icon width="10" height="10" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
+          </div>
+          <div class="bd-input" id="password">
+            <svg data-icon width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            <input
+              type="password"
+              value="blora-orbit-key"
+              placeholder="访问密钥"
+              aria-label="访问密钥"
+            />
+            <button type="button" data-part="reveal" aria-label="显示密钥">
+              <svg data-icon width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                />
+                <circle cx="12" cy="12" r="3" /></svg
+              ><svg data-icon width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"
+                />
+                <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+                <path
+                  d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"
+                />
+                <path d="m2 2 20 20" />
+              </svg>
+            </button>
+          </div>
+          <div class="bd-input-group" id="addon">
+            <span data-part="addon">https://</span>
+            <input class="bd-input" value="app-demo" aria-label="子域名" />
+            <span data-part="addon">.example.com</span>
+          </div>
+          <div
+            style="display: flex; align-items: center; justify-content: space-between; gap: 10px"
+          >
+            <span style="font-size: 12.5px; color: var(--bd-ink-secondary)"
+              >轨道副本步进与开关</span
+            >
+            <div style="display: flex; align-items: center; gap: 10px">
+              <div class="bd-stepper" id="stepper">
+                <button type="button" data-part="dec" aria-label="减少">
+                  <svg data-icon width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h14" />
+                  </svg>
+                </button>
+                <span
+                  data-part="value"
+                  aria-label="副本数"
+                  aria-valuenow="6"
+                  aria-valuemin="1"
+                  aria-valuemax="9"
+                  >6</span
+                >
+                <button type="button" data-part="inc" aria-label="增加">
+                  <svg data-icon width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h14" />
+                    <path d="M12 5v14" />
+                  </svg>
+                </button>
+                <input type="hidden" name="replicas" value="6" />
+              </div>
+              <button
+                type="button"
+                class="bd-switch"
+                role="switch"
+                aria-checked="true"
+                aria-label="自动容灾"
+                id="switch"
+              ></button>
+            </div>
+          </div>
+        </article>
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>复选与单选</h2>
+            <p>原生控件，外观全部重画</p>
+          </header>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px" id="checks">
+            <label><input type="checkbox" class="bd-checkbox" checked />热备守护</label>
+            <label><input type="checkbox" class="bd-checkbox" id="indet" />半选同步</label>
+            <label><input type="radio" class="bd-radio" name="line" checked />BGP 优选</label>
+            <label><input type="radio" class="bd-radio" name="line" />直连专线</label>
+          </div>
+        </article>
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>滑块与上传</h2>
+            <p>拖动、点击或方向键</p>
+          </header>
+          <div
+            class="bd-slider"
+            role="slider"
+            tabindex="0"
+            aria-label="CPU 上限"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="68"
+            style="--bd-value: 68%"
+            data-ticks="0,25,50,75,100"
+            id="slider"
+          ></div>
+          <label class="bd-dropzone" id="drop">
+            <input type="file" hidden accept=".yml,.json" />
+            <span data-part="icon"
+              ><svg data-icon width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" x2="12" y1="3" y2="15" /></svg
+            ></span>
+            <span data-part="text"
+              ><b>拖拽或点击上传星轨编排文件</b
+              ><small>.yml / .json · 柔和 1.5px 虚线槽</small></span
+            >
+            <span class="bd-pill" data-tone="blush">待上传</span>
+          </label>
+        </article>
+      </section>
+      <section class="bd-mosaic" data-cols="1">
+        <article class="bd-tile">
+          <header class="bd-head">
+            <h2>常规</h2>
+            <p>工作区的基础信息，对所有成员生效</p>
+          </header>
+          <div class="bd-form" id="settings">
+            <div class="bd-field">
+              <label data-part="label" for="wsName">工作区名称</label>
+              <input class="bd-input" id="wsName" value="Blora Labs" />
+              <p data-part="hint">显示在侧栏和邀请邮件中</p>
+            </div>
+            <div class="bd-field">
+              <span data-part="label">工作区 ID</span>
+              <div class="bd-input" data-readonly>
+                <code>ws-blora-labs-7f3a</code>
+                <button type="button" data-part="copy" aria-label="复制工作区 ID">
+                  <svg data-icon width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                  </svg>
+                </button>
+              </div>
+              <p data-part="hint">调用 API 和 CLI 时使用，不可修改</p>
+            </div>
+            <div class="bd-field">
+              <label data-part="label" for="desc">说明</label>
+              <textarea
+                class="bd-textarea"
+                id="desc"
+                placeholder="一句话说明这个工作区的用途"
+              ></textarea>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+    <script>
+      document.getElementById('indet').indeterminate = true;
+    </script>
+  </body>
+</html>

@@ -13,7 +13,7 @@ type Axis = 'x' | 'y';
 
 function thumb(scroller: HTMLElement, axis: Axis, page: boolean): Cleanup {
   const el = document.createElement('span');
-  el.setAttribute('data-part', 'thumb');
+  el.setAttribute('data-part', 'scrollbar');
   el.setAttribute('data-axis', axis);
   el.setAttribute('aria-hidden', 'true');
   if (page) el.setAttribute('data-scope', 'page');

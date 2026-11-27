@@ -157,7 +157,7 @@ test('≤900：侧栏变成顶栏下方的横向导航条', async ({ page }) => 
 
 test('页面滚动条：原生滚动条隐藏，Blora 滑块跟随滚动、可以拖动', async ({ page }) => {
   await open(page, 1024, 600);
-  const thumb = page.locator('body > [data-part="thumb"][data-scope="page"]');
+  const thumb = page.locator('body > [data-part="scrollbar"][data-scope="page"]');
   await expect(thumb).toHaveCount(1);
   expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollbarWidth)).toBe(
     'none',

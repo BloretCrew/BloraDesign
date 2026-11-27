@@ -1,0 +1,169 @@
+/*
+ * 小控件：步进器 bd-stepper、开关 bd-switch、复选框 bd-checkbox、单选 bd-radio
+ *   bd-stepper  <div class="bd-stepper"><button data-part="dec"> <span data-part="value" role="spinbutton"> <button data-part="inc"></div>
+ *   bd-switch   <button class="bd-switch" role="switch" aria-checked="true" aria-label="…">
+ *   bd-checkbox / bd-radio  写在原生 <input type="checkbox|radio"> 上（外观全部重画），外面用 <label> 包住文字
+ */
+@layer bd.components {
+  /* ---- 步进器 ---- */
+  .bd-stepper {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+
+    > :is([data-part='dec'], [data-part='inc']) {
+      display: grid;
+      place-items: center;
+      width: 33px;
+      height: 33px;
+      background: var(--bd-slot);
+      color: var(--bd-ink);
+      transition:
+        background-color var(--bd-duration-hover) ease,
+        color var(--bd-duration-hover) ease;
+    }
+
+    > :is([data-part='dec'], [data-part='inc']):hover:not(:disabled) {
+      background: var(--bd-blush-fill);
+      color: var(--bd-blush-ink);
+    }
+
+    > :is([data-part='dec'], [data-part='inc']):disabled {
+      color: var(--bd-ink-quaternary);
+      cursor: default;
+    }
+
+    > [data-part='dec'] {
+      border-radius: 10px 4px 4px 10px;
+    }
+
+    > [data-part='inc'] {
+      border-radius: 4px 10px 10px 4px;
+    }
+
+    > [data-part='value'] {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 33px;
+      overflow: hidden;
+      border-radius: 4px;
+      background: var(--bd-well);
+      font-family: var(--bd-font-mono);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  /* ---- 开关 ---- */
+  .bd-switch {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 20px;
+    padding: 3px;
+    border-radius: var(--bd-radius-pill);
+    background: var(--bd-slot);
+    transition: background-color var(--bd-duration-fade) ease;
+  }
+
+  .bd-switch::before {
+    content: '';
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--bd-on-primary);
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--bd-ink) 12%, transparent);
+    transition: transform var(--bd-duration-fade) ease;
+  }
+
+  .bd-switch[aria-checked='true'] {
+    background: var(--bd-blush-solid);
+  }
+
+  .bd-switch[aria-checked='true']::before {
+    transform: translateX(16px);
+  }
+
+  .bd-switch:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  /* ---- 复选框、单选 ---- */
+  label:has(> :is(.bd-checkbox, .bd-radio)) {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--bd-ink);
+  }
+
+  .bd-checkbox,
+  .bd-radio {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    background-color: var(--bd-slot);
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    transition:
+      background-color 0.14s ease,
+      background-size 0.22s var(--bd-ease-pop);
+  }
+
+  .bd-checkbox {
+    border-radius: 6px;
+    background-size: 0 0;
+  }
+
+  .bd-checkbox:checked {
+    background-color: var(--bd-blush-solid);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+    background-size: 12px 12px;
+  }
+
+  .bd-checkbox:indeterminate {
+    background-color: var(--bd-blush-solid);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E");
+    background-size: 12px 12px;
+  }
+
+  /* 单选的白色圆点：用内投影画，选中时内投影收窄、露出中间 7px 的白点 */
+  .bd-radio {
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 9px var(--bd-slot);
+    transition:
+      background-color 0.14s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .bd-radio:checked {
+    background-color: var(--bd-on-primary);
+    box-shadow: inset 0 0 0 5.5px var(--bd-blush-solid);
+  }
+
+  /* 键盘聚焦：光晕叠在画圆点的内投影外面 */
+  .bd-radio:focus-visible {
+    box-shadow:
+      inset 0 0 0 9px var(--bd-slot),
+      var(--bd-shadow-focus);
+  }
+
+  .bd-radio:checked:focus-visible {
+    box-shadow:
+      inset 0 0 0 5.5px var(--bd-blush-solid),
+      var(--bd-shadow-focus);
+  }
+
+  :is(.bd-checkbox, .bd-radio):disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}

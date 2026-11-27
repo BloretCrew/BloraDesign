@@ -398,3 +398,421 @@ PAIRS.push(
     props: ['fontSize', 'color', 'columnGap', 'height'],
   },
 );
+
+const FORM = '/recipes/components/form.html';
+const SURF = [
+  'height',
+  'width',
+  'backgroundColor',
+  'color',
+  'borderTopLeftRadius',
+  'borderBottomRightRadius',
+  'boxShadow',
+];
+
+PAIRS.push(
+  // ---- 输入框 ----
+  {
+    name: '清除框',
+    ref: `${C} .field-box`,
+    ours: `${FORM} #clear`,
+    props: [...BOX, 'paddingLeft'],
+    text: false,
+  },
+  {
+    name: '清除按钮',
+    ref: `${C} #clearBtn`,
+    ours: `${FORM} #clear > [data-part="clear"]`,
+    props: SURF,
+  },
+  {
+    name: '输入框里的图标',
+    ref: `${C} .field-box > svg`,
+    ours: `${FORM} #clear > svg`,
+    props: ['width', 'height', 'color'],
+  },
+  {
+    name: '输入框文字',
+    ref: `${C} #clearInput`,
+    ours: `${FORM} #clear > input`,
+    props: ['fontSize', 'fontWeight', 'color', 'height'],
+    size: false,
+  },
+  {
+    name: '密码框文字',
+    ref: `${C} #pwdInput`,
+    ours: `${FORM} #password > input`,
+    props: ['fontFamily', 'fontSize', 'letterSpacing'],
+    size: false,
+  },
+  {
+    name: '显示密码按钮',
+    ref: `${C} #eyeBtn`,
+    ours: `${FORM} #password > [data-part="reveal"]`,
+    props: [...SURF, 'marginRight'].filter((p) => p !== 'marginRight'),
+  },
+  {
+    name: '前缀',
+    ref: `${C} .addon-cap.left`,
+    ours: `${FORM} #addon > [data-part="addon"]:first-child`,
+    props: [...SURF, 'fontFamily', 'fontSize', 'paddingLeft'],
+  },
+  {
+    name: '后缀',
+    ref: `${C} .addon-cap.right`,
+    ours: `${FORM} #addon > [data-part="addon"]:last-child`,
+    props: [...SURF, 'fontFamily', 'fontSize'],
+  },
+  {
+    name: '拼接的输入框',
+    ref: `${C} .addon-mid`,
+    ours: `${FORM} #addon > .bd-input`,
+    props: ['height', 'backgroundColor', 'borderTopLeftRadius', 'paddingLeft', 'fontWeight'],
+    size: false,
+  },
+  // ---- 步进器、开关 ----
+  {
+    name: '步进器 · 减',
+    ref: `${C} .step-btn.dec`,
+    ours: `${FORM} #stepper > [data-part="dec"]`,
+    props: SURF.concat('borderTopRightRadius'),
+  },
+  {
+    name: '步进器 · 加',
+    ref: `${C} .step-btn.inc`,
+    ours: `${FORM} #stepper > [data-part="inc"]`,
+    props: SURF.concat('borderTopRightRadius'),
+  },
+  {
+    name: '步进器 · 数值',
+    ref: `${C} .step-num`,
+    ours: `${FORM} #stepper > [data-part="value"]`,
+    props: [...SURF, 'fontFamily', 'fontWeight'],
+  },
+  {
+    name: '开关 · 开',
+    ref: `${C} #mainSwitch`,
+    ours: `${FORM} #switch`,
+    props: [...SURF, 'paddingLeft'],
+  },
+  {
+    name: '开关 · 圆钮',
+    ref: `${C} #mainSwitch .sw-knob`,
+    ours: `${FORM} #switch::before`,
+    props: ['width', 'height', 'backgroundColor', 'transform'],
+    size: false,
+  },
+  // ---- 复选、单选 ----
+  {
+    name: '复选 · 选中',
+    ref: `${C} .chk-item.checked .orb-box`,
+    ours: `${FORM} .bd-checkbox:checked`,
+    props: ['width', 'height', 'backgroundColor', 'borderTopLeftRadius'],
+  },
+  {
+    name: '复选 · 半选',
+    ref: `${C} .chk-item.indet .orb-box`,
+    ours: `${FORM} #indet`,
+    props: ['width', 'height', 'backgroundColor', 'borderTopLeftRadius'],
+  },
+  {
+    name: '单选 · 未选',
+    ref: `${C} .chk-item:not(.checked) .orb-radio`,
+    ours: `${FORM} .bd-radio:not(:checked)`,
+    props: ['width', 'height', 'borderTopLeftRadius'],
+  },
+  {
+    name: '复选项文字',
+    ref: `${C} .chk-item`,
+    ours: `${FORM} #checks > label`,
+    props: ['fontSize', 'color', 'columnGap'],
+  },
+  // ---- 滑块 ----
+  {
+    name: '滑块 · 轨道',
+    ref: `${C} .slider-rail`,
+    ours: `${FORM} #slider [data-part="rail"]`,
+    props: ['height', 'backgroundColor', 'borderTopLeftRadius'],
+    size: false,
+  },
+  {
+    name: '滑块 · 填充',
+    ref: `${C} #sliderFill`,
+    ours: `${FORM} #slider [data-part="fill"]`,
+    props: ['height', 'backgroundColor'],
+    size: false,
+  },
+  {
+    name: '滑块 · 拇指',
+    ref: `${C} #sliderThumb`,
+    ours: `${FORM} #slider [data-part="thumb"]`,
+    props: ['width', 'height', 'backgroundColor', 'boxShadow'],
+  },
+  {
+    name: '滑块 · 操作区',
+    ref: `${C} #orbitSlider`,
+    ours: `${FORM} #slider > [data-part="track"]`,
+    props: ['height'],
+    size: false,
+  },
+  {
+    name: '滑块 · 刻度',
+    ref: `${C} .slider-ticks`,
+    ours: `${FORM} #slider > [data-part="ticks"]`,
+    props: ['fontFamily', 'fontSize', 'color', 'height'],
+    size: false,
+  },
+  // ---- 上传区 ----
+  // 参考页的上传区在更窄的格子里，标题换成了两行，不比高度
+  {
+    name: '上传区',
+    ref: `${C} #dropZone`,
+    ours: `${FORM} #drop`,
+    props: ['backgroundColor', 'borderTopLeftRadius', 'columnGap'],
+    size: false,
+  },
+  {
+    name: '上传区 · 图标底',
+    ref: `${C} .dz-icon`,
+    ours: `${FORM} #drop > [data-part="icon"]`,
+    props: SURF,
+  },
+  {
+    name: '上传区 · 文字',
+    ref: `${C} #dzTitle`,
+    ours: `${FORM} #drop b`,
+    props: ['fontSize', 'fontWeight', 'color'],
+  },
+  // ---- 字段 ----
+  {
+    name: '字段标签',
+    ref: `${SETTINGS} .f-label`,
+    ours: `${FORM} #settings [data-part="label"]`,
+    props: ['fontSize', 'fontWeight', 'color', 'marginBottom', 'height'],
+    size: false,
+  },
+  {
+    name: '字段说明',
+    ref: `${SETTINGS} .f-hint`,
+    ours: `${FORM} #settings [data-part="hint"]`,
+    props: ['fontSize', 'color', 'lineHeight', 'marginTop'],
+    size: false,
+  },
+  {
+    name: '字段输入框',
+    ref: `${SETTINGS} #wsName`,
+    ours: `${FORM} #wsName`,
+    props: ['fontSize', 'color'],
+    size: false,
+  },
+  {
+    name: '字段外壳',
+    ref: `${SETTINGS} .f .field`,
+    ours: `${FORM} #wsName`,
+    props: ['height', 'backgroundColor', 'borderTopLeftRadius', 'paddingLeft'],
+    size: false,
+  },
+  {
+    name: '只读字段',
+    ref: `${SETTINGS} .field-ro`,
+    ours: `${FORM} [data-readonly]`,
+    props: ['height', 'backgroundColor', 'color', 'borderTopLeftRadius', 'paddingLeft'],
+    size: false,
+  },
+  {
+    name: '复制按钮',
+    ref: `${SETTINGS} .field-ro .copy-btn`,
+    ours: `${FORM} [data-readonly] > [data-part="copy"]`,
+    props: [...SURF, 'marginRight'],
+  },
+  {
+    name: '字段网格',
+    ref: `${SETTINGS} .set-grid`,
+    ours: `${FORM} #settings`,
+    props: ['rowGap', 'columnGap'],
+    size: false,
+  },
+);
+
+const SEL = '/recipes/components/select.html';
+const MULTI_OPEN = `${SEL}#click=${encodeURIComponent('#multi [data-part="trigger"]')}`;
+const REF_MULTI_OPEN = `${C}#click=${encodeURIComponent('#multiPicker .picker-trigger')}`;
+const DATE_OPEN = `${SEL}#click=${encodeURIComponent('#date [data-part="trigger"]')}`;
+const REF_CAL_OPEN = `${C}#click=${encodeURIComponent('#calPicker .picker-trigger')}`;
+const TRIGGER = [
+  'height',
+  'backgroundColor',
+  'borderTopLeftRadius',
+  'paddingTop',
+  'paddingLeft',
+  'paddingRight',
+  'columnGap',
+];
+
+PAIRS.push(
+  // ---- 选择器 ----
+  {
+    name: '单选 · 触发按钮',
+    ref: `${C} #singlePicker .picker-trigger`,
+    ours: `${SEL} #single [data-part="trigger"]`,
+    props: TRIGGER,
+    size: false,
+  },
+  {
+    name: '单选 · 当前值',
+    ref: `${C} #singleLabel`,
+    ours: `${SEL} #single [data-part="value"]`,
+    props: ['fontSize', 'fontWeight', 'color'],
+    size: false,
+  },
+  {
+    name: '单选 · 箭头',
+    ref: `${C} #singlePicker .picker-trigger > svg:last-child`,
+    ours: `${SEL} #single [data-part="trigger"] > svg:last-child`,
+    props: ['width', 'height', 'color'],
+  },
+  {
+    name: '多选 · 触发按钮（打开）',
+    ref: `${REF_MULTI_OPEN} #multiPicker .picker-trigger`,
+    ours: `${MULTI_OPEN} #multi [data-part="trigger"]`,
+    props: [...TRIGGER, 'paddingBottom', 'boxShadow'],
+    size: false,
+  },
+  {
+    name: '多选 · 标签',
+    ref: `${REF_MULTI_OPEN} #multiTags .tag-chip`,
+    ours: `${MULTI_OPEN} #multi [data-part="value"] > .bd-tag`,
+    props: [
+      'height',
+      'fontSize',
+      'fontWeight',
+      'paddingLeft',
+      'paddingRight',
+      'borderTopLeftRadius',
+      'backgroundColor',
+      'color',
+      'columnGap',
+    ],
+  },
+  {
+    name: '下拉面板',
+    ref: `${REF_MULTI_OPEN} #multiPicker .picker-drop`,
+    ours: `${MULTI_OPEN} #multi [data-part="panel"]`,
+    props: ['backgroundColor', 'borderTopLeftRadius', 'paddingTop', 'paddingLeft', 'boxShadow'],
+    size: false,
+  },
+  {
+    name: '下拉搜索框',
+    ref: `${REF_MULTI_OPEN} #multiSearch`,
+    ours: `${MULTI_OPEN} #multi [data-part="search"]`,
+    props: [
+      'height',
+      'backgroundColor',
+      'borderTopLeftRadius',
+      'paddingLeft',
+      'fontSize',
+      'marginBottom',
+    ],
+    size: false,
+  },
+  {
+    name: '选项 · 选中',
+    ref: `${REF_MULTI_OPEN} #multiList > .menu-opt.sel`,
+    ours: `${MULTI_OPEN} #multi [role="option"][aria-selected="true"]`,
+    props: [
+      'fontSize',
+      'fontWeight',
+      'color',
+      'backgroundColor',
+      'paddingTop',
+      'paddingLeft',
+      'borderTopLeftRadius',
+      'borderBottomLeftRadius',
+    ],
+    size: false,
+  },
+  {
+    name: '选项 · 与下一项相连',
+    ref: `${REF_MULTI_OPEN} #multiList > .menu-opt.sel.join-bot`,
+    ours: `${MULTI_OPEN} #multi [role="option"][aria-selected="true"]:has(+ [aria-selected="true"])`,
+    props: ['borderBottomLeftRadius', 'borderTopLeftRadius'],
+    size: false,
+  },
+  {
+    name: '选项 · 未选',
+    ref: `${REF_MULTI_OPEN} #multiList > .menu-opt:not(.sel)`,
+    ours: `${MULTI_OPEN} #multi [role="option"][aria-selected="false"]`,
+    props: ['fontSize', 'fontWeight', 'color', 'backgroundColor'],
+    size: false,
+  },
+  // ---- 日期 ----
+  {
+    name: '日期 · 天数标签',
+    ref: `${C} #calSpanBadge`,
+    ours: `${SEL} #date [data-part="badge"]`,
+    props: ['height', 'fontSize', 'paddingLeft', 'borderTopLeftRadius', 'backgroundColor', 'color'],
+  },
+  {
+    name: '日期 · 文字',
+    ref: `${C} #calLabel`,
+    ours: `${SEL} #date [data-part="text"]`,
+    props: ['fontFamily', 'fontSize'],
+    size: false,
+  },
+  {
+    name: '日期 · 触发按钮',
+    ref: `${C} #calPicker .picker-trigger`,
+    ours: `${SEL} #date [data-part="trigger"]`,
+    props: [...TRIGGER, 'paddingBottom'],
+    size: false,
+  },
+  {
+    name: '日历面板',
+    ref: `${REF_CAL_OPEN} #calPicker .picker-drop`,
+    ours: `${DATE_OPEN} #date [data-part="panel"]`,
+    props: ['width', 'paddingTop', 'paddingLeft', 'borderTopLeftRadius', 'backgroundColor'],
+    size: false,
+  },
+  {
+    name: '日历 · 月份标题',
+    ref: `${REF_CAL_OPEN} .cal-head`,
+    ours: `${DATE_OPEN} #date [data-part="head"]`,
+    props: ['fontSize', 'fontWeight', 'marginBottom', 'height'],
+  },
+  {
+    name: '日历 · 翻页',
+    ref: `${REF_CAL_OPEN} .cal-nav-btn`,
+    ours: `${DATE_OPEN} #date [data-part="prev"]`,
+    props: SURF,
+  },
+  {
+    name: '日历 · 星期',
+    ref: `${REF_CAL_OPEN} .cal-weekdays span`,
+    ours: `${DATE_OPEN} #date [data-part="weekdays"] > span`,
+    props: ['fontSize', 'color', 'paddingTop', 'height', 'width'],
+  },
+  {
+    name: '日历 · 普通日',
+    ref: `${REF_CAL_OPEN} .cal-day:not(.muted):not([class*="range"]):not(.in-range)`,
+    ours: `${DATE_OPEN} #date button[data-part="day"]:not([data-state])`,
+    props: SURF,
+  },
+  {
+    name: '日历 · 起点',
+    ref: `${REF_CAL_OPEN} .cal-day.range-start`,
+    ours: `${DATE_OPEN} #date [data-state="start"]`,
+    props: [...SURF, 'borderTopRightRadius', 'fontWeight'],
+  },
+  {
+    name: '日历 · 区间内',
+    ref: `${REF_CAL_OPEN} .cal-day.in-range`,
+    ours: `${DATE_OPEN} #date [data-state="between"]`,
+    props: SURF,
+  },
+  {
+    name: '日历 · 终点',
+    ref: `${REF_CAL_OPEN} .cal-day.range-end`,
+    ours: `${DATE_OPEN} #date [data-state="end"]`,
+    props: [...SURF, 'borderTopRightRadius'],
+  },
+);

@@ -55,7 +55,7 @@
     isolation: isolate;
   }
 
-  :where(:has(> [data-part='glide'])) > :where(:not([data-part='glide'], [data-part='thumb'])) {
+  :where(:has(> [data-part='glide'])) > :where(:not([data-part='glide'], [data-part='scrollbar'])) {
     position: relative;
     z-index: 1;
   }

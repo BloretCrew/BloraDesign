@@ -1,0 +1,187 @@
+/*
+ * 选择器 bd-select：触发按钮（凹槽底，打开时变白 + 光晕，箭头转 180°）+ 浮层里的选项列表。
+ * 选中项雾粉浅底 + 对勾；多选时相邻的选中项连成一块；触发按钮里的标签与按钮同心（38 高、内缩 5、圆角 12 − 5 = 7）。
+ */
+@layer bd.components {
+  .bd-select {
+    position: relative;
+    min-width: 0;
+
+    > [data-part='trigger'] {
+      --bd-inset: 5px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      width: 100%;
+      min-height: 38px;
+      padding: 5px 12px;
+      border-radius: var(--bd-radius-control);
+      background: var(--bd-well);
+      text-align: left;
+      transition:
+        background-color var(--bd-duration-hover) ease,
+        box-shadow var(--bd-duration-hover) ease;
+    }
+
+    > [data-part='trigger']:hover {
+      background: var(--bd-slot);
+    }
+
+    > [data-part='trigger'][aria-expanded='true'] {
+      background: var(--bd-control);
+      box-shadow: var(--bd-shadow-focus);
+    }
+
+    > [data-part='trigger'] > svg:last-child {
+      color: var(--bd-ink-tertiary);
+      transition: transform 0.24s var(--bd-ease-out);
+    }
+
+    > [data-part='trigger'][aria-expanded='true'] > svg:last-child {
+      transform: rotate(180deg);
+    }
+
+    [data-part='value'] {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      font-size: 13.5px;
+      font-weight: 530;
+    }
+
+    [data-part='value'][data-empty] {
+      font-size: 12.5px;
+      font-weight: 400;
+      color: var(--bd-ink-tertiary);
+    }
+
+    /* 选中项前的星轨圆点（可选，写 <span data-part="dot">） */
+    [data-part='dot'] {
+      flex-shrink: 0;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--bd-blush-solid);
+      box-shadow: 0 0 0 3px var(--bd-blush-fill);
+    }
+  }
+
+  /* 多选：触发按钮里是标签，左侧内缩 5，标签和按钮同心 */
+  .bd-select:has([aria-multiselectable='true']) {
+    > [data-part='trigger']:has(.bd-tag) {
+      padding-block: var(--bd-inset);
+      padding-left: var(--bd-inset);
+    }
+
+    [data-part='value'] {
+      gap: 4px;
+    }
+
+    [data-part='value'] > .bd-tag {
+      gap: 4px;
+      height: calc(38px - var(--bd-inset) * 2);
+      padding: 0 6px 0 9px;
+      border-radius: calc(var(--bd-radius-control) - var(--bd-inset));
+      font-size: 12px;
+    }
+
+    [data-part='remove'] {
+      display: grid;
+      place-items: center;
+      opacity: 0.7;
+      cursor: pointer;
+    }
+
+    [data-part='remove']:hover {
+      opacity: 1;
+    }
+  }
+
+  /* ---- 面板 ---- */
+  .bd-select > [data-part='panel'] {
+    [data-part='search'] {
+      width: 100%;
+      height: 34px;
+      margin-bottom: 6px;
+      padding: 0 11px;
+      border-radius: 9px;
+      background: var(--bd-well);
+      font-size: 13px;
+    }
+
+    [role='listbox'] {
+      display: flex;
+      flex-direction: column;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+
+    [role='option'] {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 11px;
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: left;
+      font-size: 13.5px;
+      line-height: 1.4;
+      color: var(--bd-ink);
+      transition: background-color 0.12s ease;
+    }
+
+    [role='option']:hover,
+    [role='option']:focus-visible {
+      background: var(--bd-well);
+      box-shadow: none;
+    }
+
+    [role='option'][aria-selected='true'] {
+      background: var(--bd-blush-soft);
+      font-weight: 560;
+      color: var(--bd-blush-ink);
+    }
+
+    [role='option'][aria-selected='true']:is(:hover, :focus-visible) {
+      background: var(--bd-blush-soft-hover);
+    }
+
+    /* 选中项右侧的对勾 */
+    [role='option'][aria-selected='true']::after {
+      content: '';
+      flex-shrink: 0;
+      width: 14px;
+      height: 14px;
+      background: currentColor;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E")
+        center / contain no-repeat;
+    }
+
+    [role='option'][aria-disabled='true'] {
+      cursor: default;
+      color: var(--bd-ink-quaternary);
+    }
+
+    /* 多选：相邻的选中项连成一块 */
+    [aria-multiselectable='true'] > [aria-selected='true']:has(+ [aria-selected='true']) {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    [aria-multiselectable='true'] > [aria-selected='true'] + [aria-selected='true'] {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+
+    [data-part='empty'] {
+      padding: 10px 11px;
+      font-size: 12.5px;
+      color: var(--bd-ink-tertiary);
+    }
+  }
+}

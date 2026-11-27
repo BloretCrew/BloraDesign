@@ -1,0 +1,52 @@
+/*
+ * 浮层面板（选择器下拉、日期面板、菜单…）：原生 popover 放在顶层，外观由 Blora 画。
+ * 白底、15 圆角、浮层投影；打开时从上方 4px、0.97 倍连续展开，关闭时反向收起（DESIGN.md · Motion）。
+ * 位置由运行时写在 left / top 上；data-placement 决定展开的方向。
+ */
+@layer bd.components {
+  [data-bd-floating],
+  :is(.bd-select, .bd-date) > [popover] {
+    position: fixed;
+    inset: auto;
+    min-width: 210px;
+    margin: 0;
+    padding: 7px;
+    overflow: visible;
+    border-radius: 15px;
+    background: var(--bd-float);
+    color: var(--bd-ink);
+    box-shadow: var(--bd-shadow-float);
+    opacity: 1;
+    transform: none;
+    transform-origin: top left;
+    transition:
+      opacity 0.16s ease,
+      transform var(--bd-duration-pop) var(--bd-ease-out),
+      display var(--bd-duration-pop) allow-discrete,
+      overlay var(--bd-duration-pop) allow-discrete;
+  }
+
+  [data-bd-floating]:not(:popover-open) {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+  }
+
+  @starting-style {
+    [data-bd-floating]:popover-open {
+      opacity: 0;
+      transform: translateY(-4px) scale(0.97);
+    }
+  }
+
+  [data-bd-floating][data-placement^='top'] {
+    transform-origin: bottom left;
+  }
+
+  [data-bd-floating][data-placement^='top']:not(:popover-open) {
+    transform: translateY(4px) scale(0.97);
+  }
+
+  [data-bd-floating][data-placement$='end'] {
+    transform-origin: top right;
+  }
+}

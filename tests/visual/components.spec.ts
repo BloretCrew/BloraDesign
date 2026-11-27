@@ -30,9 +30,16 @@ function split(spec: string): { url: string; selector: string; index: number } {
 async function measureOn(page: Page, url: string, items: Item[]) {
   const [path = url, scene] = url.split('#');
   await page.goto(path);
-  // demo 页的场景默认隐藏，先切过去
-  if (scene)
+  // #click=选择器：打开后先点一下（展开下拉、日历）；其他 #名字：demo 页的场景默认隐藏，先切过去
+  if (scene?.startsWith('click=')) {
+    await page.waitForTimeout(300);
+    await page
+      .locator(decodeURIComponent(scene.slice(6)))
+      .first()
+      .click();
+  } else if (scene) {
     await page.evaluate((s) => (window as unknown as { go: (s: string) => void }).go(s), scene);
+  }
   if (path.startsWith('/reference/')) await page.addStyleTag({ content: FONTS });
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(500);

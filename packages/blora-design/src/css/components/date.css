@@ -1,0 +1,155 @@
+/*
+ * 日期选择 bd-date：触发按钮与选择器相同；区间模式里的天数标签与按钮同心（内缩 5，圆角 7）。
+ * 日历：起止两天雾粉实色，中间连成雾粉浅底的胶囊带；今天之外的空位不显示。
+ */
+@layer bd.components {
+  .bd-date {
+    position: relative;
+    min-width: 0;
+
+    > [data-part='trigger'] {
+      --bd-inset: 5px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      width: 100%;
+      min-height: 38px;
+      padding: 5px 12px;
+      border-radius: var(--bd-radius-control);
+      background: var(--bd-well);
+      text-align: left;
+      transition:
+        background-color var(--bd-duration-hover) ease,
+        box-shadow var(--bd-duration-hover) ease;
+    }
+
+    > [data-part='trigger']:hover {
+      background: var(--bd-slot);
+    }
+
+    > [data-part='trigger'][aria-expanded='true'] {
+      background: var(--bd-control);
+      box-shadow: var(--bd-shadow-focus);
+    }
+
+    > [data-part='trigger']:has(> .bd-pill) {
+      padding-block: var(--bd-inset);
+      padding-right: var(--bd-inset);
+    }
+
+    > [data-part='trigger'] > .bd-pill {
+      display: inline-flex;
+      align-items: center;
+      height: calc(38px - var(--bd-inset) * 2);
+      padding: 0 10px;
+      border-radius: calc(var(--bd-radius-control) - var(--bd-inset));
+      font-size: 12.5px;
+    }
+
+    [data-part='value'] {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      font-size: 13.5px;
+      font-weight: 530;
+    }
+
+    [data-part='value'] > svg {
+      color: var(--bd-blush-solid);
+    }
+
+    [data-part='text'] {
+      font-family: var(--bd-font-mono);
+      font-size: 12.5px;
+    }
+  }
+
+  .bd-date > [data-part='panel'] {
+    width: 286px;
+    min-width: 0;
+    padding: 12px;
+
+    [data-part='head'] {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    :is([data-part='prev'], [data-part='next']) {
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: var(--bd-well);
+      color: var(--bd-ink-secondary);
+      transition:
+        background-color var(--bd-duration-hover) ease,
+        color var(--bd-duration-hover) ease;
+    }
+
+    :is([data-part='prev'], [data-part='next']):hover {
+      background: var(--bd-blush-soft);
+      color: var(--bd-blush-ink);
+    }
+
+    :is([data-part='weekdays'], [data-part='grid']) {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+    }
+
+    [data-part='weekdays'] > span {
+      padding: 4px 0;
+      font-size: 11px;
+      color: var(--bd-ink-tertiary);
+    }
+
+    [data-part='grid'] {
+      row-gap: 3px;
+    }
+
+    [data-part='day'] {
+      display: grid;
+      place-items: center;
+      height: 30px;
+      border-radius: 9px;
+      font-size: 12.5px;
+      font-variant-numeric: tabular-nums;
+      color: var(--bd-ink);
+      transition:
+        background-color 0.16s ease,
+        color 0.16s ease;
+    }
+
+    button[data-part='day']:hover {
+      background: var(--bd-well);
+    }
+
+    [data-part='day'][data-state='between'] {
+      border-radius: 0;
+      background: var(--bd-blush-soft);
+      color: var(--bd-blush-ink);
+    }
+
+    [data-part='day']:is([data-state='start'], [data-state='end'], [data-state='single']) {
+      background: var(--bd-blush-solid);
+      font-weight: 600;
+      color: var(--bd-on-primary);
+    }
+
+    [data-part='day'][data-state='start'] {
+      border-radius: 9px 0 0 9px;
+    }
+
+    [data-part='day'][data-state='end'] {
+      border-radius: 0 9px 9px 0;
+    }
+  }
+}

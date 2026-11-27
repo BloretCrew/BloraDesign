@@ -1,0 +1,128 @@
+/*
+ * 滑块 bd-slider（role="slider"）：
+ *   <div class="bd-slider" role="slider" tabindex="0" aria-label="CPU 上限"
+ *        aria-valuemin="0" aria-valuemax="100" aria-valuenow="68" style="--bd-value: 68%" data-ticks="0,25,50,75,100"></div>
+ * 轨道、填充、拇指、读数气泡、刻度由运行时画进去；--bd-value 是当前值在轨道上的位置（写在标记里，JS 加载前也对）
+ * 拇指：外圈雾粉浅底，悬停 / 拖动时外圈放大；读数气泡悬停 / 拖动时出现
+ */
+@layer bd.components {
+  .bd-slider {
+    --bd-thumb: 22px;
+    --bd-thumb-core: 15px;
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+    border-radius: 6px;
+    cursor: pointer;
+    touch-action: none;
+
+    > [data-part='track'] {
+      position: relative;
+      display: flex;
+      align-items: center;
+      height: 28px;
+    }
+
+    [data-part='rail'] {
+      display: block;
+      width: 100%;
+      height: 7px;
+      overflow: hidden;
+      border-radius: var(--bd-radius-pill);
+      background: var(--bd-slot);
+    }
+
+    [data-part='fill'] {
+      display: block;
+      width: var(--bd-value, 0%);
+      height: 100%;
+      border-radius: var(--bd-radius-pill);
+      background: var(--bd-blush-track);
+    }
+
+    [data-part='thumb'] {
+      position: absolute;
+      left: var(--bd-value, 0%);
+      width: var(--bd-thumb);
+      height: var(--bd-thumb);
+      border-radius: 50%;
+      background: var(--bd-tile);
+      box-shadow: 0 1px 5px color-mix(in srgb, var(--bd-blush-solid) 32%, transparent);
+      transform: translateX(-50%);
+    }
+
+    [data-part='thumb']::before,
+    [data-part='thumb']::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+    }
+
+    [data-part='thumb']::before {
+      background: var(--bd-blush-fill);
+      transform: scale(calc(15 / 22));
+      transition: transform var(--bd-duration-pop) var(--bd-ease-out);
+    }
+
+    [data-part='thumb']::after {
+      inset: calc((var(--bd-thumb) - var(--bd-thumb-core)) / 2);
+      background: var(--bd-blush-solid);
+    }
+
+    [data-part='tip'] {
+      position: absolute;
+      bottom: 29px;
+      left: var(--bd-value, 0%);
+      padding: 2px 8px;
+      border-radius: var(--bd-radius-pill);
+      background: var(--bd-blush-soft);
+      color: var(--bd-blush-ink);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-family: var(--bd-font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      transition: opacity 0.14s ease;
+    }
+
+    > [data-part='ticks'] {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 1px;
+      font-family: var(--bd-font-mono);
+      font-size: 10.5px;
+      line-height: 1.5;
+      color: var(--bd-ink-quaternary);
+    }
+  }
+
+  .bd-slider:is(:hover, [data-dragging], :focus-visible) [data-part='thumb']::before {
+    transform: scale(1);
+  }
+
+  .bd-slider:is(:hover, [data-dragging], :focus-visible) [data-part='tip'] {
+    opacity: 1;
+  }
+
+  /* 聚焦光晕画在拇指上，不画在整条轨道上 */
+  .bd-slider:focus-visible {
+    box-shadow: none;
+  }
+
+  .bd-slider:focus-visible [data-part='thumb'] {
+    box-shadow:
+      0 1px 5px color-mix(in srgb, var(--bd-blush-solid) 32%, transparent),
+      var(--bd-shadow-focus);
+  }
+
+  .bd-slider[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: default;
+  }
+}

@@ -1,0 +1,109 @@
+/*
+ * 上传区 bd-dropzone：凹槽底 + 1.5px 虚线轮廓（DESIGN.md 里唯一允许的线框，用遮罩画，颜色是 dash，悬停 / 拖入时变雾粉）
+ *   <label class="bd-dropzone"><input type="file" hidden>
+ *     <span data-part="icon"><svg …></span>
+ *     <span data-part="text"><b>拖拽或点击上传</b><small>.yml / .json</small></span>
+ *     <span class="bd-pill" data-tone="blush">待上传</span>
+ *   </label>
+ * 点击打开系统的文件选择窗口（这是操作系统的界面，网页无法替换）；上传中写 aria-busy="true"，底色从左向右铺开
+ */
+@layer bd.components {
+  .bd-dropzone {
+    --bd-dash-color: var(--bd-dash);
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12.5px 15.5px;
+    overflow: hidden;
+    border-radius: 14px;
+    background: var(--bd-well);
+    cursor: pointer;
+    transition: background-color var(--bd-duration-hover) ease;
+  }
+
+  /* 虚线轮廓 */
+  .bd-dropzone::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--bd-dash-color);
+    pointer-events: none;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Crect width='100%25' height='100%25' rx='14' fill='none' stroke='black' stroke-width='3' stroke-dasharray='5 4'/%3E%3C/svg%3E")
+      0 0 / 100% 100%;
+    transition: background-color var(--bd-duration-hover) ease;
+  }
+
+  /* 上传进度：雾粉底色从左向右铺开 */
+  .bd-dropzone::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--bd-blush-soft);
+    pointer-events: none;
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  .bd-dropzone > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .bd-dropzone:is(:hover, [data-dragover]) {
+    --bd-dash-color: var(--bd-blush-track);
+
+    background: var(--bd-blush-soft);
+  }
+
+  .bd-dropzone[aria-busy='true']::before {
+    animation: bd-upload-fill 0.95s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .bd-dropzone:focus-within {
+    box-shadow: var(--bd-shadow-focus);
+  }
+
+  @keyframes bd-upload-fill {
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  .bd-dropzone > [data-part='icon'] {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--bd-radius-icon);
+    background: var(--bd-blush-soft);
+    color: var(--bd-blush-ink);
+  }
+
+  /* 图标和文字之间 11（与右侧标签之间 12） */
+  .bd-dropzone > [data-part='icon'] + [data-part='text'] {
+    margin-left: -1px;
+  }
+
+  .bd-dropzone > [data-part='text'] {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+
+    > b {
+      font-size: 12.8px;
+      font-weight: 580;
+    }
+
+    > small {
+      font-family: var(--bd-font-mono);
+      font-size: 11.5px;
+      color: var(--bd-ink-tertiary);
+    }
+  }
+}

@@ -71,8 +71,12 @@ test('data-bd-controlled：运行时只发事件，由业务改状态，滑块�
 test('JS 加载之前选中项自己显示选中底', async ({ page }) => {
   await page.route('**/blora.js', (route) => route.abort());
   await page.goto(PAGE);
-  const bg = await page
-    .locator('#range > [aria-checked="true"]')
-    .evaluate((el) => getComputedStyle(el).backgroundColor);
-  expect(bg).toBe('rgb(255, 255, 255)');
+  // 等颜色过渡结束（机器负载高时首帧可能还在过渡中）
+  await expect
+    .poll(() =>
+      page
+        .locator('#range > [aria-checked="true"]')
+        .evaluate((el) => getComputedStyle(el).backgroundColor),
+    )
+    .toBe('rgb(255, 255, 255)');
 });

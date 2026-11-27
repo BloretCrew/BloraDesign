@@ -5,11 +5,14 @@
  * 不需要初始化或销毁。
  */
 import { start } from './runtime/core';
+import { registerDate } from './runtime/date';
+import { registerForm } from './runtime/form';
 import { registerNav } from './runtime/nav';
 import { registerPager } from './runtime/pager';
 import { registerRail } from './runtime/rail';
 import { registerScroll, startPageScroll } from './runtime/scroll';
 import { registerSegmented } from './runtime/segmented';
+import { registerSelect } from './runtime/select';
 import { registerSteps } from './runtime/steps';
 import { registerTabs } from './runtime/tabs';
 import { registerTail } from './runtime/tail';
@@ -30,6 +33,9 @@ if (typeof document !== 'undefined') {
   registerNav();
   registerTree();
   registerSteps();
+  registerForm();
+  registerSelect();
+  registerDate();
   registerTail();
   start();
   startPageScroll();

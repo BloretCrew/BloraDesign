@@ -18,7 +18,7 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .bd-tray > :not([data-part='thumb']) {
+  .bd-tray > :not([data-part='scrollbar']) {
     min-width: 0;
     padding: var(--bd-space-cell-padding-y) var(--bd-space-cell-padding-x);
     border-radius: var(--bd-radius-cell);
@@ -29,7 +29,7 @@
 
   /* 紧凑变体：规格行、表格行 */
   :is(.bd-tray[data-density='compact'], [data-density='compact'] .bd-tray)
-    > :not([data-part='thumb']) {
+    > :not([data-part='scrollbar']) {
     min-height: 32px;
     padding: var(--bd-space-cell-dense-padding-y) var(--bd-space-cell-dense-padding-x);
   }
@@ -39,7 +39,7 @@
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .bd-tray > :not([data-part='thumb']) {
+    .bd-tray > :not([data-part='scrollbar']) {
       padding-inline: var(--bd-space-cell-dense-padding-x);
     }
   }

@@ -28,4 +28,11 @@
 @import './components/nav.css';
 @import './components/tree.css';
 @import './components/steps.css';
+@import './components/form.css';
+@import './components/controls.css';
+@import './components/slider.css';
+@import './components/dropzone.css';
+@import './components/overlay.css';
+@import './components/select.css';
+@import './components/date.css';
 @import './motion.css';
