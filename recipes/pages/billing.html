@@ -261,6 +261,18 @@
               type="button"
               class="bd-button"
               data-shape="icon"
+              data-part="search"
+              aria-label="搜索"
+              id="searchBtn"
+            >
+              <svg data-icon width="15" height="15" aria-hidden="true">
+                <use href="#i-search" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="bd-button"
+              data-shape="icon"
               aria-label="切换深色模式"
               id="themeBtn"
             >
@@ -306,7 +318,7 @@
             </div>
           </header>
 
-          <section class="bd-mosaic" data-cols="4" data-index="none">
+          <section class="bd-mosaic" data-cols="4" data-index="none" data-pattern="plan-grid">
             <article class="bd-tile" data-pattern="plan-card">
               <header class="bd-item">
                 <span data-part="icon"
@@ -485,6 +497,7 @@
           <section
             class="bd-mosaic"
             data-cols="2"
+            data-pattern="compare-row"
             style="--bd-columns: minmax(0, 1.75fr) minmax(0, 1fr)"
           >
             <article class="bd-tile">
@@ -505,15 +518,17 @@
                   </button>
                 </div>
               </header>
-              <table
-                class="bd-table"
-                data-variant="tray"
-                data-align="center"
-                data-pattern="plan-compare"
-                id="cmp"
-                aria-label="套餐功能对比"
-                style="--bd-table-columns: minmax(150px, 1.25fr) repeat(4, minmax(0, 1fr))"
-              ></table>
+              <div class="bd-scroll">
+                <table
+                  class="bd-table"
+                  data-variant="tray"
+                  data-align="center"
+                  data-pattern="plan-compare"
+                  id="cmp"
+                  aria-label="套餐功能对比"
+                  style="--bd-table-columns: minmax(150px, 1.25fr) repeat(4, minmax(0, 1fr))"
+                ></table>
+              </div>
             </article>
             <div class="bd-stack">
               <article class="bd-tile">
@@ -521,7 +536,7 @@
                   <h2>常见问题</h2>
                   <div data-part="end"><span data-part="tag">FAQ · 4</span></div>
                 </header>
-                <div class="bd-accordion" data-variant="tray">
+                <div class="bd-accordion" data-variant="tray" data-pattern="plan-faq">
                   <details open>
                     <summary>
                       升级或降级后如何计费？<svg
@@ -636,7 +651,7 @@
             </div>
           </header>
 
-          <section class="bd-mosaic" data-cols="4">
+          <section class="bd-mosaic" data-cols="4" data-pattern="usage-summary">
             <article class="bd-tile" data-variant="metric">
               <p data-part="label">本期费用</p>
               <div
@@ -691,7 +706,7 @@
             data-cols="2"
             style="--bd-columns: minmax(0, 1.75fr) minmax(0, 1fr)"
           >
-            <article class="bd-tile">
+            <article class="bd-tile" data-pattern="daily-cost">
               <header class="bd-head">
                 <h2>每日费用</h2>
                 <p id="costSub">本期前 13 天，与上期同期对比</p>
@@ -1028,7 +1043,13 @@
                   </svg>
                   <input id="invSearch" placeholder="发票号或金额" aria-label="搜索发票" />
                 </label>
-                <div class="bd-segmented" role="radiogroup" aria-label="状态" id="invSeg">
+                <div
+                  class="bd-segmented"
+                  role="radiogroup"
+                  aria-label="状态"
+                  id="invSeg"
+                  data-pattern="invoice-status"
+                >
                   <button type="button" role="radio" data-value="all" aria-checked="true">
                     全部<span data-part="count" data-count="all"></span>
                   </button>
@@ -1066,19 +1087,19 @@
               <table class="bd-table" id="invoices" data-pattern="invoice-table">
                 <colgroup>
                   <col />
-                  <col style="width: 15.7%" />
-                  <col style="width: 15.71%" />
-                  <col style="width: 15.68%" />
-                  <col style="width: 21.2%" />
-                  <col style="width: 56px" />
+                  <col data-hide="sm" />
+                  <col />
+                  <col />
+                  <col data-hide="md" />
+                  <col />
                 </colgroup>
                 <thead>
                   <tr>
                     <th>发票号</th>
-                    <th>开票日期</th>
+                    <th data-hide="sm">开票日期</th>
                     <th data-align="end">金额</th>
                     <th>状态</th>
-                    <th>支付方式</th>
+                    <th data-hide="md">支付方式</th>
                     <th><span hidden>下载</span></th>
                   </tr>
                 </thead>
@@ -1112,7 +1133,7 @@
             </div>
           </header>
 
-          <section class="bd-mosaic" data-cols="1" id="expiryAlert">
+          <section class="bd-mosaic" data-cols="1" id="expiryAlert" data-pattern="expiry-alert">
             <article class="bd-tile" data-variant="alert">
               <span data-part="icon"
                 ><svg data-icon width="16" height="16" aria-hidden="true">
@@ -1153,6 +1174,7 @@
           <section
             class="bd-mosaic"
             data-cols="2"
+            data-pattern="payment-row"
             style="--bd-columns: minmax(0, 1fr) minmax(0, 1.35fr)"
           >
             <article class="bd-tile">
@@ -1293,7 +1315,7 @@
                 <h2>账单地址与开票信息</h2>
                 <p>显示在每一张发票上</p>
               </header>
-              <form class="bd-form" id="addrForm" data-cols="3">
+              <form class="bd-form" id="addrForm" data-cols="3" data-pattern="billing-address">
                 <div class="bd-field" data-span="2">
                   <label data-part="label" for="aCompany">公司名称</label>
                   <input
@@ -1381,7 +1403,7 @@
                 <h2>发票寄送</h2>
                 <p>付款成功后自动开具</p>
               </header>
-              <ul class="bd-tray" id="deliver">
+              <ul class="bd-tray" id="deliver" data-pattern="invoice-delivery">
                 <li class="bd-item">
                   <div>
                     <span>电子发票自动发送</span
@@ -1629,10 +1651,10 @@
                 const [tone, label] = INV_STATUS[it.status];
                 return `<tr data-no="${it.no}">
                   <td><strong><code>${it.no}</code></strong><small>${it.period}</small></td>
-                  <td><time>${it.date}</time></td>
+                  <td data-hide="sm"><time>${it.date}</time></td>
                   <td data-align="end">${it.status === 'refund' ? `<s data-part="muted">${yuan(it.amount)}</s>` : `<strong>${yuan(it.amount)}</strong>`}</td>
                   <td><span class="bd-pill" data-dot${tone ? ` data-tone="${tone}"` : ''}>${label}</span></td>
-                  <td>${payCell(it.pay)}</td>
+                  <td data-hide="md">${payCell(it.pay)}</td>
                   <td><button type="button" class="bd-button" data-variant="ghost" data-shape="icon" data-size="sm" data-dl aria-label="下载 PDF">${icon('download')}</button></td>
                 </tr>`;
               })
@@ -1713,6 +1735,10 @@
         $('#yearSelect [data-part="value"]').textContent = YEARS.all;
         renderInvoices();
         go('invoices');
+      });
+      $('#searchBtn').addEventListener('click', () => {
+        go('invoices');
+        setTimeout(() => $('#invSearch').focus(), 350);
       });
 
       /* ---------------- 支付方式 ---------------- */

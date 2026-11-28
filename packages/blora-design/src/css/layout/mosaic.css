@@ -32,6 +32,21 @@
     min-height: 0;
   }
 
+  /* 变成一列以后不再填满窗口：每一栏给一个固定高度、各自滚动（--bd-fit-rows 可改） */
+  @media (max-width: 900px) {
+    .bd-mosaic[data-grow='fit'] {
+      flex: none;
+      grid-template-rows: var(--bd-fit-rows, 400px 640px);
+      min-height: 0;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .bd-mosaic[data-grow='fit'] {
+      grid-template-rows: var(--bd-fit-rows, 380px 620px);
+    }
+  }
+
   /* 数据决定长度的内容（看板）：顶部对齐、底边参差 */
   .bd-mosaic[data-align='start'] {
     align-items: start;

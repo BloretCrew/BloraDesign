@@ -279,6 +279,18 @@
               type="button"
               class="bd-button"
               data-shape="icon"
+              data-part="search"
+              aria-label="搜索"
+              data-toast="搜索工单、成员和消息"
+            >
+              <svg data-icon width="15" height="15" aria-hidden="true">
+                <use href="#i-search" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="bd-button"
+              data-shape="icon"
               aria-label="切换深色模式"
               id="themeBtn"
             >
@@ -338,7 +350,7 @@
               <p data-part="value">
                 <span id="kpiDone">0</span><small>/ <span id="kpiTotal">9</span> 张</small>
               </p>
-              <p data-part="foot">时间已过 64% · 还剩 5 天</p>
+              <p data-part="foot"><span>时间已过 64% · 还剩 5 天</span></p>
             </article>
             <article class="bd-tile" data-variant="metric">
               <p data-part="label">进行中</p>
@@ -350,7 +362,7 @@
                 aria-valuemax="100"
               ></div>
               <p data-part="value"><span id="kpiDoing">3</span><small>张</small></p>
-              <p data-part="foot" id="kpiDoingFoot">WIP 上限 4</p>
+              <p data-part="foot" id="kpiDoingFoot"><span>WIP 上限 4</span></p>
             </article>
             <article class="bd-tile" data-variant="metric">
               <p data-part="label">待评审</p>
@@ -359,7 +371,7 @@
                   <use href="#i-git-pull-request" /></svg
               ></span>
               <p data-part="value"><span id="kpiReview">1</span><small>张</small></p>
-              <p data-part="foot">平均等待 6 小时 · 需 1 人批准</p>
+              <p data-part="foot"><span>平均等待 6 小时 · 需 1 人批准</span></p>
             </article>
             <article class="bd-tile" data-variant="metric">
               <p data-part="label">逾期</p>
@@ -369,7 +381,8 @@
               ></span>
               <p data-part="value">1<small>张</small></p>
               <p data-part="foot">
-                <span data-part="delta" data-tone="rose">2 天</span>LAT-155 账单导出 CSV
+                <span data-part="delta" data-tone="rose">2 天</span
+                ><span>LAT-155 账单导出 CSV</span>
               </p>
             </article>
           </section>
@@ -557,6 +570,7 @@
             class="bd-mosaic"
             data-cols="2"
             data-grow="fit"
+            data-pattern="inbox"
             id="inboxRow"
             style="--bd-columns: minmax(300px, 0.85fr) minmax(0, 1.65fr)"
           >
@@ -633,7 +647,12 @@
             </div>
           </header>
 
-          <section class="bd-mosaic" data-cols="2" style="--bd-columns: minmax(0, 1fr) 330px">
+          <section
+            class="bd-mosaic"
+            data-cols="2"
+            data-pattern="schedule"
+            style="--bd-columns: minmax(0, 1fr) 330px"
+          >
             <article class="bd-tile" data-pattern="week-grid">
               <header class="bd-head">
                 <h2>本周日程</h2>
@@ -643,6 +662,7 @@
               <div data-part="days" id="calHead"></div>
               <div data-part="allday" id="calAllday"></div>
               <div data-part="hours" id="calBody"></div>
+              <div data-part="week" id="agendaWeek"></div>
               <ul class="bd-tray" data-cols="4" data-part="legend" id="calLegend"></ul>
             </article>
             <article class="bd-tile" data-pattern="agenda">
@@ -1054,10 +1074,10 @@
         const soon = $$('[data-pattern="kanban-card"][data-soon]', tray('doing')).length;
         $('#kpiDoingFoot').innerHTML =
           n.doing > WIP
-            ? `<span data-part="delta" data-tone="rose">超出 ${n.doing - WIP} 张</span>WIP 上限 ${WIP}`
+            ? `<span data-part="delta" data-tone="rose">超出 ${n.doing - WIP} 张</span><span>WIP 上限 ${WIP}</span>`
             : soon
-              ? `<span data-part="delta">明天到期 ${soon}</span>WIP 上限 ${WIP}`
-              : `WIP 上限 ${WIP} · 没有临期工单`;
+              ? `<span data-part="delta">明天到期 ${soon}</span><span>WIP 上限 ${WIP}</span>`
+              : `<span>WIP 上限 ${WIP} · 没有临期工单</span>`;
         $('#kpiReview').textContent = n.review;
         $('#railSprintPct').textContent = pct + '%';
         $('#railSprintPct').value = pct;
@@ -1652,13 +1672,15 @@
           const h = evs.reduce((s, ev) => s + ev.e - ev.s, 0);
           return `<li class="bd-item"><span data-part="swatch"${tone(c)}></span><div><span>${t}</span></div><span data-part="end">${fmtH(h)} · ${evs.length}</span></li>`;
         }).join('');
+        const row = ([ev, i]) =>
+          `<button type="button" class="bd-item" role="option" data-align="start" data-i="${i}"${ev.d === TODAY && ev.e <= NOW ? ' data-past' : ''}><time>${fmt(ev.s)}</time><span data-part="swatch"${tone(ev.c)}></span><div><span>${ev.t}</span><small>${span(ev)}${ev.loc ? ' · ' + ev.loc : ''}</small></div></button>`;
         const today = EV.map((ev, i) => [ev, i]).filter(([ev]) => ev.d === TODAY);
-        $('#todayAgenda').innerHTML = today
-          .map(
-            ([ev, i]) =>
-              `<button type="button" class="bd-item" role="option" data-align="start" data-i="${i}"${ev.e <= NOW ? ' data-past' : ''}><time>${fmt(ev.s)}</time><span data-part="swatch"${tone(ev.c)}></span><div><span>${ev.t}</span><small>${span(ev)}${ev.loc ? ' · ' + ev.loc : ''}</small></div></button>`,
-          )
-          .join('');
+        $('#todayAgenda').innerHTML = today.map(row).join('');
+        /* 窄屏：周视图换成按天分组的列表 */
+        $('#agendaWeek').innerHTML = DAYS.map(([w, n], d) => {
+          const list = EV.map((ev, i) => [ev, i]).filter(([ev]) => ev.d === d);
+          return `<div${d === TODAY ? ' aria-current="date"' : ''}><p><b>${n} 日</b>${w}${d === TODAY ? ' · 今天' : ''}</p><div class="bd-tray" role="listbox" aria-label="${w}的日程" data-bd-controlled>${list.length ? list.map(row).join('') : '<p data-part="none">没有日程</p>'}</div></div>`;
+        }).join('');
         const b = busy(today.map(([ev]) => ev));
         $('#todayCount').textContent = `${today.length} 项 · 重叠 ${b.overlaps}`;
         $('#todayFoot').innerHTML =

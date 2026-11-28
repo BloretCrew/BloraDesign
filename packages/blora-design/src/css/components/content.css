@@ -157,6 +157,10 @@
     }
 
     /* 提示 / 注意框：浅底 + 开头一个状态标签，不用整块彩色底 */
+    aside > .bd-pill {
+      line-height: inherit;
+    }
+
     aside {
       display: flex;
       align-items: flex-start;

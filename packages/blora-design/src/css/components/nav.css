@@ -137,7 +137,8 @@
       padding: 6px;
       overflow: auto hidden;
 
-      > :is(a, button) {
+      > :is(a, button),
+      &[data-density] > :is(a, button) {
         min-height: 32px;
         white-space: nowrap;
       }

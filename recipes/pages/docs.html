@@ -235,6 +235,18 @@
               type="button"
               class="bd-button"
               data-shape="icon"
+              data-part="search"
+              aria-label="搜索"
+              id="searchBtn"
+            >
+              <svg data-icon width="15" height="15" aria-hidden="true">
+                <use href="#i-search" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="bd-button"
+              data-shape="icon"
               aria-label="切换深色模式"
               id="themeBtn"
             >
@@ -1007,7 +1019,13 @@
             <h1>更新日志</h1>
             <p>每周二发布；涉及破坏性变更时，会提前 30 天邮件通知工作区管理员。</p>
             <div data-part="end">
-              <div class="bd-segmented" role="radiogroup" aria-label="变更类型" id="clSeg">
+              <div
+                class="bd-segmented"
+                role="radiogroup"
+                aria-label="变更类型"
+                data-pattern="type-filter"
+                id="clSeg"
+              >
                 <button type="button" role="radio" data-value="all" aria-checked="true">
                   全部<span data-part="count" data-clc="all"></span>
                 </button>
@@ -1346,7 +1364,13 @@
                   <h2>匹配的内容</h2>
                   <p id="srSub">输入关键词搜索全部文档</p>
                   <div data-part="end">
-                    <div class="bd-segmented" role="radiogroup" aria-label="排序" id="sortSeg">
+                    <div
+                      class="bd-segmented"
+                      role="radiogroup"
+                      aria-label="排序"
+                      data-size="sm"
+                      id="sortSeg"
+                    >
                       <button type="button" role="radio" data-value="rel" aria-checked="true">
                         相关度
                       </button>
@@ -1371,7 +1395,13 @@
                       </svg>
                     </button>
                   </label>
-                  <div class="bd-segmented" role="radiogroup" aria-label="内容类型" id="typeSeg">
+                  <div
+                    class="bd-segmented"
+                    role="radiogroup"
+                    aria-label="内容类型"
+                    data-pattern="type-filter"
+                    id="typeSeg"
+                  >
                     <button type="button" role="radio" data-value="all" aria-checked="true">
                       全部<span data-part="count" data-tc="all"></span>
                     </button>
@@ -1905,6 +1935,10 @@
         if (e.key !== 'Enter') return;
         setQuery(e.target.value.trim(), true);
         go('search');
+      });
+      $('#searchBtn').addEventListener('click', () => {
+        go('search');
+        $('#docSearch').focus();
       });
 
       /* ---------------- 深色模式 ---------------- */

@@ -63,6 +63,10 @@
     --bd-corner-tl: var(--bd-radius-tile);
   }
 
+  .bd-layout > [data-part='main']:first-child > :nth-last-child(1 of :not([hidden])) {
+    --bd-corner-bl: var(--bd-radius-tile);
+  }
+
   .bd-layout > [data-part='aside'] > :first-child {
     --bd-corner-tr: var(--bd-radius-tile);
   }
@@ -122,18 +126,32 @@
   }
 
   /* 窄屏：先去掉右栏，再把导航放到上面 */
+  /* 窄屏：先去掉右栏（列宽比例 --bd-columns 只在宽屏生效），再把导航放到上面 */
   @media (max-width: 1280px) {
     .bd-layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .bd-layout:has(> .bd-nav) {
       grid-template-columns: 196px minmax(0, 1fr);
     }
 
     .bd-layout > [data-part='aside'] {
       display: none;
     }
+
+    .bd-layout > [data-part='main'] > :nth-child(1 of :not([hidden])) {
+      --bd-corner-tr: var(--bd-radius-tile);
+    }
+
+    .bd-layout > [data-part='main'] > :nth-last-child(1 of :not([hidden])) {
+      --bd-corner-br: var(--bd-radius-tile);
+    }
   }
 
   @media (max-width: 900px) {
-    .bd-layout {
+    .bd-layout,
+    .bd-layout:has(> .bd-nav) {
       grid-template-columns: minmax(0, 1fr);
     }
 

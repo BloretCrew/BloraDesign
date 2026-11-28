@@ -152,6 +152,14 @@
     }
   }
 
+  /* 套餐页常见问题：<div class="bd-accordion" data-variant="tray" data-pattern="plan-faq">，
+     回答比长文里的常见问题小一号：13 / 1.6、说明墨色 */
+  [data-pattern='plan-faq'] details > :not(summary) {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--bd-ink-description);
+  }
+
   /* 套餐额度：<ul class="bd-tray" data-pattern="quota"> 里每行一个 bd-item：
        34 图标底（跨两行）· <div><strong>名称 + 可选 bd-pill</strong></div> · <span data-part="end"><b>已用</b> / 上限</span>
        · 占满下一行的 bd-progress（可带 data-tone） */
@@ -166,10 +174,12 @@
       height: 34px;
     }
 
+    /* 名称和状态标签放不下时，标签换到名称下一行 */
     strong {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      gap: 8px;
+      gap: 3px 8px;
     }
 
     > [data-part='end'] b {
@@ -330,6 +340,19 @@
        · <td data-align="end">金额</td>（贴着下一列的左边，列间只留 12）· 状态 bd-pill · 支付方式 pay-method · 下载按钮
      表头 34 高、12 号，行高 50；发票号 13 / 560，账期用正文字体，日期次级墨色 */
   [data-pattern='invoice-table'] {
+    /* 列宽：日期、金额、状态各 15.7%，支付方式 21.2%，下载 56；≤1100 收起支付方式，≤640 再收起日期 */
+    col:is(:nth-child(2), :nth-child(3), :nth-child(4)) {
+      width: 15.7%;
+    }
+
+    col:nth-child(5) {
+      width: 21.2%;
+    }
+
+    col:last-child {
+      width: 56px;
+    }
+
     th {
       padding: 8px 12px;
       font-size: 12px;
@@ -476,6 +499,18 @@
     }
   }
 
+  /* 账单地址表单：<form class="bd-form" data-cols="3" data-pattern="billing-address">，行距 12、列距 14 */
+  [data-pattern='billing-address'] {
+    row-gap: 12px;
+  }
+
+  /* 发票寄送：<ul class="bd-tray" data-pattern="invoice-delivery"> 里每行一个开关 bd-item（标题 + 说明 · bd-switch），
+     行内边距 10 / 12，说明和开关之间留 20 */
+  [data-pattern='invoice-delivery'] > .bd-item {
+    gap: 20px;
+    padding: 10px 12px;
+  }
+
   /* 添加新卡：<article class="bd-tile" data-pattern="add-card">
        bd-head · <div data-part="body"> 左边卡面预览（card-preview）、右边 bd-form，两栏垂直居中 · 收束行（说明 + 清空 / 保存）
      收束行贴着表单，不加上内边距 */
@@ -575,6 +610,173 @@
       font-weight: 600;
       letter-spacing: 0;
       color: var(--bd-on-primary);
+    }
+  }
+
+  /* ============ 窄屏 ============ */
+
+  /* 套餐功能对比：至少 640 宽，放不下时在格子里横向滚动（阴影不被裁掉，左右各让出 6） */
+  [data-pattern='plan-compare'] {
+    min-width: 640px;
+  }
+
+  .bd-scroll:has(> [data-pattern='plan-compare']) {
+    margin: 0 -6px;
+    padding: 0 6px;
+  }
+
+  @media (max-width: 1100px) {
+    /* 核心候选：bd-mosaic 需要一个「≤1100 就收成一列」的写法（如 data-collapse="md"），
+       对比表 + 右侧叠放、支付方式两块都是在 1100 收成一列，而不是 data-cols="2" 默认的 900 */
+    :is([data-pattern='compare-row'], [data-pattern='payment-row']) {
+      grid-template-columns: minmax(0, 1fr);
+
+      > * {
+        --bd-corner-tl: var(--bd-radius-seam);
+        --bd-corner-tr: var(--bd-radius-seam);
+        --bd-corner-br: var(--bd-radius-seam);
+        --bd-corner-bl: var(--bd-radius-seam);
+      }
+
+      > :first-child {
+        --bd-corner-tl: var(--bd-radius-tile);
+        --bd-corner-tr: var(--bd-radius-tile);
+      }
+
+      > :last-child {
+        --bd-corner-bl: var(--bd-radius-tile);
+        --bd-corner-br: var(--bd-radius-tile);
+      }
+    }
+
+    /* 发票表收起支付方式后，日期、金额、状态各占 19.94% */
+    [data-pattern='invoice-table'] col:is(:nth-child(2), :nth-child(3), :nth-child(4)) {
+      width: 19.94%;
+    }
+
+    /* 费用排行：占比条收窄到 80，金额列 76 */
+    [data-pattern='cost-rank'] > .bd-item {
+      > .bd-progress {
+        width: 80px;
+      }
+
+      > [data-part='end'] {
+        min-width: 76px;
+      }
+    }
+  }
+
+  /* 每日费用：≤900 收起标题右侧的图例，标题不换行 */
+  @media (max-width: 900px) {
+    [data-pattern='daily-cost'] > .bd-head .bd-legend {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    /* 用量概览：带环形读数的指标，小数仍跟在整数后面；脚注不换行，增减标签自己收窄 */
+    [data-pattern='usage-summary'] > .bd-tile {
+      > [data-part='value'] > small {
+        display: inline;
+        margin: 0 0 0 3px;
+      }
+
+      > [data-part='foot'] {
+        flex-wrap: nowrap;
+      }
+    }
+
+    /* 核心候选：≤640 时格子的间距统一收到 12，提醒格（data-variant="alert"）也应如此，
+       现在它自己的 14 压过了窄屏的 12 */
+    [data-pattern='expiry-alert'] > .bd-tile[data-variant='alert'] {
+      gap: 12px;
+    }
+
+    /* 套餐卡四张排成一列 */
+    [data-pattern='plan-grid'] {
+      grid-template-columns: minmax(0, 1fr);
+
+      > * {
+        --bd-corner-tl: var(--bd-radius-seam);
+        --bd-corner-tr: var(--bd-radius-seam);
+        --bd-corner-br: var(--bd-radius-seam);
+        --bd-corner-bl: var(--bd-radius-seam);
+      }
+
+      > :first-child {
+        --bd-corner-tl: var(--bd-radius-tile);
+        --bd-corner-tr: var(--bd-radius-tile);
+      }
+
+      > :last-child {
+        --bd-corner-bl: var(--bd-radius-tile);
+        --bd-corner-br: var(--bd-radius-tile);
+      }
+    }
+
+    /* 发票状态分段：去掉计数、收窄内边距，五段等分一行 */
+    [data-pattern='invoice-status'] {
+      > button {
+        flex: 1;
+        min-width: 0;
+        padding: 0 4px;
+      }
+
+      [data-part='count'] {
+        display: none;
+      }
+    }
+
+    /* 发票表：金额、状态按内容宽，下载 42，发票号吃掉剩下的；账期说明可以换行 */
+    [data-pattern='invoice-table'] {
+      col:nth-child(3) {
+        width: 65px;
+      }
+
+      col:nth-child(4) {
+        width: 75px;
+      }
+
+      col:last-child {
+        width: 42px;
+      }
+
+      :is(th, td)[data-align='end'] {
+        padding-right: 5px;
+      }
+
+      /* 行至少 50 高，内容垂直居中；账期说明换行时行高跟着内容走，不再加上下内边距 */
+      tbody tr > td {
+        padding-block: 0;
+      }
+
+      td > strong + small {
+        white-space: normal;
+      }
+    }
+
+    /* 费用排行：去掉占比条 */
+    [data-pattern='cost-rank'] > .bd-item > .bd-progress {
+      display: none;
+    }
+
+    /* 添加新卡：卡面在上（最宽 300），字段在下 */
+    [data-pattern='add-card'] > [data-part='body'] {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    [data-pattern='card-preview'] {
+      width: 100%;
+      max-width: 300px;
+    }
+  }
+
+  /* 添加新卡的字段始终两列（有效期、安全码并排） */
+  [data-pattern='add-card'] .bd-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    > [data-span='full'] {
+      grid-column: 1 / -1;
     }
   }
 }

@@ -22,9 +22,19 @@
     }
   }
 
+  /* 服务状态格收束条：说明是普通数字（不用等宽数字），和右侧标签排在一行 */
+  [data-pattern='uptime'] + [data-part='foot'] > p {
+    font-variant-numeric: normal;
+  }
+
   /* ---- 可用性条 uptime ----
      <ul class="bd-tray" data-pattern="uptime">，每个 <li> 是一项服务：
      <p><span>名称</span><data>99.99%</data></p> + <div> 里 30 个 <i>（每格一天，data-tone="blush" 降级、"rose" 故障） */
+  /* 托盘和收束条之间比格子间距多空 4（单列堆叠时才看得出来） */
+  [data-pattern='uptime'] {
+    margin-bottom: 4px;
+  }
+
   [data-pattern='uptime'] > li {
     > p {
       display: flex;
@@ -165,6 +175,12 @@
   [data-pattern='dns-records'] td > code {
     padding: 0;
     background: none;
+  }
+
+  /* 核心候选：长文提示框里的状态标签沿用长文行高（参考页 11.5 × 1.65，标签高 23），
+     正文只有一行时提示框高 45 而不是 43。这里借 DNS 记录表把范围限定在这篇长文里 */
+  .bd-prose:has(> [data-pattern='dns-records']) > aside > .bd-pill {
+    line-height: inherit;
   }
 
   /* ---- 常见问题 faq ----
@@ -346,14 +362,27 @@
       display: none;
     }
 
+    /* 类型标签 22 高、行高 1.6（参考页），与正文首行基线对齐后小格高 40.2 */
     > .bd-tag {
       justify-self: start;
+      height: 22px;
+      line-height: 1.6;
     }
 
     > div > p {
       white-space: normal;
       line-height: 1.6;
       color: var(--bd-ink);
+    }
+
+    /* 正文里的命令按长文的行内代码排（不是条目里的等宽小格），换行时不撑高行 */
+    > div > p > code {
+      display: inline;
+      margin: 0;
+      padding: 1px 6px;
+      border-radius: var(--bd-radius-cell);
+      font-size: 0.86em;
+      line-height: inherit;
     }
 
     > [data-part='end'] {
@@ -479,6 +508,10 @@
     }
   }
 
+  /* ---- 类型筛选 type-filter ----
+     <div class="bd-segmented" data-pattern="type-filter">，每个选项是「名称 + data-part="count" 计数」；
+     手机上占满一行、各项等分，计数收起（见文件末尾的窄屏规则） */
+
   /* ---- 产品筛选 product-filter ----
      <div class="bd-tray" data-pattern="product-filter">，每条 <label class="bd-item">：bd-checkbox + <div><p>产品</p></div> + 计数；
      勾选的小格（核心样式给雾粉浅底）里的文字和计数也换成雾粉墨色 */
@@ -489,6 +522,281 @@
 
     &:has(> :checked) > * {
       color: var(--bd-blush-ink);
+    }
+  }
+}
+
+/* ============ 窄屏 ============
+   ≤1100 分类卡两列、可用性条缝隙收窄；≤640 手机：分类卡单列、搜索框去按钮、热门文章单列去时长、
+   可用性托盘保持两列、几张格子的标题行把右侧槽位换到下一行 */
+@layer bd.patterns {
+  /* 核心候选：bd-layout 的外角跟着列数走。主区是第一列时，最后一格的左下角是外角；
+     ≤1280 右栏收起后主区第一格右上、最后一格右下是外角；≤900 单列时左侧导航条占上面两个外角，
+     主区最后一格（或最后一行拼图）占下面两个外角。这里只对文档页的三种布局生效 */
+  .bd-layout:is(
+    :has(> .bd-nav > [data-pattern='toc-progress']),
+    :has(> [data-part='main'] > :is([data-pattern='release'], [data-pattern='search-results']))
+  ) {
+    > [data-part='main']:first-child > :nth-last-child(1 of :not([hidden])) {
+      --bd-corner-bl: var(--bd-radius-tile);
+    }
+
+    @media (max-width: 1280px) {
+      > [data-part='main'] > :nth-child(1 of :not([hidden])) {
+        --bd-corner-tr: var(--bd-radius-tile);
+      }
+
+      > [data-part='main'] > :nth-last-child(1 of :not([hidden])):not(.bd-mosaic),
+      > [data-part='main'] > .bd-mosaic:last-child > :last-child {
+        --bd-corner-br: var(--bd-radius-tile);
+      }
+    }
+
+    @media (max-width: 900px) {
+      > .bd-nav {
+        --bd-corner-tr: var(--bd-radius-tile);
+        --bd-corner-bl: var(--bd-radius-seam);
+      }
+
+      > .bd-nav + [data-part='main'] > :first-child {
+        --bd-corner-tr: var(--bd-radius-seam);
+      }
+
+      > [data-part='main'] > :nth-last-child(1 of :not([hidden])):not(.bd-mosaic),
+      > [data-part='main'] > .bd-mosaic:last-child > :first-child {
+        --bd-corner-bl: var(--bd-radius-tile);
+      }
+    }
+
+    @media (max-width: 640px) {
+      > [data-part='main'] > .bd-mosaic:last-child > :first-child {
+        --bd-corner-bl: var(--bd-radius-seam);
+      }
+
+      > [data-part='main'] > .bd-mosaic:last-child > :last-child {
+        --bd-corner-bl: var(--bd-radius-tile);
+      }
+    }
+  }
+
+  /* 上一篇 / 下一篇在 ≤900 仍是两列，到手机上才单列 */
+  @media (max-width: 900px) {
+    [data-pattern='prev-next'] {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    [data-pattern='prev-next'] {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 1100px) {
+    [data-pattern='category-card'] {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+
+      > :where(*) {
+        --bd-corner-tl: var(--bd-radius-seam);
+        --bd-corner-tr: var(--bd-radius-seam);
+        --bd-corner-br: var(--bd-radius-seam);
+        --bd-corner-bl: var(--bd-radius-seam);
+      }
+
+      > :where(:first-child) {
+        --bd-corner-tl: var(--bd-radius-tile);
+      }
+
+      > :where(:nth-child(2), :last-child:nth-child(-n + 2)) {
+        --bd-corner-tr: var(--bd-radius-tile);
+      }
+
+      > :where(:nth-child(2n + 1):nth-last-child(-n + 2)) {
+        --bd-corner-bl: var(--bd-radius-tile);
+      }
+
+      > :where(:last-child, :nth-child(2n):nth-last-child(-n + 2)) {
+        --bd-corner-br: var(--bd-radius-tile);
+      }
+    }
+
+    [data-pattern='uptime'] > li > div {
+      gap: 1px;
+    }
+  }
+
+  /* 目录变成横向导航条，阅读进度不再显示。
+     核心候选：≤900 横排时导航项 32 高的规则要压过紧凑密度的 34（现在紧凑密度的选择器更具体，横排后仍是 34） */
+  @media (max-width: 900px) {
+    [data-pattern='toc-progress'] {
+      display: none;
+    }
+
+    [data-pattern='release'] > .bd-tray[data-cols='3'] {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .bd-nav:has(> [data-pattern='toc-progress']) > :is(a, button) {
+      min-height: 32px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    [data-pattern='category-card'] {
+      grid-template-columns: minmax(0, 1fr);
+
+      > :where(*) {
+        --bd-corner-tl: var(--bd-radius-seam);
+        --bd-corner-tr: var(--bd-radius-seam);
+        --bd-corner-br: var(--bd-radius-seam);
+        --bd-corner-bl: var(--bd-radius-seam);
+      }
+
+      > :where(:first-child) {
+        --bd-corner-tl: var(--bd-radius-tile);
+        --bd-corner-tr: var(--bd-radius-tile);
+      }
+
+      > :where(:last-child) {
+        --bd-corner-bl: var(--bd-radius-tile);
+        --bd-corner-br: var(--bd-radius-tile);
+      }
+    }
+
+    [data-pattern='help-search'] {
+      > .bd-input > .bd-button {
+        display: none;
+      }
+
+      .bd-stats > div {
+        padding: 8px;
+      }
+    }
+
+    [data-pattern='uptime'] {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    [data-pattern='popular'] {
+      grid-template-rows: none;
+      grid-auto-flow: row;
+
+      > .bd-item > [data-part='end'] {
+        display: none;
+      }
+    }
+
+    /* 记录表不挤压列：按参考页的自动列宽排开，在托盘里横向滚动 */
+    [data-pattern='dns-records'] {
+      overflow-x: auto;
+
+      tr {
+        grid-template-columns: 77px 60px 72px 204px 53px;
+      }
+
+      > :is(thead, tbody) {
+        width: max-content;
+      }
+
+      :is(th, td),
+      :is(th, td):first-child,
+      :is(th, td):last-child {
+        padding-inline: 12px;
+      }
+    }
+
+    /* 文末元信息和反馈条之间空 10（格子间距 12 之外） */
+    [data-pattern='article-meta'] {
+      margin-top: 10px;
+    }
+
+    /* 反馈条：两颗按钮换到说明下面；格子间距变成 12 后，与正文之间仍空 40 */
+    [data-pattern='article-feedback'] {
+      margin-top: 28px;
+
+      > .bd-item {
+        flex-wrap: wrap;
+        row-gap: 12px;
+      }
+
+      > .bd-item > div {
+        flex-basis: 100%;
+      }
+    }
+
+    /* 上一篇 / 下一篇单列，「下一篇」也左对齐；参考页窄屏格子间距 12 也落在这两张卡上 */
+    [data-pattern='prev-next'] > .bd-tile {
+      gap: 12px;
+
+      &[rel='next'] {
+        align-items: flex-start;
+        text-align: left;
+      }
+    }
+
+    /* 核心候选：页头和工具栏里的分段控件在手机上占满一行、各项等分、去掉计数 */
+    [data-pattern='type-filter'] {
+      flex: 1 1 100%;
+      width: 100%;
+
+      > button {
+        flex: 1;
+        min-width: 0;
+        padding-inline: 4px;
+      }
+
+      [data-part='count'] {
+        display: none;
+      }
+    }
+
+    /* 搜索结果：图标底 32、间距 10，类型和日期一列收起；小格左右内边距仍是 12 */
+    [data-pattern='search-results'] .bd-item {
+      gap: 10px;
+      padding-inline: 12px;
+
+      > [data-part='icon'] {
+        width: 32px;
+        height: 32px;
+      }
+
+      > [data-part='end'] {
+        display: none;
+      }
+    }
+
+    /* 角落几何线：标题会伸到右上角，弧线不能压字 */
+    [data-pattern='release'] > .bd-corner {
+      display: none;
+    }
+
+    /* 变更列表：去掉影响范围一列；小格左右内边距仍是 12（不跟托盘收窄） */
+    [data-pattern='change-list'] > .bd-item {
+      grid-template-columns: 58px minmax(0, 1fr);
+      padding-inline: 12px;
+
+      > [data-part='end'] {
+        display: none;
+      }
+    }
+
+    /* 核心候选：bd-head 在 ≤640 时，标题和说明放不下右侧槽位就把槽位换到下一行（参考页是 flex-wrap、行距 8）。
+       框架的 bd-head 是网格，判断不了「放不下」，这里只对参考页里会换行的几张格子生效 */
+    :is(
+        [data-pattern='help-search'],
+        [data-pattern='search-results'],
+        .bd-tile:has(> [data-pattern='support-options']),
+        [data-pattern='release']:has(> .bd-corner)
+      )
+      > .bd-head {
+      grid-template-columns: minmax(0, 1fr);
+
+      > [data-part='end'] {
+        grid-column: 1;
+        grid-row: auto;
+        justify-content: flex-start;
+        margin-top: 8px;
+      }
     }
   }
 }

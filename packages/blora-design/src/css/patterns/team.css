@@ -722,7 +722,14 @@
       font-size: 12.5px;
     }
 
+    > [data-part='legend'] > .bd-item > div {
+      min-width: 0;
+    }
+
     > [data-part='legend'] > .bd-item > div > span {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
       font-size: 12.5px;
       font-weight: 400;
       color: var(--bd-ink-secondary);
@@ -740,34 +747,6 @@
   [data-pattern='agenda'] {
     gap: 14px;
 
-    > .bd-tray > .bd-item {
-      gap: 10px;
-    }
-
-    > .bd-tray > .bd-item > time {
-      width: 42px;
-      padding-top: 2px;
-      line-height: normal;
-    }
-
-    > .bd-tray > .bd-item > [data-part='swatch'] {
-      margin-top: 6px;
-    }
-
-    > .bd-tray > .bd-item > div > * {
-      white-space: nowrap;
-      line-height: normal;
-    }
-
-    > .bd-tray > .bd-item > div > small {
-      margin-top: 0;
-    }
-
-    > .bd-tray > .bd-item[data-past] > *,
-    > .bd-tray > .bd-item[data-past] > div > * {
-      color: var(--bd-ink-quaternary);
-    }
-
     > .bd-stats {
       padding-top: 0;
     }
@@ -775,6 +754,37 @@
     > .bd-stats dt {
       font-size: 12px;
       font-weight: 400;
+    }
+  }
+
+  /* 日程条目：今日托盘和窄屏的按天列表共用 */
+  :is([data-pattern='agenda'], [data-pattern='week-grid'] > [data-part='week'] > div) > .bd-tray {
+    > .bd-item {
+      gap: 10px;
+    }
+
+    > .bd-item > time {
+      width: 42px;
+      padding-top: 2px;
+      line-height: normal;
+    }
+
+    > .bd-item > [data-part='swatch'] {
+      margin-top: 6px;
+    }
+
+    > .bd-item > div > * {
+      white-space: nowrap;
+      line-height: normal;
+    }
+
+    > .bd-item > div > small {
+      margin-top: 0;
+    }
+
+    > .bd-item[data-past] > *,
+    > .bd-item[data-past] > div > * {
+      color: var(--bd-ink-quaternary);
     }
   }
 
@@ -973,6 +983,7 @@
     gap: 10px;
 
     p {
+      white-space: normal;
       line-height: 1.5;
     }
 
@@ -1005,6 +1016,15 @@
       color: var(--bd-ink-tertiary);
     }
 
+    /* 带锁图标的说明行高 18.6（参考页的行内块撑出的行盒） */
+    .bd-item small:has(> svg) {
+      line-height: 1.55;
+    }
+
+    > [data-part='foot'] {
+      padding-top: 2px;
+    }
+
     > [data-part='foot'] > p {
       gap: 8px;
       padding-left: 2px;
@@ -1012,6 +1032,363 @@
 
     > [data-part='foot'] > p > svg {
       color: var(--bd-sand-ink);
+    }
+  }
+
+  /* ============ 窄屏 ============ */
+
+  /* 周视图的列表形态：<div data-part="week"> 里每天一组 <div>（<p><b>日</b>周几</p> + listbox 托盘，空的一天放 <p data-part="none">）；宽屏隐藏 */
+  [data-pattern='week-grid'] > [data-part='week'] {
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    > div > p {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      padding: 0 4px;
+      font-size: 12.5px;
+      font-weight: 560;
+      color: var(--bd-ink-tertiary);
+    }
+
+    > div > p > b {
+      font-size: 14px;
+      font-weight: 620;
+      font-variant-numeric: tabular-nums;
+      color: var(--bd-ink);
+    }
+
+    > [aria-current] > p,
+    > [aria-current] > p > b {
+      color: var(--bd-blush-ink);
+    }
+
+    [data-part='none'] {
+      font-size: 12.5px;
+      color: var(--bd-ink-quaternary);
+    }
+  }
+
+  @media (max-width: 1100px) {
+    /* 看板列窄但内容短：比指标行晚一档才折成两列 */
+    [data-pattern='kanban'] {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+
+      > * {
+        --bd-corner-tl: var(--bd-radius-seam);
+        --bd-corner-tr: var(--bd-radius-seam);
+        --bd-corner-br: var(--bd-radius-seam);
+        --bd-corner-bl: var(--bd-radius-seam);
+      }
+
+      > :first-child {
+        --bd-corner-tl: var(--bd-radius-tile);
+        --bd-corner-bl: var(--bd-radius-tile);
+      }
+
+      > :last-child {
+        --bd-corner-tr: var(--bd-radius-tile);
+        --bd-corner-br: var(--bd-radius-tile);
+      }
+    }
+
+    /* 日程：右栏「今天」移到周视图下方，变宽后改两列：左边下一个 + 读数，右边日程托盘 */
+    [data-pattern='schedule'] {
+      grid-template-columns: minmax(0, 1fr);
+
+      > :first-child {
+        --bd-corner-tl: var(--bd-radius-tile);
+        --bd-corner-tr: var(--bd-radius-tile);
+        --bd-corner-bl: var(--bd-radius-seam);
+        --bd-corner-br: var(--bd-radius-seam);
+      }
+
+      > :last-child {
+        --bd-corner-tl: var(--bd-radius-seam);
+        --bd-corner-tr: var(--bd-radius-seam);
+        --bd-corner-bl: var(--bd-radius-tile);
+        --bd-corner-br: var(--bd-radius-tile);
+      }
+    }
+
+    [data-pattern='agenda'] {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: start;
+      gap: 14px 18px;
+
+      > .bd-head {
+        grid-column: 1 / -1;
+      }
+
+      > [data-pattern='next-event'] {
+        grid-row: 2;
+        grid-column: 1;
+      }
+
+      > .bd-stats {
+        grid-row: 3;
+        grid-column: 1;
+        align-self: end;
+        margin-top: 0;
+      }
+
+      > .bd-tray {
+        grid-row: 2 / span 2;
+        grid-column: 2;
+      }
+    }
+
+    /* 资料页头：操作换到下一行，读数靠右 */
+    [data-pattern='profile-head'] {
+      grid-template-columns: auto auto minmax(0, 1fr);
+
+      > .bd-spec {
+        justify-self: end;
+      }
+
+      > [data-part='end'] {
+        grid-row: 4;
+        grid-column: 1 / -1;
+        justify-self: start;
+        margin-top: 18px;
+      }
+    }
+  }
+
+  @media (max-width: 900px) {
+    [data-pattern='kanban'] {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+
+      > :nth-child(1) {
+        --bd-corner-tl: var(--bd-radius-tile);
+        --bd-corner-tr: var(--bd-radius-seam);
+        --bd-corner-bl: var(--bd-radius-seam);
+      }
+
+      > :nth-child(2) {
+        --bd-corner-tr: var(--bd-radius-tile);
+      }
+
+      > :nth-child(3) {
+        --bd-corner-bl: var(--bd-radius-tile);
+      }
+
+      > :nth-child(4) {
+        --bd-corner-tr: var(--bd-radius-seam);
+        --bd-corner-br: var(--bd-radius-tile);
+      }
+    }
+
+    /* 核心候选：data-grow="fit" 的主从视图在单列时不再填满窗口，两栏上下排、各自固定高度内部滚动（切换不跳高） */
+    [data-pattern='inbox'] {
+      flex: none;
+      grid-template-rows: 400px 640px;
+      min-height: 0;
+    }
+
+    [data-pattern='week-grid'] {
+      > :is([data-part='days'], [data-part='allday'], [data-part='hours']) {
+        display: none;
+      }
+
+      > [data-part='week'] {
+        display: flex;
+      }
+    }
+
+    /* 资料页头：读数换到最下面一行、三格均分 */
+    [data-pattern='profile-head'] {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+
+      > [data-part='end'] {
+        grid-row: 1 / span 3;
+        grid-column: 3;
+        margin-top: 0;
+      }
+
+      > .bd-spec {
+        grid-row: 4;
+        grid-column: 1 / -1;
+        justify-self: stretch;
+        margin-top: 18px;
+      }
+
+      > .bd-spec > div {
+        flex: 1;
+        min-width: 0;
+      }
+    }
+  }
+
+  @media (max-width: 640px) {
+    [data-pattern='kanban'] {
+      grid-template-columns: minmax(0, 1fr);
+
+      > :nth-child(1) {
+        --bd-corner-tl: var(--bd-radius-tile);
+        --bd-corner-tr: var(--bd-radius-tile);
+        --bd-corner-bl: var(--bd-radius-seam);
+      }
+
+      > :nth-child(2) {
+        --bd-corner-tr: var(--bd-radius-seam);
+      }
+
+      > :nth-child(3) {
+        --bd-corner-bl: var(--bd-radius-seam);
+      }
+
+      > :nth-child(4) {
+        --bd-corner-bl: var(--bd-radius-tile);
+        --bd-corner-br: var(--bd-radius-tile);
+      }
+    }
+
+    :is([data-pattern='kanban'] > .bd-tile, [data-pattern='message-list']) {
+      padding: 16px 10px 10px;
+    }
+
+    [data-pattern='message-list'] {
+      gap: 10px;
+    }
+
+    [data-pattern='inbox'] {
+      grid-template-rows: 380px 620px;
+    }
+
+    [data-pattern='reader'] {
+      padding: 14px 14px 12px;
+
+      > [data-part='subject'] {
+        font-size: 16.5px;
+      }
+
+      > [data-part='from'] > time,
+      > [data-part='reply'] [data-part='hint'] {
+        display: none;
+      }
+
+      > [data-part='body'] {
+        margin: 10px -14px 0;
+        padding: 4px 14px 16px;
+        font-size: 13.5px;
+      }
+    }
+
+    /* 指标格：手机上仍保留右上角图标、单位跟在数字后面；脚注一行放不下就截断 */
+    [data-pattern='board-metrics'] > .bd-tile {
+      > [data-part='icon'] {
+        display: grid;
+      }
+
+      > [data-part='value'] > small {
+        display: inline;
+        margin: 0 0 0 3px;
+      }
+
+      > [data-part='foot'] {
+        flex-wrap: nowrap;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      > [data-part='foot'] > span:not([data-part]) {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    [data-pattern='week-grid'] {
+      padding-inline: 12px;
+
+      > [data-part='legend'] {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    [data-pattern='week-nav'] > span {
+      display: none;
+    }
+
+    [data-pattern='agenda'] {
+      display: flex;
+      gap: 14px;
+
+      > .bd-tray {
+        align-self: stretch;
+      }
+    }
+
+    [data-pattern='profile-head'] {
+      grid-template-columns: auto minmax(0, 1fr);
+
+      > .bd-avatar {
+        width: 48px;
+        height: 48px;
+        font-size: 17px;
+      }
+
+      > [data-part='end'] {
+        grid-row: 4;
+        grid-column: 1 / -1;
+        margin-top: 18px;
+      }
+
+      > .bd-spec {
+        grid-row: 5;
+      }
+
+      > .bd-spec > div {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+      }
+    }
+
+    /* 熟练度图例去掉说明，计数跟在名称后面 */
+    [data-pattern='skill-cloud'] > [data-part='levels'] {
+      [data-part='muted'] {
+        display: none;
+      }
+
+      > .bd-item > div {
+        flex: none;
+      }
+
+      > .bd-item > [data-part='end'] {
+        flex: 1;
+        justify-content: flex-start;
+      }
+    }
+
+    [data-pattern='ticket-list'] > .bd-item > :is(code, time) {
+      display: none;
+    }
+
+    /* 「最近动态」的筛选分段放不进标题行，换到标题下方并占满宽度 */
+    .bd-tile:has(> [data-pattern='activity-feed']) > .bd-head {
+      grid-template-columns: minmax(0, 1fr);
+
+      > [data-part='end'] {
+        grid-row: 3;
+        grid-column: 1 / -1;
+        margin-top: 10px;
+      }
+
+      > [data-part='end'] > .bd-segmented {
+        flex: 1;
+      }
     }
   }
 }

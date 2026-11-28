@@ -233,4 +233,10 @@
       transform: translateY(16px);
     }
   }
+
+  @media (max-width: 640px) {
+    .bd-tile[data-variant='alert'] {
+      gap: 12px;
+    }
+  }
 }

@@ -139,4 +139,10 @@
       stroke: none;
     }
   }
+
+  @media (max-width: 640px) {
+    .bd-corner {
+      display: none;
+    }
+  }
 }

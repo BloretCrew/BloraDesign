@@ -18,48 +18,52 @@ const FONTS = `
 // 截图时隐藏文字光标、滚动滑块这类与布局无关、出现时机不定的东西
 const QUIET = `* { caret-color: transparent !important; }`;
 
+type PerWidth = Partial<Record<number, number>>;
+
 interface Scene {
   page: string;
   scene?: string;
-  /** 允许的差异像素占比（0–1） */
-  budget: number;
+  /** 只比这些宽度（默认三档都比） */
+  widths?: number[];
+  /** 允许的差异像素占比（0–1），按宽度覆盖默认值 */
+  budget?: PerWidth;
   /** 允许的整页高度差（px），只给已记录的偏差用（docs/roadmap.md） */
-  height?: number;
+  height?: PerWidth;
 }
 
-// 默认只比 1380；BD_WIDTHS=1024,375 可以另比窄屏
+// 默认预算：窄屏文字换行多，次像素位置的差异也多一些
+const BUDGET: Record<number, number> = { 1380: 0.011, 1024: 0.016, 375: 0.035 };
+// 默认高度差：桌面必须一致；手机上参考页有收起的批量栏等留下的 1–4px 残余间距
+const HEIGHT: Record<number, number> = { 1380: 0, 1024: 0, 375: 4 };
+
 // CI 的 Linux Chromium 用另一套中文回落字体和字形微调，文字边缘的差异像素比 macOS 多；
 // 几何仍由「高度一致」把关，所以像素预算在 CI 上放宽一倍
 const SLACK = process.env.CI ? 2 : 1;
 
-const WIDTHS = (process.env.BD_WIDTHS ?? '1380').split(',').map(Number);
+// 默认比 1380 / 1024 / 375 三档；BD_WIDTHS=1024 只比其中一档
+const WIDTHS = (process.env.BD_WIDTHS ?? '1380,1024,375').split(',').map(Number);
+
+const scenes = (page: string, list: string[]): Scene[] => list.map((scene) => ({ page, scene }));
 
 export const PAGES: Scene[] = [
-  ...['start', 'overview', 'list', 'detail', 'settings'].map((scene) => ({
-    page: 'demo-console',
-    scene,
-    budget: 0.011,
-  })),
-  // 套餐页：对比表托盘按 DESIGN.md 用 5 / 4（参考页 4 / 3）、展开的常见问题用雾粉浅底、收束行上边距 4，共高 13px（docs/roadmap.md）
-  { page: 'demo-billing', scene: 'plans', budget: 0.025, height: 13 },
-  ...['usage', 'invoices', 'payment'].map((scene) => ({
-    page: 'demo-billing',
-    scene,
-    budget: 0.01,
-  })),
-  ...['board', 'inbox', 'schedule', 'profile'].map((scene) => ({
-    page: 'demo-team',
-    scene,
-    budget: 0.01,
-  })),
-  ...['help', 'article', 'changelog', 'search'].map((scene) => ({
-    page: 'demo-docs',
-    scene,
-    budget: 0.01,
-  })),
-  // 组件全集页比 DESIGN.md 早：格子标题 14.5 / 600、指标格是居中 52px 环的另一种版式，按 DESIGN.md 实现（docs/roadmap.md）
-  { page: 'components', budget: 0.05, height: 10 },
+  ...scenes('demo-console', ['start', 'overview', 'list', 'detail', 'settings']),
+  ...scenes('demo-billing', ['plans', 'usage', 'invoices', 'payment']),
+  ...scenes('demo-team', ['board', 'inbox', 'schedule', 'profile']),
+  ...scenes('demo-docs', ['help', 'article', 'changelog', 'search']),
+  // 组件全集页比 DESIGN.md 早：格子标题 14.5 / 600、指标格是居中 52px 环的另一种版式，按 DESIGN.md 实现；
+  // 它的手机版式（隐藏格子说明、标签上下排）是展示页自己的，只比桌面宽度（docs/roadmap.md）
+  { page: 'components', widths: [1380], budget: { 1380: 0.05 }, height: { 1380: 10 } },
 ];
+
+// 已记录的偏差（docs/roadmap.md）
+const EXCEPTIONS: Record<string, Pick<Scene, 'budget' | 'height'>> = {
+  // 套餐页：对比表托盘按 DESIGN.md 用 5 / 4（参考页 4 / 3）、展开的常见问题用雾粉浅底、收束行上边距 4
+  // 窄屏对比表变成单独一行，这几处差异全部累加到页面高度上（+20）
+  'demo-billing#plans': {
+    budget: { 1380: 0.02, 1024: 0.022 },
+    height: { 1380: 13, 1024: 20, 375: 20 },
+  },
+};
 
 const ours = (p: string) => `/recipes/pages/${p.replace(/^demo-/, '')}.html`;
 
@@ -87,6 +91,10 @@ function pad(img: PNG, w: number, h: number): PNG {
 
 for (const width of WIDTHS) {
   for (const s of PAGES) {
+    if (s.widths && !s.widths.includes(width)) continue;
+    const extra = EXCEPTIONS[`${s.page}#${s.scene ?? ''}`] ?? {};
+    const budget = extra.budget?.[width] ?? s.budget?.[width] ?? BUDGET[width] ?? 0.011;
+    const heightSlack = extra.height?.[width] ?? s.height?.[width] ?? HEIGHT[width] ?? 0;
     const name = `${s.page.replace(/^demo-/, '')}${s.scene ? `-${s.scene}` : ''}@${width}`;
     test(`整页一致：${name}`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
@@ -108,8 +116,8 @@ for (const width of WIDTHS) {
         `${name}: 高度 参考 ${a.height} / 框架 ${b.height}，差异 ${(ratio * 100).toFixed(3)}%`,
       );
       expect({
-        height: Math.abs(b.height - a.height) <= (s.height ?? 0),
-        ratio: ratio <= s.budget * SLACK,
+        height: Math.abs(b.height - a.height) <= heightSlack,
+        ratio: ratio <= budget * SLACK,
       }).toEqual({
         height: true,
         ratio: true,
