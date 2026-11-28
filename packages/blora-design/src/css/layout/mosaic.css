@@ -151,6 +151,10 @@
       color: var(--bd-ink-secondary);
     }
 
+    > [data-part='tag'] {
+      color: var(--bd-ink-tertiary);
+    }
+
     &:has(> :is(.bd-button, [data-part='actions'])) {
       padding: 9px 9px 9px 14px;
     }

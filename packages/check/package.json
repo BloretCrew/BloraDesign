@@ -1,0 +1,51 @@
+{
+  "name": "@bloret-crew/blora-check",
+  "version": "3.0.0-alpha.0",
+  "description": "Blora Design 的页面检查工具：在三个宽度、浅色和深色下检查空白、压缩、原生外观、写死颜色、对比度等，并检查 HTML 写法",
+  "license": "Apache-2.0",
+  "author": "Rhedar <rhedarliu@outlook.com>",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BloretCrew/BloraDesign.git",
+    "directory": "packages/check"
+  },
+  "keywords": [
+    "blora-design",
+    "design-system",
+    "lint",
+    "visual-check"
+  ],
+  "bin": {
+    "blora": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "parse5": "^8.0.0",
+    "playwright": "^1.65.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.11",
+    "typescript": "~6.0.3",
+    "vitest": "^5.1.2"
+  }
+}

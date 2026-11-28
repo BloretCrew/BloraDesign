@@ -36,7 +36,7 @@
     }
 
     [data-tone='comment'] {
-      color: var(--bd-ink-quaternary);
+      color: var(--bd-ink-tertiary);
     }
 
     [data-part='prompt'] {

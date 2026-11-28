@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="blora-scenes" content="help,article,changelog,search" />
     <title>Blora Docs · 文档与帮助中心</title>
     <!-- 第 ② 阶段验收页：只用框架重写 reference/demo-docs.html（帮助中心、文章、更新日志、搜索） -->
     <link rel="stylesheet" href="../../packages/blora-design/dist/blora.css" />
@@ -342,7 +343,7 @@
                 </div>
               </dl>
             </article>
-            <article class="bd-tile">
+            <article class="bd-tile" data-bd-allow="whitespace">
               <header class="bd-head">
                 <h2>服务状态</h2>
                 <p>过去 30 天可用性，每格一天</p>
@@ -1048,7 +1049,7 @@
 
           <div class="bd-layout" style="--bd-columns: minmax(0, 1fr) 300px">
             <div data-part="main" id="clList">
-              <article class="bd-tile" data-pattern="release">
+              <article class="bd-tile" data-pattern="release" data-bd-allow="whitespace">
                 <span class="bd-corner"></span>
                 <header class="bd-head">
                   <h2>

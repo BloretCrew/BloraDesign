@@ -1,6 +1,7 @@
 import stylelint from 'stylelint';
 import { describe, expect, it } from 'vitest';
 import config from '../index.js';
+import strict from '../strict.js';
 
 async function rulesHit(code: string): Promise<string[]> {
   const { results } = await stylelint.lint({ code, config });
@@ -39,5 +40,45 @@ describe('stylelint-config-blora', () => {
     ],
   ])('拦下%s', async (_name, code, rule) => {
     expect(await rulesHit(code)).toContain(rule);
+  });
+});
+
+describe('stylelint-config-blora/strict', () => {
+  async function strictHit(code: string): Promise<string[]> {
+    const { results } = await stylelint.lint({ code, config: strict });
+    return (results[0]?.warnings ?? []).map((w) => w.rule).sort();
+  }
+
+  it('只用设计变量的写法不报错', async () => {
+    expect(
+      await strictHit(`.card {
+        margin: 0 auto;
+        padding: var(--bd-space-tile-padding-y) var(--bd-space-tile-padding-x);
+        gap: var(--bd-space-seam);
+        border-radius: var(--bd-radius-tile);
+        box-shadow: var(--bd-shadow-tile);
+        transition: opacity var(--bd-duration) var(--bd-ease-out);
+      }
+      .dot { border-radius: 50%; }`),
+    ).toEqual([]);
+  });
+
+  it.each([
+    ['写死圆角', 'a { border-radius: 12px; }', 'declaration-property-value-disallowed-list'],
+    ['写死内边距', 'a { padding: 8px 12px; }', 'declaration-property-value-disallowed-list'],
+    ['写死间距', 'a { gap: 1rem; }', 'declaration-property-value-disallowed-list'],
+    [
+      '写死时长',
+      'a { transition: transform 0.2s ease; }',
+      'declaration-property-value-disallowed-list',
+    ],
+    [
+      '手写投影',
+      'a { box-shadow: 0 1px 2px var(--bd-ink); }',
+      'declaration-property-value-allowed-list',
+    ],
+    ['基础规则仍然生效', 'a { color: #fff; }', 'color-no-hex'],
+  ])('拦下%s', async (_name, code, rule) => {
+    expect(await strictHit(code)).toContain(rule);
   });
 });

@@ -42,5 +42,15 @@
       --bd-duration: 0.01ms;
       --bd-duration-pop: 0.01ms;
     }
+
+    /* 写死时长的过渡和动画也一样：只留颜色、底色、投影、透明度的渐变，其余（位移、缩放、旋转、尺寸）立即完成 */
+    *,
+    *::before,
+    *::after {
+      transition-property: color, background-color, box-shadow, opacity, fill, stroke !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+    }
   }
 }

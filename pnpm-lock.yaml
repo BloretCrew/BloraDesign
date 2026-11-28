@@ -166,6 +166,9 @@ importers:
 
   .:
     devDependencies:
+      '@bloret-crew/blora-check':
+        specifier: workspace:*
+        version: link:packages/check
       '@bloret-crew/cortado':
         specifier: ^0.1.0
         version: 0.1.0
@@ -251,6 +254,25 @@ importers:
       yaml:
         specifier: ^2.9.1
         version: 2.9.1
+
+  packages/check:
+    dependencies:
+      parse5:
+        specifier: ^8.0.0
+        version: 8.1.1
+      playwright:
+        specifier: ^1.65.1
+        version: 1.65.1
+    devDependencies:
+      '@types/node':
+        specifier: ^26.6.11
+        version: 26.6.11
+      typescript:
+        specifier: ~6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^5.1.2
+        version: 5.1.2(@types/node@26.6.11)(vite@8.4.0(@types/node@26.6.11)(yaml@2.9.1))
 
   packages/stylelint-config:
     devDependencies:
@@ -864,6 +886,10 @@ packages:
   electron-to-chromium@1.5.494:
     resolution: {integrity: sha512-Tph7ohL4Xc0ft3DXElYEIVTmPI3H0MtPCTdgtz5AwWGZG6q+vMiT3IzJ3RJX/HJQ8pYzeimQyvi6SsBTOS0nyQ==}
 
+  entities@9.0.0:
+    resolution: {integrity: sha512-oJFNDJg3kTPwAD1cNn2+WmUq4wFoo09npc3Ydf1D7ED4smRiWrsKnaLxykrTWgyGEcusc87P5dxlAleol9kpkg==}
+    engines: {node: '>=20.19.0'}
+
   env-paths@2.2.1:
     resolution: {integrity: sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==}
     engines: {node: '>=6'}
@@ -1333,6 +1359,9 @@ packages:
 
   parse-entities@4.0.2:
     resolution: {integrity: sha512-GG2AQYWoLgL877gQIKeRPGO1xF9+eG1ujIb5soS5gPvLQ1y2o8FL90w2QWNdf9I361Mpp7726c+lj3U0qK1uGw==}
+
+  parse5@8.1.1:
+    resolution: {integrity: sha512-EcR/6WDcU7b2N3vQSxKALCk9lXGtUMQxXio008OEMBE0kavu/7JLfBEeFPzi43nMqVDSbEn3QCK+BMCc9zO//w==}
 
   path-exists@4.0.0:
     resolution: {integrity: sha512-ak9Qy5Q7jYb2Wwcey5Fpvg2KoAc/ZIhLSLOSBmRmygPsGwkVVt0fZa0qrtMz+m6tJTAHfZQ8FnmB4MG4LWy7/w==}
@@ -2259,6 +2288,8 @@ snapshots:
 
   electron-to-chromium@1.5.494: {}
 
+  entities@9.0.0: {}
+
   env-paths@2.2.1: {}
 
   es-module-lexer@2.3.2: {}
@@ -2891,6 +2922,10 @@ snapshots:
       is-alphanumerical: 2.0.1
       is-decimal: 2.0.1
       is-hexadecimal: 2.0.1
+
+  parse5@8.1.1:
+    dependencies:
+      entities: 9.0.0
 
   path-exists@4.0.0: {}
 

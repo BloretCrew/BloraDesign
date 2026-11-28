@@ -1101,10 +1101,11 @@ PAIRS.push(
     size: false,
   },
   {
+    // 颜色有意加深一档（quaternary → tertiary），在凹槽底上满足辅助文字的对比度（docs/roadmap.md · 第 ③ 阶段）
     name: '代码块 · 注释',
     ref: `${DOCS} .code-block .c`,
     ours: `${DATA} #code [data-tone="comment"]`,
-    props: ['color'],
+    props: ['fontSize', 'fontFamily'],
     size: false,
   },
   {

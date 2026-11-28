@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="blora-scenes" content="plans,usage,invoices,payment" />
     <title>Blora Cloud · 账单与套餐</title>
     <!-- 第 ② 阶段验收页：只用框架重写 reference/demo-billing.html（套餐、用量、发票、支付方式） -->
     <link rel="stylesheet" href="../../packages/blora-design/dist/blora.css" />
@@ -1177,7 +1178,7 @@
             data-pattern="payment-row"
             style="--bd-columns: minmax(0, 1fr) minmax(0, 1.35fr)"
           >
-            <article class="bd-tile">
+            <article class="bd-tile" data-bd-allow="whitespace">
               <header class="bd-head">
                 <h2>已保存的支付方式</h2>
                 <p id="cardCount">3 张卡片 · 1 个账户余额</p>
@@ -1197,7 +1198,12 @@
               </div>
             </article>
 
-            <article class="bd-tile" id="addCardTile" data-pattern="add-card">
+            <article
+              class="bd-tile"
+              data-bd-allow="whitespace"
+              id="addCardTile"
+              data-pattern="add-card"
+            >
               <header class="bd-head">
                 <h2>添加新卡</h2>
                 <p>支持 Visa、万事达与银联，卡号加密存储</p>
@@ -1310,7 +1316,7 @@
             data-cols="2"
             style="--bd-columns: minmax(0, 1.75fr) minmax(0, 1fr)"
           >
-            <article class="bd-tile" id="addrTile">
+            <article class="bd-tile" data-bd-allow="whitespace" id="addrTile">
               <header class="bd-head">
                 <h2>账单地址与开票信息</h2>
                 <p>显示在每一张发票上</p>
@@ -1764,7 +1770,7 @@
         },
       ];
       const cardRow = (c) => `<li class="bd-item" data-id="${c.id}">
-          <span data-pattern="card-brand" data-brand="${c.brand === 'card' ? 'up' : c.brand}">${BRAND_TAG[c.brand]}</span>
+          <span data-pattern="card-brand" role="img" aria-label="${BRAND_TAG[c.brand]}" data-brand="${c.brand === 'card' ? 'up' : c.brand}">${BRAND_TAG[c.brand]}</span>
           <div><strong>${BRAND[c.brand]} <code>•••• ${c.last4}</code></strong><small data-tip="${c.holder}">有效期 ${c.exp} · ${c.holder}</small></div>
           ${c.def ? '<span class="bd-pill" data-tone="blush">默认</span>' : ''}${c.expiring ? '<span class="bd-pill" data-tone="rose">即将到期</span>' : ''}
           <div class="bd-menu">

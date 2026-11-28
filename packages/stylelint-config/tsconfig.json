@@ -6,5 +6,5 @@
     "checkJs": false,
     "types": ["node"]
   },
-  "include": ["index.js", "test", "vitest.config.ts"]
+  "include": ["index.js", "strict.js", "test", "vitest.config.ts"]
 }

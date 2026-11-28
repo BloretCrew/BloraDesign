@@ -1,7 +1,7 @@
 {
   "name": "@bloret-crew/stylelint-config-blora",
   "version": "3.0.0-alpha.0",
-  "description": "Blora Design 的 stylelint 规则：禁止写死颜色、渐变、描边，以及直接引用 Cortado 调色板",
+  "description": "Blora Design 的 stylelint 规则：禁止写死颜色、渐变、描边，以及直接引用 Cortado 调色板；严格版还要求圆角、间距、投影、动效时长只用设计变量",
   "license": "Apache-2.0",
   "author": "Rhedar <rhedarliu@outlook.com>",
   "type": "module",
@@ -17,10 +17,12 @@
   ],
   "exports": {
     ".": "./index.js",
+    "./strict": "./strict.js",
     "./package.json": "./package.json"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "strict.js"
   ],
   "peerDependencies": {
     "stylelint": ">=17"

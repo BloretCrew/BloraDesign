@@ -1,4 +1,11 @@
 /* bd.base：页面底色、正文排版、聚焦光晕、文字选中色（DESIGN.md · Typography / Motion） */
+/* 小控件向外扩出的点击区域（px）。只作用在写它的元素上，blora check 量点击区域时会算进去 */
+@property --bd-hit-slop {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
 @layer bd.base {
   html {
     background: var(--bd-canvas);
@@ -66,5 +73,56 @@
   :where(:has(> [data-part='glide'])) > :where(:not([data-part='glide'], [data-part='scrollbar'])) {
     position: relative;
     z-index: 1;
+  }
+
+  /* 手机上可点击区域至少 24px（WCAG 2.2 AA）：开关、输入框里的小按钮、标签里的移除按钮用 ::after 向外扩，不改变外观 */
+  :is(
+    .bd-switch,
+    .bd-input > :is([data-part='clear'], [data-part='reveal'], [data-part='copy']),
+    .bd-spec dd > [data-part='copy']
+  ) {
+    --bd-hit-slop: 2px;
+
+    position: relative;
+  }
+
+  .bd-tag > button {
+    --bd-hit-slop: 7px;
+
+    position: relative;
+  }
+
+  :is(
+    .bd-switch,
+    .bd-input > :is([data-part='clear'], [data-part='reveal'], [data-part='copy']),
+    .bd-spec dd > [data-part='copy'],
+    .bd-tag > button
+  )::after {
+    content: '';
+    position: absolute;
+    inset: calc(var(--bd-hit-slop) * -1);
+  }
+
+  /* 包着勾选框、单选框的文字标签、面包屑链接、收束行里的文字链接：上下扩出点击区域 */
+  :is(label:has(> :is(.bd-checkbox, .bd-radio)), .bd-breadcrumb > :is(a, button)) {
+    --bd-hit-slop: 3px;
+
+    position: relative;
+  }
+
+  [data-part='foot'] > a[data-part='link'] {
+    --bd-hit-slop: 4px;
+
+    position: relative;
+  }
+
+  :is(
+    label:has(> :is(.bd-checkbox, .bd-radio)),
+    .bd-breadcrumb > :is(a, button),
+    [data-part='foot'] > a[data-part='link']
+  )::after {
+    content: '';
+    position: absolute;
+    inset: calc(var(--bd-hit-slop) * -1) 0;
   }
 }

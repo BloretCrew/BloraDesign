@@ -18,11 +18,13 @@
     "lint:design": "node scripts/lint-design.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "verify": "pnpm run build && pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run test:browser",
+    "verify": "pnpm run build && pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run test:browser && pnpm run check:pages",
     "changeset": "changeset",
-    "test:browser": "playwright test"
+    "test:browser": "playwright test",
+    "check:pages": "node packages/check/dist/cli.js check recipes/pages"
   },
   "devDependencies": {
+    "@bloret-crew/blora-check": "workspace:*",
     "@bloret-crew/cortado": "^0.1.0",
     "@bloret-crew/stylelint-config-blora": "workspace:*",
     "@changesets/cli": "^3.0.3",

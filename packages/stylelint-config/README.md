@@ -15,4 +15,10 @@ npm install -D stylelint @bloret-crew/stylelint-config-blora
 { "extends": ["@bloret-crew/stylelint-config-blora"] }
 ```
 
+业务项目建议用**严格版**：在上面这些之外，圆角、间距（margin / padding / gap）、投影、动效时长也只能用 `--bd-*` 变量（0、`auto`、`50%` 可以）。
+
+```json
+{ "extends": ["@bloret-crew/stylelint-config-blora/strict"] }
+```
+
 Apache-2.0。

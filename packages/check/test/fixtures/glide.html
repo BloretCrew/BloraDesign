@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../../../blora-design/dist/blora.css" />
+    <script type="module" src="../../../blora-design/dist/blora.js"></script>
+    <title>选中滑块</title>
+  </head>
+  <body>
+    <main class="bd-page">
+      <article class="bd-tile">
+        <div class="bd-segmented" role="radiogroup" aria-label="范围" id="seg">
+          <button type="button" role="radio" aria-checked="true">24 小时</button>
+          <button type="button" role="radio">7 天</button>
+        </div>
+      </article>
+      <script type="module">
+        // 模拟业务代码把滑块挪偏
+        setTimeout(() => {
+          document.querySelector('#seg [data-part=glide]').style.translate = '12px 0';
+        }, 300);
+      </script>
+    </main>
+  </body>
+</html>

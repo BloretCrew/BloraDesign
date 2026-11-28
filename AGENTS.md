@@ -42,7 +42,8 @@ pnpm install
 pnpm build        # 构建全部包
 pnpm test         # 测试（依赖构建产物，先 build）
 pnpm lint         # ESLint、stylelint、DESIGN.md lint、Prettier
-pnpm verify       # CI 跑的全套：build → lint → typecheck → test
+pnpm check:pages  # 用 blora check 检查 recipes/pages 的全部场景
+pnpm verify       # CI 跑的全套：build → lint → typecheck → test → 浏览器测试 → blora check
 ```
 
 提交前跑 `pnpm verify`。改 DESIGN.md 后，`pnpm lint:design` 允许出现 orphaned-tokens 警告和主按钮对比度警告（已知问题），不允许出现错误。

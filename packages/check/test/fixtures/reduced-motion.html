@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../../../blora-design/dist/blora.css" />
+    <script type="module" src="../../../blora-design/dist/blora.js"></script>
+    <title>减少动效</title>
+  </head>
+  <body>
+    <main class="bd-page">
+      <article class="bd-tile"><p id="spin">一直在动的元素</p></article>
+      <script type="module">
+        // 业务脚本没有判断 prefers-reduced-motion
+        document
+          .getElementById('spin')
+          .animate([{ transform: 'translateX(0)' }, { transform: 'translateX(40px)' }], {
+            duration: 2000,
+            iterations: Infinity,
+          });
+      </script>
+    </main>
+  </body>
+</html>

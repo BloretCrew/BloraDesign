@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="blora-scenes" content="board,inbox,schedule,profile" />
     <title>Blora Cloud · 协作与工单</title>
     <!-- 第 ② 阶段验收页：只用框架重写 reference/demo-team.html（看板、收件箱、日程、成员资料） -->
     <link rel="stylesheet" href="../../packages/blora-design/dist/blora.css" />
@@ -665,7 +666,7 @@
               <div data-part="week" id="agendaWeek"></div>
               <ul class="bd-tray" data-cols="4" data-part="legend" id="calLegend"></ul>
             </article>
-            <article class="bd-tile" data-pattern="agenda">
+            <article class="bd-tile" data-pattern="agenda" data-bd-allow="whitespace">
               <span class="bd-corner"></span>
               <header class="bd-head">
                 <h2>今天</h2>
@@ -774,7 +775,7 @@
                 </li>
               </ul>
             </article>
-            <article class="bd-tile">
+            <article class="bd-tile" data-bd-allow="whitespace">
               <header class="bd-head">
                 <h2>负责的工单</h2>
                 <p>本迭代 5 张，其中 1 张逾期</p>
@@ -841,7 +842,7 @@
             data-cols="2"
             style="--bd-columns: minmax(0, 1.75fr) minmax(0, 1fr)"
           >
-            <article class="bd-tile">
+            <article class="bd-tile" data-bd-allow="whitespace">
               <header class="bd-head">
                 <h2>最近动态</h2>
                 <p>过去 7 天共 23 条，每类显示最近 6 条</p>
