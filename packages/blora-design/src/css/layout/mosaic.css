@@ -156,6 +156,24 @@
     }
   }
 
+  /* 浅底说明条里只有说明和标签 / 链接时只占一行：说明太长就省略（带按钮时照常换行） */
+  .bd-tile
+    > [data-part='foot'][data-variant='tint']:not(:has(> :is(.bd-button, [data-part='actions']))) {
+    flex-wrap: nowrap;
+
+    > p {
+      display: block;
+      flex: 1 1 auto;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    > :not(p) {
+      flex-shrink: 0;
+    }
+  }
+
   .bd-tile > [data-part='foot'][data-align='start'] {
     justify-content: flex-start;
     gap: 6px 14px;
